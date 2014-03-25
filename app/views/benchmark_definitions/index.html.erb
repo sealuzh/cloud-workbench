@@ -1,0 +1,27 @@
+<h1>Listing benchmark_definitions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @benchmark_definitions.each do |benchmark_definition| %>
+      <tr>
+        <td><%= benchmark_definition.name %></td>
+        <td><%= link_to 'Show', benchmark_definition %></td>
+        <td><%= link_to 'Edit', edit_benchmark_definition_path(benchmark_definition) %></td>
+        <td><%= link_to 'Destroy', benchmark_definition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Benchmark definition', new_benchmark_definition_path %>

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @metric_definition.name %>
+</p>
+
+<p>
+  <strong>Unit:</strong>
+  <%= @metric_definition.unit %>
+</p>
+
+<%= link_to 'Edit', edit_metric_definition_path(@metric_definition) %> |
+<%= link_to 'Back', metric_definitions_path %>

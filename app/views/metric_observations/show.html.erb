@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Key:</strong>
+  <%= @metric_observation.key %>
+</p>
+
+<p>
+  <strong>Value:</strong>
+  <%= @metric_observation.value %>
+</p>
+
+<%= link_to 'Edit', edit_metric_observation_path(@metric_observation) %> |
+<%= link_to 'Back', metric_observations_path %>

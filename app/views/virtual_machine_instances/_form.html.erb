@@ -1,0 +1,21 @@
+<%= form_for(@virtual_machine_instance) do |f| %>
+  <% if @virtual_machine_instance.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@virtual_machine_instance.errors.count, "error") %> prohibited this virtual_machine_instance from being saved:</h2>
+
+      <ul>
+      <% @virtual_machine_instance.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.text_field :status %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

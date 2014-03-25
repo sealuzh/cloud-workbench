@@ -1,0 +1,33 @@
+<h1>Listing virtual_machine_definitions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Role</th>
+      <th>Region</th>
+      <th>Instance type</th>
+      <th>Image</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @virtual_machine_definitions.each do |virtual_machine_definition| %>
+      <tr>
+        <td><%= virtual_machine_definition.role %></td>
+        <td><%= virtual_machine_definition.region %></td>
+        <td><%= virtual_machine_definition.instance_type %></td>
+        <td><%= virtual_machine_definition.image %></td>
+        <td><%= link_to 'Show', virtual_machine_definition %></td>
+        <td><%= link_to 'Edit', edit_virtual_machine_definition_path(virtual_machine_definition) %></td>
+        <td><%= link_to 'Destroy', virtual_machine_definition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Virtual machine definition', new_virtual_machine_definition_path %>

@@ -1,0 +1,33 @@
+<%= form_for(@virtual_machine_definition) do |f| %>
+  <% if @virtual_machine_definition.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@virtual_machine_definition.errors.count, "error") %> prohibited this virtual_machine_definition from being saved:</h2>
+
+      <ul>
+      <% @virtual_machine_definition.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :role %><br>
+    <%= f.text_field :role %>
+  </div>
+  <div class="field">
+    <%= f.label :region %><br>
+    <%= f.text_field :region %>
+  </div>
+  <div class="field">
+    <%= f.label :instance_type %><br>
+    <%= f.text_field :instance_type %>
+  </div>
+  <div class="field">
+    <%= f.label :image %><br>
+    <%= f.text_field :image %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

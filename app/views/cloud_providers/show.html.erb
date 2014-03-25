@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @cloud_provider.name %>
+</p>
+
+<p>
+  <strong>Credentials path:</strong>
+  <%= @cloud_provider.credentials_path %>
+</p>
+
+<p>
+  <strong>Ssh key path:</strong>
+  <%= @cloud_provider.ssh_key_path %>
+</p>
+
+<%= link_to 'Edit', edit_cloud_provider_path(@cloud_provider) %> |
+<%= link_to 'Back', cloud_providers_path %>

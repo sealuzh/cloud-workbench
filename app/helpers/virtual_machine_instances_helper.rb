@@ -1,0 +1,2 @@
+module VirtualMachineInstancesHelper
+end

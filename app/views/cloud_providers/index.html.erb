@@ -1,0 +1,31 @@
+<h1>Listing cloud_providers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Credentials path</th>
+      <th>Ssh key path</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cloud_providers.each do |cloud_provider| %>
+      <tr>
+        <td><%= cloud_provider.name %></td>
+        <td><%= cloud_provider.credentials_path %></td>
+        <td><%= cloud_provider.ssh_key_path %></td>
+        <td><%= link_to 'Show', cloud_provider %></td>
+        <td><%= link_to 'Edit', edit_cloud_provider_path(cloud_provider) %></td>
+        <td><%= link_to 'Destroy', cloud_provider, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cloud provider', new_cloud_provider_path %>

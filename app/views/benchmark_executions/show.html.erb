@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @benchmark_execution.status %>
+</p>
+
+<p>
+  <strong>Start time:</strong>
+  <%= @benchmark_execution.start_time %>
+</p>
+
+<p>
+  <strong>End time:</strong>
+  <%= @benchmark_execution.end_time %>
+</p>
+
+<%= link_to 'Edit', edit_benchmark_execution_path(@benchmark_execution) %> |
+<%= link_to 'Back', benchmark_executions_path %>

@@ -1,0 +1,31 @@
+<h1>Listing benchmark_executions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Start time</th>
+      <th>End time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @benchmark_executions.each do |benchmark_execution| %>
+      <tr>
+        <td><%= benchmark_execution.status %></td>
+        <td><%= benchmark_execution.start_time %></td>
+        <td><%= benchmark_execution.end_time %></td>
+        <td><%= link_to 'Show', benchmark_execution %></td>
+        <td><%= link_to 'Edit', edit_benchmark_execution_path(benchmark_execution) %></td>
+        <td><%= link_to 'Destroy', benchmark_execution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Benchmark execution', new_benchmark_execution_path %>

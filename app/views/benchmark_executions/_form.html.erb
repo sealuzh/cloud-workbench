@@ -1,0 +1,29 @@
+<%= form_for(@benchmark_execution) do |f| %>
+  <% if @benchmark_execution.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@benchmark_execution.errors.count, "error") %> prohibited this benchmark_execution from being saved:</h2>
+
+      <ul>
+      <% @benchmark_execution.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.text_field :status %>
+  </div>
+  <div class="field">
+    <%= f.label :start_time %><br>
+    <%= f.datetime_select :start_time %>
+  </div>
+  <div class="field">
+    <%= f.label :end_time %><br>
+    <%= f.datetime_select :end_time %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

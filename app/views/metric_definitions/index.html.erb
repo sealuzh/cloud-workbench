@@ -1,0 +1,29 @@
+<h1>Listing metric_definitions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Unit</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @metric_definitions.each do |metric_definition| %>
+      <tr>
+        <td><%= metric_definition.name %></td>
+        <td><%= metric_definition.unit %></td>
+        <td><%= link_to 'Show', metric_definition %></td>
+        <td><%= link_to 'Edit', edit_metric_definition_path(metric_definition) %></td>
+        <td><%= link_to 'Destroy', metric_definition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Metric definition', new_metric_definition_path %>

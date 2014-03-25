@@ -1,4 +1,18 @@
 CloudBenchmarking::Application.routes.draw do
+  resources :cloud_providers
+
+  resources :virtual_machine_definitions
+
+  resources :virtual_machine_instances
+
+  resources :benchmark_executions
+
+  resources :metric_observations
+
+  resources :metric_definitions
+
+  resources :benchmark_definitions
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
