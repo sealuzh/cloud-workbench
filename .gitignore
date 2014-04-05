@@ -15,6 +15,9 @@
 /log/*.log
 /tmp
 
+# Ignore benchmark_definitions working directory
+/public/benchmark_definitions
+
 # Ignore other unneeded files.
 database.yml
 doc/
