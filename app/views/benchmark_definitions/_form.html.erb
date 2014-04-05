@@ -12,10 +12,19 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+    <%= form_for(@benchmark_definition) do |f| %>
+      <%= f.label :name %><br>
+      <%= f.text_field :name %><br><br>
+
+      <%= f.label 'Vagrantfile' %><br>
+      <%= text_area_tag :vagrant_file_content, params[:vagrant_file_content], :size => "60x25" %><br>
+
+      <%= f.submit %>
+
+    <% end %>
+
   </div>
+
   <div class="actions">
-    <%= f.submit %>
   </div>
 <% end %>
