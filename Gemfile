@@ -12,6 +12,8 @@ gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
+gem 'delayed_job_active_record', '~> 4.0.0'
+
 group :development do
   gem 'sqlite3'
 end
