@@ -27,7 +27,7 @@ class BenchmarkExecutionsController < ApplicationController
     @benchmark_execution = BenchmarkExecution.new(benchmark_execution_params)
     respond_to do |format|
       if @benchmark_execution.save
-        Delayed::Job.enqueue(PrepareBenchmarkExecutionJob.new(@benchmark_execution.benchmark_definition_id))
+        Delayed::Job.enqueue(PrepareBenchmarkExecutionJob.new(@benchmark_execution.benchmark_definition_id, @benchmark_execution.id))
         format.html { redirect_to @benchmark_execution, notice: 'Benchmark execution was successfully created.' }
         format.json { render action: 'show', status: :created, location: @benchmark_execution }
       else
