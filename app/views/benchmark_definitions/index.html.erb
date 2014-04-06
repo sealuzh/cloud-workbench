@@ -19,6 +19,12 @@
         <td><%= link_to 'Show', benchmark_definition %></td>
         <td><%= link_to 'Edit', edit_benchmark_definition_path(benchmark_definition) %></td>
         <td><%= link_to 'Destroy', benchmark_definition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= form_for(@benchmark_execution) do |f| %>
+            <%= f.text_field :benchmark_definition_id %>
+            <%= submit_tag 'Start new execution' %>
+          <% end %>
+        </td>
       </tr>
   <% end %>
   </tbody>

@@ -69,6 +69,6 @@ class BenchmarkExecutionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def benchmark_execution_params
-      params.require(:benchmark_execution).permit(:status, :start_time, :end_time)
+      params.require(:benchmark_execution).permit(:benchmark_definition_id, :status, :start_time, :end_time)
     end
 end

@@ -3,6 +3,8 @@
 <table>
   <thead>
     <tr>
+      <th>Id</th>
+      <th>Benchmark definition id</th>
       <th>Status</th>
       <th>Start time</th>
       <th>End time</th>
@@ -15,6 +17,8 @@
   <tbody>
     <% @benchmark_executions.each do |benchmark_execution| %>
       <tr>
+        <td><%= benchmark_execution.id %></td>
+        <td><%= benchmark_execution.benchmark_definition_id %></td>
         <td><%= benchmark_execution.status %></td>
         <td><%= benchmark_execution.start_time %></td>
         <td><%= benchmark_execution.end_time %></td>
