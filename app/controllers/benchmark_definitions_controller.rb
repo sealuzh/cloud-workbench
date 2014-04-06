@@ -5,7 +5,6 @@ class BenchmarkDefinitionsController < ApplicationController
   # GET /benchmark_definitions.json
   def index
     @benchmark_definitions = BenchmarkDefinition.all
-    @benchmark_execution = @benchmark_definitions.first.benchmark_executions.build
   end
 
   # GET /benchmark_definitions/1
