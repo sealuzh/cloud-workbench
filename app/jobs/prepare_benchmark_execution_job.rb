@@ -9,7 +9,7 @@ class PrepareBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :bench
     benchmark_execution.save
 
     %x( cd "#{benchmark_definition.vagrant_directory_path}" &&
-        vagrant up )
+        vagrant up --provider=aws )
     # TODO: Handle stdout, stderr redirection into a logging directory (not . due to vagrant sync, which may result in an endless loop) and exit_code
 
     benchmark_execution.end_time = Time.now # TODO: Save timestamp on each state transition (this is the wrong place for end_time!) => Use a state model
