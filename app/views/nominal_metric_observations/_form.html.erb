@@ -1,0 +1,16 @@
+<%= form_for(@nominal_metric_observation) do |f| %>
+  <% if @nominal_metric_observation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@nominal_metric_observation.errors.count, "error") %> prohibited this metric_observation from being saved:</h2>
+
+      <ul>
+      <% @nominal_metric_observation.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= render 'shared/metric_observation_form', f: f %>
+
+<% end %>

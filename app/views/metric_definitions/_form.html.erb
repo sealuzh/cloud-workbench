@@ -12,12 +12,20 @@
   <% end %>
 
   <div class="field">
+    <%= f.label :benchmark_definition_id %><br>
+    <%= f.text_field :benchmark_definition_id %>
+  </div>
+  <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>
   </div>
   <div class="field">
     <%= f.label :unit %><br>
     <%= f.text_field :unit %>
+  </div>
+  <div class="field">
+    <%= f.label :scale_type %><br>
+    <%= f.text_field :scale_type %>
   </div>
   <div class="actions">
     <%= f.submit %>

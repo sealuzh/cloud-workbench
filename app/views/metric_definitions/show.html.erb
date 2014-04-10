@@ -1,6 +1,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong>Benchmark definition id:</strong>
+  <%= @metric_definition.benchmark_definition_id %>
+</p>
+
+<p>
   <strong>Name:</strong>
   <%= @metric_definition.name %>
 </p>
@@ -8,6 +13,11 @@
 <p>
   <strong>Unit:</strong>
   <%= @metric_definition.unit %>
+</p>
+
+<p>
+  <strong>Scale type:</strong>
+  <%= @metric_definition.scale_type %>
 </p>
 
 <%= link_to 'Edit', edit_metric_definition_path(@metric_definition) %> |

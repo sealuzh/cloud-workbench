@@ -3,8 +3,10 @@
 <table>
   <thead>
     <tr>
+      <th>Benchmark definition id</th>
       <th>Name</th>
       <th>Unit</th>
+      <th>Scale type</th>
       <th></th>
       <th></th>
       <th></th>
@@ -14,8 +16,10 @@
   <tbody>
     <% @metric_definitions.each do |metric_definition| %>
       <tr>
+        <td><%= metric_definition.benchmark_definition_id %></td>
         <td><%= metric_definition.name %></td>
         <td><%= metric_definition.unit %></td>
+        <td><%= metric_definition.scale_type %></td>
         <td><%= link_to 'Show', metric_definition %></td>
         <td><%= link_to 'Edit', edit_metric_definition_path(metric_definition) %></td>
         <td><%= link_to 'Destroy', metric_definition, method: :delete, data: { confirm: 'Are you sure?' } %></td>

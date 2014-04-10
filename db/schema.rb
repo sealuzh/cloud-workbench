@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140406140215) do
+ActiveRecord::Schema.define(version: 20140410113800) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
@@ -62,43 +62,40 @@ ActiveRecord::Schema.define(version: 20140406140215) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "benchmark_definition_id"
+    t.string   "scale_type"
   end
 
-  create_table "metric_observations", force: true do |t|
-    t.integer  "key"
-    t.string   "value"
+  create_table "nominal_metric_observations", force: true do |t|
+    t.float    "value",                       limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "time",                        limit: 8
+    t.integer  "virtual_machine_instance_id"
     t.integer  "metric_definition_id"
-    t.integer  "benchmark_execution_id"
   end
 
-  add_index "metric_observations", ["benchmark_execution_id"], name: "index_metric_observations_on_benchmark_execution_id"
-  add_index "metric_observations", ["metric_definition_id"], name: "index_metric_observations_on_metric_definition_id"
+  add_index "nominal_metric_observations", ["metric_definition_id"], name: "index_nominal_metric_observations_on_metric_definition_id"
+  add_index "nominal_metric_observations", ["virtual_machine_instance_id"], name: "index_nominal_metric_observations_on_vm_instance_id "
 
-  create_table "virtual_machine_definitions", force: true do |t|
-    t.string   "role"
-    t.string   "region"
-    t.string   "instance_type"
-    t.string   "image"
+  create_table "ordered_metric_observations", force: true do |t|
+    t.integer  "metric_definition_id"
+    t.integer  "virtual_machine_instance_id"
+    t.integer  "time",                        limit: 8
+    t.float    "value"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "benchmark_definition_id"
-    t.integer  "cloud_provider_id"
   end
 
-  add_index "virtual_machine_definitions", ["benchmark_definition_id"], name: "index_virtual_machine_definitions_on_benchmark_definition_id"
-  add_index "virtual_machine_definitions", ["cloud_provider_id"], name: "index_virtual_machine_definitions_on_cloud_provider_id"
+  add_index "ordered_metric_observations", ["metric_definition_id"], name: "index_ordered_metric_observations_on_metric_definition_id"
+  add_index "ordered_metric_observations", ["virtual_machine_instance_id"], name: "index_ordered_metric_observations_on_vm_instance_id"
 
   create_table "virtual_machine_instances", force: true do |t|
     t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "virtual_machine_definition_id"
     t.integer  "benchmark_execution_id"
   end
 
   add_index "virtual_machine_instances", ["benchmark_execution_id"], name: "index_virtual_machine_instances_on_benchmark_execution_id"
-  add_index "virtual_machine_instances", ["virtual_machine_definition_id"], name: "index_vm_instances_on_vm_definition_id"
 
 end

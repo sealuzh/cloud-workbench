@@ -2,13 +2,11 @@ class BenchmarkExecutionsController < ApplicationController
   before_action :set_benchmark_execution, only: [:show, :edit, :update, :destroy]
 
   # GET /benchmark_executions
-  # GET /benchmark_executions.json
   def index
     @benchmark_executions = BenchmarkExecution.all
   end
 
   # GET /benchmark_executions/1
-  # GET /benchmark_executions/1.json
   def show
   end
 
@@ -22,43 +20,29 @@ class BenchmarkExecutionsController < ApplicationController
   end
 
   # POST /benchmark_executions
-  # POST /benchmark_executions.json
   def create
     @benchmark_execution = BenchmarkExecution.new(benchmark_execution_params)
-    respond_to do |format|
-      if @benchmark_execution.save
-        Delayed::Job.enqueue(PrepareBenchmarkExecutionJob.new(@benchmark_execution.benchmark_definition_id, @benchmark_execution.id))
-        format.html { redirect_to @benchmark_execution, notice: 'Benchmark execution was successfully created.' }
-        format.json { render action: 'show', status: :created, location: @benchmark_execution }
-      else
-        format.html { render action: 'new' }
-        format.json { render json: @benchmark_execution.errors, status: :unprocessable_entity }
-      end
+    if @benchmark_execution.save
+      Delayed::Job.enqueue(PrepareBenchmarkExecutionJob.new(@benchmark_execution.benchmark_definition_id, @benchmark_execution.id))
+      redirect_to @benchmark_execution, notice: 'Benchmark execution was successfully created.'
+    else
+      render action: 'new'
     end
   end
 
   # PATCH/PUT /benchmark_executions/1
-  # PATCH/PUT /benchmark_executions/1.json
   def update
-    respond_to do |format|
-      if @benchmark_execution.update(benchmark_execution_params)
-        format.html { redirect_to @benchmark_execution, notice: 'Benchmark execution was successfully updated.' }
-        format.json { head :no_content }
-      else
-        format.html { render action: 'edit' }
-        format.json { render json: @benchmark_execution.errors, status: :unprocessable_entity }
-      end
+    if @benchmark_execution.update(benchmark_execution_params)
+      redirect_to @benchmark_execution, notice: 'Benchmark execution was successfully updated.'
+    else
+      render action: 'edit'
     end
   end
 
   # DELETE /benchmark_executions/1
-  # DELETE /benchmark_executions/1.json
   def destroy
     @benchmark_execution.destroy
-    respond_to do |format|
-      format.html { redirect_to benchmark_executions_url }
-      format.json { head :no_content }
-    end
+      redirect_to benchmark_executions_url
   end
 
   private

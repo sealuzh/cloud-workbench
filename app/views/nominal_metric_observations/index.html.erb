@@ -1,0 +1,33 @@
+<h1>Listing nominal_metric_observations</h1>
+
+<table>
+  <thead>
+  <tr>
+    <th>Metric definition id </th>
+    <th>Virtual machine instance id</th>
+    <th>Time</th>
+    <th>Value</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @nominal_metric_observations.each do |nominal_metric_observation| %>
+    <tr>
+      <td><%= nominal_metric_observation.metric_definition_id %></td>
+      <td><%= nominal_metric_observation.virtual_machine_instance_id %></td>
+      <td><%= nominal_metric_observation.time %></td>
+      <td><%= nominal_metric_observation.value %></td>
+      <td><%= link_to 'Show', nominal_metric_observation %></td>
+      <td><%= link_to 'Edit', edit_nominal_metric_observation_path(nominal_metric_observation) %></td>
+      <td><%= link_to 'Destroy', nominal_metric_observation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New nominal metric observation', new_nominal_metric_observation_path %>

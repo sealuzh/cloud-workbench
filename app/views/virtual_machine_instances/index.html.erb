@@ -3,6 +3,7 @@
 <table>
   <thead>
     <tr>
+      <th>Benchmark execution id</th>
       <th>Status</th>
       <th></th>
       <th></th>
@@ -13,6 +14,7 @@
   <tbody>
     <% @virtual_machine_instances.each do |virtual_machine_instance| %>
       <tr>
+        <td><%= virtual_machine_instance.benchmark_execution_id %></td>
         <td><%= virtual_machine_instance.status %></td>
         <td><%= link_to 'Show', virtual_machine_instance %></td>
         <td><%= link_to 'Edit', edit_virtual_machine_instance_path(virtual_machine_instance) %></td>
