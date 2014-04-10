@@ -20,7 +20,6 @@ class NominalMetricObservationsController < ApplicationController
   end
 
   # POST /nominal_metric_observations
-  # TODO: Provide metric_observations_controller as single interface to submit new metrics. The implementation detail which metric_observation (nominal or ordered) should be hidden from the client. The decision is based on the scale type defined in metrics_definition.
   def create
     @nominal_metric_observation = NominalMetricObservation.new(metric_observation_params)
 

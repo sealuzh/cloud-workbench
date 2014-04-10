@@ -3,6 +3,8 @@ CloudBenchmarking::Application.routes.draw do
   resources :benchmark_executions
 
   resources :metric_definitions
+  # resources :metric_observations, only: [:new, :create]
+  resources :metric_observations
   resources :nominal_metric_observations
   resources :ordered_metric_observations
 
