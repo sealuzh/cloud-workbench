@@ -9,6 +9,8 @@ class BenchmarkDefinition < ActiveRecord::Base
   # that do not support case-sensitive indices.
   validates :name, presence: true, uniqueness: { case_sensitive: false }
 
+  enumerize :scale_type, in: [:nominal, :ordinal, :interval, :ratio], default: :nominal
+
   VAGRANT_PATH = "#{Rails.root}/public/benchmark_definitions"
   VAGRANT_FILE_NAME = 'Vagrantfile'
 
