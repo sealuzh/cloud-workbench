@@ -10,5 +10,15 @@
   <%= @virtual_machine_instance.status %>
 </p>
 
+<p>
+  <strong>Provider name:</strong>
+  <%= @virtual_machine_instance.provider_name %>
+</p>
+
+<p>
+  <strong>Provider instance id:</strong>
+  <%= @virtual_machine_instance.provider_instance_id %>
+</p>
+
 <%= link_to 'Edit', edit_virtual_machine_instance_path(@virtual_machine_instance) %> |
 <%= link_to 'Back', virtual_machine_instances_path %>

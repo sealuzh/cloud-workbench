@@ -3,4 +3,6 @@ class VirtualMachineInstance < ActiveRecord::Base
   validates :benchmark_execution, presence: true
   has_many :nominal_metric_observations
   has_many :ordered_metric_observations
+
+
 end

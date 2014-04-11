@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140410113800) do
+ActiveRecord::Schema.define(version: 20140411112914) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
@@ -94,8 +94,11 @@ ActiveRecord::Schema.define(version: 20140410113800) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "benchmark_execution_id"
+    t.string   "provider_name"
+    t.string   "provider_instance_id"
   end
 
   add_index "virtual_machine_instances", ["benchmark_execution_id"], name: "index_virtual_machine_instances_on_benchmark_execution_id"
+  add_index "virtual_machine_instances", ["provider_instance_id", "provider_name"], name: "index_vm_instances_on_provider_instance_id_and_provider_name"
 
 end

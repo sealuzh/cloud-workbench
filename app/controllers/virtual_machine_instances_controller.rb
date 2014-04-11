@@ -53,6 +53,6 @@ class VirtualMachineInstancesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def virtual_machine_instance_params
-      params.require(:virtual_machine_instance).permit(:benchmark_execution_id, :status)
+      params.require(:virtual_machine_instance).permit(:benchmark_execution_id, :status, :provider_name, :provider_instance_id)
     end
 end
