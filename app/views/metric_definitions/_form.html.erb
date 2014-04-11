@@ -25,7 +25,7 @@
   </div>
   <div class="field">
     <%= f.label :scale_type %><br>
-    <%= f.text_field :scale_type %>
+    <%= f.select :scale_type, MetricDefinition.scale_type.options %>
   </div>
   <div class="actions">
     <%= f.submit %>

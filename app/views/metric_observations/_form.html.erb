@@ -11,6 +11,28 @@
     </div>
   <% end %>
 
-  <%= render 'shared/metric_observation_form', f: f %>
+  <div class="field">
+    <%= f.label :metric_definition_id %><br>
+    <%= f.text_field :metric_definition_id %>
+  </div>
+  <div class="field">
+    <%= f.label :provider_name %><br>
+    <%= f.text_field :provider_name %>
+  </div>
+  <div class="field">
+    <%= f.label :provider_instance_id %><br>
+    <%= f.text_field :provider_instance_id %>
+  </div>
+  <div class="field">
+    <%= f.label :time %><br>
+    <%= f.number_field :time %>
+  </div>
+  <div class="field">
+    <%= f.label :value %><br>
+    <%= f.text_field :value %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
 
 <% end %>
