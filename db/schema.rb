@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20140411112914) do
   end
 
   create_table "nominal_metric_observations", force: true do |t|
-    t.float    "value",                       limit: 255
+    t.string   "value"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "time",                        limit: 8
