@@ -6,15 +6,16 @@ class MetricObservationsController < ApplicationController
     @metric_observation = MetricObservation.new
   end
 
-  # REVIEW: Idempotence of this create (and the import) method should be guaranteed for RESTful design. Use something like: CONCRETE_metric_observation = find_by_id(row["id"]) || new
+  # This action is NOT idempotent as a RESTful resource should be. It would be too costly to search the entire metrics for same entries
+  # NOTE: Consider renaming to submit to indicate that this action isn't idempotent
   def create
     @metric_observation = MetricObservation.new(metric_observations_params)
     if @metric_observation.save
       flash[:success] = 'Metric observation was successfully created.'
 
-      # TODO: Redirect to CONCRETE_metric_observation (either nominal or ordered)
-      # redirect_to @metric_observation, notice: 'Metric observation was successfully created.'
-      redirect_to ordered_metric_observations_path
+      # Redirect to CONCRETE_metric_observation (either nominal or ordered)
+      method_name = "#{@metric_observation.concrete_metric_observation.class.name.underscore}_path"
+      redirect_to send(method_name.to_sym, @metric_observation.concrete_metric_observation)
     else
       render action: 'new'
     end
