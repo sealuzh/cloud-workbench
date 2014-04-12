@@ -8,6 +8,8 @@ CloudBenchmarking::Application.routes.draw do
   resources :ordered_metric_observations
 
   resources :virtual_machine_instances
+  put 'virtual_machine_instance/benchmark_completed' => 'virtual_machine_instances#benchmark_completed'
+  put 'virtual_machine_instance/postprocessing_completed' => 'virtual_machine_instances#postprocessing_completed'
   resources :cloud_providers
 
 
