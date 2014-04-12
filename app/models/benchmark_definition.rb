@@ -2,14 +2,11 @@ require 'fileutils'
 
 class BenchmarkDefinition < ActiveRecord::Base
   before_destroy :remove_vagrant_directory
-
   has_many :metric_definitions
   has_many :benchmark_executions, dependent: :destroy
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
   # that do not support case-sensitive indices.
   validates :name, presence: true, uniqueness: { case_sensitive: false }
-
-  enumerize :scale_type, in: [:nominal, :ordinal, :interval, :ratio], default: :nominal
 
   VAGRANT_PATH = "#{Rails.root}/public/benchmark_definitions"
   VAGRANT_FILE_NAME = 'Vagrantfile'
