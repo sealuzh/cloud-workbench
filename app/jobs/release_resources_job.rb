@@ -7,7 +7,7 @@ class ReleaseResourcesJob < Struct.new(:benchmark_definition_id, :benchmark_exec
     benchmark_execution.save
 
     %x( cd "#{benchmark_definition.vagrant_directory_path}" &&
-        vagrant destroy )
+        vagrant destroy --force )
     # TODO: Handle stdout, stderr redirection into a logging directory (not . due to vagrant sync, which may result in an endless loop) and exit_code
 
     benchmark_execution.status = 'FINISHED'
