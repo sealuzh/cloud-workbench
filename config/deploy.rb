@@ -24,7 +24,7 @@ set :use_sudo, false
 # Bundler
 # -------
 set :bundle_flags, "--deployment --binstubs"
-set :bundle_without, [:test, :development, :deploy]
+set :bundle_without, %w{development test}.join(' ')
 
 # Rbenv
 # -----
