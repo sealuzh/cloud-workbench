@@ -1,17 +1,11 @@
 # Source: https://github.com/TalkingQuickly/capistrano-3-rails-template
 #
-# will first try and copy the file:
-# config/deploy/#{full_app_name}/#{from}.erb
-# to:
-# shared/config/to
-# if the original source path doesn exist then it will
-# search in:
-# config/deploy/shared/#{from}.erb
-# this allows files which are common to all enviros to
-# come from a single source while allowing specific
-# ones to be over-ridden
-# if the target file name is the same as the source then
-# the second parameter can be left out
+# will first try and copy the file: config/deploy/#{full_app_name}/#{from}.erb
+# to: shared/config/to if the original source path doesn't exist then it will
+# search in: config/deploy/shared/#{from}.erb
+# This allows files which are common to all environments to come from a single
+# source while allowing specific ones to be overridden if the target file name
+# is the same as the source then the second parameter can be left out
 def smart_template(from, to=nil)
   to ||= from
   full_to_path = "#{shared_path}/config/#{to}"

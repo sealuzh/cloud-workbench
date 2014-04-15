@@ -1,3 +1,5 @@
+set :rails_env, :staging # dont try and infer something as important as environment from stage name.
+
 # Simple Role Syntax
 # ==================
 # Supports bulk-adding hosts to roles, the primary server in each group

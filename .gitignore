@@ -18,6 +18,13 @@
 # Ignore benchmark_definitions working directory
 /public/benchmark_definitions
 
+# Ignore all files except that ones that contain '.example' in the name
+config/deploy/shared/*
+!config/deploy/shared/*.example*
+
+config/deploy/cloud_benchmarking_*/*
+!config/deploy/cloud_benchmarking_*/*.example*
+
 # Ignore other unneeded files.
 database.yml
 doc/
