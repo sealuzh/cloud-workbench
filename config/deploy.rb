@@ -28,6 +28,8 @@ set :bundle_without, [:test, :development, :deploy]
 
 # Rbenv
 # -----
+set :rbenv_path, '/opt/rbenv'
+set :rbenv_ruby, File.read('.ruby-version').strip # Use ruby version from file
 set :pty, true
 BASH = '/bin/bash --login'
 set :shell, BASH
