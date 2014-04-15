@@ -76,7 +76,7 @@ namespace :deploy do
 
   desc "Restart application"
   task :restart do
-    on roles(:app), :except => { :no_release => true } do
+    on roles(:app) do
       run "sudo sv restart #{fetch(:application)}"
     end
   end
