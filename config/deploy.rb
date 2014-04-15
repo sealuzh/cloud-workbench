@@ -66,47 +66,39 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 # set :keep_releases, 5
 
 namespace :deploy do
-  task :start do
-    run "sudo sv up #{fetch(:application)}"
-  end
+  before :deploy, "deploy:check_revision" # make sure we're deploying what we think we're deploying
+  before :deploy, "deploy:run_tests" # only allow a deploy with passing tests to deployed
 
-  task :stop do
-    run "sudo sv down #{fetch(:application)}"
-  end
-
-  desc "Restart application"
-  task :restart do
-    on roles(:app), in: :sequence, wait: 5 do
-      run "sudo sv restart #{fetch(:application)}"
-    end
-  end
+  # compile assets locally then rsync
+  # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
 
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
   after 'deploy:publishing', 'deploy:restart'
 
-  # make sure we're deploying what we think we're deploying
-  before :deploy, "deploy:check_revision"
-  # only allow a deploy with passing tests to deployed
-  before :deploy, "deploy:run_tests"
-  # compile assets locally then rsync
-  # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
+  after :restart, :clear_cache do
+    on roles(:web), in: :groups, limit: 3, wait: 10 do
+      within release_path do
+        execute :rake, 'cache:clear'
+      end
+    end
+  end
+
   after :finishing, 'deploy:cleanup'
 
-  # desc 'Restart application'
-  # task :restart do
-  #   on roles(:app), in: :sequence, wait: 5 do
-  #     # Your restart mechanism here, for example:
-  #     # execute :touch, release_path.join('tmp/restart.txt')
-  #   end
-  # end
-  #
-  # after :restart, :clear_cache do
-  #   on roles(:web), in: :groups, limit: 3, wait: 10 do
-  #     # Here we can do anything such as:
-  #     # within release_path do
-  #     #   execute :rake, 'cache:clear'
-  #     # end
-  #   end
-  # end
 
+  task :start do
+    execute "sudo sv up #{fetch(:application)}"
+  end
+
+  task :stop do
+    execute "sudo sv down #{fetch(:application)}"
+  end
+
+  # See Capistrano docs: http://capistranorb.com/2013/06/01/release-announcement.html
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      execute "sudo sv restart #{fetch(:application)}"
+    end
+  end
 end
