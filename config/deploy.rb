@@ -66,22 +66,16 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 # set :keep_releases, 5
 
 namespace :deploy do
-  before :deploy, "deploy:check_revision" # make sure we're deploying what we think we're deploying
-  before :deploy, "deploy:run_tests" # only allow a deploy with passing tests to deployed
+  # Make sure we're deploying what we think we're deploying
+  before :deploy, "deploy:check_revision"
+  # Only allow a deploy with passing tests to deployed
+  before :deploy, "deploy:run_tests"
 
   # compile assets locally then rsync
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
 
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
   after 'deploy:publishing', 'deploy:restart'
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      within release_path do
-        execute :rake, 'cache:clear'
-      end
-    end
-  end
 
   after :finishing, 'deploy:cleanup'
 
