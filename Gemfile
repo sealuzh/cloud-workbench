@@ -15,8 +15,22 @@ gem 'jbuilder', '~> 1.2'
 gem 'delayed_job_active_record', '~> 4.0.0'
 gem 'enumerize', '~> 0.8.0'
 
+
 group :development do
+  # Deploy with Capistrano
+  gem 'capistrano', '~> 3.2.0', require: false
+  gem 'capistrano-rails',   '~> 1.1', require: false
+  gem 'capistrano-bundler', '~> 1.1.2', require: false
+  gem 'capistrano-rbenv', '~> 2.0', require: false
+end
+
+group :development, :test do
   gem 'sqlite3'
+end
+
+group :production do
+  gem 'unicorn'
+  gem 'pg'
 end
 
 group :doc do
