@@ -54,15 +54,21 @@ namespace :deploy do
   task :start do
     run "sudo sv up #{fetch(:application)}"
   end
+
   task :stop do
     run "sudo sv down #{fetch(:application)}"
   end
+
   desc "Restart application"
   task :restart do
     on roles(:app), :except => { :no_release => true } do
       run "sudo sv restart #{fetch(:application)}"
     end
   end
+
+  # As of Capistrano 3.1, the `deploy:restart` task is not called
+  # automatically.
+  after 'deploy:publishing', 'deploy:restart'
 
   # desc 'Restart application'
   # task :restart do
@@ -71,8 +77,6 @@ namespace :deploy do
   #     # execute :touch, release_path.join('tmp/restart.txt')
   #   end
   # end
-  #
-  # after :publishing, :restart
   #
   # after :restart, :clear_cache do
   #   on roles(:web), in: :groups, limit: 3, wait: 10 do
