@@ -1,23 +1,21 @@
-# config valid only for Capistrano 3.2
+# config valid only for Capistrano 3.1
 lock '3.2.0'
 
 set :application, "cloud_benchmarking"
-# set :repo_url,  "git@bitbucket.org:sealuzh/cloud-benchmarking.git"
+set :repo_url,  "git@bitbucket.org:sealuzh/cloud-benchmarking.git"
 
-# Deploy from local repo
-set :scm, :none
-set :repository, "."
-set :deploy_via, :copy
 
-set :branch, "master"
-set :keep_releases, 5
+# Default branch is :master
+# ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }.call
 
-# Use with git repo later
-# Code Repository
-# =========
-# set :scm, :git
-# set :scm_verbose, true
-# set :deploy_via, :remote_cache
+# Default deploy_to directory is /var/www/my_app
+set :deploy_to, "/home/apps/#{fetch(:application)}"
+
+set :ssh_options, {
+    keys: %w(~/.ssh/id_rsa),
+    forward_agent: true,
+    auth_methods: %w(publickey)
+}
 
 # Remote Server
 # =============
@@ -35,17 +33,6 @@ BASH = '/bin/bash --login'
 set :shell, BASH
 set :default_shell, BASH
 
-# Rails: Asset Pipeline
-# ---------------------
-# load 'deploy/assets' # Does not work with Capistrano 3
-
-# if you want to clean up old releases on each deploy uncomment this:
-# after "deploy:restart", "deploy:cleanup"
-# after :finishing, "deploy:cleanup"
-
-
-
-
 # Default value for :log_level is :debug
 # set :log_level, :debug
 
@@ -57,6 +44,9 @@ set :default_shell, BASH
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
+
+# Default value for keep_releases is 5
+# set :keep_releases, 5
 
 namespace :deploy do
   task :start do
