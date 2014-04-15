@@ -1,3 +1,5 @@
+# Source: http://stackoverflow.com/a/22206605
+
 namespace :bundle do
   # Example: Run via "cap production bundle:list"
   desc 'List the installed gems'
