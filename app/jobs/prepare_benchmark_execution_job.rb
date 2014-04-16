@@ -1,5 +1,7 @@
 require 'fileutils'
 class PrepareBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :benchmark_execution_id)
+  PRIORITY_HIGH = 1
+
   def perform
     puts "Preparing benchmark with id #{benchmark_definition_id}"
     benchmark_definition = BenchmarkDefinition.find(benchmark_definition_id)
@@ -31,7 +33,9 @@ class PrepareBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :bench
       vm_instance.save
       benchmark_execution.save
 
-      Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(benchmark_definition.id, benchmark_execution.id))
+    # Schedule StartBenchmarkExecutionJobs with higher priority than PrepareBenchmarkExecutionJobs.
+    # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
+      Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(benchmark_definition.id, benchmark_execution.id), PRIORITY_HIGH)
     else
       puts "Vagrant up failed. See logfile: #{log_file}"
       benchmark_execution.status = 'FAILED_ON_PREPARING'
