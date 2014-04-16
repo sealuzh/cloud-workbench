@@ -22,6 +22,7 @@ group :development do
   gem 'capistrano-rails',   '~> 1.1', require: false
   gem 'capistrano-bundler', '~> 1.1.2', require: false
   gem 'capistrano-rbenv', '~> 2.0', require: false
+  gem 'capistrano-unicorn', :require => false
   # gem 'rvm1-capistrano3', require: false # Use if deploying into RVM environments
 end
 
