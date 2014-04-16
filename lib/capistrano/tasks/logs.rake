@@ -7,10 +7,14 @@ namespace :logs do
         execute "tail -f #{shared_path}/log/#{args[:file]}.log"
       end
     else
-      puts "please specify a logfile e.g: 'rake logs:tail[logfile]"
-      puts "will tail 'shared_path/log/logfile.log'"
-      puts "remember if you use zsh you'll need to format it as:"
-      puts "rake 'logs:tail[logfile]' (single quotes)"
+      print_usage
     end
+  end
+
+  def print_usage
+    puts "please specify a logfile e.g: 'cap production logs:tail[production]"
+    puts "will tail 'shared_path/log/logfile.log'"
+    puts "remember if you use zsh you'll need to format it as:"
+    puts "cap production logs:tail[production]' (single quotes)"
   end
 end
