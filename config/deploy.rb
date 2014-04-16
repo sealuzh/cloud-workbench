@@ -1,8 +1,8 @@
 # config valid only for Capistrano 3.1
 lock '3.2.0'
 
-set :application, "cloud_benchmarking"
-set :repo_url,  "git@bitbucket.org:sealuzh/cloud-benchmarking.git"
+set :application, 'cloud_benchmarking'
+set :repo_url,  'git@bitbucket.org:sealuzh/cloud-benchmarking.git'
 # Used in case we're deploying multiple versions of the same app side by side.
 # Also provides quick sanity checks when looking at filepaths.
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
@@ -25,7 +25,8 @@ set :use_sudo, false
 
 # Bundler
 # -------
-set :bundle_flags, "--deployment --binstubs"
+set :bundle_path, -> { shared_path.join('vendor/bundle') }
+set :bundle_flags, '--deployment --binstubs'
 set :bundle_without, %w{development test}.join(' ')
 
 # Rbenv
@@ -60,16 +61,16 @@ set :linked_files, %w{config/database.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+set :default_env, { BUNDLE_GEMFILE: "#{fetch(:deploy_to)}/current/Gemfile" }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
 namespace :deploy do
   # Make sure we're deploying what we think we're deploying
-  before :deploy, "deploy:check_revision"
+  before :deploy, 'deploy:check_revision'
   # Only allow a deploy with passing tests to deployed
-  before :deploy, "deploy:run_tests"
+  before :deploy, 'deploy:run_tests'
 
   # compile assets locally then rsync
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
