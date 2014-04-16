@@ -25,6 +25,8 @@ set :use_sudo, false
 
 # Bundler
 # -------
+# Ensure that your web server is configured to use vendor/bundle as bundle path.
+# You may need to configure the BUNDLE_PATH environment variable or web server specific settings.
 set :bundle_path, -> { shared_path.join('vendor/bundle') }
 set :bundle_flags, '--deployment --binstubs'
 set :bundle_without, %w{development test}.join(' ')
@@ -50,6 +52,7 @@ set :tests, []
 # see documentation in lib/capistrano/tasks/setup_config.cap
 # for details of operations. Provide two values if you want
 # to rename e.g. 'database.secret.yml' to 'database.yml'
+# These files will be copied to "#{shared}/config"
 set(:config_files, [
     %w(database.secret.yml database.yml)
 ])
@@ -61,7 +64,7 @@ set :linked_files, %w{config/database.yml}
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Default value for default_env is {}
-set :default_env, { BUNDLE_GEMFILE: "#{fetch(:deploy_to)}/current/Gemfile" }
+# set :default_env, { path: "/opt/ruby/bin:$PATH" }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
