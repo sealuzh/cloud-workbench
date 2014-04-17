@@ -61,11 +61,12 @@ set(:config_files, [
 set :linked_files, %w{config/database.yml}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/benchmark_definitions}
+# TODO: also symlink: public/benchmark_definitions
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
 
 # Shouldn't be necessary?! => solve problems with Vagrant first!
-set :default_env, { BUNDLE_GEMFILE: "#{fetch(:deploy_to)}/current/Gemfile",
-                    BUNDLE_PATH: "#{fetch(:deploy_to)}/shared/vendor/bundle" }
+# set :default_env, { BUNDLE_GEMFILE: "#{fetch(:deploy_to)}/current/Gemfile",
+#                     BUNDLE_PATH: "#{fetch(:deploy_to)}/shared/vendor/bundle" }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
