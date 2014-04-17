@@ -61,10 +61,11 @@ set(:config_files, [
 set :linked_files, %w{config/database.yml}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/benchmark_definitions}
 
-# Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+# Shouldn't be necessary?! => solve problems with Vagrant first!
+set :default_env, { BUNDLE_GEMFILE: "#{fetch(:deploy_to)}/current/Gemfile",
+                    BUNDLE_PATH: "#{fetch(:deploy_to)}/shared/vendor/bundle" }
 
 # Default value for keep_releases is 5
 # set :keep_releases, 5
@@ -86,6 +87,7 @@ namespace :deploy do
 
   task :start do
     execute "sudo sv up #{fetch(:application)}"
+    # execute :rake, "jobs:work"
   end
 
   task :stop do
@@ -97,6 +99,8 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       execute "sudo sv restart #{fetch(:application)}"
+      # TODO: Create runit configuration for Delayed_job workers
+      # execute :rake, "jobs:work"
     end
   end
 end
