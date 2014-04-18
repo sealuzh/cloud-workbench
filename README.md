@@ -3,6 +3,7 @@
 # Installation
 
 ## Requirements
+* Git (1.9.2)
 * Vagrant (1.5.3): https://www.vagrantup.com/downloads
  * chef (11.6.2)
  * vagrant-omnibus (1.3.1)
