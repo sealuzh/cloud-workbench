@@ -1,22 +1,71 @@
-This directory contains unmodified 3rd party cookbooks downloaded from the Opscode Cookbook Site http://community.opscode.com/cookbooks or other sources.
+# Purpose
+This directory contains specific cookbooks for the cloud_benchmarking application and benchmarks.
+"site-cookbooks" means specific for a certain application and is commonly used in the Chef community.
 
-IMPORTANT: Do not store any modified cookbooks here. Use the application- or wrapper-cookbook approach instead described in the official Opscode blog http://www.getchef.com/blog/2013/12/03/doing-wrapper-cookbooks-right/.
+
+# Create cookbooks
+
+## Berks (recommended)
+
+`berks cookbook COOKBOOK`
+
+Example: `berks cookbook cloud-benchmarking`
+
+This will create the following directory structure:
+.
+├── Berksfile
+├── Berksfile.lock
+├── CHANGELOG.md
+├── Gemfile
+├── Gemfile.lock
+├── LICENSE
+├── README.md
+├── Thorfile
+├── Vagrantfile
+├── attributes
+├── chefignore
+├── files
+│   └── default
+├── libraries
+├── metadata.rb
+├── providers
+├── recipes
+│   └── default.rb
+├── resources
+└── templates
+    └── default
+
+See docs: http://berkshelf.com/
 
 
-To install a cookbook from the Opscode Cookbook Site use the following command:
+## Knife
 
-    knife cookbook site install COOKBOOK
+`knife cookbook create COOKBOOK`
 
-This will:
+Example: `knife cookbook create cloud-benchmarking`
 
-* Download the cookbook tarball from cookbooks.opscode.com.
-* Ensure its on the git master branch.
-* Checks for an existing vendor branch, and creates if it doesn't.
-* Checks out the vendor branch (chef-vendor-COOKBOOK).
-* Removes the existing (old) version.
-* Untars the cookbook tarball it downloaded in the first step.
-* Adds the cookbook files to the git index and commits.
-* Creates a tag for the version downloaded.
-* Checks out the master branch again.
-* Merges the cookbook into master.
-* Repeats the above for all the cookbooks dependencies, downloading them from the community site
+This will create the following directory structure:
+.
+├── CHANGELOG.md
+├── README.md
+├── attributes
+├── definitions
+├── files
+│   └── default
+├── libraries
+├── metadata.rb
+├── providers
+├── recipes
+│   └── default.rb
+├── resources
+└── templates
+    └── default
+
+See docs: http://docs.opscode.com/knife_cookbook.html#create
+
+
+# Next steps
+
+1. Update `metadata.rb` with the cookbook specific informations (e.g. dependencies)
+2. Write your cookbook and make use of the resources provided out of the box: http://docs.opscode.com/chef/resources.html
+  * Search the docs any time: http://docs.opscode.com/search.html
