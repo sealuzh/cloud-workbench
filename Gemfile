@@ -17,6 +17,11 @@ gem 'enumerize', '~> 0.8.0'
 
 
 group :development do
+  # Chef: Use the Chef gem since the omnibus installer with Chef-client version <=11.12.2
+  # is not yet compatible (planned for 11.14.0) with ruby version managers such as RVM or rbenv.
+  # See issue: https://tickets.opscode.com/browse/CHEF-3581
+  gem 'chef', '~> 11.12.2'
+
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.2.0', require: false
   gem 'capistrano-rails',   '~> 1.1', require: false
