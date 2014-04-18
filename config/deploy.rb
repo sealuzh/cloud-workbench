@@ -61,6 +61,10 @@ set(:config_files, [
 set :linked_files, %w{config/database.yml}
 
 # Default value for linked_dirs is []
+# TODO: Use "#{Rails.root}/storage" (and symlink it) to store your files. Follow the advices here: http://makandracards.com/makandra/16999-common-mistakes-when-storing-file-uploads-with-rails
+# Also consider the following alternatives:
+# * Store the Vagrantfile in the database and create the file when creating a benchmark execution.
+# * Use Paperclip and Carrierwave to manage attachments
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/benchmark_definitions}
 
 # Default value for default_env is {}
