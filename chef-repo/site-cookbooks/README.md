@@ -1,4 +1,6 @@
-This directory contains unmodified 3rd party cookbooks downloaded from the Opscode Cookbook Site http://community.opscode.com/cookbooks or other sources. Do not store any modified cookbooks here. Use the application- or wrapper-cookbook approach describes in the official Opscode blog http://www.getchef.com/blog/2013/12/03/doing-wrapper-cookbooks-right/
+This directory contains unmodified 3rd party cookbooks downloaded from the Opscode Cookbook Site http://community.opscode.com/cookbooks or other sources.
+
+IMPORTANT: Do not store any modified cookbooks here. Use the application- or wrapper-cookbook approach instead described in the official Opscode blog http://www.getchef.com/blog/2013/12/03/doing-wrapper-cookbooks-right/.
 
 
 To install a cookbook from the Opscode Cookbook Site use the following command:
