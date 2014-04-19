@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: cbench-databox
+# Cookbook Name:: cbench-rackbox
 # Recipe:: default
 #
 # Copyright (C) 2014 seal uzh
@@ -17,16 +17,18 @@
 # limitations under the License.
 #
 
-# Woraround for error in databox recipe where all databases get installed
+# Woraround for error in rackbox recipe where all apps get installed
 # regardless of the provided configuration.
-# See https://github.com/teohm/databox-cookbook/pull/6
 # Set attribute to nil such that the conditional check in the original cookbook works.
-if node["databox"]["databases"]["mysql"].none?
-  node.set["databox"]["databases"]["mysql"] = nil
+if node["rackbox"]["apps"]["unicorn"].none?
+  node.set["rackbox"]["apps"]["unicorn"] = nil
 end
 
-if node["databox"]["databases"]["postgresql"].none?
-  node.set["databox"]["databases"]["postgresql"] = nil
+if node["rackbox"]["apps"]["passenger"].none?
+  node.set["rackbox"]["apps"]["passenger"] = nil
 end
 
-include_recipe "databox"
+# Use a custom runit template for unicorn: `sv-cbench-unicorn-run.erb`
+node.default["rackbox"]["default_config"]["unicorn_runit"]["template_name"] = "cbench-unicorn"
+
+include_recipe "rackbox"
