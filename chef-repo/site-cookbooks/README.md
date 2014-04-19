@@ -66,6 +66,7 @@ See docs: http://docs.opscode.com/knife_cookbook.html#create
 
 # Next steps
 
-1. Update `metadata.rb` with the cookbook specific informations (e.g. dependencies)
+1. Update `metadata.rb` and `README.md` with the cookbook specific informations (e.g. dependencies)
 2. Write your cookbook and make use of the resources provided out of the box: http://docs.opscode.com/chef/resources.html
   * Search the docs any time: http://docs.opscode.com/search.html
+3. Delete unnecessary files and directories

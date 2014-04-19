@@ -12,6 +12,9 @@ To install a cookbook from the Opscode Cookbook Site use the following command:
 
     knife cookbook site install COOKBOOK
 
+Official Opscode community cookbooks site: http://community.opscode.com/cookbooks
+There are also popular cookbooks (e.g. https://github.com/fnichol/chef-rbenv) that are not available at the Opcode site. Search for them via Github and Google.
+
 This will:
 
 * Download the cookbook tarball from cookbooks.opscode.com.
