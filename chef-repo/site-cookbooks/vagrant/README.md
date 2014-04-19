@@ -43,7 +43,7 @@ installed.
 * `node['vagrant']['msi_version']` - Version string of the installed
   MSI "package" on Windows.
 
-The following attribute is optional.
+The following attributes are optional:
 
 * `node['vagrant']['plugins']` - An array of plugins. The elements in
   the array can be a string or a hash. String elements should be the
@@ -52,6 +52,10 @@ The following attribute is optional.
   install. This is used by the `vagrant_plugin` resource in the
   default recipe.
 
+* `node['vagrant']['plugins_user']` - User for which the vagrant plugins will be installed. Default is `root`
+
+* `node['vagrant']['plugins_group']` - Group for which the vagrant plugins will be installed. Default is `root`
+ 
 Resources
 =========
 
@@ -78,7 +82,7 @@ vagrant plugins.
     vagrant_plugin "vagrant-omnibus"
 
     vagrant_plugin "vagrant-berkshelf"
-      version "1.2.0"
+      version "2.0.0rc3"
     end
 
 Recipes
@@ -105,8 +109,8 @@ then use Chef's built-in RubyGems to uninstall. If you have a
 customized Ruby environment, such as with rbenv or rvm (or other), you
 may need to manually remove and clean up anything leftover, such as
 running `rbenv rehash`. Likewise, if you have multiple copies of the
-vagrant gem installed, you'll need to clean up all versions. This
-recipe won't support such craziness :-).
+vagrant gem installed, you'll need to clean up all versions.
+=> This recipe won't support such craziness :-).
 
 Usage
 =====
@@ -118,12 +122,12 @@ Then include the default recipe on the node's run list.
 
 To specify plugins for installation in the default recipe, specify an
 array for the `node['vagrant']['plugins']` attribute. For example, to
-install the `vagrant-omnibus` plugin (any version) and version "1.2.0"
+install the `vagrant-omnibus` plugin (any version) and version "2.0.0rc"
 of the `vagrant-berkshelf` plugin:
 
     node.set['vagrant']['plugins'] = [
       "vagrant-omnibus",
-      {"name" => "vagrant-berkshelf", "version" => "1.2.0"}
+      {"name" => "vagrant-berkshelf", "version" => "2.0.0rc3"}
     ]
 
 See the attribute description above.

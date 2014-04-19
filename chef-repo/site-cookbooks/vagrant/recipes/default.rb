@@ -24,13 +24,15 @@ node['vagrant']['plugins'].each do |plugin|
 
     vagrant_plugin plugin['name'] do
       version plugin['version']
-      user node['current_user']
+      plugins_user node['vagrant']['plugins_user']
+      plugins_group node['vagrant']['plugins_group']
     end
 
   else
 
     vagrant_plugin plugin do
-      user node['current_user']
+      plugins_user node['vagrant']['plugins_user']
+      plugins_group node['vagrant']['plugins_group']
     end
 
   end
