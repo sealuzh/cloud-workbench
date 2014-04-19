@@ -2,7 +2,15 @@ source "https://api.berkshelf.com"
 
 metadata
 
-# Fork of the vagrant cookbook available at Opcode: master branch (2014-04-18)
-# Adds support for user choice on installation and provides some bugfixes.
-cookbook 'vagrant', git: 'https://github.com/melonhead-cookbooks/vagrant-cookbook',
-					ref: 'daeeb8e35a79bdc8529d9ac56213eda873de1e83'
+# Improved version of the fork https://github.com/melonhead-cookbooks/vagrant-cookbook
+#cookbook 'vagrant', path: '../vagrant'
+# Alternatively use the version from bitbucket
+# cookbook 'vagrant', git: 'git@bitbucket.org:sealuzh/cloud-benchmarking.git',
+# 				    protocol: :ssh,
+# 				    rel: 'chef-repo/site-cookbooks/vagrant'
+
+
+# Include all local site-cookbooks. Note that the directory name MUST match the cookbook name
+Dir.glob('../site-cookbooks/*').each do |path|
+	cookbook File.basename(path), path: path
+end

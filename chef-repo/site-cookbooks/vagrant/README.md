@@ -36,6 +36,8 @@ The following attributes *must* be set.
 * `node['vagrant']['checksum']` - SHA256 checksum of the Vagrant
   installation package.
 
+See the official Vagrant downloads page for current releases: http://www.vagrantup.com/downloads.html
+
 If the node is Windows, the MSI version must be set. This is used by
 the `windows_package` resource to determine if the package is
 installed.

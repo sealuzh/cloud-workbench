@@ -16,3 +16,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+include_recipe "vim"
+include_recipe "vagrant"
+include_recipe "cbench-databox"
+include_recipe "cbench-rackbox"
+include_recipe "nodejs"
+
+# Consider configuring the database.yml based on the chosen database, password and db name.
