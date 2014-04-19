@@ -1,0 +1,32 @@
+{
+  "run_list":[
+		"cloud-benchmarking"
+  ],
+  "appbox": {
+    "deploy_keys": ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCD+BQ5ILiCrn4IIoabtQOz7iAhQV48LfqdSlrxTMIoDrAzKZdyfGlhaRydLz7acdfd/PJG8IzaskinGdQYM3NfkPFniyU72ir07/QykQDbgadEA5XP4o1Tm0hUPs1Wt7OHBWzYxYjhYJN7Rnun7Pc/Xj4D7Dr48FJQUxUvAPLYJQ== joel.scheuner.dev@gmail.com"],
+    "vagrant_keys": ["ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key"]
+  },
+  "databox": {
+    "db_root_password": "my_db_root_password",
+    "databases": {
+      "postgresql": [
+        { "username": "cloud",
+          "password": "cloud",
+          "database_name": "cloud_benchmarking_production" }
+      ]
+    }
+  },
+  "rackbox": {
+    "ruby": {
+      "versions": [ "2.1.1" ],
+      "global_version": "2.1.1"
+    },
+    "apps": {
+      "unicorn": [
+        { "appname": "cloud_benchmarking",
+          "hostname": "33.33.33.10"
+        }
+      ]
+    }
+  }
+}

@@ -8,7 +8,7 @@
  * chef (11.6.2)
  * vagrant-omnibus (1.3.1)
  * [optional] vagrant-aws (0.4.1) for AWS EC2 Cloud
-* Required cookbooks: TODO: include repo path (site-cookbooks and own cookbook)
+* Required cookbooks: TODO: Berkshelf and vendored (without Berkshelf)
 
 # Things you may want to cover
 
