@@ -12,28 +12,28 @@ This directory contains specific cookbooks for the cloud_benchmarking applicatio
 Example: `berks cookbook cloud-benchmarking`
 
 This will create the following directory structure:
-.
-├── Berksfile
-├── Berksfile.lock
-├── CHANGELOG.md
-├── Gemfile
-├── Gemfile.lock
-├── LICENSE
-├── README.md
-├── Thorfile
-├── Vagrantfile
-├── attributes
-├── chefignore
-├── files
-│   └── default
-├── libraries
-├── metadata.rb
-├── providers
-├── recipes
-│   └── default.rb
-├── resources
-└── templates
-    └── default
+.  
+├── Berksfile  
+├── Berksfile.lock  
+├── CHANGELOG.md  
+├── Gemfile  
+├── Gemfile.lock  
+├── LICENSE  
+├── README.md  
+├── Thorfile  
+├── Vagrantfile  
+├── attributes  
+├── chefignore  
+├── files  
+│   └── default  
+├── libraries  
+├── metadata.rb  
+├── providers  
+├── recipes  
+│   └── default.rb  
+├── resources  
+└── templates  
+    └── default  
 
 See docs: http://berkshelf.com/
 
@@ -45,21 +45,21 @@ See docs: http://berkshelf.com/
 Example: `knife cookbook create cloud-benchmarking`
 
 This will create the following directory structure:
-.
-├── CHANGELOG.md
-├── README.md
-├── attributes
-├── definitions
-├── files
-│   └── default
-├── libraries
-├── metadata.rb
-├── providers
-├── recipes
-│   └── default.rb
-├── resources
-└── templates
-    └── default
+.  
+├── CHANGELOG.md  
+├── README.md  
+├── attributes  
+├── definitions  
+├── files  
+│   └── default  
+├── libraries  
+├── metadata.rb  
+├── providers  
+├── recipes  
+│   └── default.rb  
+├── resources  
+└── templates  
+    └── default  
 
 See docs: http://docs.opscode.com/knife_cookbook.html#create
 
