@@ -1,0 +1,8 @@
+source "https://api.berkshelf.com"
+
+metadata
+
+# Fork of the vagrant cookbook available at Opcode: master branch (2014-04-18)
+# Adds support for user choice on installation and provides some bugfixes.
+cookbook 'vagrant', git: 'https://github.com/melonhead-cookbooks/vagrant-cookbook',
+					ref: 'daeeb8e35a79bdc8529d9ac56213eda873de1e83'
