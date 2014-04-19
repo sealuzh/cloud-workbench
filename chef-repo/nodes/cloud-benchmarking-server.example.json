@@ -1,0 +1,56 @@
+{
+  "run_list":[
+		"vagrant",
+    "databox",
+    "rackbox",
+    "nodejs",
+    "vim"
+  ],
+	"vagrant": {
+		"url": "https://dl.bintray.com/mitchellh/vagrant/vagrant_1.5.3_x86_64.deb",
+		"checksum": "430c5553aeb3f2f5ff30c8c32a565db16669eaf76a553e3e1ceff27cbe6cb2b2",
+		"plugins": [
+		  { "name": "vagrant-aws", "version": "0.4.1" },
+		  { "name": "vagrant-omnibus", "version": "1.3.1" },
+		  { "name": "chef", "version": "11.6.2" }
+		],
+		"plugins_user": "apps",
+		"plugins_group": "apps"
+	},
+	"rbenv": {
+		"group_users": ["deploy", "apps"]
+	},
+  "appbox": {
+    "deploy_keys": ["ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCD+BQ5ILiCrn4IIoabtQOz7iAhQV48LfqdSlrxTMIoDrAzKZdyfGlhaRydLz7acdfd/PJG8IzaskinGdQYM3NfkPFniyU72ir07/QykQDbgadEA5XP4o1Tm0hUPs1Wt7OHBWzYxYjhYJN7Rnun7Pc/Xj4D7Dr48FJQUxUvAPLYJQ== joel.scheuner.dev@gmail.com"],
+    "vagrant_keys": ["ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ== vagrant insecure public key"]
+  },
+  "databox": {
+    "db_root_password": "welcome!",
+    "databases": {
+      "postgresql": [
+        { "username": "app2",
+          "password": "app2",
+          "database_name": "app2_production" },
+        { "username": "cloud",
+          "password": "cloud",
+          "database_name": "cloud_benchmarking_production" }
+      ]
+    }
+  },
+  "rackbox": {
+    "ruby": {
+      "versions": ["1.9.3-p385", "1.9.2-p320", "2.1.1"],
+      "global_version": "1.9.3-p385"
+    },
+    "apps": {
+      "unicorn": [
+        { "appname": "app2",
+          "hostname": "test.app2.com"
+        },
+        { "appname": "cloud_benchmarking",
+          "hostname": "33.33.33.66"
+        }
+      ]
+    }
+  }
+}
