@@ -8,6 +8,7 @@
  * chef (11.6.2)
  * vagrant-omnibus (1.3.1)
  * [optional] vagrant-aws (0.4.1) for AWS EC2 Cloud
+ * [optional] vagrant-cachier (0.7.0) for optimized local development with VirtualBox
 * Required cookbooks: TODO: Berkshelf and vendored (without Berkshelf)
 
 # Things you may want to cover

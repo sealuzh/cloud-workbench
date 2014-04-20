@@ -2,9 +2,14 @@
 
 Installs and configures the cloud benchmarking application.
 
+Only unicorn and postgresql have been tested. Using passenger and mysql would require some tweaking.
+
 ## Supported Platforms
 
 Only tested with Ubuntu 12.04 (64bit)
+
+Known issues:
+* For other platforms the vagrant cookbook must be reconfigured (url + checksum)
 
 ## Attributes
 

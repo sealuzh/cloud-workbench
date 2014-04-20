@@ -10,7 +10,14 @@ metadata
 # 				    rel: 'chef-repo/site-cookbooks/vagrant'
 
 
-# Include all local site-cookbooks. Note that the directory name MUST match the cookbook name
-Dir.glob('../site-cookbooks/*').each do |path|
-	cookbook File.basename(path), path: path
+# Include all local site-cookbooks except this cookbook itself (avoid reflexive dependency).
+# Note that the directory name MUST match the cookbook name
+require 'pathname'
+pn = Pathname.new(File.expand_path(__FILE__))
+own_dir_name = pn.parent.basename.to_s
+Dir.glob('../../site-cookbooks/*').each do |path|
+  dir_name = File.basename(path).to_s
+  if (File.directory? path) && (dir_name != own_dir_name)
+    cookbook(dir_name, path: path)
+  end
 end

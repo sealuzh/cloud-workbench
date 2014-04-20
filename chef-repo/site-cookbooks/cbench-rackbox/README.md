@@ -1,6 +1,6 @@
 # cbench-rackbox-cookbook
 
-Application/wrapper cookbook for the rackbox cookbook. Fixes an error where all web servers (unicorn and passenger) are installed regardless of the provided attributes. It also provides a custom runit template for unicorn and provides additional environment variables (BUNDLE_GEMFILE, BUNDLE_PATH) for the unicorn_runit setup (see libraries/helpers).
+Wrapper cookbook for the rackbox cookbook. Fixes an error where all web servers (unicorn and passenger) are installed regardless of the provided attributes. It also provides a custom runit template for unicorn and provides additional environment variables (BUNDLE_GEMFILE, BUNDLE_PATH) for the unicorn_runit setup (see libraries/helpers).
 
 ## Supported Platforms
 

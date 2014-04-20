@@ -1,6 +1,6 @@
 # cbench-databox-cookbook
 
-Application/wrapper cookbook for the databox cookbook from https://github.com/area17/databox-cookbook to fix an error. Pending pull request https://github.com/teohm/databox-cookbook/pull/6 will probably never be merged.
+Wrapper cookbook for the databox cookbook from https://github.com/area17/databox-cookbook to fix an error. Pending pull request https://github.com/teohm/databox-cookbook/pull/6 will probably never be merged.
 
 ## Supported Platforms
 

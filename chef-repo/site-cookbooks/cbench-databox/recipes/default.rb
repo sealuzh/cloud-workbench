@@ -21,11 +21,13 @@
 # regardless of the provided configuration.
 # See https://github.com/teohm/databox-cookbook/pull/6
 # Set attribute to nil such that the conditional check in the original cookbook works.
-if node["databox"]["databases"]["mysql"].none?
+mysql = node["databox"]["databases"]["mysql"]
+if mysql || mysql.none?
   node.set["databox"]["databases"]["mysql"] = nil
 end
 
-if node["databox"]["databases"]["postgresql"].none?
+postgresql = node["databox"]["databases"]["postgresql"]
+if postgresql || postgresql.none?
   node.set["databox"]["databases"]["postgresql"] = nil
 end
 

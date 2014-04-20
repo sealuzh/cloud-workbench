@@ -18,11 +18,23 @@ Vagrant.configure("2") do |config|
     # The path to the Berksfile to use with Vagrant Berkshelf
     puts 'INFO:  Vagrant-berkshelf plugin detected.'
     config.berkshelf.berksfile_path = './Berksfile'
+    config.berkshelf.enabled = true
   else
     puts "FATAL: Vagrant-berkshelf plugin not detected. Please install the plugin with\n
                  'vagrant plugin install vagrant-berkshelf' from any other directory\n
                  before continuing."
     exit
+  end
+
+  # Detects vagrant-cachier plugin
+  if Vagrant.has_plugin?('vagrant-cachier')
+    puts 'INFO:  Vagrant-cachier plugin detected. Optimizing caches.'
+    config.cache.auto_detect = true
+    config.cache.enable :chef
+    config.cache.enable :apt
+    config.cache.enable :gem
+  else
+    puts 'WARN:  Vagrant-cachier plugin not detected. Continuing unoptimized.'
   end
   
   config.vm.box = 'opscode-ubuntu-12.04'
@@ -35,8 +47,8 @@ Vagrant.configure("2") do |config|
 
   config.vm.provider :virtualbox do |vb|
     # Try to approximate an AWS m1.small instance
-    vb.memory = 1700
-    vb.cpus = 1
+    vb.memory = 2500
+    vb.cpus = 3
   end
   
   config.vm.provision :chef_solo do |chef|
@@ -47,7 +59,7 @@ Vagrant.configure("2") do |config|
     # Ignore warning of empty runlist on "vagrant up" since the runlist from the json is applied.
     # This allows to share the chef configuration with chef solo.
     # Appy run_list and attributes from json
-    chef.json = JSON.parse( IO.read('../nodes/cloud-benchmarking-server.json') )
+    chef.json = JSON.parse( IO.read('../../nodes/cloud-benchmarking-server.json') )
   end
 
 end

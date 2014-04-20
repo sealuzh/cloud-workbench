@@ -27,6 +27,7 @@ module Rackbox
         env(
           'BUNDLE_GEMFILE'      => File.join(app_dir, 'Gemfile'),
           'BUNDLE_PATH'         => File.absolute_path(File.join(app_dir, '../shared/vendor/bundle')) # Symlinked to shared/vendor/bundle
+        )
         restart_on_update false
       end
     end

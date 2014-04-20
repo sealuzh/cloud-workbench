@@ -20,15 +20,19 @@
 # Woraround for error in rackbox recipe where all apps get installed
 # regardless of the provided configuration.
 # Set attribute to nil such that the conditional check in the original cookbook works.
-if node["rackbox"]["apps"]["unicorn"].none?
+unicorn = node["rackbox"]["apps"]["unicorn"]
+if unicorn || unicorn.none?
   node.set["rackbox"]["apps"]["unicorn"] = nil
 end
 
-if node["rackbox"]["apps"]["passenger"].none?
+passenger = node["rackbox"]["apps"]["passenger"]
+if passenger || passenger.none?
   node.set["rackbox"]["apps"]["passenger"] = nil
 end
 
 # Use a custom runit template for unicorn: `sv-cbench-unicorn-run.erb`
 node.default["rackbox"]["default_config"]["unicorn_runit"]["template_name"] = "cbench-unicorn"
+# Search for the template within this cookbook
+node.default["rackbox"]["default_config"]["unicorn_runit"]["template_cookbook"] = "cbench-rackbox"
 
 include_recipe "rackbox"
