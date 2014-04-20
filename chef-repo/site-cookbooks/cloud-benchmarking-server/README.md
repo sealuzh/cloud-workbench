@@ -1,6 +1,6 @@
-# cloud-benchmarking-cookbook
+# cloud-benchmarking-server-cookbook
 
-Installs and configures the cloud benchmarking application.
+Installs and configures the server of the cloud benchmarking application.
 
 Only unicorn and postgresql have been tested. Using passenger and mysql would require some tweaking.
 
@@ -21,7 +21,7 @@ Known issues:
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>['cloud-benchmarking']['bacon']</tt></td>
+    <td><tt>['cloud-benchmarking-server']['bacon']</tt></td>
     <td>Boolean</td>
     <td>whether to include bacon</td>
     <td><tt>true</tt></td>
@@ -32,18 +32,18 @@ Known issues:
 
 ### cloud-benchmarking::default
 
-Include `cloud-benchmarking` in your node's `run_list`:
+Include `cloud-benchmarking-server` in your node's `run_list`:
 
 ```json
 {
   "run_list": [
-    "recipe[cloud-benchmarking]"
+    "recipe[cloud-benchmarking-server]"
   ]
 }
 ```
 
 ```ruby
-chef.run_list = ['recipe[cloud-benchmarking']
+chef.run_list = ['recipe[cloud-benchmarking-server']
 ```
 
 ## License and Authors

@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: cloud-benchmarking
+# Cookbook Name:: cloud-benchmarking-server
 # Recipe:: default
 #
 # Copyright (C) 2014 seal uzh

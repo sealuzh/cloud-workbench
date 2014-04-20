@@ -1,6 +1,6 @@
 # 0.1.0
 
-Initial release of cloud-benchmarking
+Initial release of cloud-benchmarking-server
 
 * Enhancements
   * an enhancement

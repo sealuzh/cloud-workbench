@@ -1,4 +1,4 @@
-#default["cloud-benchmarking"]["SOME-ATTRIBUTE"] = "my cloud benchmarking specific attribute"
+#default["cloud-benchmarking-server"]["SOME-ATTRIBUTE"] = "my cloud benchmarking specific attribute"
 
 default["rackbox"]["ruby"]["versions"] = 	   [ "2.1.1" ]
 default["rackbox"]["ruby"]["global_version"] =   "2.1.1"
