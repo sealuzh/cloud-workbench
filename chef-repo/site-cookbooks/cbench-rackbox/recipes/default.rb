@@ -30,7 +30,8 @@ if passenger || passenger.none?
   node.override["rackbox"]["apps"]["passenger"] = nil
 end
 
-# MUST be set before including the "rackbox" cookbook as the rackbook cookbook will use it to define the runit_service
+# MUST use override before including the "rackbox" cookbook as the rackbook cookbook will use it to define the runit_service
+# Note that node.set does NOT work
 # Use a custom runit template for unicorn: `sv-cbench-unicorn-run.erb`
 node.override["rackbox"]["default_config"]["unicorn_runit"]["template_name"] = "cbench-unicorn"
 # Search for the template within this cookbook
