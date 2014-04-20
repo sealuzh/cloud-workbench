@@ -23,12 +23,12 @@
 # Set attribute to nil such that the conditional check in the original cookbook works.
 mysql = node["databox"]["databases"]["mysql"]
 if mysql || mysql.none?
-  node.set["databox"]["databases"]["mysql"] = nil
+  node.override["databox"]["databases"]["mysql"] = nil
 end
 
 postgresql = node["databox"]["databases"]["postgresql"]
 if postgresql || postgresql.none?
-  node.set["databox"]["databases"]["postgresql"] = nil
+  node.override["databox"]["databases"]["postgresql"] = nil
 end
 
 include_recipe "databox"

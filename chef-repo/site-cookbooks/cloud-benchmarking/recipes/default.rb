@@ -21,6 +21,6 @@ include_recipe "vim"
 include_recipe "vagrant"
 include_recipe "cbench-databox"
 include_recipe "cbench-rackbox"
-include_recipe "nodejs"
+include_recipe "cbench-nodejs"
 
 # Consider configuring the database.yml based on the chosen database, password and db name.

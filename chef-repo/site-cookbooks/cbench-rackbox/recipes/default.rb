@@ -22,17 +22,18 @@
 # Set attribute to nil such that the conditional check in the original cookbook works.
 unicorn = node["rackbox"]["apps"]["unicorn"]
 if unicorn || unicorn.none?
-  node.set["rackbox"]["apps"]["unicorn"] = nil
+  node.override["rackbox"]["apps"]["unicorn"] = nil
 end
 
 passenger = node["rackbox"]["apps"]["passenger"]
 if passenger || passenger.none?
-  node.set["rackbox"]["apps"]["passenger"] = nil
+  node.override["rackbox"]["apps"]["passenger"] = nil
 end
 
+# MUST be set before including the "rackbox" cookbook as the rackbook cookbook will use it to define the runit_service
 # Use a custom runit template for unicorn: `sv-cbench-unicorn-run.erb`
-node.default["rackbox"]["default_config"]["unicorn_runit"]["template_name"] = "cbench-unicorn"
+node.override["rackbox"]["default_config"]["unicorn_runit"]["template_name"] = "cbench-unicorn"
 # Search for the template within this cookbook
-node.default["rackbox"]["default_config"]["unicorn_runit"]["template_cookbook"] = "cbench-rackbox"
+node.override["rackbox"]["default_config"]["unicorn_runit"]["template_cookbook"] = "cbench-rackbox"
 
 include_recipe "rackbox"

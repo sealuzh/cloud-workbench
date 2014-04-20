@@ -8,6 +8,6 @@ version          '0.1.0'
 
 depends 'cbench-databox'
 depends 'cbench-rackbox'
-depends 'nodejs'
+depends 'cbench-nodejs'
 depends 'vim'
 depends 'vagrant' # Improved version of a Github fork of the original cookbook
