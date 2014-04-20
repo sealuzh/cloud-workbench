@@ -23,4 +23,5 @@ include_recipe "cbench-databox"
 include_recipe "cbench-rackbox"
 include_recipe "cbench-nodejs"
 
-# Consider configuring the database.yml based on the chosen database, password and db name.
+# Consider configuring the database.yml based on the chosen database, password and db name here
+# instead of pushing this configuration later via Capistrano.

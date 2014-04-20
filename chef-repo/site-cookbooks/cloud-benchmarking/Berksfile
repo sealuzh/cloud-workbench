@@ -2,14 +2,6 @@ source "https://api.berkshelf.com"
 
 metadata
 
-# Improved version of the fork https://github.com/melonhead-cookbooks/vagrant-cookbook
-#cookbook 'vagrant', path: '../vagrant'
-# Alternatively use the version from bitbucket
-# cookbook 'vagrant', git: 'git@bitbucket.org:sealuzh/cloud-benchmarking.git',
-# 				    protocol: :ssh,
-# 				    rel: 'chef-repo/site-cookbooks/vagrant'
-
-
 # Include all local site-cookbooks except this cookbook itself (avoid reflexive dependency).
 # Note that the directory name MUST match the cookbook name
 require 'pathname'
