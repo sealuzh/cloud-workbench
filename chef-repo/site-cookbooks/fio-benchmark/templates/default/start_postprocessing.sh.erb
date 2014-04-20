@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.submit_metric '1','121','1311'"
+<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.submit_metric '1','122','1312'"
+<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.submit_metric '1','122','1313'"
+
+<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.notify_postprocessing_completed"

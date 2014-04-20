@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+fio fio-write-job.ini
+
+<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.notify_benchmark_completed"
