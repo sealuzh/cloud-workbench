@@ -1,5 +1,6 @@
 # Install fio via apt
-# - Only some older releases: http://packages.ubuntu.com/search?keywords=fio&searchon=names
+# - Only some older releases available:
+#     http://packages.ubuntu.com/search?keywords=fio&searchon=names
 
 # Update package index
 include_recipe 'apt'

@@ -3,55 +3,60 @@
 # Recipe:: default
 #
 
-if node[:fio][:install_source]
-  include_recipe 'build-essential'
-  include_recipe 'fio-benchmark::install_source'
-else
-  include_recipe 'fio-benchmark::install_apt'
-end
+# Install benchmark
+include_recipe "install_#{node[:fio][:install_method]}"
 
 
 # Configure benchmark
-client = data_bag_item('cloud-benchmarking', 'client')
-
-
-template "#{client['benchmark_dir']}/fio-write-job.ini" do
-  source 'fio-write-job.ini.erb'
+template "#{node[:benchmark][:dir]}/#{node[:fio][:config_file]}" do
+  owner node[:benchmark][:owner]
+  group node[:benchmark][:group]
+  variables(
+    rw: node[:fio][:rw],
+    size: node[:fio][:size],
+    bs: node[:fio][:bs],
+    write_bw_log: node[:fio][:write_bw_log],
+    write_lat_log: node[:fio][:write_lat_log],
+    write_iops_log: node[:fio][:write_iops_log]
+  )
+  source node[:fio][:template_name]
+  cookbook node[:fio][:template_cookbook]
 end
 
+# Postprocessing
+template "#{node[:benchmark][:dir]}/fio_log_parser.rb" do
+  source "fio_log_parser.rb.erb"
+  owner node[:benchmark][:owner]
+  group node[:benchmark][:group]
+  mode "0755"
+end
 
-
-# Assumes that rest-client gem is installed within the Chef omnibus installer (which should be the case)
+# Benchmark execution hooks
+# TODO: Provide Chef LWPR to facilitate benchmark definitions by
+# handling owner, group, mode, name, etc in the background
+# May be avoided by passing a custom PATH environment variable.
 RUBY = "#{Chef::Config.embedded_dir}/bin/ruby"
 
-template "#{BENCHMARK_DIR}/start_benchmark.sh" do
-  owner "root"
-  group "root"
-  mode 00755
-  variables(ruby: RUBY)
-  source 'start_benchmark.sh.erb'
-end
-
-template "#{BENCHMARK_DIR}/start_postprocessing.sh" do
-  owner "root"
-  group "root"
-  mode 00755
-  variables(ruby: RUBY)
-  source 'start_postprocessing.sh.erb'
+template "#{node[:benchmark][:dir]}/#{node[:benchmark][:start]}" do
+  source "start.sh.erb"
+  owner node[:benchmark][:owner]
+  group node[:benchmark][:group]
+  mode "0755"
+  variables(
+    config_file: node[:fio][:config_file],
+    fio: node[:fio][:bin]
+  )
 end
 
 
-# Create a class/module within libraries to support multiple providers
-AWS_INSTANCE_ID_REQUEST = 'wget -q -O - http://169.254.169.254/latest/meta-data/instance-id'
-INSTANCE_ID = %x("#{AWS_INSTANCE_ID_REQUEST}")
-
-# Think about setting a default e.g. node['chef-server']['fqdn']
-workbench_server = data_bag_item('benchmark', 'workbench_server')
-template "#{BENCHMARK_DIR}/benchmark_helper.rb" do
-  owner "root"
-  group "root"
-  mode 00755
-  variables(workbench_server: workbench_server['value'],
-            instance_id: INSTANCE_ID)
-  source 'benchmark_helper.rb.erb'
+template "#{node[:benchmark][:dir]}/#{node[:benchmark][:stop_and_postprocess]}" do
+  source "stop_and_postprocess.sh.erb"
+  owner node[:benchmark][:owner]
+  group node[:benchmark][:group]
+  mode "0755"
+  variables(
+    ruby: RUBY,
+    metric_definition_id: node[:fio][:metric_definition_id]
+    fio_log: node[:fio][:write_bw_log]
+  )
 end

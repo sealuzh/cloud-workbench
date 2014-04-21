@@ -1,7 +1,13 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.submit_metric '1','121','1311'"
-<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.submit_metric '1','122','1312'"
-<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.submit_metric '1','122','1313'"
+# Parse results
+<%= @ruby %> -r "./fio_log_parser.rb" -e "FioLogParser.parse_log '<%= @fio_log %>', 'fio_results.csv'"
 
+# Submit metrics
+<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.submit_metrics '<%= @metric_definition_id %>', 'fio_results.csv'"
+
+# Example for submitting a single metric
+#<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.submit_metric '1','122','1313'"
+
+# Notify postprocessing completed
 <%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.notify_postprocessing_completed"
