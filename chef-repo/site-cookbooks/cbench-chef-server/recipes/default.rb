@@ -17,20 +17,43 @@
 # limitations under the License.
 #
 
-include_recipe 'chef-server'
-
-# Set Chef api_fqdn via Ohai provided public hostname
+# TODO: Provide generic solution for multiple cloud providers e.g. via Ohai that
+# reliably detects the public ip, hostname, etc.
+# Problem: chef-solo command is executed by Vagrant with additional parameters
+# Workaround: User may be required to manually "vagrant provision" after the first "vagrant up"
+public_hostname = %x(wget -q -O - http://169.254.169.254/latest/meta-data/public-hostname)
 old_config = node['chef-server']['configuration']
-old_api_fqdn = old_config['api_fqdn']
-new_api_fqdn = api_fqdn: node['public_hostname']
-new_config = old_config.merge({new_api_fqdn})
+new_api_fqdn = { api_fqdn: public_hostname }
+new_config = old_config.merge(new_api_fqdn)
 node.override['chef-server']['configuration'] = new_config
 
-# node.override['fqdn'] = node['public_hostname']
 
-puts "old_api_fqdn=#{old_api_fqdn} => new_api_fqdn=#{new_api_fqdn}"
+include_recipe 'chef-server'
 
-execute "reconfigure chef-server on configuration change" do
-	command "sudo chef-server-ctl reconfigure"
-	action :run, not_if old_api_fqdn == new_api_fqdn
-end
+# Does not work as executed too late
+# => no effect on chef-server since chef-server.rb is generated during chef-server recipe
+# ruby_block "setup api_fqdn based on Ohai" do
+#   block do
+
+# old_config = node['chef-server']['configuration']
+# new_api_fqdn = { api_fqdn: node['cloud_v2']['public_hostname'] }
+# new_config = old_config.merge(new_api_fqdn)
+
+#     puts "old_config=#{old_config}"
+#     puts  '|'
+#     puts  'v'
+#     puts "new_config=#{new_config}"
+#     node.override['chef-server']['configuration'] = new_config
+
+#     # if old_config != new_config
+#     #   %x(sudo chef-server-ctl reconfigure)
+#     # end
+#   end
+# end
+
+# execute "reconfigure chef-server on configuration change" do
+# 	command "sudo chef-server-ctl reconfigure"
+# 	action :run
+# 	not_if {old_api_fqdn.to_s == new_api_fqdn.to_s}
+# end
+
