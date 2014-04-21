@@ -1,5 +1,9 @@
-#default["cloud-benchmarking-server"]["SOME-ATTRIBUTE"] = "my cloud benchmarking specific attribute"
+# Delayed job
+default["cloud-benchmarking-server"]["delayed_job"]["template_name"] = "delayed_job"
+default["cloud-benchmarking-server"]["delayed_job"]["template_cookbook"] = "cloud-benchmarking-server"
+default["cloud-benchmarking-server"]["delayed_job"]["env"] = "production"
 
+# Rackbox
 default["rackbox"]["ruby"]["versions"] = 	   [ "2.1.1" ]
 default["rackbox"]["ruby"]["global_version"] =   "2.1.1"
 
