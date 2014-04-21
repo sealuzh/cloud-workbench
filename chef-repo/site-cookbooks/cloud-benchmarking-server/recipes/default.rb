@@ -26,7 +26,7 @@ include_recipe "cbench-nodejs"
 # Consider configuring the database.yml based on the chosen database, password and db name here
 # instead of pushing this configuration later via Capistrano.
 
-# TODO: Needs testing!
+# TODO: Needs testing! A paremetrized loop may be required for multiple workers!?
 =begin
 # Delayed job worker(s)
 app["appname"] = "cloud_benchmarking" # TODO: Fix hardcoded value.
