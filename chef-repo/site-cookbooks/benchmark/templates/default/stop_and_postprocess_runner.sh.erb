@@ -1,4 +1,3 @@
 #!/usr/bin/env sh
 
-# TODO: Do nohup here instead of within the Rails app
-<%= "./#{@stop_and_postprocess}" %>
+nohup <%= "./#{@stop_and_postprocess}" %> > postprocessing.stdout 2> postprocessing.stderr < /dev/null &

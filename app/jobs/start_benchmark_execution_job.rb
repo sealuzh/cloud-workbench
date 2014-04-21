@@ -3,9 +3,9 @@ class StartBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :benchma
     benchmark_definition = BenchmarkDefinition.find(benchmark_definition_id)
     benchmark_execution = BenchmarkExecution.find(benchmark_execution_id)
 
+    # TODO: Handle exit code, Avoid sudo, Handle situation when runner don't do a nohup => kill job
     %x( cd "#{benchmark_definition.vagrant_directory_path}" &&
-        vagrant ssh -- "sudo bash -c 'cd /usr/local/cloud-benchmark && pwd; nohup ./start_benchmark.sh > stdout.log 2> stderr.log < /dev/null &'" )
-    # TODO: Handle exit code, Find a way to get the pid
+        vagrant ssh -- "sudo bash -c '/usr/local/cloud-benchmark/start_runner.sh'" )
 
     benchmark_execution.status = 'RUNNING'
     benchmark_execution.save

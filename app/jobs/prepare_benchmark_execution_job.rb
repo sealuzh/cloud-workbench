@@ -15,8 +15,9 @@ class PrepareBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :bench
     FileUtils.mkdir_p(logging_path)
     log_file = "#{logging_path}/vagrant_up.log"
 
+    PROVIDER = 'aws'
     %x( cd "#{benchmark_definition.vagrant_directory_path}" &&
-        vagrant up >>#{log_file} 2>&1 )
+        vagrant up --provider=#{PROVIDER} >>#{log_file} 2>&1 )
 
     if $?.success?
       # TODO: Set StateTransitions for each VirtualMachineInstance

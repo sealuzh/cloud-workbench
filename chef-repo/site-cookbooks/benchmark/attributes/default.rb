@@ -7,7 +7,8 @@ default["benchmark"]["server-ip"] = nil # No useful default value possible
 default["benchmark"]["owner"] = "ubuntu"
 default["benchmark"]["group"] = "ubuntu"
 
-# Runner that handle nohup and I/O redirection
+# Runner that handles nohup and I/O redirection
+default["benchmark"]["redirect_io"] = true # TODO: implement this
 default["benchmark"]["start_runner"] = "start_runner.sh"
 default["benchmark"]["stop_and_postprocess_runner"] = "stop_and_postprocess_runner.sh"
 
