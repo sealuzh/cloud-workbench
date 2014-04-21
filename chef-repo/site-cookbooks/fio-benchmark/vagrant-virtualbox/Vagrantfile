@@ -1,0 +1,69 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = '2'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = 'fio-benchmark-v5-vbox'
+  config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-12.04_chef-provisionerless.box'
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  config.vm.provider 'virtualbox' do |vb|
+  #   # Don't boot with headless mode
+  #   vb.gui = true
+  #
+  #   # Use VBoxManage to customize the VM. For example to change memory:
+    vb.customize ['modifyvm', :id, '--memory', '615']
+  end
+
+  # Add chefserver domain name to hosts file
+  config.vm.provision :shell, :inline =>
+   '# Check to ensure idempotence.
+    if [ ! -f "/var/vagrant_provision" ]; then
+      # Actual commands
+      sudo echo "33.33.33.50  chefserver" >> /etc/hosts
+      sudo echo "33.33.33.50  chef-server" >> /etc/hosts
+      sudo echo "33.33.33.50  chef.seal.uzh.ch" >> /etc/hosts
+    fi
+    touch /var/vagrant_provision # Create file to ensure idempotence'
+
+  #vagrant omnibus plugin that installs Chef with a bundled Ruby: https://github.com/schisamo/vagrant-omnibus
+  config.omnibus.chef_version = :latest
+
+  # Enable provisioning with chef server, specifying the chef server URL,
+  # and the path to the validation key (relative to this Vagrantfile).
+  #
+  # The Opscode Platform uses HTTPS. Substitute your organization for
+  # ORGNAME in the URL and validation key.
+  #
+  # If you have your own Chef Server, use the appropriate URL, which may be
+  # HTTP instead of HTTPS depending on your configuration. Also change the
+  # validation key to validation.pem.
+  #
+  config.vm.provision 'chef_client' do |chef|
+    chef.chef_server_url = 'https://33.33.33.50/'
+    chef.validation_key_path = '~/.chef/chef-validator.pem'
+    chef.node_name = "#{config.vm.box}"
+    #chef.log_level = :debug
+    
+    # Put the client.rb in /etc/chef so chef-client can be run w/o specifying
+    chef.provisioning_path = '/etc/chef'
+    
+    # Define run list
+    chef.run_list = [
+      'recipe[fio-benchmark@0.1.0]'
+    ]
+    
+    # This would overrides the server config
+    # chef.add_role "demo"
+    
+    # Cleanup when vm gets destroyed: There seems to be a bug in Vagrant-(plugin) experienced with VirtualBox provisioner
+    chef.delete_node = true
+    chef.delete_client = true
+  end
+end
