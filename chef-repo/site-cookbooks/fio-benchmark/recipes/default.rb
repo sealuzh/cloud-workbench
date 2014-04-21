@@ -57,6 +57,6 @@ template "#{node[:benchmark][:dir]}/#{node[:benchmark][:stop_and_postprocess]}" 
   variables(
     ruby: RUBY,
     metric_definition_id: node[:fio][:metric_definition_id]
-    fio_log: node[:fio][:write_bw_log]
+    fio_log: "#{node[:fio][:write_bw_log]}_bw.log"
   )
 end

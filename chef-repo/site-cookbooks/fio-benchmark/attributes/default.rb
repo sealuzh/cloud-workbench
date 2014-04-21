@@ -21,4 +21,4 @@ default[:fio][:config_file] = 'fio_job.ini'
 
 # Execution
 # TODO: Support this shortcut
-# default[:benchmark][:sh][:start] = "#{node[:fio][:bin]} #{node[:fio][:config_file]}"
+# default[:benchmark][:start][:sh] = "#{node[:fio][:bin]} #{node[:fio][:config_file]}"

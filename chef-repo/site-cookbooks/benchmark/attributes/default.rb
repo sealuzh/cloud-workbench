@@ -16,9 +16,9 @@ default["benchmark"]["start"] = "start.sh"
 default["benchmark"]["stop_and_postprocess"] = "stop_and_postprocess.sh"
 
 # May be supported later: Creates a shell script with the inline content provided
-# default["benchmark"]["sh"]["start"] = nil
-# default["benchmark"]["sh"]["stop_and_postprocess"] = nil
+# default["benchmark"]["start"]["sh"] = nil
+# default["benchmark"]["stop_and_postprocess"]["sh"] = nil
 
 # May be supported later: Creates a ruby file and calls it from the shell script
-# default["benchmark"]["ruby"]["start"] = nil
-# default["benchmark"]["ruby"]["stop_and_postprocess"] = nil
+# default["benchmark"]["start"]["ruby"] = nil
+# default["benchmark"]["stop_and_postprocess"]["ruby"] = nil
