@@ -59,7 +59,8 @@ Vagrant.configure("2") do |config|
     # Ignore warning of empty runlist on "vagrant up" since the runlist from the json is applied.
     # This allows to share the chef configuration with chef solo.
     # Appy run_list and attributes from json
-    chef.json = JSON.parse( IO.read('../../nodes/cloud-benchmarking-server.json') )
+    # TODO: Update json for wrapper cookbook compatible version when cloud instances work
+    # chef.json = JSON.parse( IO.read('../../../nodes/cloud-benchmarking-server.json') )
   end
 
 end

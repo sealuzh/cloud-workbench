@@ -17,4 +17,20 @@
 # limitations under the License.
 #
 
-include_recipe "chef-server"
+include_recipe 'chef-server'
+
+# Set Chef api_fqdn via Ohai provided public hostname
+old_config = node['chef-server']['configuration']
+old_api_fqdn = old_config['api_fqdn']
+new_api_fqdn = api_fqdn: node['public_hostname']
+new_config = old_config.merge({new_api_fqdn})
+node.override['chef-server']['configuration'] = new_config
+
+# node.override['fqdn'] = node['public_hostname']
+
+puts "old_api_fqdn=#{old_api_fqdn} => new_api_fqdn=#{new_api_fqdn}"
+
+execute "reconfigure chef-server on configuration change" do
+	command "sudo chef-server-ctl reconfigure"
+	action :run, not_if old_api_fqdn == new_api_fqdn
+end

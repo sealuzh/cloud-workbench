@@ -6,6 +6,11 @@ default["cloud-benchmarking-server"]["delayed_job"]["env"] = "production"
 # Rackbox
 default["rackbox"]["ruby"]["versions"] = 	   [ "2.1.1" ]
 default["rackbox"]["ruby"]["global_version"] =   "2.1.1"
+default["rackbox"]["apps"]["unicorn"] = [
+	"appname" => "cloud_benchmarking"
+	# MUST be resolved dynamically (inspect Ohai on running instance set in recipe)
+	# "hostname" => "33.33.33.10"
+  ]
 
 # Vagrant configuration
 default["vagrant"]["url"] = "https://dl.bintray.com/mitchellh/vagrant/vagrant_1.5.3_x86_64.deb"
