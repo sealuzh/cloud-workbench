@@ -44,6 +44,7 @@ end
 
 
 # Create a class/module to support multiple providers
+# Example response: "i-7705c135"
 AWS_INSTANCE_ID_REQUEST = 'wget -q -O - http://169.254.169.254/latest/meta-data/instance-id'
 INSTANCE_ID = %x("#{AWS_INSTANCE_ID_REQUEST}")
 

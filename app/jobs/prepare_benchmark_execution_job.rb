@@ -1,6 +1,8 @@
 require 'fileutils'
 class PrepareBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :benchmark_execution_id)
   PRIORITY_HIGH = 1
+  PROVIDER = 'aws'
+  # PROVIDER = 'virtualbox'
 
   def perform
     puts "Preparing benchmark with id #{benchmark_definition_id}"
@@ -15,7 +17,6 @@ class PrepareBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :bench
     FileUtils.mkdir_p(logging_path)
     log_file = "#{logging_path}/vagrant_up.log"
 
-    PROVIDER = 'aws'
     %x( cd "#{benchmark_definition.vagrant_directory_path}" &&
         vagrant up --provider=#{PROVIDER} >>#{log_file} 2>&1 )
 
