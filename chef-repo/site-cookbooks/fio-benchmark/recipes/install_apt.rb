@@ -6,6 +6,6 @@
 include_recipe 'apt'
 
 # Install fio benchmark via apt package manager
-apt_package 'fio'
+apt_package 'fio' do
   action :install
 end
