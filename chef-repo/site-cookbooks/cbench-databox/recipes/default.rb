@@ -20,15 +20,13 @@
 # Woraround for error in databox recipe where all databases get installed
 # regardless of the provided configuration.
 # See https://github.com/teohm/databox-cookbook/pull/6
-# Set attribute to nil such that the conditional check in the original cookbook works.
+# Set attribute to nil did not work. Therefore implement choice here.
 mysql = node["databox"]["databases"]["mysql"]
-if mysql || mysql.none?
-  node.override["databox"]["databases"]["mysql"] = nil
+if mysql && mysql.any?
+  include_recipe "databox::mysql"
 end
 
 postgresql = node["databox"]["databases"]["postgresql"]
-if postgresql || postgresql.none?
-  node.override["databox"]["databases"]["postgresql"] = nil
+if postgresql && postgresql.any?
+  include_recipe "databox::postgresql"
 end
-
-include_recipe "databox"
