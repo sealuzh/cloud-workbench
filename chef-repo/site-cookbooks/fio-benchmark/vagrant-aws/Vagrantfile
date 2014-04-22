@@ -48,6 +48,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.log_level = :info
     
     chef.run_list = [
+      "recipe[benchmark]",
       "recipe[fio-benchmark@0.2.0]"
     ]
     
