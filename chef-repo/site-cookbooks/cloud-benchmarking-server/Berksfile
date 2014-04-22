@@ -7,6 +7,7 @@ metadata
 require 'pathname'
 pn = Pathname.new(File.expand_path(__FILE__))
 own_dir_name = pn.parent.basename.to_s
+Dir.chdir pn.parent
 Dir.glob('../../site-cookbooks/*').each do |path|
   dir_name = File.basename(path).to_s
   if (File.directory? path) && (dir_name != own_dir_name)
