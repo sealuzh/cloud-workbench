@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+SSH_USERNAME = "ubuntu"
+
 Vagrant.configure('2') do |config|
   # Detects vagrant-omnibus plugin
   if Vagrant.has_plugin?('vagrant-omnibus')
@@ -18,7 +20,7 @@ Vagrant.configure('2') do |config|
     # The path to the Berksfile to use with Vagrant Berkshelf
     puts 'INFO:  Vagrant-berkshelf plugin detected.'
     config.berkshelf.enabled = true
-    config.berkshelf.berksfile_path = './Berksfile'
+    config.berkshelf.berksfile_path = '../Berksfile'
   else
     puts "FATAL: Vagrant-berkshelf plugin not detected. Please install the plugin with\n
                  'vagrant plugin install vagrant-berkshelf' from any other directory\n
@@ -31,7 +33,7 @@ Vagrant.configure('2') do |config|
   config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
 
   # VM
-  config.vm.hostname = 'chef-server-ec2-production'
+  config.vm.hostname = 'cloud-benchmarking-server-production'
   config.ssh.forward_agent = true
 
   # AWS EC2 provider
@@ -48,13 +50,14 @@ Vagrant.configure('2') do |config|
       region.keypair_name = ENV['EC2_KEYPAIR']
     end
     override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
-    override.ssh.username = "ubuntu"
-    # t1.micro cannot satisfy the memory requirements of the chef-server
-    aws.instance_type = "m1.small"
+    override.ssh.username = SSH_USERNAME
+    aws.instance_type = "t1.micro"
     aws.security_groups = ["aic13-cloud_benchmarking-web"]
-    aws.elastic_ip = true # Always creates a new elastic ip
+    # Creation fails if no more elastic ips are available and
+    # the instance is immediately shutdown!
+    # aws.elastic_ip = true # Always creates a new elastic ip
     aws.tags = {
-      'Name' => 'CloudBenchmarking-ChefServer-Production'
+      'Name' => 'CloudBenchmarking-Server-Production'
      }
   end
 
@@ -64,21 +67,25 @@ Vagrant.configure('2') do |config|
       'recipe[cloud-benchmarking-server]'
     ]
     chef.json = {
-      "appbox": {
-        "deploy_keys": [
+      "appbox" => {
+        "deploy_keys" => [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCaea+LWlsLHA+NaIHDAETymdFToH9FcTvxDGHydE8bxAvlebXq625wF9/YX8qVN6ahcFME32JbNfFSYlp8KGDCa+qNazVawdhsOrEqsudOgZRuizlTI8AjEbbNvVyanQ+c5F/+zLW0v+/N+gk203k7v9lptYlmUQEmLg5EDEwpSrVAVmyfwZr5sMtSa6Ll3WFydGwTxmtGSfzTehMcRHCN/gyk5EOcJScP0PHq6RNSwN6ZPClXuOWBL+2wJ62yNUDm5fPM/X8RgB2IBczO0h7+j51zT85HiE99o5ILfMQjZ/yff6t+qJwJS+DXVZrGs2X3CM3pSxcONKYr9AlTfn+P joel-key-pair-ireland",
           "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCD+BQ5ILiCrn4IIoabtQOz7iAhQV48LfqdSlrxTMIoDrAzKZdyfGlhaRydLz7acdfd/PJG8IzaskinGdQYM3NfkPFniyU72ir07/QykQDbgadEA5XP4o1Tm0hUPs1Wt7OHBWzYxYjhYJN7Rnun7Pc/Xj4D7Dr48FJQUxUvAPLYJQ== joel.scheuner.dev@gmail.com"
           ],
-        "admin_keys": [
-          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCD+BQ5ILiCrn4IIoabtQOz7iAhQV48LfqdSlrxTMIoDrAzKZdyfGlhaRydLz7acdfd/PJG8IzaskinGdQYM3NfkPFniyU72ir07/QykQDbgadEA5XP4o1Tm0hUPs1Wt7OHBWzYxYjhYJN7Rnun7Pc/Xj4D7Dr48FJQUxUvAPLYJQ== joel.scheuner.dev@gmail.com"
+        "admin_keys" => [
+          "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCaea+LWlsLHA+NaIHDAETymdFToH9FcTvxDGHydE8bxAvlebXq625wF9/YX8qVN6ahcFME32JbNfFSYlp8KGDCa+qNazVawdhsOrEqsudOgZRuizlTI8AjEbbNvVyanQ+c5F/+zLW0v+/N+gk203k7v9lptYlmUQEmLg5EDEwpSrVAVmyfwZr5sMtSa6Ll3WFydGwTxmtGSfzTehMcRHCN/gyk5EOcJScP0PHq6RNSwN6ZPClXuOWBL+2wJ62yNUDm5fPM/X8RgB2IBczO0h7+j51zT85HiE99o5ILfMQjZ/yff6t+qJwJS+DXVZrGs2X3CM3pSxcONKYr9AlTfn+P joel-key-pair-ireland"
           ],
       },
-        "databox": {
-          "db_root_password": "my_db_root_password",
-          "databases": {
-          "postgresql": [
-            { "username": "cloud",
-              "password": "cloud",
-              "database_name": "cloud_benchmarking_production" }
+      "cbench-rackbox" => {
+        "add_group_sudoers" => [ SSH_USERNAME ]
+      },
+      "databox" => {
+        "db_root_password" => "HIDDEN",
+        "databases" => {
+          "postgresql" => [
+            { "username" => "HIDDEN",
+              "password" => "HIDDEN",
+              "database_name" => "cloud_benchmarking_production" }
           ]
         }
       }
