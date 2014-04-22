@@ -17,6 +17,15 @@
 # limitations under the License.
 #
 
+# Avoid removing the user that runs Chef from being removed of the sudoers.
+# See "appbox::users"
+appbox_sudoers = [
+  "sudo",
+  node["appbox"]["admin_user"],
+  node["appbox"]["deploy_user"]
+]
+node.override["authorization"]["sudo"]["groups"] = appbox_sudoers.concat( node['cbench-rackbox']['add_group_sudoers'] )
+
 # Woraround for error in rackbox recipe where all apps get installed
 # regardless of the provided configuration.
 # Set attribute to nil such that the conditional check in the original cookbook works.
