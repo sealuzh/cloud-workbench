@@ -18,7 +18,7 @@
 #
 
 # Avoid removing the user that runs Chef from being removed of the sudoers.
-# See "appbox::users"
+# See "appbox::users" which includes the existing sudoers
 appbox_sudoers = [
   "sudo",
   node["appbox"]["admin_user"],
