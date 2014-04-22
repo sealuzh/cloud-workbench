@@ -1,0 +1,1 @@
+default['cbench-rackbox']['add_group_sudoers'] = []
