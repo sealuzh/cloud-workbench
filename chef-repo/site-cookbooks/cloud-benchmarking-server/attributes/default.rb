@@ -1,3 +1,5 @@
+default["apt"]["compiletime"] = true
+
 # Delayed job
 default["cloud-benchmarking-server"]["delayed_job"]["template_name"] = "delayed_job"
 default["cloud-benchmarking-server"]["delayed_job"]["template_cookbook"] = "cloud-benchmarking-server"

@@ -17,6 +17,7 @@
 # limitations under the License.
 #
 
+include_recipe "apt"
 include_recipe "vim"
 include_recipe "vagrant"
 include_recipe "cbench-databox"
