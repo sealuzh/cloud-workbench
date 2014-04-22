@@ -51,6 +51,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "recipe[benchmark]",
       "recipe[fio-benchmark@0.2.0]"
     ]
+
+    chef.json = {
+      fio => {
+        metric_definition_id => 1
+      }
+    }
     
     # Cleanup when vm gets destroyed: There seems to be a bug in the Vagrant-plugin experienced with VirtualBox provisioner
     chef.delete_node = true
