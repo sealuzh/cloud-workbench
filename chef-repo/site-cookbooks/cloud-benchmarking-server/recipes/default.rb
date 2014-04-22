@@ -17,14 +17,6 @@
 # limitations under the License.
 #
 
-node.override["rackbox"]["apps"]["unicorn"] = [
-  "appname" => "cloud_benchmarking",
-  # Only works with Ohai installation (will be installed with Chef)
-  # You must provision a second time after a fresh initial installation.
-  # Alternatively use: node["cloud_v2"]["public_hostname"] => (e.g. ec2-54-195-245-183.eu-west-1.compute.amazonaws.com)
-  "hostname" => node["cloud_v2"]["public_ipv4"] || "localhost"
-  ]
-
 include_recipe "apt"
 include_recipe "vim"
 include_recipe "vagrant"
