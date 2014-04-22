@@ -17,17 +17,6 @@
 # limitations under the License.
 #
 
-# TODO: Provide generic solution for multiple cloud providers e.g. via Ohai that
-# reliably detects the public ip, hostname, etc.
-# Problem: chef-solo command is executed by Vagrant with additional parameters
-# Workaround: User may be required to manually "vagrant provision" after the first "vagrant up"
-public_hostname = %x(wget -q -O - http://169.254.169.254/latest/meta-data/public-hostname)
-old_config = node['chef-server']['configuration']
-new_api_fqdn = { api_fqdn: public_hostname }
-new_config = old_config.merge(new_api_fqdn)
-node.override['chef-server']['configuration'] = new_config
-
-
 include_recipe 'chef-server'
 
 # Does not work as executed too late
