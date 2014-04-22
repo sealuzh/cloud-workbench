@@ -1,0 +1,10 @@
+#!/bin/bash --login
+
+cd <%= @options[:working_directory] %>
+source <%= @options[:home_dir] %>/.profile
+
+exec 2>&1
+exec <%= node[:runit][:chpst_bin] %> \
+    -u <%= @options[:user] %>:<%= @options[:group] %> \
+    -e <%= node[:runit][:sv_dir] %>/<%= @options[:service_name] %>/env \
+    bundle exec rake jobs:work
