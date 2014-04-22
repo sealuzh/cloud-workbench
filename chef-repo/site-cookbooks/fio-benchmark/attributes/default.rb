@@ -1,5 +1,5 @@
 # Installation
-default[:fio][:version] = '2.1.7' # Most recent version in 2014-04-07
+default[:fio][:version] = '2.1.8' # Most recent version in 2014-04-22
 default[:fio][:install_method] = 'source'
 default[:fio][:source_url] = "http://brick.kernel.dk/snaps/fio-#{node[:fio][:version]}.tar.gz"
 default[:fio][:bin] = 'fio'

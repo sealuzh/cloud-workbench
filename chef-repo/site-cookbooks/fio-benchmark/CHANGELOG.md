@@ -1,12 +1,11 @@
-fio-benchmark CHANGELOG
-=======================
+# fio-benchmark CHANGELOG
 
+##0.2.0
 
-0.1.0
------
-- [Joel Scheuner] - Initial release of fio-benchmark
+[Joel Scheuner] - 2014-04-22
 
-- - -
-Check the [Markdown Syntax Guide](http://daringfireball.net/projects/markdown/syntax) for help with Markdown.
+* Add more configuration options and refactor generic benchmark related utilities into own benchmark cookbook.
 
-The [Github Flavored Markdown page](http://github.github.com/github-flavored-markdown/) describes the differences between markdown on github and standard markdown.
+##0.1.0
+
+[Joel Scheuner] - 2014-03 Initial release of fio-benchmark

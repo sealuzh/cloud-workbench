@@ -33,7 +33,7 @@ Attributes
     <td><tt>[:fio][:version]</tt></td>
     <td>String</td>
     <td>Version of FIO</td>
-    <td><tt>2.1.7</tt></td>
+    <td><tt>2.1.8</tt></td>
   </tr>
   <tr>
     <td><tt>[:fio][:install_source_]</tt></td>
