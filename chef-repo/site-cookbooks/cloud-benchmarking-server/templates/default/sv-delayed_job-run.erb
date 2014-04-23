@@ -1,7 +1,9 @@
 #!/bin/bash --login
 
+export HOME=<%= @options[:home_dir] %>
 cd <%= @options[:working_directory] %>
-source <%= @options[:home_dir] %>/.profile
+# $HOME is required in .profile
+source $HOME/.profile
 
 exec 2>&1
 exec <%= node[:runit][:chpst_bin] %> \

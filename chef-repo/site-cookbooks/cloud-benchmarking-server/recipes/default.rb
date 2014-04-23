@@ -35,7 +35,7 @@ include_recipe "cbench-nodejs"
 app = {}
 app["appname"] = "cloud_benchmarking" # TODO: Fix hardcoded value.
 app_dir = ::File.join(node["appbox"]["apps_dir"], app["appname"], 'current')
-home_dir = File.join(node['user']['home_root'], node['appbox']['apps_user']
+home_dir = File.join(node['user']['home_root'], node['appbox']['apps_user'])
 runit_service "delayed_job" do
 	run_template_name  node["cloud-benchmarking-server"]["delayed_job"]["template_name"]
 	log_template_name  node["cloud-benchmarking-server"]["delayed_job"]["template_name"]
@@ -58,7 +58,7 @@ runit_service "delayed_job" do
     'BUNDLE_GEMFILE'      => File.join(app_dir, 'Gemfile'),
     'BUNDLE_PATH'         => File.absolute_path(File.join(app_dir, '../shared/vendor/bundle')), # Symlinked to shared/vendor/bundle
     'RAILS_ENV'           => 'production',
-    'HOME'                => home_dir)
+    'HOME'                => home_dir
   )
 	restart_on_update false
 end
