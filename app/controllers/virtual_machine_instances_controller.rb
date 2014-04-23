@@ -47,7 +47,7 @@ class VirtualMachineInstancesController < ApplicationController
       @virtual_machine_instance.status = 'POSTPROCESSING'
       @virtual_machine_instance.save
       Delayed::Job.enqueue(StartPostprocessingJob.new(@virtual_machine_instance.benchmark_execution.benchmark_definition_id))
-      redirect_to @virtual_machine_instance
+      render status: 200, json: @virtual_machine_instance.to_json
     else
       render action: 'edit'
     end
@@ -61,7 +61,7 @@ class VirtualMachineInstancesController < ApplicationController
       @virtual_machine_instance.status = 'RELEASING_RESOURCES'
       @virtual_machine_instance.save
       Delayed::Job.enqueue(ReleaseResourcesJob.new(@virtual_machine_instance.benchmark_execution.benchmark_definition_id, @virtual_machine_instance.benchmark_execution_id))
-      redirect_to @virtual_machine_instance
+      render status: 200, json: @virtual_machine_instance.to_json
     else
       render action: 'edit'
     end

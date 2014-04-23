@@ -15,7 +15,9 @@ class MetricObservationsController < ApplicationController
 
       # Redirect to CONCRETE_metric_observation (either nominal or ordered)
       method_name = "#{@metric_observation.concrete_metric_observation.class.name.underscore}_path"
-      redirect_to send(method_name.to_sym, @metric_observation.concrete_metric_observation)
+      # => This should be a 'machine' interface only
+      # redirect_to send(method_name.to_sym, @metric_observation.concrete_metric_observation)
+      render status: 200, json: @metric_observation.to_json
     else
       render action: 'new'
     end
