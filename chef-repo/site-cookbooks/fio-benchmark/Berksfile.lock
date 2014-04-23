@@ -1,10 +1,13 @@
 DEPENDENCIES
+  benchmark
+    path: ../benchmark
   fio-benchmark
     path: .
     metadata: true
 
 GRAPH
   apt (2.3.8)
+  benchmark (0.1.0)
   build-essential (2.0.0)
   fio-benchmark (0.2.0)
     apt (>= 0.0.0)

@@ -53,8 +53,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ]
 
     chef.json = {
-      fio => {
-        metric_definition_id => 1
+      "fio" => {
+        "metric_definition_id" => 1
       }
     }
     

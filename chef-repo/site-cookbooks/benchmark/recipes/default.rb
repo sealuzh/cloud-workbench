@@ -18,9 +18,9 @@
 #
 
 
-directory node["benchmark"]["benchmark_dir"] do
-  owner client["owner"]
-  group client["group"]
+directory node["benchmark"]["dir"] do
+  owner node["benchmark"]["owner"]
+  group node["benchmark"]["group"]
   mode 0755
   action :create
 end
@@ -46,7 +46,7 @@ end
 # Create a class/module to support multiple providers
 # Example response: "i-7705c135"
 AWS_INSTANCE_ID_REQUEST = 'wget -q -O - http://169.254.169.254/latest/meta-data/instance-id'
-INSTANCE_ID = %x("#{AWS_INSTANCE_ID_REQUEST}")
+INSTANCE_ID = `#{AWS_INSTANCE_ID_REQUEST}`
 
 # Think about setting a default e.g. node['chef-server']['fqdn']
 workbench_server = data_bag_item('benchmark', 'workbench_server')

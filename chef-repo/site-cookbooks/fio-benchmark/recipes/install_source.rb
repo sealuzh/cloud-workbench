@@ -9,20 +9,19 @@ include_recipe 'build-essential'
 
 
 # Download specific version only if not already present
-remote_file "#{Chef::Config[:file_cache_path]}/fio-#{node[:fio][:version]}.tar.gz" do
-  source node[:fio][:source_url]
+remote_file "#{Chef::Config['file_cache_path']}/fio-#{node['fio']['version']}.tar.gz" do
+  source node['fio']['source_url']
   action :create_if_missing
   notifies :run, "bash[install_fio]", :immediately
 end
 
 # Build specific version from source
 bash "install_fio" do
- user node[:benchmark][:owner]
- cwd Chef::Config[:file_cache_path]
+ cwd Chef::Config['file_cache_path']
  code <<-EOH
-  gunzip fio-#{node[:fio][:version]}.tar.gz
-  tar -xf fio-#{node[:fio][:version]}.tar
-  (cd fio-#{node[:fio][:version]} && ./configure && make && make install)
+  gunzip fio-#{node['fio']['version']}.tar.gz
+  tar -xf fio-#{node['fio']['version']}.tar
+  (cd fio-#{node['fio']['version']} && ./configure && make && sudo make install)
  EOH
  action :nothing
 end

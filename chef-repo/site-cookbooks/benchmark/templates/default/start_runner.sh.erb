@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-nohup <%= "./#{@start}" %> > start.stdout 2> start.stderr < /dev/null &
+<%= "./#{@start}" %> >> start.log 2>> start.log < /dev/null

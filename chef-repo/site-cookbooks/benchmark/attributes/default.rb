@@ -1,7 +1,8 @@
 # This may also be provided via data bag. But since a parameter passing mechanism
 # between the cloud-benchmarking-server and Vagrant is required on per benchmark
 # basis anyway this should be solved the same way.
-default["benchmark"]["server-ip"] = nil # No useful default value possible
+# default["benchmark"]["server-ip"] = nil # No useful default value possible
+default["benchmark"]["dir"] = "/usr/local/cloud-benchmark"
 
 # System specific
 default["benchmark"]["owner"] = "ubuntu"
