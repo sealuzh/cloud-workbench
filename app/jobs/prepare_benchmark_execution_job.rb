@@ -20,23 +20,23 @@ class PrepareBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :bench
     %x( cd "#{benchmark_definition.vagrant_directory_path}" &&
         vagrant up --provider=#{PROVIDER} >>#{log_file} 2>&1 )
 
+    # TODO: Support multiple providers and multiple vm instances per benchmark
+    machines = "#{benchmark_definition.vagrant_directory_path}/.vagrant/machines/default"
+    #Dir.entries(machines) # Maybe useful for multi provider support
+    provider_name = 'aws'
+    id_file_path = "#{machines}/#{provider_name}"
+    provider_instance_id = File.read(id_file_path)
+    vm_instance = benchmark_execution.virtual_machine_instances.build(status: benchmark_execution.status, provider_name: provider_name, provider_instance_id: provider_instance_id)
+    vm_instance.status = benchmark_execution.status
+    vm_instance.save
+    benchmark_execution.save
+
     if $?.success?
       # TODO: Set StateTransitions for each VirtualMachineInstance
       benchmark_execution.status = 'WAITING'
 
-      # TODO: Support multiple providers and multiple vm instances per benchmark
-      machines = "#{benchmark_definition.vagrant_directory_path}/.vagrant/machines/default"
-      #Dir.entries(machines) # Maybe useful for multi provider support
-      provider_name = 'aws'
-      id_file_path = "#{machines}/#{provider_name}"
-      provider_instance_id = File.read(id_file_path)
-      vm_instance = benchmark_execution.virtual_machine_instances.build(status: benchmark_execution.status, provider_name: provider_name, provider_instance_id: provider_instance_id)
-      vm_instance.status = benchmark_execution.status
-      vm_instance.save
-      benchmark_execution.save
-
-    # Schedule StartBenchmarkExecutionJobs with higher priority than PrepareBenchmarkExecutionJobs.
-    # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
+      # Schedule StartBenchmarkExecutionJobs with higher priority than PrepareBenchmarkExecutionJobs.
+      # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
       Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(benchmark_definition.id, benchmark_execution.id), PRIORITY_HIGH)
     else
       puts "Vagrant up failed. See logfile: #{log_file}"
