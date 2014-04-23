@@ -15,9 +15,7 @@ template "#{node['benchmark']['dir']}/#{node['fio']['config_file']}" do
     rw: node['fio']['rw'],
     size: node['fio']['size'],
     bs: node['fio']['bs'],
-    write_bw_log: node['fio']['write_bw_log'],
-    write_lat_log: node['fio']['write_lat_log'],
-    write_iops_log: node['fio']['write_iops_log']
+    write_bw_log: node['fio']['write_bw_log']
   )
   source node['fio']['template_name']
   cookbook node['fio']['template_cookbook']

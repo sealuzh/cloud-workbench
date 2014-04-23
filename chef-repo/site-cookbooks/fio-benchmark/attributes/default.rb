@@ -11,8 +11,6 @@ default[:fio][:rw] = 'write'
 default[:fio][:size] = '10m'
 default[:fio][:bs] = '4K-4K/4K-4K'
 default[:fio][:write_bw_log] = 'fio_write_job' # generates "fio_write_job_bw.log"
-default[:fio][:write_lat_log] = nil
-default[:fio][:write_iops_log] = nil
 
 # Configuration
 default[:fio][:template_name] = 'fio_job.ini.erb'
