@@ -2,9 +2,10 @@
 
 <table>
   <thead>
-    <tr>
-      <th>Benchmark definition id</th>
-      <th>Name</th>
+  <tr>
+    <th>id</th>
+    <th>Benchmark definition id</th>
+    <th>Name</th>
       <th>Unit</th>
       <th>Scale type</th>
       <th></th>
@@ -16,6 +17,7 @@
   <tbody>
     <% @metric_definitions.each do |metric_definition| %>
       <tr>
+        <td><%= metric_definition.id %></td>
         <td><%= metric_definition.benchmark_definition_id %></td>
         <td><%= metric_definition.name %></td>
         <td><%= metric_definition.unit %></td>

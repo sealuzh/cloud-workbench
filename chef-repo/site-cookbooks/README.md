@@ -3,6 +3,28 @@ This directory contains specific cookbooks for the cloud_benchmarking applicatio
 "site-cookbooks" means specific for a certain application and is commonly used in the Chef community.
 
 
+# Installation
+
+Prerequisites:
+
+* Chef configured with `$HOME/.chef/knife.rb` (server registration for cookbook upload required)
+
+## Option A
+
+Prefered option if you have a Ruby development environment installed with RVM or rbenv.
+
+1. Make sure you have Ruby version 2.1.1 installed
+2. `cd $GIT_REPO_HOME/cloud_benchmarking`
+3. `bundle install --without=production:test`
+4. `knife -v` and `berks -v` should be available
+
+## Option B
+
+Alternative if you have no Ruby development environment available but Vagrant installed.
+
+1. `vagrant plugin install chef`
+2. `knife -v` should be available but you might be required to use the full path `$HOME/.vagrant.d/gems/bin/knife`. Consider symlinking to your $PATH (e.g. `ln -s  $HOME/.vagrant.d/gems/bin/knife /usr/local/bin`) or using an alias in .profile `alias knife="$HOME/.vagrant.d/gems/bin/knife".
+
 # Create cookbooks
 
 ## Berks (recommended)
@@ -36,6 +58,8 @@ This will create the following directory structure:
     └── default  
 
 See docs: http://berkshelf.com/
+
+Note: If you want to commit your cookbook to the seal Bitbucket repository make sure you delete the `.git/` repository that Berkshelf automatically creates for you with `cd GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/COOKBOOK_NAME` and `rm -r .git/`
 
 
 ## Knife

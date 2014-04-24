@@ -21,7 +21,7 @@ See chef-server
 
 #### Requirements
 
-* Vagrant (1.5.3)
+* Vagrant (1.5.4)
   * vagrant-omnibus (1.3.1)
   * vagrant-berkshelf (2.0.0.rc3)
   * [optional] vagrant-aws (0.4.1)
