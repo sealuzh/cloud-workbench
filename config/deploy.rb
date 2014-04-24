@@ -90,12 +90,12 @@ namespace :deploy do
 
   task :start do
     execute "sudo sv up #{fetch(:application)}"
-    # execute "sudo sv up delayed_job"
+    execute 'sudo sv up delayed_job'
   end
 
   task :stop do
     execute "sudo sv down #{fetch(:application)}"
-    # execute "sudo sv down delayed_job"
+    execute 'sudo sv down delayed_job'
   end
 
   # See Capistrano docs: http://capistranorb.com/2013/06/01/release-announcement.html
@@ -104,7 +104,7 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       execute "sudo sv restart #{fetch(:application)}"
       # TODO: Think about graceful restart for running jobs!
-      # execute "sudo sv restart delayed_job"
+      # execute 'sudo sv restart delayed_job'
     end
   end
 end
