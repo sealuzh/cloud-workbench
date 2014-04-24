@@ -35,17 +35,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   #vagrant omnibus plugin that installs Chef with a bundled Ruby: https://github.com/schisamo/vagrant-omnibus
+  # Exploit Ruby include to move infrastructure stuff to out. Use plugin detection.
   config.omnibus.chef_version = :latest
 
   # Chef provisioning
   config.vm.provision "chef_client" do |chef|
+    chef.log_level = :info
     # Put the client.rb in /etc/chef such that the chef-client can be run via "sudo chef-client" without specifying the path
     chef.provisioning_path = "/etc/chef"
     chef.chef_server_url = Chef::Config[:chef_server_url]
     chef.validation_key_path = Chef::Config[:validation_key]
-    # Use 6-digit random string to generate unique node names since Chef nodes MUST have unique names
+    
+    # May use 6-digit random string to generate unique node names since Chef nodes MUST have unique names with: SecureRandom.hex(3)
+    # MUST be unique in scope of all benchmarks!
     chef.node_name = "#{config.vm.hostname}-#{SecureRandom.hex(3)}"
-    chef.log_level = :info
     
     chef.run_list = [
       "recipe[benchmark]",
@@ -58,8 +61,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       }
     }
     
-    # Cleanup when vm gets destroyed: There seems to be a bug in the Vagrant-plugin experienced with VirtualBox provisioner
-    chef.delete_node = true
-    chef.delete_client = true
+    # Cleanup when vm gets destroyed: Does not work due to bug https://github.com/mitchellh/vagrant/issues/2476
+    # chef.delete_node = true
+    # chef.delete_client = true
   end
 end
