@@ -4,14 +4,6 @@ ruby '2.1.1'
 
 gem 'rails', '4.0.4'
 
-
-gem 'sass-rails', '~> 4.0.2'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
-gem 'jquery-rails'
-gem 'turbolinks'
-gem 'jbuilder', '~> 1.2'
-
 gem 'delayed_job_active_record', '~> 4.0.0'
 gem 'enumerize', '~> 0.8.0'
 
@@ -35,6 +27,16 @@ end
 group :development, :test do
   gem 'sqlite3'
 end
+
+gem 'sass-rails', '~> 4.0.2'
+gem 'therubyracer', '~> 0.12.1'
+gem 'less-rails', '~> 2.5.0'
+gem 'twitter-bootstrap-rails', '~> 2.2.8'
+gem 'uglifier', '>= 1.3.0'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'jquery-rails'
+gem 'turbolinks'
+gem 'jbuilder', '~> 1.2'
 
 group :production do
   gem 'unicorn'
