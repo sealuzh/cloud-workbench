@@ -1,35 +1,41 @@
 <h2>Benchmark Definitions</h2>
 
-<table>
-  <thead>
-  <tr>
-    <th>Id</th>
-    <th>Name</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-  </thead>
-
-  <tbody>
-  <% @benchmark_definitions.each do |benchmark_definition| %>
-      <tr>
-        <td><%= benchmark_definition.id %></td>
-        <td><%= benchmark_definition.name %></td>
-        <td><%= link_to 'Show', benchmark_definition %></td>
-        <td><%= link_to 'Edit', edit_benchmark_definition_path(benchmark_definition) %></td>
-        <td><%= link_to 'Destroy', benchmark_definition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-        <td>
-          <%= form_for(benchmark_definition.benchmark_executions.build) do |f| %>
-            <%= f.hidden_field :benchmark_definition_id %>
-            <%= f.submit 'Start execution', data: { confirm: 'Are you sure?' } %>
-          <% end %>
-        </td>
-      </tr>
-  <% end %>
-  </tbody>
-</table>
-
-<br>
-
 <%= link_to 'New Benchmark definition', new_benchmark_definition_path %>
+
+
+<%= will_paginate %>
+    <div id="defaultTable">
+      <table class="table responsive-table">
+        <thead>
+        <tr>
+          <th>Benchmark Name</th>
+          <th>Edit</th>
+          <th>Start execution</th>
+          <th>Score</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @benchmark_definitions.each do |benchmark_definition| %>
+          <tr>
+            <td>
+              <% if benchmark_definition.benchmark_executions.any?%>
+                <%= link_to benchmark_definition.name, benchmark_definition %>
+              <% else %>
+                <%= link_to edit_benchmark_definition_path(benchmark_definition) do %>
+                  <%= benchmark_definition.name %>&nbsp;<i class="fa fa-edit"></i>
+                <% end %>
+              <% end %>
+            </td>
+            <td>
+              <%= form_for(benchmark_definition.benchmark_executions.build) do |f| %>
+                <%= f.hidden_field :benchmark_definition_id %>
+                <%= f.submit 'Start execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-primary btn-xs' %>
+              <% end %>
+            </td>
+            <td><%= link_to 'Destroy', benchmark_definition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+<%= will_paginate %>

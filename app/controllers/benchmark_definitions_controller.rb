@@ -3,7 +3,7 @@ class BenchmarkDefinitionsController < ApplicationController
 
   # GET /benchmark_definitions
   def index
-    @benchmark_definitions = BenchmarkDefinition.all
+    @benchmark_definitions = BenchmarkDefinition.paginate(page: params[:page])
   end
 
   # GET /benchmark_definitions/1
