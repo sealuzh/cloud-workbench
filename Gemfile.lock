@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/selbyk/aced_rails.git
+  revision: e733b0cd41deaf5dcd84a7ae5dee4fb2499842f4
+  ref: e733b0cd41deaf5dcd84a7ae5dee4fb2499842f4
+  specs:
+    aced_rails (0.2.1.1)
+      rails (>= 3.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -304,6 +312,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  aced_rails!
   berkshelf (~> 3.0.1)
   bootstrap-will_paginate (~> 0.0.10)
   capistrano (~> 3.2.0)
@@ -311,7 +320,6 @@ DEPENDENCIES
   capistrano-rails (~> 1.1)
   capistrano-rbenv (~> 2.0)
   chef (~> 11.12.2)
-  coffee-rails (~> 4.0.0)
   delayed_job_active_record (~> 4.0.0)
   enumerize (~> 0.8.0)
   font-awesome-rails (~> 4.0.3.1)
