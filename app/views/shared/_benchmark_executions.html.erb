@@ -3,6 +3,9 @@
   <table class='table responsive-table'>
     <thead>
     <tr>
+      <% if show_benchmark_definition %>
+      <th>Benchmark Definition</th>
+      <% end %>
       <th>Status</th>
       <th>Started</th>
       <th>Ended</th>
@@ -12,6 +15,11 @@
     <tbody>
     <% @benchmark_executions.each do |benchmark_execution| %>
       <tr>
+        <% if show_benchmark_definition %>
+        <td>
+          <%= link_to benchmark_execution.benchmark_definition.name, benchmark_execution.benchmark_definition %>
+        </td>
+        <% end %>
         <td>
           <%= benchmark_execution.status %>
         </td>

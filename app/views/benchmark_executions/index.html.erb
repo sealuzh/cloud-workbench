@@ -1,31 +1,30 @@
-<h1>Listing benchmark_executions</h1>
+<% if @benchmark_definition.present? %>
+  <!-- Index benchmark_executions for a specific benchmark_definition -->
+  <div class="row">
+    <div class="span9">
+      <h2>Benchmark Executions of <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
+    </div>
+    <div class="span3">
+      <%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
+        <%= f.hidden_field :benchmark_definition_id %>
+        <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Id</th>
-      <th>Benchmark definition id</th>
-      <th>Status</th>
-      <th>Start time</th>
-      <th>End time</th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
+  <div class="container">
+    <div class="row">
 
-  <tbody>
-    <% @benchmark_executions.each do |benchmark_execution| %>
-      <tr>
-        <td><%= benchmark_execution.id %></td>
-        <td><%= benchmark_execution.benchmark_definition_id %></td>
-        <td><%= benchmark_execution.status %></td>
-        <td><%= benchmark_execution.start_time %></td>
-        <td><%= benchmark_execution.end_time %></td>
-        <td><%= link_to 'Show', benchmark_execution %></td>
-        <td><%= link_to 'Edit', edit_benchmark_execution_path(benchmark_execution) %></td>
-        <td><%= link_to 'Destroy', benchmark_execution, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <div class="box span9">
+        <%= render 'shared/benchmark_executions', show_benchmark_definition: false %>
+      </div>
+
+      <%= render 'shared/metric_definitions_sidebar' %>
+    </div>
+  </div>
+<% else %>
+  <!-- Index all benchmark_executions -->
+  <h2>Benchmark Executions</h2>
+  <%= render 'shared/benchmark_executions', show_benchmark_definition: true %>
+<% end %>
+

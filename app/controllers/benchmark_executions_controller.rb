@@ -7,9 +7,10 @@ class BenchmarkExecutionsController < ApplicationController
   def index
     if params[:context] == :benchmark_definition
       set_benchmark_definition
-      @benchmark_executions = @benchmark_definition.benchmark_executions
+      @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:page])
+      @metric_definitions = @benchmark_definition.metric_definitions
     else
-      @benchmark_executions = BenchmarkExecution.all
+      @benchmark_executions = BenchmarkExecution.paginate(page: params[:page])
     end
   end
 
