@@ -1,8 +1,11 @@
-<h2>Benchmark Definitions</h2>
-
-<% content_for :sidebar do %>
-  <%= link_to 'Create New Benchmark', new_benchmark_definition_path, class: 'btn btn-primary btn-xs' %>
-<% end %>
+<div class="row">
+  <div class="span9">
+    <h2>Benchmark Definitions</h2>
+  </div>
+  <div class="span3">
+    <%= link_to 'Create New Benchmark', new_benchmark_definition_path, class: 'btn btn-primary btn-xs' %>
+  </div>
+</div>
 
 <%= will_paginate %>
     <div id='defaultTable'>
@@ -26,7 +29,8 @@
                 <%= pluralize(benchmark_definition.benchmark_executions.count, 'Execution') %>
               <% end %>
               <% if benchmark_definition.benchmark_executions.has_active? %>
-                (<i class='fa fa-play'></i><%= benchmark_definition.benchmark_executions.actives.count %>)
+                <br>
+                <i class='fa fa-play-circle'></i>&NonBreakingSpace;<%= benchmark_definition.benchmark_executions.actives.count %>
               <% end %>
             </td>
             <td>

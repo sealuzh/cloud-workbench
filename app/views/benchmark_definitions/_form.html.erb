@@ -1,30 +1,9 @@
 <%= form_for(@benchmark_definition) do |f| %>
-  <% if @benchmark_definition.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@benchmark_definition.errors.count, "error") %> prohibited this benchmark_definition from being saved:</h2>
+  <%= f.label :name %><br>
+  <%= f.text_field :name %><br><br>
 
-      <ul>
-      <% @benchmark_definition.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= f.label 'Vagrantfile' %><br>
+  <%= text_area_tag :vagrant_file_content, params[:vagrant_file_content], rows: "20", :class => "form-control span9", :id => "autosize" %><br>
 
-  <div class="field">
-    <%= form_for(@benchmark_definition) do |f| %>
-      <%= f.label :name %><br>
-      <%= f.text_field :name %><br><br>
-
-      <%= f.label 'Vagrantfile' %><br>
-      <%= text_area_tag :vagrant_file_content, params[:vagrant_file_content], :size => "60x25" %><br>
-
-      <%= f.submit %>
-
-    <% end %>
-
-  </div>
-
-  <div class="actions">
-  </div>
+  <%= f.submit %>
 <% end %>
