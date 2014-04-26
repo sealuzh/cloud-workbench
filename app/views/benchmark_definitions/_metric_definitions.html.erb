@@ -4,7 +4,7 @@
     <% @metric_definitions.each do |metric_definition| %>
       <tr><td>
         <%= link_to metric_definition do %>
-          <%= metric_definition.name %><br>
+          <b><%= metric_definition.name %></b><br>
           <%= metric_definition.unit %> (<%= metric_definition.scale_type %>)
         <% end %>
       </td></tr>

@@ -25,7 +25,7 @@
               <% end %>
             </td>
             <td>
-              <%= link_to benchmark_executions_path do %>
+              <%= link_to benchmark_definition_benchmark_executions_path(benchmark_definition) do %>
                 <%= pluralize(benchmark_definition.benchmark_executions.count, 'Execution') %>
               <% end %>
               <% if benchmark_definition.benchmark_executions.has_active? %>

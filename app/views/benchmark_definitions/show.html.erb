@@ -5,7 +5,9 @@
 
     <div class="box span9">
       <header>
-        <h4>Executions (<%= @benchmark_definition.benchmark_executions.count %>)</h4>
+        <h4><%= link_to benchmark_definition_benchmark_executions_path(@benchmark_definition) do %>
+            <%= pluralize(@benchmark_definition.benchmark_executions.count, 'Execution') %>
+          <% end %></h4>
       </header>
       <%= render 'benchmark_executions' %>
     </div>
@@ -13,6 +15,9 @@
     <div class="span3">
       <div class="well sidebar-nav">
         <h4>Metrics</h4>
+        <%= link_to 'Create New Metric', new_metric_definition_path(@benchmark_definition), class: 'btn btn-primary' %>
+        <br>
+        <br>
         <%= render 'metric_definitions' %>
       </div>
     </div>
