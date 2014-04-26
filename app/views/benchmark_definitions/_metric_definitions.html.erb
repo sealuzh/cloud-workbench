@@ -1,0 +1,14 @@
+<div id="defaultTable">
+  <table class="table responsive-table">
+    <tbody>
+    <% @metric_definitions.each do |metric_definition| %>
+      <tr><td>
+        <%= link_to metric_definition do %>
+          <%= metric_definition.name %><br>
+          <%= metric_definition.unit %> (<%= metric_definition.scale_type %>)
+        <% end %>
+      </td></tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

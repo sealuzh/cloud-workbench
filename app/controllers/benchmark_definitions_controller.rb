@@ -8,6 +8,9 @@ class BenchmarkDefinitionsController < ApplicationController
 
   # GET /benchmark_definitions/1
   def show
+    @benchmark_definition = BenchmarkDefinition.find(params[:id])
+    @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:page])
+    @metric_definitions = @benchmark_definition.metric_definitions
   end
 
   # GET /benchmark_definitions/new

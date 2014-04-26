@@ -1,9 +1,21 @@
-<p id="notice"><%= notice %></p>
+<h2><%= @benchmark_definition.name %></h2>
 
-<p>
-  <strong>Name:</strong>
-  <%= @benchmark_definition.name %>
-</p>
+<div class="container">
+  <div class="row">
 
-<%= link_to 'Edit', edit_benchmark_definition_path(@benchmark_definition) %> |
-<%= link_to 'Back', benchmark_definitions_path %>
+    <div class="box span9">
+      <header>
+        <h4>Executions (<%= @benchmark_definition.benchmark_executions.count %>)</h4>
+      </header>
+      <%= render 'benchmark_executions' %>
+    </div>
+
+    <div class="span3">
+      <div class="well sidebar-nav">
+        <h4>Metrics</h4>
+        <%= render 'metric_definitions' %>
+      </div>
+    </div>
+  </div>
+</div>
+

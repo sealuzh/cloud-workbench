@@ -1,16 +1,4 @@
 <%= form_for(@benchmark_execution) do |f| %>
-  <% if @benchmark_execution.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@benchmark_execution.errors.count, "error") %> prohibited this benchmark_execution from being saved:</h2>
-
-      <ul>
-      <% @benchmark_execution.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
   <div class="field">
     <%= f.label :benchmark_definition_id %><br>
     <%= f.text_field :benchmark_definition_id %>

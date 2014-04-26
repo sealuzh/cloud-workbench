@@ -24,7 +24,7 @@ class BenchmarkExecutionsController < ApplicationController
     @benchmark_execution = BenchmarkExecution.new(benchmark_execution_params)
     if @benchmark_execution.save
       Delayed::Job.enqueue(PrepareBenchmarkExecutionJob.new(@benchmark_execution.benchmark_definition_id, @benchmark_execution.id))
-      redirect_to @benchmark_execution, notice: 'Benchmark execution was successfully created.'
+      redirect_to @benchmark_execution, notice: 'Benchmark execution was successfully scheduled.'
     else
       render action: 'new'
     end

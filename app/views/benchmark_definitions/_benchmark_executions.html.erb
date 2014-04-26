@@ -1,0 +1,32 @@
+<%= will_paginate @benchmark_executions %>
+<div id='defaultTable' class='body'>
+  <table class='table responsive-table'>
+    <thead>
+    <tr>
+      <th>Status</th>
+      <th>Started</th>
+      <th>Ended</th>
+      <th>Duration</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @benchmark_executions.each do |benchmark_execution| %>
+      <tr>
+        <td>
+          <%= benchmark_execution.status %>
+        </td>
+        <td>
+          <%= benchmark_execution.start_time.present? ? benchmark_execution.start_time.to_formatted_s(:db) : '-' %>
+        </td>
+        <td>
+          <%= benchmark_execution.end_time.present? ? benchmark_execution.end_time.to_formatted_s(:db) : '-' %>
+        </td>
+        <td>
+          <%= benchmark_execution.start_time.present? ? distance_of_time_in_words(benchmark_execution.duration) : '-' %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<%= will_paginate @benchmark_executions %>
