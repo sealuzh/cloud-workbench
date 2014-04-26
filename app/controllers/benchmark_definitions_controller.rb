@@ -1,5 +1,7 @@
 class BenchmarkDefinitionsController < ApplicationController
   before_action :set_benchmark_definition, only: [:show, :edit, :update, :destroy]
+  # A benchmark definition with existing executions MUST NOT be edited
+  before_action :ensure_integrity_of_existing_executions , only: [:edit, :update]
 
   # GET /benchmark_definitions
   def index
@@ -40,8 +42,9 @@ class BenchmarkDefinitionsController < ApplicationController
   # PATCH/PUT /benchmark_definitions/1
   def update
     if @benchmark_definition.update(benchmark_definition_params)
-      @benchmark_definition.save_vagrant_file(params[:vagrant_file_content]) # TODO: Error handling and ensure that only possible if benchmark has no BenchmarkExecutions
-      redirect_to @benchmark_definition, notice: 'Benchmark definition was successfully updated.'
+      @benchmark_definition.save_vagrant_file(params[:vagrant_file_content])
+      flash.now[:success] = 'Benchmark definition was successfully updated.'
+      render action: 'edit'
     else
       render action: 'edit'
     end
@@ -61,5 +64,12 @@ class BenchmarkDefinitionsController < ApplicationController
 
     def benchmark_definition_params
       params.require(:benchmark_definition).permit(:name, :vagrant_file_content)
+    end
+
+    def ensure_integrity_of_existing_executions
+      if @benchmark_definition.benchmark_executions.any?
+        flash[:error] = "You can't modify a benchmark that has already been executed!"
+        redirect_to @benchmark_definition
+      end
     end
 end
