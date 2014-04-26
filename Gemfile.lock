@@ -328,6 +328,7 @@ DEPENDENCIES
   jquery-rails
   less-rails (~> 2.5.0)
   pg
+  pry (~> 0.9.12.6)
   rails (= 4.0.4)
   sdoc
   sqlite3

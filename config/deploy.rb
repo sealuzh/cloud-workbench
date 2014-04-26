@@ -29,7 +29,7 @@ set :use_sudo, false
 # You may need to configure the BUNDLE_PATH environment variable or web server specific settings.
 set :bundle_path, -> { shared_path.join('vendor/bundle') }
 set :bundle_flags, '--deployment --binstubs'
-set :bundle_without, %w{development test}.join(' ')
+set :bundle_without, %w{development test chef}.join(' ')
 
 # Rbenv
 # -----

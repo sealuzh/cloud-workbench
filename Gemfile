@@ -7,14 +7,8 @@ gem 'rails', '4.0.4'
 gem 'delayed_job_active_record', '~> 4.0.0'
 gem 'enumerize', '~> 0.8.0'
 
-# Consider using separate groups for cookbook authoring and deployment
 group :development do
-  # Chef: Use the Chef gem since the omnibus installer with Chef-client version <=11.12.2
-  # is not yet compatible (planned for 11.14.0) with ruby version managers such as RVM or rbenv.
-  # See issue: https://tickets.opscode.com/browse/CHEF-3581
-  gem 'chef', '~> 11.12.2', require: false
-  gem 'berkshelf', '~> 3.0.1', require: false
-  gem 'foodcritic', '~> 3.0.3', require: false
+  gem 'pry', '~> 0.9.12.6'
 
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.2.0', require: false
@@ -47,6 +41,15 @@ gem 'jbuilder', '~> 1.2'
 group :production do
   gem 'unicorn'
   gem 'pg'
+end
+
+group :chef do
+  # Chef: Use the Chef gem since the omnibus installer with Chef-client version <=11.12.2
+  # is not yet compatible (planned for 11.14.0) with ruby version managers such as RVM or rbenv.
+  # See issue: https://tickets.opscode.com/browse/CHEF-3581
+  gem 'chef', '~> 11.12.2', require: false
+  gem 'berkshelf', '~> 3.0.1', require: false
+  gem 'foodcritic', '~> 3.0.3', require: false
 end
 
 group :doc do
