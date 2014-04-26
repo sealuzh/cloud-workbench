@@ -1,38 +1,32 @@
 <h2>Benchmark Definitions</h2>
 
-<%= link_to 'New Benchmark definition', new_benchmark_definition_path %>
-
+<% content_for :sidebar do %>
+  <%= link_to 'Create New Benchmark', new_benchmark_definition_path, class: 'btn btn-primary btn-xs' %>
+<% end %>
 
 <%= will_paginate %>
     <div id="defaultTable">
       <table class="table responsive-table">
-        <thead>
-        <tr>
-          <th>Benchmark Name</th>
-          <th>Edit</th>
-          <th>Start execution</th>
-          <th>Score</th>
-        </tr>
-        </thead>
         <tbody>
           <% @benchmark_definitions.each do |benchmark_definition| %>
           <tr>
             <td>
               <% if benchmark_definition.benchmark_executions.any?%>
-                <%= link_to benchmark_definition.name, benchmark_definition %>
+                <%= link_to benchmark_definition do %>
+                  <%= benchmark_definition.name %>&NonBreakingSpace;<i class="fa fa-eye"></i>
+                <% end %>
               <% else %>
                 <%= link_to edit_benchmark_definition_path(benchmark_definition) do %>
-                  <%= benchmark_definition.name %>&nbsp;<i class="fa fa-edit"></i>
+                  <%= benchmark_definition.name %>&NonBreakingSpace;<i class="fa fa-edit"></i>
                 <% end %>
               <% end %>
             </td>
             <td>
               <%= form_for(benchmark_definition.benchmark_executions.build) do |f| %>
                 <%= f.hidden_field :benchmark_definition_id %>
-                <%= f.submit 'Start execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-primary btn-xs' %>
+                <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-default btn-xs' %>
               <% end %>
             </td>
-            <td><%= link_to 'Destroy', benchmark_definition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
           </tr>
           <% end %>
         </tbody>
