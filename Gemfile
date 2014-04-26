@@ -28,13 +28,13 @@ group :development, :test do
   gem 'sqlite3'
 end
 
-gem 'sass-rails', '~> 4.0.2'
+# gem 'sass-rails', '~> 4.0.2'
 gem 'therubyracer', '~> 0.12.1'
 gem 'less-rails', '~> 2.5.0'
 gem 'twitter-bootstrap-rails', '~> 2.2.8'
+gem 'font-awesome-rails', '~> 4.0.3.1'
 gem 'will_paginate', '~> 3.0.5'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
-gem 'font-awesome-rails', '~> 4.0.3.1'
 
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
