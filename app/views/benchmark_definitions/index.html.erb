@@ -5,20 +5,28 @@
 <% end %>
 
 <%= will_paginate %>
-    <div id="defaultTable">
-      <table class="table responsive-table">
+    <div id='defaultTable'>
+      <table class='table responsive-table'>
         <tbody>
           <% @benchmark_definitions.each do |benchmark_definition| %>
           <tr>
             <td>
               <% if benchmark_definition.benchmark_executions.any?%>
                 <%= link_to benchmark_definition do %>
-                  <%= benchmark_definition.name %>&NonBreakingSpace;<i class="fa fa-eye"></i>
+                  <%= benchmark_definition.name %>&NonBreakingSpace;<i class='fa fa-eye'></i>
                 <% end %>
               <% else %>
                 <%= link_to edit_benchmark_definition_path(benchmark_definition) do %>
-                  <%= benchmark_definition.name %>&NonBreakingSpace;<i class="fa fa-edit"></i>
+                  <%= benchmark_definition.name %>&NonBreakingSpace;<i class='fa fa-edit'></i>
                 <% end %>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to benchmark_executions_path do %>
+                <%= pluralize(benchmark_definition.benchmark_executions.count, 'Execution') %>
+              <% end %>
+              <% if benchmark_definition.benchmark_executions.has_active? %>
+                (<i class='fa fa-play'></i><%= benchmark_definition.benchmark_executions.actives.count %>)
               <% end %>
             </td>
             <td>

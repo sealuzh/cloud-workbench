@@ -3,7 +3,17 @@ require 'fileutils'
 class BenchmarkDefinition < ActiveRecord::Base
   before_destroy :remove_vagrant_directory
   has_many :metric_definitions
-  has_many :benchmark_executions, dependent: :destroy
+  has_many :benchmark_executions, dependent: :destroy do
+    def has_active?
+      actives.any?
+    end
+    def actives
+      actives = []
+      self.each { |execution| actives.append(execution) if execution.active? }
+      actives
+    end
+  end
+
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
   # that do not support case-sensitive indices.
   validates :name, presence: true, uniqueness: { case_sensitive: false }
