@@ -11,12 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140411112914) do
+ActiveRecord::Schema.define(version: 20140426151241) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "vagrantfile"
   end
 
   add_index "benchmark_definitions", ["name"], name: "index_benchmark_definitions_on_name", unique: true
