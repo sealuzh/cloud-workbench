@@ -1,3 +1,11 @@
-<h1>New metric_observation</h1>
+<!-- TODO: Remove this: Just for debugging purpose during development -->
+<h2>New metric observation</h2>
 
-<%= render 'form' %>
+<%= simple_form_for(@metric_observation, html: {class: 'form-horizontal' }) do |f| %>
+  <%= f.input :metric_definition_id, collection: MetricDefinition.all.select(:id).collect { |m| m.id }, :include_blank => false %>
+  <%= f.input :provider_name, collection: ['aws'], as: :radio_buttons, :include_blank => false %>
+  <%= f.input :provider_instance_id, collection: VirtualMachineInstance.all.select(:provider_instance_id).to_a.collect { |vm| vm.provider_instance_id }, :include_blank => false %>
+  <%= f.input :time %>
+  <%= f.input :value %>
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %>

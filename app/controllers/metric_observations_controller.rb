@@ -7,19 +7,24 @@ class MetricObservationsController < ApplicationController
   end
 
   # This action is NOT idempotent as a RESTful resource should be. It would be too costly to search the entire metrics for same entries
-  # NOTE: Consider renaming to submit to indicate that this action isn't idempotent
   def create
     @metric_observation = MetricObservation.new(metric_observations_params)
     if @metric_observation.save
       flash[:success] = 'Metric observation was successfully created.'
-
-      # Redirect to CONCRETE_metric_observation (either nominal or ordered)
-      method_name = "#{@metric_observation.concrete_metric_observation.class.name.underscore}_path"
-      # => This should be a 'machine' interface only
-      # redirect_to send(method_name.to_sym, @metric_observation.concrete_metric_observation)
-      render status: :ok, json: @metric_observation.to_json
+      respond_to do |format|
+        format.json { render @metric_observation.to_json }
+        format.html do
+          flash[:success] = 'Successfully created new metric observation'
+          method_name = "#{@metric_observation.concrete_metric_observation.class.name.underscore}_path"
+          # Redirect to CONCRETE_metric_observation (either nominal or ordered)
+          redirect_to send(method_name.to_sym, @metric_observation.concrete_metric_observation)
+        end
+      end
     else
-      render action: 'new'
+      respond_to do |format|
+        format.json { head :internal_server_error }
+        format.html { render action: 'new' }
+      end
     end
   end
 
