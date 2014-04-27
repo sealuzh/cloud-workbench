@@ -4,11 +4,11 @@ CloudBenchmarking::Application.routes.draw do
     resources :metric_definitions, only: [:new, :create], context: :benchmark_definition
   end
   resources :benchmark_executions, except: [:new, :create]
-  resources :metric_definitions, except: [:new, :create]
+  resources :metric_definitions, except: [:index, :new, :create]
 
   resources :metric_observations, only: [:new, :create]
-  resources :nominal_metric_observations
-  resources :ordered_metric_observations
+  resources :nominal_metric_observations, only: [:show]
+  resources :ordered_metric_observations, only: [:show]
 
   resources :virtual_machine_instances
   put 'virtual_machine_instance/benchmark_completed' => 'virtual_machine_instances#benchmark_completed'
