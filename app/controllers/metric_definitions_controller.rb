@@ -1,5 +1,6 @@
 class MetricDefinitionsController < ApplicationController
   before_action :set_metric_definition, only: [:show, :edit, :update, :destroy]
+  before_action :set_benchmark_definition, only: [:new, :create]
 
   # GET /metric_definitions
   def index
@@ -12,21 +13,23 @@ class MetricDefinitionsController < ApplicationController
                                             .paginate(page: params[:page])
   end
 
-  # GET /metric_definitions/new
+  # GET benchmark_definitions/1/metric_definitions/new
   def new
-    @metric_definition = MetricDefinition.new
+    @metric_definition = @benchmark_definition.metric_definitions.build
   end
 
   # GET /metric_definitions/1/edit
   def edit
   end
 
-  # POST /metric_definitions
+  # POST benchmark_definitions/1/metric_definitions
   def create
-    @metric_definition = MetricDefinition.new(metric_definition_params)
+    @metric_definition = @benchmark_definition.metric_definitions.build(metric_definition_params)
 
     if @metric_definition.save
-      redirect_to @metric_definition, notice: 'Metric definition was successfully created.'
+      flash[:success] = "Metric definition #{view_context.link_to @metric_definition.name, @metric_definition}
+                         was successfully created.".html_safe
+      redirect_to @metric_definition.benchmark_definition
     else
       render action: 'new'
     end
@@ -48,6 +51,11 @@ class MetricDefinitionsController < ApplicationController
   end
 
   private
+
+    def set_benchmark_definition
+      @benchmark_definition = BenchmarkDefinition.find(params[:benchmark_definition_id])
+    end
+
     def set_metric_definition
       @metric_definition = MetricDefinition.find(params[:id])
     end

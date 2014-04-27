@@ -1,33 +1,8 @@
-<%= form_for(@metric_definition) do |f| %>
-  <% if @metric_definition.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@metric_definition.errors.count, "error") %> prohibited this metric_definition from being saved:</h2>
-
-      <ul>
-      <% @metric_definition.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :benchmark_definition_id %><br>
-    <%= f.text_field :benchmark_definition_id %>
-  </div>
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </div>
-  <div class="field">
-    <%= f.label :unit %><br>
-    <%= f.text_field :unit %>
-  </div>
-  <div class="field">
-    <%= f.label :scale_type %><br>
-    <%= f.select :scale_type, MetricDefinition.scale_type.options %>
-  </div>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+<%= simple_form_for(@metric_definition,
+                    url: benchmark_definition_metric_definitions_path(@benchmark_definition),
+                    html: {class: 'form-horizontal' }) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :unit %>
+  <%= f.input :scale_type, collection: MetricDefinition.scale_type.options, as: :radio_buttons %>
+  <%= f.submit class: 'btn btn-primary' %>
 <% end %>

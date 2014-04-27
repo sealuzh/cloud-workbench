@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140426151241) do
+ActiveRecord::Schema.define(version: 20140427195001) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(version: 20140426151241) do
     t.integer  "benchmark_definition_id"
     t.string   "scale_type"
   end
+
+  add_index "metric_definitions", ["name", "benchmark_definition_id"], name: "index_metric_definitions_on_name_and_benchmark_definition_id", unique: true
 
   create_table "nominal_metric_observations", force: true do |t|
     t.string   "value"
