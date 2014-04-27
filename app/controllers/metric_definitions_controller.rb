@@ -4,11 +4,6 @@ class MetricDefinitionsController < ApplicationController
   # A metric definition with existing observations MUST NOT be edited
   before_action :ensure_integrity_of_existing_observations , only: [:edit, :update]
 
-  # GET /metric_definitions
-  def index
-    @metric_definitions = MetricDefinition.all
-  end
-
   # GET /metric_definitions/1
   def show
     @metric_observations = MetricObservation.where(metric_definition_id: @metric_definition.id)
