@@ -1,4 +1,8 @@
 <h2><%= @benchmark_definition.name %></h2>
+<%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
+  <%= f.hidden_field :benchmark_definition_id %>
+  <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-primary' %>
+<% end %>
 
 <div class="container">
   <div class="row">

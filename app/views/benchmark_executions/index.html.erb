@@ -1,16 +1,10 @@
 <% if @benchmark_definition.present? %>
   <!-- Index benchmark_executions for a specific benchmark_definition -->
-  <div class="row">
-    <div class="span9">
-      <h2>Benchmark Executions of <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
-    </div>
-    <div class="span3">
-      <%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
-        <%= f.hidden_field :benchmark_definition_id %>
-        <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-primary' %>
-      <% end %>
-    </div>
-  </div>
+  <h2>Benchmark Executions of <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
+  <%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
+    <%= f.hidden_field :benchmark_definition_id %>
+    <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-primary' %>
+  <% end %>
 
   <div class="container">
     <div class="row">

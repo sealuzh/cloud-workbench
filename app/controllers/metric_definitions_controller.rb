@@ -8,6 +8,8 @@ class MetricDefinitionsController < ApplicationController
 
   # GET /metric_definitions/1
   def show
+    @metric_observations = MetricObservation.where(metric_definition_id: @metric_definition.id)
+                                            .paginate(page: params[:page])
   end
 
   # GET /metric_definitions/new

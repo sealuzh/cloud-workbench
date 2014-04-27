@@ -17,7 +17,7 @@ class MetricObservationsController < ApplicationController
       method_name = "#{@metric_observation.concrete_metric_observation.class.name.underscore}_path"
       # => This should be a 'machine' interface only
       # redirect_to send(method_name.to_sym, @metric_observation.concrete_metric_observation)
-      render status: 200, json: @metric_observation.to_json
+      render status: :ok, json: @metric_observation.to_json
     else
       render action: 'new'
     end
@@ -26,6 +26,7 @@ class MetricObservationsController < ApplicationController
   # Bulk import of metric observations
   def import
     # TODO: Handle bulk import via CSV
+    render status: :not_implemented
   end
 
   private
