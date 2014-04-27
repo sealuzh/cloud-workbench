@@ -29,6 +29,7 @@ gem 'font-awesome-rails', '~> 4.0.3.1'
 gem 'will_paginate', '~> 3.0.5'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
 
+gem 'simple_form', '~> 3.0.2'
 # Fork of aced_rails gem with Rails 4 support: https://github.com/ffloyd/aced_rails
 # Alternative gem that simply integrates ace into the Rails assets pipeline: https://github.com/codykrieger/ace-rails-ap
 gem 'aced_rails', git: 'https://github.com/selbyk/aced_rails.git', ref: 'e733b0cd41deaf5dcd84a7ae5dee4fb2499842f4'
