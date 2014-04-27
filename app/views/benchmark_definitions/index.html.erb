@@ -10,11 +10,11 @@
             <td>
               <% if benchmark_definition.benchmark_executions.any?%>
                 <%= link_to benchmark_definition do %>
-                  <%= benchmark_definition.name %>&NonBreakingSpace;<i class='fa fa-eye'></i>
+                  <%= benchmark_definition.name %>&nbsp;<i class='fa fa-eye'></i>
                 <% end %>
               <% else %>
                 <%= link_to edit_benchmark_definition_path(benchmark_definition) do %>
-                  <%= benchmark_definition.name %>&NonBreakingSpace;<i class='fa fa-edit'></i>
+                  <%= benchmark_definition.name %>&nbsp;<i class='fa fa-edit'></i>
                 <% end %>
               <% end %>
             </td>
@@ -24,7 +24,7 @@
               <% end %>
               <% if benchmark_definition.benchmark_executions.has_active? %>
                 <br>
-                <i class='fa fa-play-circle'></i>&NonBreakingSpace;<%= benchmark_definition.benchmark_executions.actives.count %>
+                <i class='fa fa-play-circle'></i>&nbsp;<%= benchmark_definition.benchmark_executions.actives.count %>
               <% end %>
             </td>
             <td>

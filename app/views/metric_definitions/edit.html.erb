@@ -1,6 +1,8 @@
-<h1>Editing metric_definition</h1>
+<h2>Edit <%= @metric_definition.name %></h2>
 
-<%= render 'form' %>
-
-<%= link_to 'Show', @metric_definition %> |
-<%= link_to 'Back', metric_definitions_path %>
+<%= simple_form_for(@metric_definition, html: {class: 'form-horizontal' }) do |f| %>
+  <%= f.input :name %>
+  <%= f.input :unit %>
+  <%= f.input :scale_type, collection: MetricDefinition.scale_type.options, as: :radio_buttons %>
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %>

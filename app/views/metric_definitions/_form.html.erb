@@ -1,8 +1,0 @@
-<%= simple_form_for(@metric_definition,
-                    url: benchmark_definition_metric_definitions_path(@benchmark_definition),
-                    html: {class: 'form-horizontal' }) do |f| %>
-  <%= f.input :name %>
-  <%= f.input :unit %>
-  <%= f.input :scale_type, collection: MetricDefinition.scale_type.options, as: :radio_buttons %>
-  <%= f.submit class: 'btn btn-primary' %>
-<% end %>
