@@ -6,6 +6,7 @@ class MetricObservation
   include ActiveModel::Model
   extend Forwardable
 
+  # Delegate the common methods to the concrete implementation.
   def_delegators :@concrete_metric_observation, :time,
                                                 :value,
                                                 :virtual_machine_instance,
@@ -23,6 +24,8 @@ class MetricObservation
     # Delete used arguments to prevent mass assignment error later
     @provider_name = args.delete :provider_name
     @provider_instance_id = args.delete :provider_instance_id
+    # Use NominalMetricObservation as default implementation if none is provided as
+    # the string value is more generic than the float of OrderedMetricObservation
     @concrete_metric_observation = args[:default_implementation] || NominalMetricObservation.new(args)
   end
 
@@ -46,6 +49,15 @@ class MetricObservation
     end
   end
 
+  # You MUST provide a metric_definition_id as argument
+  def self.search(params)
+    observations = scope_builder
+    benchmark_definition_id = BenchmarkDefinition.find_by_name(params[:benchmark_definition_name],
+                                                               case_sensitive: false).id
+    observations.where("benchmark_definition_id == ?", benchmark_definition_id)
+    # TODO: Continue impl.
+  end
+
   private
 
     def complete_attributes
@@ -61,5 +73,9 @@ class MetricObservation
                                                                     virtual_machine_instance_id: virtual_machine_instance.id,
                                                                     time: time, value: value)
       end
+    end
+
+    def self.scope_builder
+      DynamicDelegator.new(scoped)
     end
 end

@@ -6,7 +6,7 @@ class MetricObservationsController < ApplicationController
     @metric_observation = MetricObservation.new
   end
 
-  # This action is NOT idempotent as a RESTful resource should be. It would be too costly to search the entire metrics for same entries
+  # This action is NOT idempotent as a RESTful resource should be. It would be too costly to search the entire metrics for identical entries
   def create
     @metric_observation = MetricObservation.new(metric_observations_params)
     if @metric_observation.save
