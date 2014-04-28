@@ -2,7 +2,7 @@
 <p id="notice"><%= notice %></p>
 
 <div class="container">
-  <div class="span1">
+  <div class="span2">
     <span class="label label-default"><%= @benchmark_execution.status %></span>
   </div>
   <div class="span3">
@@ -23,19 +23,19 @@
 <br>
 <!--HACK: Push this functionality into the model-->
 <div class="container">
-  <div class="span4">
+  <div class="span8">
     <% log_file = File.join(@benchmark_execution.benchmark_definition.vagrant_directory_path, '.vagrant', 'log', 'vagrant_up.log' ) %>
     <% log_content = File.read(log_file) rescue "no vagrant_up.log" %>
     <p><%= log_file %></p>
-    <br>
-    <%= text_area_tag :log, log_content, {:readonly => true, :size => "60x25" }%>
+    <%= text_area_tag :log, log_content, {:readonly => true, rows: "15", class: "form-control span8" }%>
   </div>
+  <br>
+  <br>
   <div class="span4">
     <% log_file = File.join(@benchmark_execution.benchmark_definition.vagrant_directory_path, '.vagrant', 'log', 'vagrant_destroy.log' ) %>
     <% log_content = File.read(log_file) rescue "no vagrant_destroy.log" %>
-    <br>
     <p><%= log_file %></p>
-    <%= text_area_tag :log, log_content, {:readonly => true, :size => "60x25" }%>
+    <%= text_area_tag :log, log_content, {:readonly => true, rows: "15", class: "form-control span8" }%>
   </div>
 </div>
 

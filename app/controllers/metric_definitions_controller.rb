@@ -26,7 +26,7 @@ class MetricDefinitionsController < ApplicationController
     if @metric_definition.save
       flash[:success] = "Metric definition #{view_context.link_to @metric_definition.name, edit_metric_definition_path(@metric_definition)}
                          was successfully created.".html_safe
-      redirect_to @metric_definition.benchmark_definition
+      redirect_to edit_benchmark_definition_path(@metric_definition.benchmark_definition)
     else
       render action: 'new'
     end
