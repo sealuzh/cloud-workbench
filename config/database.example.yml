@@ -1,13 +1,18 @@
-# SQLite version 3.x
-#   gem install sqlite3
-#
-#   Ensure the SQLite 3 gem is defined in your Gemfile
-#   gem 'sqlite3'
 development:
   adapter: sqlite3
   database: db/development.sqlite3
   pool: 5
   timeout: 5000
+
+#development:
+#  adapter: postgresql
+#  pool: 5
+#  database: cloud_benchmarking_development
+#  username: cloud
+#  password:
+#  host: localhost
+
+
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -18,6 +23,16 @@ test:
   pool: 5
   timeout: 5000
 
+# test:
+#   adapter: postgresql
+#   pool: 5
+#   database: cloud_benchmarking_test
+#   username: cloud
+#   password:
+#host: localhost
+
+
+
 # Configure the production settings for deployment in
 # config/deploy/shared (shared across multiple stages) or
 # config/deploy/cloud_benchmarking_production (stage specific)
@@ -27,3 +42,5 @@ production:
   database: cloud_benchmarking_production
   username: cloud
   password: cloud
+  host: localhost
+  port: 5432
