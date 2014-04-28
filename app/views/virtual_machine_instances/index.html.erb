@@ -1,33 +1,29 @@
-<h1>Listing virtual_machine_instances</h1>
+<h2>VM-Instances</h2>
 
-<table>
-  <thead>
+<%= will_paginate @virtual_machine_instances %>
+<div id='defaultTable' class='body'>
+  <table class='table responsive-table'>
+    <thead>
     <tr>
-      <th>Benchmark execution id</th>
+      <th>Link</th>
       <th>Status</th>
-      <th>Provider name</th>
-      <th>Provider instance id</th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th>Provider</th>
+      <th>Provider Instance Id</th>
     </tr>
-  </thead>
-
-  <tbody>
-    <% @virtual_machine_instances.each do |virtual_machine_instance| %>
+    </thead>
+    <tbody>
+    <% @virtual_machine_instances.each do |vm_instance| %>
       <tr>
-        <td><%= virtual_machine_instance.benchmark_execution_id %></td>
-        <td><%= virtual_machine_instance.status %></td>
-        <td><%= virtual_machine_instance.provider_name %></td>
-        <td><%= virtual_machine_instance.provider_instance_id %></td>
-        <td><%= link_to 'Show', virtual_machine_instance %></td>
-        <td><%= link_to 'Edit', edit_virtual_machine_instance_path(virtual_machine_instance) %></td>
-        <td><%= link_to 'Destroy', virtual_machine_instance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+        <td>
+          <%= link_to vm_instance do %>
+            <i class='fa fa-link'></i>
+          <% end %>
+        </td>
+        <td><%= vm_instance.status %></td>
+        <td><%= vm_instance.provider_name %></td>
+        <td><%= vm_instance.provider_instance_id %></td>
     <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Virtual machine instance', new_virtual_machine_instance_path %>
+    </tbody>
+  </table>
+</div>
+<%= will_paginate @virtual_machine_instances %>

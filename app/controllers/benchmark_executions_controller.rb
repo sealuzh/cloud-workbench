@@ -16,6 +16,7 @@ class BenchmarkExecutionsController < ApplicationController
 
   # GET /benchmark_executions/1
   def show
+    @benchmark_definition = @benchmark_execution.benchmark_definition
   end
 
   # GET /benchmark_definition/:id/benchmark_executions/new

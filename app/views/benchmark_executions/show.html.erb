@@ -1,35 +1,42 @@
+<h2>Execution of <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Benchmark definition id:</strong>
-  <%= @benchmark_execution.benchmark_definition_id %>
-</p>
+<div class="container">
+  <div class="span1">
+    <span class="label label-default"><%= @benchmark_execution.status %></span>
+  </div>
+  <div class="span3">
+    <p>
+      <strong>Start time:</strong><br>
+      <%= @benchmark_execution.start_time.present? ? @benchmark_execution.start_time.to_formatted_s(:db) : '-' %>
+    </p>
+  </div>
+  <div class="span3">
+    <p>
+      <strong>End time:</strong><br>
+      <%= @benchmark_execution.end_time.present? ? @benchmark_execution.end_time.to_formatted_s(:db) : '-' %>
+    </p>
+  </div>
+</div>
 
-<p>
-  <strong>Status:</strong>
-  <%= @benchmark_execution.status %>
-</p>
 
-<p>
-  <strong>Start time:</strong>
-  <%= @benchmark_execution.start_time %>
-</p>
+<br>
+<!--HACK: Push this functionality into the model-->
+<div class="container">
+  <div class="span4">
+    <% log_file = File.join(@benchmark_execution.benchmark_definition.vagrant_directory_path, '.vagrant', 'log', 'vagrant_up.log' ) %>
+    <% log_content = File.read(log_file) rescue "no vagrant_up.log" %>
+    <p><%= log_file %></p>
+    <br>
+    <%= text_area_tag :log, log_content, {:readonly => true, :size => "60x25" }%>
+  </div>
+  <div class="span4">
+    <% log_file = File.join(@benchmark_execution.benchmark_definition.vagrant_directory_path, '.vagrant', 'log', 'vagrant_destroy.log' ) %>
+    <% log_content = File.read(log_file) rescue "no vagrant_destroy.log" %>
+    <br>
+    <p><%= log_file %></p>
+    <%= text_area_tag :log, log_content, {:readonly => true, :size => "60x25" }%>
+  </div>
+</div>
 
-<p>
-  <strong>End time:</strong>
-  <%= @benchmark_execution.end_time %>
-</p>
-
-<%= link_to 'Edit', edit_benchmark_execution_path(@benchmark_execution) %> |
-<%= link_to 'Back', benchmark_executions_path %>
-
-<% log_file = File.join(@benchmark_execution.benchmark_definition.vagrant_directory_path, '.vagrant', 'log', 'vagrant_up.log' ) %>
-<% log_content = File.read(log_file) rescue "no vagrant_up.log" %>
-<p><%= log_file %></p>
-<%= text_area_tag :log, log_content, {:readonly => true, :size => "60x25" }%>
-
-<% log_file = File.join(@benchmark_execution.benchmark_definition.vagrant_directory_path, '.vagrant', 'log', 'vagrant_destroy.log' ) %>
-<% log_content = File.read(log_file) rescue "no vagrant_destroy.log" %>
-<p><%= log_file %></p>
-<%= text_area_tag :log, log_content, {:readonly => true, :size => "60x25" }%>
 

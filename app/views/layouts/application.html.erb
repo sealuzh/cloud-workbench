@@ -61,17 +61,9 @@
           <a class="brand" href="/dashboard">CloudBenchmarking</a>
           <div class="container nav-collapse">
             <ul class="nav">
-              <li class="dropdown">
-                <%= link_to "#", class: "dropdown-toggle", 'data-toggle' => "dropdown" do %>
-                  Benchmark<b class="caret"></b>
-                <% end %>
-                <ul class="dropdown-menu">
-                  <li><%= link_to "Definitions", benchmark_definitions_path %> </li>
-                  <li><%= link_to "Executions", benchmark_executions_path  %></li>
-                </ul>
-              </li>
-
-              <li><%= link_to "VMs", virtual_machine_instances_path  %></li>
+              <li><%= link_to "Benchmark-Definitions", benchmark_definitions_path %> </li>
+              <li><%= link_to "Benchmark-Executions", benchmark_executions_path  %></li>
+              <li><%= link_to "VM-Instances", virtual_machine_instances_path  %></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

@@ -3,7 +3,7 @@ class VirtualMachineInstancesController < ApplicationController
 
   # GET /virtual_machine_instances
   def index
-    @virtual_machine_instances = VirtualMachineInstance.all
+    @virtual_machine_instances = VirtualMachineInstance.paginate(page: params[:page])
   end
 
   # GET /virtual_machine_instances/1
