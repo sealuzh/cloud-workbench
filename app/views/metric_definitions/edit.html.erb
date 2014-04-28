@@ -1,8 +1,17 @@
 <h2>Edit <%= @metric_definition.name %></h2>
 
+
 <%= simple_form_for(@metric_definition, html: {class: 'form-horizontal' }) do |f| %>
   <%= f.input :name %>
   <%= f.input :unit %>
   <%= f.input :scale_type, collection: MetricDefinition.scale_type.options, as: :radio_buttons %>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>
+
+<br>
+<span class="label label-warning">Currently used for unique referencing.
+  Will be replaced with a logical, non-technical identifier.</span>
+<p>
+  <strong>metric_definition_id:</strong><br>
+  <input type="text" value="<%= @metric_definition.id %>" disabled="" class="form-control">
+</p>

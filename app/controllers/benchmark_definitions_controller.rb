@@ -22,6 +22,7 @@ class BenchmarkDefinitionsController < ApplicationController
 
   # GET /benchmark_definitions/1/edit
   def edit
+    @metric_definitions = @benchmark_definition.metric_definitions
     # TODO: Implement file locking mechanism during edit. Lock must expire after N minutes.
     # See: http://stackoverflow.com/questions/1803574/rails-implementing-a-simple-lock-to-prevent-users-from-editing-the-same-data
     params[:vagrant_file_content] = @benchmark_definition.vagrant_file_content
@@ -33,7 +34,8 @@ class BenchmarkDefinitionsController < ApplicationController
 
     if @benchmark_definition.save
       @benchmark_definition.save_vagrant_file(params[:vagrant_file_content]) # TODO: Error handling
-      redirect_to @benchmark_definition, notice: 'Benchmark definition was successfully created.'
+      flash[:success] = 'Benchmark definition was successfully created.'
+      redirect_to edit_benchmark_definition_path(@benchmark_definition)
     else
       render action: 'new'
     end
@@ -43,8 +45,8 @@ class BenchmarkDefinitionsController < ApplicationController
   def update
     if @benchmark_definition.update(benchmark_definition_params)
       @benchmark_definition.save_vagrant_file(params[:vagrant_file_content])
-      flash.now[:success] = 'Benchmark definition was successfully updated.'
-      render action: 'edit'
+      flash[:success] = 'Benchmark definition was successfully updated.'
+      redirect_to edit_benchmark_definition_path(@benchmark_definition)
     else
       render action: 'edit'
     end

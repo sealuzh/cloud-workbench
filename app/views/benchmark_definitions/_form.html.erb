@@ -4,6 +4,5 @@
 
   <%= f.label 'Vagrantfile' %><br>
   <%= text_area_tag :vagrant_file_content, params[:vagrant_file_content], rows: "20", :class => "form-control span9", :id => "autosize" %><br>
-
-  <%= f.submit %>
+  <%= f.submit class: 'btn btn-primary' %>
 <% end %>

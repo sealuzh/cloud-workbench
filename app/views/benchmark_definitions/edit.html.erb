@@ -1,6 +1,21 @@
 <h1>Editing benchmark_definition</h1>
 
-<%= render 'form' %>
+<%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
+  <%= f.hidden_field :benchmark_definition_id %>
+  <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
+<% end %>
+<br>
 
-<%= link_to 'Show', @benchmark_definition %> |
-<%= link_to 'Back', benchmark_definitions_path %>
+<div class="container">
+  <div class="row">
+
+    <div class="box span9">
+      <%= render 'form' %>
+    </div>
+
+    <%= render 'shared/metric_definitions_sidebar' %>
+  </div>
+</div>
+
+<!--TODO: Remove link and think how to provide a start benchmark button without loosing edited values-->
+<h5><%= link_to 'Show', @benchmark_definition %></h5>

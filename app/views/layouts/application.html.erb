@@ -70,10 +70,12 @@
       </div>
     </div>
 
+  <% if Rails.env.development? %>
   <div class="well well-lg">
     <h4>Debugging</h4>
-    <%= debug(params) if Rails.env.development? %>
+    <%= debug(params) %>
   </div>
+  <% end %>
 
   </body>
 </html>
