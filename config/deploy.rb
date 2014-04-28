@@ -3,7 +3,7 @@ lock '3.2.0'
 
 set :application, 'cloud_benchmarking'
 set :repo_url,  'git@bitbucket.org:sealuzh/cloud-benchmarking.git'
-set :branch, 'twitter-bootstrap'
+set :branch, 'master'
 # Used in case we're deploying multiple versions of the same app side by side.
 # Also provides quick sanity checks when looking at filepaths.
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
