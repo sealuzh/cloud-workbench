@@ -1,0 +1,36 @@
+{
+  "name": "curl",
+  "description": "Installs/Configures curl",
+  "long_description": "[![Build Status](https://travis-ci.org/retr0h/cookbook-curl.png?branch=master)](https://travis-ci.org/retr0h/cookbook-curl)\n[![Dependency Status](https://gemnasium.com/retr0h/cookbook-curl.png)](https://gemnasium.com/retr0h/cookbook-curl)\n\nDescription\n============\n\nInstalls/Configures curl\n\nRequirements\n============\n\n* Chef 11\n\nAttributes\n==========\n\n* `default['curl']['libcurl_packages']` - A list of libcurl packages to install.\n\nUsage\n=====\n\n```json\n\"run_list\": [\n    \"recipe[curl]\"\n]\n```\n\ndefault\n-------\n\nInstalls/Configures curl\n\nlibcurl\n-------\n\nInstall/Configure libcurl packages\n\nTesting\n=======\n\n    $ rake\n\nLicense and Author\n==================\n\nAuthor:: John Dewey (<john@dewey.ws>)\n\nCopyright 2012-2014, John Dewey\n\nLicensed under the Apache License, Version 2.0 (the \"License\");\nyou may not use this file except in compliance with the License.\nYou may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\nUnless required by applicable law or agreed to in writing, software\ndistributed under the License is distributed on an \"AS IS\" BASIS,\nWITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\nSee the License for the specific language governing permissions and\nlimitations under the License.\n",
+  "maintainer": "John Dewey",
+  "maintainer_email": "john@dewey.ws",
+  "license": "Apache 2.0",
+  "platforms": {
+    "centos": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "fedora": ">= 0.0.0",
+    "redhat": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+    "curl": "Installs/Configures curl",
+    "libcurl": "Install/Configure libcurl packages"
+  },
+  "version": "2.0.0"
+}

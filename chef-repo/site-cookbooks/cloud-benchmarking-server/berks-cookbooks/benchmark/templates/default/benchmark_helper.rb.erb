@@ -1,0 +1,50 @@
+require 'rest_client'
+require 'csv'
+class BenchmarkHelper
+  SERVER_URL = '<%= @workbench_server %>'
+  INSTANCE_ID = '<%= @instance_id %>'
+  
+  
+  METRIC_OBSERVATION = 'metric_observations'
+  METRIC_OBSERVATION_RESOURCE = RestClient::Resource.new "#{SERVER_URL}/#{METRIC_OBSERVATION}"
+  
+  VM_INSTANCE = 'virtual_machine_instance'
+  VM_INSTANCE_RESOURCE = RestClient::Resource.new "#{SERVER_URL}/#{VM_INSTANCE}"
+  
+  def self.notify_benchmark_completed
+    VM_INSTANCE_RESOURCE['benchmark_completed'].put(
+    provider_name: 'aws',
+    provider_instance_id: INSTANCE_ID,
+    :virtual_machine_instance => {
+      benchmark_state: 'POSTPROCESSING'
+    })
+  end
+  
+  def self.submit_metric(metric_definition_id, time, value)
+    METRIC_OBSERVATION_RESOURCE.post(
+      :metric_observation => {
+        metric_definition_id: metric_definition_id,
+        provider_name: 'aws',
+        provider_instance_id: INSTANCE_ID,
+        time: time,
+        value: value
+      })
+  end
+
+  # TODO: Implement bulk upload (server side support missing yet)
+  def self.submit_metrics(metric_definition_id, csv_file)
+    CSV.foreach(csv_file) do |row|
+      self.submit_metric(metric_definition_id, row[0], row[1])
+    end
+  end
+  
+  def self.notify_postprocessing_completed
+    VM_INSTANCE_RESOURCE['postprocessing_completed'].put(
+    provider_name: 'aws',
+    provider_instance_id: INSTANCE_ID,
+    :virtual_machine_instance => {
+      benchmark_state: 'RELEASING_RESOURCES'
+    })
+  end
+  
+end

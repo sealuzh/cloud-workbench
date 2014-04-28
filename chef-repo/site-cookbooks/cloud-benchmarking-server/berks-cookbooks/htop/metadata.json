@@ -1,0 +1,35 @@
+{
+  "name": "htop",
+  "description": "Installs htop",
+  "long_description": "# chef-htop\n\n## Description\n\nInstalls [htop](http://htop.sourceforge.net/) an interactive process viewer for Linux.\n\n\n## Requirements\n\n### Supported Platforms\n\nThe following platforms are supported by this cookbook, meaning that the recipes run on these platforms without error:\n\n* Ubuntu\n* Debian\n* RedHat\n* CentOS\n\n_NOTE:_ On RedHat/CentOS, the RPM is downloaded from [RepoForge](http://pkgs.repoforge.org/htop/)\n\n## Recipes\n\n* `htop` - The default recipe.\n\n## Usage\n\nthis cookbook installs htop if not present, and pulls updates if they are installed on the system.\n\n## Attributes\n\n* `node['htop']['version']` - Version of htop to install. Defaults to nil.\n\n\n## Contributing\n\n1. Fork it\n2. Create your feature branch (`git checkout -b my-new-feature`)\n3. Commit your changes (`git commit -am 'Added some feature'`)\n4. Push to the branch (`git push origin my-new-feature`)\n5. Create new Pull Request\n\n\n## Contributors\n\nMany thanks go to the following who have contributed to making this cookbook even better:\n\n* **[@rpunt](https://github.com/rpunt)**\n    * initial pull request with redhat/centos support\n* **[@dwradcliffe](https://github.com/dwradcliffe)**\n    * add version attribute\n\n\n## License\n\n**chef-htop**\n\n* Freely distributable and licensed under the [MIT license](http://phlipper.mit-license.org/2011-2013/license.html).\n* Copyright (c) 2011-2013 Phil Cohen (github@phlippers.net) [![endorse](http://api.coderwall.com/phlipper/endorsecount.png)](http://coderwall.com/phlipper)\n* http://phlippers.net/\n",
+  "maintainer": "Phil Cohen",
+  "maintainer_email": "github@phlippers.net",
+  "license": "MIT",
+  "platforms": {
+    "debian": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0",
+    "redhat": ">= 0.0.0",
+    "centos": ">= 0.0.0"
+  },
+  "dependencies": {
+    "yum": ">= 0.0.0"
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+    "htop": "Installs htop monitoring"
+  },
+  "version": "1.2.0"
+}

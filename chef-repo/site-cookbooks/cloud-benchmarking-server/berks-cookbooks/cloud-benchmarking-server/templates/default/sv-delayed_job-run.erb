@@ -1,0 +1,12 @@
+#!/bin/bash --login
+
+export HOME=<%= @options[:home_dir] %>
+cd <%= @options[:working_directory] %>
+# $HOME is required in .profile
+source $HOME/.profile
+
+exec 2>&1
+exec <%= node[:runit][:chpst_bin] %> \
+    -u <%= @options[:user] %>:<%= @options[:group] %> \
+    -e <%= node[:runit][:sv_dir] %>/<%= @options[:service_name] %>/env \
+    bundle exec rake jobs:work

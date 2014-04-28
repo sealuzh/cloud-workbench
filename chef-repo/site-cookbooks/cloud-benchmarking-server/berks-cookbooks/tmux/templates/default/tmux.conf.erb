@@ -1,0 +1,34 @@
+# Use a better prefix
+unbind C-b
+bind <%= @session_opts['prefix'] %> send-prefix
+
+# Split windows with more logical keys
+bind | split-window -h
+bind - split-window -v
+
+# Remap movement keys
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# Generate server options
+<% @server_opts.each_pair do |opt, val| %>
+  <% unless val.nil? %>
+set -sg <%= opt %> <%= val %>
+  <% end %>
+<% end %>
+
+# Generate session options
+<% @session_opts.each_pair do |opt, val| %>
+  <% unless val.nil? %>
+set -g <%= opt %> <%= val %>
+  <% end %>
+<% end %>
+
+# Generate window options
+<% @window_opts.each_pair do |opt, val| %>
+  <% unless val.nil? %>
+setw -g <%= opt %> <%= val %>
+  <% end %>
+<% end %>
