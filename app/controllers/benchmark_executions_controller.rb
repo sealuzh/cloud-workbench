@@ -30,6 +30,9 @@ class BenchmarkExecutionsController < ApplicationController
 
   # POST /benchmark_executions
   def create
+    # TODO: This should only call and handle errors appropriately (unlikely that ):
+    # @benchmark_definition.schedule_execution
+
     @benchmark_execution = @benchmark_definition.benchmark_executions.build(benchmark_execution_params)
     if @benchmark_execution.save
       Delayed::Job.enqueue(PrepareBenchmarkExecutionJob.new(@benchmark_execution.benchmark_definition_id, @benchmark_execution.id))

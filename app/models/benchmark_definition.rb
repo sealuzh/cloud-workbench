@@ -1,8 +1,7 @@
 require 'fileutils'
-
 class BenchmarkDefinition < ActiveRecord::Base
   before_destroy :remove_vagrant_directory
-  has_many :metric_definitions
+  has_many :metric_definitions, dependent: :destroy
   has_many :benchmark_executions, dependent: :destroy do
     def has_active?
       actives.any?
@@ -13,11 +12,14 @@ class BenchmarkDefinition < ActiveRecord::Base
       actives
     end
   end
-
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
   # that do not support case-sensitive indices.
   validates :name, presence: true, uniqueness: { case_sensitive: false }
   # validates :vagrantfile, presence: true # TODO: enable when switched from file to db backed Vagrantfile
+  has_one :benchmark_schedule
+
+
+
 
   VAGRANT_PATH = "#{Rails.root}/public/benchmark_definitions"
   VAGRANT_FILE_NAME = 'Vagrantfile'
