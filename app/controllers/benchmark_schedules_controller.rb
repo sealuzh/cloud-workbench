@@ -45,7 +45,7 @@ class BenchmarkSchedulesController < ApplicationController
 
     def flash_for(action)
       flash[:success] = "Schedule for #{@benchmark_definition.name} was successfully #{action}:<br>
-                         #{@benchmark_schedule.crontab} <i class='fa fa-arrow-right'></i>
+                         #{@benchmark_schedule.crontab}  <i class='fa fa-arrow-right'></i>
                          #{@benchmark_schedule.crontab_in_english}".html_safe
     end
 end
