@@ -1,0 +1,7 @@
+set :output, "#{Rails.root}/log/benchmark_schedule.log
+
+every '<%= @crontab %>' do
+  command 'echo date=`date`'
+end
+
+#   runner "MyModel.some_method"
