@@ -29,20 +29,7 @@
               <% end %>
             </td>
             <td>
-              <% schedule = benchmark_definition.benchmark_schedule %>
-              <% if schedule.nil? %>
-                <%= link_to 'Create Schedule', new_benchmark_definition_benchmark_schedule_path(benchmark_definition), class: 'btn btn-default' %>
-              <% elsif schedule.active? %>
-                <div class="tooltip-options">
-                  <%= link_to 'Edit Schedule', edit_benchmark_schedule_path(schedule),
-                            class: 'btn btn-success', title: "<b>#{schedule.crontab}</b><br>#{schedule.crontab_in_english}".html_safe %>
-                </div>
-              <% else %>
-                <div class="tooltip-options">
-                  <%= link_to 'Edit Schedule', edit_benchmark_schedule_path(schedule),
-                              class: 'btn btn-default', title: "<b>#{schedule.crontab}</b><br>#{schedule.crontab_in_english}".html_safe %>
-                </div>
-              <% end %>
+              <%= render 'shared/conditional_benchmark_schedule_btn', benchmark_definition: benchmark_definition %>
             </td>
             <td>
               <%= form_for [benchmark_definition, benchmark_definition.benchmark_executions.build] do |f| %>
