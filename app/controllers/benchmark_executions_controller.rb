@@ -30,18 +30,15 @@ class BenchmarkExecutionsController < ApplicationController
 
   # POST /benchmark_executions
   def create
-    # TODO: This should only call and handle errors appropriately (unlikely that ):
-    # @benchmark_definition.schedule_execution
-
-    @benchmark_execution = @benchmark_definition.benchmark_executions.build(benchmark_execution_params)
-    if @benchmark_execution.save
-      Delayed::Job.enqueue(PrepareBenchmarkExecutionJob.new(@benchmark_execution.benchmark_definition_id, @benchmark_execution.id))
-      redirect_to @benchmark_execution, notice: 'Benchmark execution was successfully scheduled.'
-    else
-      render action: 'new'
-    end
+    @benchmark_execution = @benchmark_definition.start_execution_async
+    flash[:success] = "#{view_context.link_to 'Benchmark execution', @benchmark_execution} for
+                       #{view_context.link_to @benchmark_definition.name, @benchmark_definition}
+                       was successfully started asynchronously.".html_safe
+    redirect_to @benchmark_execution
   rescue => e
-    flash.now[:error] = "Benchmark execution couldn't be scheduled. Error: #{e.message}"
+    flash[:error] = "Benchmark execution couldn't be started asynchronously.<br>
+                     <i class='fa-times'></i>Error: #{e.message}".html_safe
+    redirect_to :back
   end
 
   # PATCH/PUT /benchmark_executions/1

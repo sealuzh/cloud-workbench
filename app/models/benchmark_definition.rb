@@ -18,13 +18,30 @@ class BenchmarkDefinition < ActiveRecord::Base
   # validates :vagrantfile, presence: true # TODO: enable when switched from file to db backed Vagrantfile
   has_one :benchmark_schedule
 
+  def self.start_execution_async_for_id(benchmark_definition_id)
+    benchmark_definition = find(benchmark_definition_id)
+    benchmark_definition.start_execution_async
+  end
 
+  # May throw an exception on save or enqueue
+  def start_execution_async
+    benchmark_execution = benchmark_executions.build
+    benchmark_execution.status = "WAITING FOR ASYNC START"
+    benchmark_execution.save!
+    begin
+      Delayed::Job.enqueue(PrepareBenchmarkExecutionJob.new(self.id, benchmark_execution.id))
+    rescue => e
+      benchmark_execution.destroy
+      raise e
+    end
+    benchmark_execution
+  end
 
 
   VAGRANT_PATH = "#{Rails.root}/public/benchmark_definitions"
   VAGRANT_FILE_NAME = 'Vagrantfile'
 
-# TODO: Consider using RESTful design for the vagrant file: Vagrantfile as RESTful resource. Refactor into module?
+# TODO: Consider using RESTful design for the vagrant file: Vagrantfile as RESTful resource. Refactor into VagrantDriver class.
 # See: http://stackoverflow.com/questions/15889750/editing-file-in-rails-using-text-area
   def save_vagrant_file(vagrant_file_content)
     FileUtils.mkdir_p(vagrant_directory_path)
