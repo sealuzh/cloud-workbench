@@ -13,8 +13,8 @@ group :development do
   gem 'pry', '~> 0.9.12.6'
 
   # Deploy with Capistrano
-  gem 'capistrano', '~> 3.2.0', require: false
-  gem 'capistrano-rails',   '~> 1.1', require: false
+  gem 'capistrano', '~> 3.2.1', require: false
+  gem 'capistrano-rails', '~> 1.1', require: false
   gem 'capistrano-bundler', '~> 1.1.2', require: false
   gem 'capistrano-rbenv', '~> 2.0', require: false
   # gem 'rvm1-capistrano3', require: false # Use if deploying into RVM environments
@@ -51,7 +51,7 @@ group :chef do
   # is not yet compatible (planned for 11.14.0) with ruby version managers such as RVM or rbenv.
   # See issue: https://tickets.opscode.com/browse/CHEF-3581
   gem 'chef', '~> 11.12.2', require: false
-  gem 'berkshelf', '~> 3.0.1', require: false
+  gem 'berkshelf', '~> 3.1.1', require: false
   gem 'foodcritic', '~> 3.0.3', require: false
 end
 
