@@ -1,4 +1,4 @@
-# config valid only for Capistrano 3.1
+# config valid only for Capistrano 3.2
 lock '3.2.0'
 
 set :application, 'cloud_benchmarking'
@@ -63,7 +63,7 @@ set :linked_files, %w{config/database.yml}
 # Also consider the following alternatives:
 # * Store the Vagrantfile in the database and create the file when creating a benchmark execution.
 # * Use Paperclip and Carrierwave to manage attachments
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/benchmark_definitions}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/benchmark_definitions storage}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
