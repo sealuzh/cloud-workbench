@@ -1,50 +1,42 @@
+# Capistrano
+# ----------
 # config valid only for Capistrano 3.2
-lock '3.2.0'
+lock '3.2.1'
+set :log_level, :debug
+set :format, :pretty
 
+# Application
+# -----------
 set :application, 'cloud_benchmarking'
-set :repo_url,  'git@bitbucket.org:sealuzh/cloud-benchmarking.git'
-set :branch, 'master'
 # Used in case we're deploying multiple versions of the same app side by side.
 # Also provides quick sanity checks when looking at filepaths.
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 
-# Default deploy_to directory is /var/www/my_app
-set :deploy_to, "/home/apps/#{fetch(:application)}"
+# Repository
+# ----------
+set :repo_url, 'git@bitbucket.org:sealuzh/cloud-benchmarking.git'
+set :branch, 'master'
 
+# SSH connection
+# --------------
 set :ssh_options, {
     keys: %w(~/.ssh/id_rsa),
     forward_agent: true,
     auth_methods: %w(publickey)
 }
 
-# Remote Server
-# =============
+# Remote machine
+# --------------
+set :deploy_to, "/home/apps/#{fetch(:application)}"
+set :deploy_user, 'deploy'
+set :keep_releases, 5
 set :use_sudo, false
 
-# Bundler
-# -------
-# Ensure that your web server is configured to use vendor/bundle as bundle path.
-# You may need to configure the BUNDLE_PATH environment variable or web server specific settings.
-set :bundle_path, -> { shared_path.join('vendor/bundle') }
-set :bundle_flags, '--deployment --binstubs'
-set :bundle_without, %w{development test chef}.join(' ')
-
-# Rbenv
-# -----
-set :rbenv_path, '/opt/rbenv'
-set :rbenv_ruby, File.read('.ruby-version').strip # Use ruby version from file
-set :pty, true
-BASH = '/bin/bash --login'
-set :shell, BASH
-set :default_shell, BASH
-
-
-# Custom test task extension: what specs should be run before deployment is allowed to
-# continue, see lib/capistrano/tasks/run_tests.cap
-set :tests, []
-
-# Default value for :log_level is :debug
-# set :log_level, :debug
+# Attempts to fix rails tasks such as rake which fail with 'Gemfile not found'
+# set :rake,  "#{fetch(:deploy_to)}/current/bin/rake"
+# set :default_env, { 'PATH' => "/opt/rbenv/shims:/opt/rbenv/bin:$PATH",
+#                     'BUNDLE_GEMFILE' => "#{fetch(:deploy_to)}/current/Gemfile",
+#                     'BUNDLE_PATH'    => "#{fetch(:deploy_to)}/shared/vendor/bundle"}
 
 # which config files should be copied by deploy:setup_config
 # see documentation in lib/capistrano/tasks/setup_config.cap
@@ -63,21 +55,45 @@ set :linked_files, %w{config/database.yml}
 # Also consider the following alternatives:
 # * Store the Vagrantfile in the database and create the file when creating a benchmark execution.
 # * Use Paperclip and Carrierwave to manage attachments
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/benchmark_definitions storage}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/benchmark_definitions storage chef-repo}
 
-# Default value for default_env is {}
-# set :default_env, { path: "/opt/ruby/bin:$PATH" }
+# Bundler
+# -------
+# Ensure that your web server is configured to use vendor/bundle as bundle path.
+# You may need to configure the BUNDLE_PATH environment variable or web server specific settings.
+set :bundle_path, -> { shared_path.join('vendor/bundle') }
+set :bundle_flags, '--deployment --binstubs'
+set :bundle_without, %w{development test chef}.join(' ')
 
-# Default value for keep_releases is 5
-# set :keep_releases, 5
+# Rbenv
+# -----
+set :rbenv_path, '/opt/rbenv'
+set :rbenv_ruby, File.read('.ruby-version').strip # Use ruby version from file
+# Attempt to fix rake failure
+# set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 
+# Shell
+# -----
+set :pty, true
+BASH = '/bin/bash --login'
+set :shell, BASH
+set :default_shell, BASH
+
+# Tests
+# -----
+# Custom test task extension: what specs should be run before deployment is allowed to
+# continue, see lib/capistrano/tasks/run_tests.cap
+set :tests, []
+
+# Deploy tasks
+# ============
 namespace :deploy do
   # Make sure we're deploying what we think we're deploying
   before :deploy, 'deploy:check_revision'
   # Only allow a deploy with passing tests to deployed
   before :deploy, 'deploy:run_tests'
 
-  # compile assets locally then rsync
+  # Compile assets locally then rsync. Enable if you want to burden assets compilation to the production server.
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
 
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
@@ -89,9 +105,11 @@ namespace :deploy do
   task :start do
     execute "sudo sv up #{fetch(:application)}"
     execute 'sudo sv up delayed_job'
+    # rake 'cron:update'
   end
 
   task :stop do
+    # rake 'cron:clean'
     execute "sudo sv down #{fetch(:application)}"
     execute 'sudo sv down delayed_job'
   end
@@ -100,8 +118,11 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
+      # TODO: Fix cron update rake tasks
+      # execute :rake, 'cron:clean'
       execute "sudo sv restart #{fetch(:application)}"
-      # TODO: Think about graceful restart for running jobs!
+      # rake 'cron:update'
+      # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
       # execute 'sudo sv restart delayed_job'
     end
   end
