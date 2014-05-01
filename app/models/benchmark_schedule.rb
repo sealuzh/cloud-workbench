@@ -2,6 +2,8 @@ require 'pathname'
 require 'fileutils'
 require 'erb'
 class BenchmarkSchedule < ActiveRecord::Base
+  DEFAULT_TEMPLATE_PATH = Rails.application.config.benchmark_schedule_template
+  DEFAULT_SCHEDULE_PATH = Rails.application.config.benchmark_schedule
   belongs_to :benchmark_definition
   validates :benchmark_definition, presence: true
   # Very loose matching. Does no complete validation. Matches:
@@ -25,25 +27,21 @@ class BenchmarkSchedule < ActiveRecord::Base
   end
 
   def self.update_system_crontab
-    # TODO: Fetch from app config (=> string is safer than Pathname)
-    template_path = "#{Rails.root}/lib/templates/erb/whenever_schedule.rb.erb"
-    schedule_path = "#{Rails.root}/storage/development/benchmark_schedules/whenever_schedule.rb"
-
-    schedule = generate_schedule_from_template(template_path)
-    write_content_to_file(schedule, schedule_path)
-    apply_schedule_to_system_crontab(schedule_path)
+    schedule = generate_schedule_from_template(DEFAULT_TEMPLATE_PATH)
+    write_content_to_file(schedule, DEFAULT_SCHEDULE_PATH)
+    apply_schedule_to_system_crontab(DEFAULT_SCHEDULE_PATH)
   end
 
-  def self.generate_schedule_from_template(template_path)
+  def self.generate_schedule_from_template(template_path = DEFAULT_TEMPLATE_PATH)
     template = ERB.new File.read(template_path)
     template.result(binding)
   end
 
-  def self.apply_schedule_to_system_crontab(schedule_path)
+  def self.apply_schedule_to_system_crontab(schedule_path = DEFAULT_SCHEDULE_PATH)
     %x(whenever --update-crontab -f "#{schedule_path}")
   end
 
-  def self.clear_system_crontab(schedule_path)
+  def self.clear_system_crontab(schedule_path = DEFAULT_SCHEDULE_PATH)
     %x(whenever --clear-crontab -f "#{schedule_path}")
   end
 

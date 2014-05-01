@@ -22,5 +22,11 @@ module CloudBenchmarking
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
+
+    # CloudBenchmarking settings
+    config.storage = File.join(Rails.root, 'storage')
+    config.templates = File.join(Rails.root, 'lib', 'templates')
+    config.benchmark_schedule_template = File.join(config.templates, 'erb', 'whenever_schedule.rb.erb')
+    config.benchmark_schedule = File.join(config.storage, Rails.env, 'benchmark_schedules', 'whenever_schedule.rb')
   end
 end
