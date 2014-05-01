@@ -22,9 +22,15 @@ end
 
 group :development, :test do
   gem 'sqlite3'
+  gem 'therubyracer', '~> 0.12.1'
 end
 
-gem 'therubyracer', '~> 0.12.1'
+group :production do
+  gem 'unicorn'
+  gem 'pg'
+  gem 'execjs'
+end
+
 gem 'less-rails', '~> 2.5.0'
 gem 'twitter-bootstrap-rails', '~> 2.2.8'
 gem 'font-awesome-rails', '~> 4.0.3.1'
@@ -40,11 +46,6 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
-
-group :production do
-  gem 'unicorn'
-  gem 'pg'
-end
 
 group :chef do
   # Chef: Use the Chef gem since the omnibus installer with Chef-client version <=11.12.2
