@@ -37,7 +37,10 @@ class BenchmarkSchedule < ActiveRecord::Base
   end
 
   def self.apply_schedule_to_system_crontab(schedule_path = DEFAULT_SCHEDULE_PATH)
-    %x(whenever --update-crontab -f "#{schedule_path}")
+    result = %x(whenever --update-crontab -f "#{schedule_path}")
+    unless $?.success?
+      fail "Failed to update system crontab. Error: #{result}"
+    end
   end
 
   def self.clear_system_crontab(schedule_path = DEFAULT_SCHEDULE_PATH)

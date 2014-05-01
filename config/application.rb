@@ -25,8 +25,11 @@ module CloudBenchmarking
 
     # CloudBenchmarking settings
     config.storage = File.join(Rails.root, 'storage')
+    config.log = File.join(Rails.root, 'log')
     config.templates = File.join(Rails.root, 'lib', 'templates')
     config.benchmark_schedule_template = File.join(config.templates, 'erb', 'whenever_schedule.rb.erb')
     config.benchmark_schedule = File.join(config.storage, Rails.env, 'benchmark_schedules', 'whenever_schedule.rb')
+
+    config.benchmark_schedule_log = File.join(config.log, 'benchmark_schedule.log')
   end
 end

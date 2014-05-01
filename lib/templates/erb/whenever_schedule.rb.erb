@@ -2,15 +2,17 @@
 # DSL for cron jobs: "Whenever is a Ruby gem that provides a clear syntax for writing and deploying cron jobs."
 # Docs: https://github.com/javan/whenever
 
+# Keep in mind that in 'whenever_schedule.rb' the Rails environment is not available.
+# Therefore environment specific variables like Rails.env must be passed via erb syntax.
 set :environment, '<%= Rails.env %>'
-# TODO: fetch from appconfig instead of hardcoding
-set :output, '<%= "#{Rails.root}/log/benchmark_schedule.log" %>'
+set :output, '<%= Rails.application.config.benchmark_schedule_log %>'
+
+production_env = 'BUNDLE_GEMFILE=<%= File.join(Rails.root, 'Gemfile') %>'
+job_type :runner,  "cd :path && #{production_env if @environment == 'production'} :runner_command -e :environment ':task' :output"
 
 # Create cron job for each active schedule with the Whenever DSL
 <% BenchmarkSchedule.actives.each do |active_schedule| %>
   every '<%= active_schedule.cron_expression %>' do
-    # TODO: remove debug command
-    # command 'echo <%= active_schedule.benchmark_definition.name %>: `date`'
     runner "BenchmarkDefinition.start_execution_async_for_id(<%= active_schedule.benchmark_definition_id %>)"
   end
 <% end %>
