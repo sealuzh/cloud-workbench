@@ -1,3 +1,5 @@
+# For path helpers see: 'Capistrano::DSL::Paths' in capistrano/lib/capistrano/dsl/paths.rb
+
 # Capistrano
 # ----------
 # config valid only for Capistrano 3.2
@@ -34,9 +36,9 @@ set :use_sudo, false
 
 # Attempts to fix rails tasks such as rake which fail with 'Gemfile not found'
 # set :rake,  "#{fetch(:deploy_to)}/current/bin/rake"
-# set :default_env, { 'PATH' => "/opt/rbenv/shims:/opt/rbenv/bin:$PATH",
-#                     'BUNDLE_GEMFILE' => "#{fetch(:deploy_to)}/current/Gemfile",
-#                     'BUNDLE_PATH'    => "#{fetch(:deploy_to)}/shared/vendor/bundle"}
+# set :default_env, { 'PATH' => '/opt/rbenv/shims:/opt/rbenv/bin:/usr/bin:$PATH',
+#                     'BUNDLE_GEMFILE' => "#{current_path}/Gemfile",
+#                     'BUNDLE_PATH'    => "#{shared_path}/vendor/bundle"}
 
 # which config files should be copied by deploy:setup_config
 # see documentation in lib/capistrano/tasks/setup_config.cap
@@ -118,7 +120,13 @@ namespace :deploy do
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
+      # WORKS
+      # execute "cd /home/apps/cloud_benchmarking/releases/20140501215318 && ( RBENV_ROOT=/opt/rbenv RBENV_VERSION=2.1.1 RAILS_ENV=production /opt/rbenv/bin/rbenv exec bundle exec rake about )"
+      # FAILS with: "Could not find rake-10.3.1 in any of the sources. Run `bundle install` to install missing gems."
+      # execute "cd #{release_path} && ( RBENV_ROOT=/opt/rbenv RBENV_VERSION=2.1.1 RAILS_ENV=production /opt/rbenv/bin/rbenv exec bundle exec rake about )"
       # TODO: Fix cron update rake tasks
+      # Even this will fail with ''!
+      # rake 'about'
       # execute :rake, 'cron:clean'
       execute "sudo sv restart #{fetch(:application)}"
       # rake 'cron:update'
