@@ -6,11 +6,11 @@
     <% schedule = @benchmark_definition.benchmark_schedule %>
     <% if schedule.nil? %>
     <% elsif schedule.active? %>
-      <span class="label label-success"><%= schedule.crontab %></span>
+      <span class="label label-success"><%= schedule.cron_expression %></span>
       <br>
       <br>
     <% else %>
-      <span class="label label-default"><%= schedule.crontab %></span>
+      <span class="label label-default"><%= schedule.cron_expression %></span>
       <br>
       <br>
     <% end %>

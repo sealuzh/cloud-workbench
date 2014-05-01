@@ -7,17 +7,17 @@ class BenchmarkSchedule < ActiveRecord::Base
   # Very loose matching. Does no complete validation. Matches:
   # 1) MUST contain 4 whitespaces (separating the 5 columns which may contain arbitrary characters)
   # 2) MUST NOT start with '*' to avoid the mistake that a benchmark is run every minute!
-  VALID_CRONTAB_REGEX = /[^\*].*\s.+\s.+\s.+\s.+/
+  VALID_CRON_EXPRESSION_REGEX = /[^\*].*\s.+\s.+\s.+\s.+/
   # TODO: enable after testing
-  # validates :crontab, format: { with: VALID_CRONTAB_REGEX,
-  #                               message: "Cron expression MUST NOT start with '*' and
-  #                                         MUST contain 4 whitespaces separating the 5 columns." }
-  after_update :check_and_update_system_crontab_after_update
+  # validates :cron_expression, format: { with: VALID_CRON_EXPRESSION_REGEX,
+  #                                       message: "Cron expression MUST NOT start with '*' and
+  #                                                 ~MUST contain 4 whitespaces separating the 5 columns." }
   after_create   :update_system_crontab_if_active
   before_destroy :update_system_crontab_if_active
+  after_update :check_and_update_system_crontab_after_update
 
-  def crontab_in_english
-    Cron2English.parse(self.crontab).join(' ')
+  def cron_expression_in_english
+    Cron2English.parse(self.cron_expression).join(' ')
   end
 
   def self.actives
@@ -31,25 +31,20 @@ class BenchmarkSchedule < ActiveRecord::Base
 
     schedule = generate_schedule_from_template(template_path)
     write_content_to_file(schedule, schedule_path)
-    apply_schedule_to_cron(schedule_path)
+    apply_schedule_to_system_crontab(schedule_path)
   end
 
   def self.generate_schedule_from_template(template_path)
-    # actives = self.actives
     template = ERB.new File.read(template_path)
     template.result(binding)
   end
 
-  def self.write_content_to_file(schedule, schedule_path)
-    parent_dir = Pathname.new(schedule_path).parent
-    FileUtils::mkdir_p(parent_dir)
-    File.open(schedule_path, 'w') do |f|
-      f.write(schedule)
-    end
+  def self.apply_schedule_to_system_crontab(schedule_path)
+    %x(whenever --update-crontab -f "#{schedule_path}")
   end
 
-  def self.apply_schedule_to_cron(schedule_path)
-    %x(whenever --update-crontab -f "#{schedule_path}")
+  def self.clear_system_crontab(schedule_path)
+    %x(whenever --clear-crontab -f "#{schedule_path}")
   end
 
   private
@@ -59,8 +54,16 @@ class BenchmarkSchedule < ActiveRecord::Base
     end
 
     def check_and_update_system_crontab_after_update
-      if active_changed? || active && crontab_changed?
+      if active_changed? || active && cron_expression_changed?
         BenchmarkSchedule.update_system_crontab
+      end
+    end
+
+    def self.write_content_to_file(schedule, schedule_path)
+      parent_dir = Pathname.new(schedule_path).parent
+      FileUtils::mkdir_p(parent_dir)
+      File.open(schedule_path, 'w') do |f|
+        f.write(schedule)
       end
     end
 

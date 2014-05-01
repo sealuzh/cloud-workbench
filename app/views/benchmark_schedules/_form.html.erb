@@ -30,7 +30,7 @@
 <%= simple_form_for(@benchmark_schedule,
                     url: url,
                     html: {class: 'form-horizontal' }) do |f| %>
-  <%= f.input :crontab %>
+  <%= f.input :cron_expression %>
   <%= f.input :active %>
   <%= f.submit class: 'btn btn-primary' %>
 <% end %>

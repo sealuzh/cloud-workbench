@@ -4,11 +4,11 @@
 <% elsif schedule.active? %>
   <div class="tooltip-options">
     <%= link_to 'Edit Schedule', edit_benchmark_schedule_path(schedule),
-                class: 'btn btn-success', title: "<b>#{schedule.crontab}</b><br>#{schedule.crontab_in_english}".html_safe %>
+                class: 'btn btn-success', title: "<b>#{schedule.cron_expression}</b><br>#{schedule.cron_expression_in_english}".html_safe %>
   </div>
 <% else %>
   <div class="tooltip-options">
     <%= link_to 'Edit Schedule', edit_benchmark_schedule_path(schedule),
-                class: 'btn btn-default', title: "<b>#{schedule.crontab}</b><br>#{schedule.crontab_in_english}".html_safe %>
+                class: 'btn btn-default', title: "<b>#{schedule.cron_expression}</b><br>#{schedule.cron_expression_in_english}".html_safe %>
   </div>
 <% end %>

@@ -40,12 +40,12 @@ class BenchmarkSchedulesController < ApplicationController
     end
 
     def benchmark_schedule_params
-      params.require(:benchmark_schedule).permit(:benchmark_definition_id, :crontab, :active)
+      params.require(:benchmark_schedule).permit(:benchmark_definition_id, :cron_expression, :active)
     end
 
     def flash_for(action)
       flash[:success] = "Schedule for #{@benchmark_definition.name} was successfully #{action}:<br>
-                         #{@benchmark_schedule.crontab}  <i class='fa fa-arrow-right'></i>
-                         #{@benchmark_schedule.crontab_in_english}".html_safe
+                         #{@benchmark_schedule.cron_expression}  <i class='fa fa-arrow-right'></i>
+                         #{@benchmark_schedule.cron_expression_in_english}".html_safe
     end
 end

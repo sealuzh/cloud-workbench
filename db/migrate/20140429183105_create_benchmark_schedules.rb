@@ -1,7 +1,7 @@
 class CreateBenchmarkSchedules < ActiveRecord::Migration
   def change
     create_table :benchmark_schedules do |t|
-      t.string :crontab
+      t.string :cron_expression
       t.boolean :active, default: true
       t.references :benchmark_definition, index: true
 

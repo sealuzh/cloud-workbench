@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(version: 20140429183105) do
   add_index "benchmark_executions", ["benchmark_definition_id"], name: "index_benchmark_executions_on_benchmark_definition_id"
 
   create_table "benchmark_schedules", force: true do |t|
-    t.string   "crontab"
+    t.string   "cron_expression"
     t.boolean  "active",                  default: true
     t.integer  "benchmark_definition_id"
     t.datetime "created_at"
