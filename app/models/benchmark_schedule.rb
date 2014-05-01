@@ -9,8 +9,12 @@ class BenchmarkSchedule < ActiveRecord::Base
   # 2) MUST NOT start with '*' to avoid the mistake that a benchmark is run every minute!
   VALID_CRONTAB_REGEX = /[^\*].*\s.+\s.+\s.+\s.+/
   # TODO: enable after testing
-  # validates :crontab, format: { with: VALID_CRONTAB_REGEX }
-  after_update :check_and_update_system_crontab
+  # validates :crontab, format: { with: VALID_CRONTAB_REGEX,
+  #                               message: "Cron expression MUST NOT start with '*' and
+  #                                         MUST contain 4 whitespaces separating the 5 columns." }
+  after_update :check_and_update_system_crontab_after_update
+  after_create   :update_system_crontab_if_active
+  before_destroy :update_system_crontab_if_active
 
   def crontab_in_english
     Cron2English.parse(self.crontab).join(' ')
@@ -50,7 +54,11 @@ class BenchmarkSchedule < ActiveRecord::Base
 
   private
 
-    def check_and_update_system_crontab
+    def update_system_crontab_if_active
+      BenchmarkSchedule.update_system_crontab if active?
+    end
+
+    def check_and_update_system_crontab_after_update
       if active_changed? || active && crontab_changed?
         BenchmarkSchedule.update_system_crontab
       end
