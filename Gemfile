@@ -22,7 +22,6 @@ end
 
 group :development, :test do
   gem 'sqlite3'
-  gem 'therubyracer', '~> 0.12.1'
 end
 
 group :production do
@@ -31,6 +30,7 @@ group :production do
   gem 'execjs'
 end
 
+gem 'therubyracer', '~> 0.12.1'
 gem 'less-rails', '~> 2.5.0'
 gem 'twitter-bootstrap-rails', '~> 2.2.8'
 gem 'font-awesome-rails', '~> 4.0.3.1'
