@@ -83,6 +83,12 @@ Consider: permissions, dynamic directories (node[appdir])
 
 ## Getting Started
 
+# Tests
+
+Run the tests with `bundle exec rake` or `bundle exec rspec spec/`
+
+You might have to run `bundle exec rake test:prepare` first if you have any pending migration for the test environment.
+
 # Limitations
 
 * Only AWS as provider supported due to the following dependencies
