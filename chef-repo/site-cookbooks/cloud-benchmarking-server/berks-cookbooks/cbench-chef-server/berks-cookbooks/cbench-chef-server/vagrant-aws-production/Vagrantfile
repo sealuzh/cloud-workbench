@@ -4,6 +4,7 @@
 Vagrant.configure('2') do |config|
   # Detects vagrant-omnibus plugin
   if Vagrant.has_plugin?('vagrant-omnibus')
+    puts 'INFO:  Vagrant-omnibus plugin detected.'
     config.omnibus.chef_version = :latest
   else
     puts "FATAL: Vagrant-omnibus plugin not detected. Please install the plugin with\n
@@ -17,7 +18,7 @@ Vagrant.configure('2') do |config|
   config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
 
   # VM
-  config.vm.hostname = 'chef-server-aws-production'
+  config.vm.hostname = 'chef-server-ec2-production'
   config.ssh.forward_agent = true
 
   # AWS EC2 provider
@@ -38,7 +39,7 @@ Vagrant.configure('2') do |config|
     # t1.micro cannot satisfy the memory requirements of the chef-server
     aws.instance_type = "m1.small"
     aws.security_groups = ["aic13-cloud_benchmarking-web"]
-    # aws.elastic_ip = true # Always creates a new elastic ip
+    aws.elastic_ip = true # Always creates a new elastic ip
     aws.tags = {
       'Name' => 'CloudBenchmarking-ChefServer-Production'
      }
@@ -46,7 +47,6 @@ Vagrant.configure('2') do |config|
 
   # Chef solo provisioning via Berkshelf vendored cookbooks
   config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "../berks-cookbooks"
     chef.run_list = [
       'recipe[cbench-chef-server]'
     ]

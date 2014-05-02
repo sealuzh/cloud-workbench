@@ -26,7 +26,8 @@ module Rackbox
         # See: http://blog.willj.net/2011/08/02/fixing-the-gemfile-not-found-bundlergemfilenotfound-error/
         env(
           'BUNDLE_GEMFILE'      => File.join(app_dir, 'Gemfile'),
-          'BUNDLE_PATH'         => File.absolute_path(File.join(app_dir, '../shared/vendor/bundle')) # Symlinked to shared/vendor/bundle
+          'BUNDLE_PATH'         => File.absolute_path(File.join(app_dir, '../shared/vendor/bundle')), # Symlinked to shared/vendor/bundle
+          'EXECJS_RUNTIME'      => 'Node'
         )
         restart_on_update false
       end
