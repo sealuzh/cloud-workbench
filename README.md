@@ -89,6 +89,11 @@ Run the tests with `bundle exec rake` or `bundle exec rspec spec/`
 
 You might have to run `bundle exec rake test:prepare` first if you have any pending migration for the test environment.
 
+## Guard and Spork
+
+Start Guard and Spork with `bundle exec guard`. This will preload the testing environment once and automatically
+ execute the test when files have been modified.
+
 # Limitations
 
 * Only AWS as provider supported due to the following dependencies
