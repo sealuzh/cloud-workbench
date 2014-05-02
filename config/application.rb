@@ -23,13 +23,15 @@ module CloudBenchmarking
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # CloudBenchmarking settings
-    config.storage = File.join(Rails.root, 'storage')
+    ### CloudBenchmarking settings
+    # Main paths
+    config.storage = File.join(Rails.root, 'storage', Rails.env)
     config.log = File.join(Rails.root, 'log')
     config.templates = File.join(Rails.root, 'lib', 'templates')
-    config.benchmark_schedule_template = File.join(config.templates, 'erb', 'whenever_schedule.rb.erb')
-    config.benchmark_schedule = File.join(config.storage, Rails.env, 'benchmark_schedules', 'whenever_schedule.rb')
 
+    # Benchmark schedule
+    config.benchmark_schedule_template = File.join(config.templates, 'erb', 'whenever_schedule.rb.erb')
+    config.benchmark_schedule = File.join(config.storage, 'benchmark_schedules', 'whenever_schedule.rb')
     config.benchmark_schedule_log = File.join(config.log, 'benchmark_schedule.log')
   end
 end

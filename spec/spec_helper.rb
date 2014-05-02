@@ -41,6 +41,8 @@ Spork.prefork do
     # the seed, which is printed after each run.
     #     --seed 1234
     config.order = "random"
+
+    config.include FactoryGirl::Syntax::Methods
     config.include Capybara::DSL
 
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
@@ -60,6 +62,23 @@ Spork.prefork do
 
     config.after(:each) do
       DatabaseCleaner.clean
+    end
+
+    # FactoryGirl
+    config.before(:suite) do
+      begin
+        DatabaseCleaner.start
+        FactoryGirl.lint
+      ensure
+        DatabaseCleaner.clean
+      end
+    end
+
+    # Clean file system
+    config.after(:all) do
+      if Rails.env.test? || Rails.env.cucumber?
+        FileUtils.rm_rf Dir[Rails.application.config.storage]
+      end
     end
   end
 end
