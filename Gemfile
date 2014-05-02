@@ -11,6 +11,7 @@ gem 'enumerize', '~> 0.8.0'
 
 group :development do
   gem 'pry', '~> 0.9.12.6'
+  gem 'guard-livereload', '~> 2.1.2', require: false
 
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.2.1', require: false
