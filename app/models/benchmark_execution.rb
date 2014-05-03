@@ -1,7 +1,9 @@
+require 'fileutils'
 class BenchmarkExecution < ActiveRecord::Base
   belongs_to :benchmark_definition
   validates :benchmark_definition, presence: true
   has_many :virtual_machine_instances
+  before_destroy :remove_vagrant_dir
   PRIORITY_HIGH = 1
 
   def active?
@@ -168,6 +170,10 @@ class BenchmarkExecution < ActiveRecord::Base
       File.open(vagrantfile_path, 'w') do |file|
         file.write(vagrantfile)
       end
+    end
+
+    def remove_vagrant_dir
+      FileUtils.remove_dir(root_dir)
     end
 
     def benchmark_definition_dir
