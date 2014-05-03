@@ -7,4 +7,6 @@ Delayed::Worker.max_attempts = 1
 Delayed::Worker.max_run_time = 4.hours
 Delayed::Worker.read_ahead = 2
 Delayed::Worker.default_queue_name = 'default'
-Delayed::Worker.delay_jobs = !Rails.env.test?
+# This would immediately run the job in tests!
+# May be useful for some tests but as long as
+# Delayed::Worker.delay_jobs = !Rails.env.test?
