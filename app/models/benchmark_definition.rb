@@ -29,15 +29,21 @@ class BenchmarkDefinition < ActiveRecord::Base
   # May throw an exception on save or enqueue
   def start_execution_async
     benchmark_execution = benchmark_executions.build
-    benchmark_execution.status = "WAITING FOR ASYNC START"
+    benchmark_execution.status = "WAITING FOR PREPARATION"
     benchmark_execution.save!
+    enqueue_prepare_job(benchmark_execution)
+    benchmark_execution
+  end
+
+  # May throw an exception on enqueue
+  def enqueue_prepare_job(benchmark_execution)
     begin
-      Delayed::Job.enqueue(PrepareBenchmarkExecutionJob.new(self.id, benchmark_execution.id))
+      prepare_job = PrepareBenchmarkExecutionJob.new(self.id, benchmark_execution.id)
+      Delayed::Job.enqueue(prepare_job)
     rescue => e
       benchmark_execution.destroy
       raise e
     end
-    benchmark_execution
   end
 
 
