@@ -10,17 +10,19 @@ feature "Benchmark definitions" do
   scenario "Creating a valid benchmark definition" do
     valid_benchmark_definition = build(:benchmark_definition)
     visit new_benchmark_definition_path
+    expect(find_field('Vagrantfile').value).to match(/.*Vagrant.configure.*/)
     within("#new_benchmark_definition") do
       fill_in 'Name', with: valid_benchmark_definition.name
-      fill_in 'vagrant_file_content', with: valid_benchmark_definition.vagrantfile
+      fill_in 'Vagrantfile', with: valid_benchmark_definition.vagrantfile
     end
 
     click_button 'Create Benchmark definition'
     page.should have_content 'Benchmark definition was successfully created'
     # TODO: decide about show and edit
     # page.should have_content valid_benchmark_definition.name
-    have_field('Name', with: valid_benchmark_definition.name)
-    page.should have_content valid_benchmark_definition.vagrantfile
+    page.should have_field('Name', with: valid_benchmark_definition.name)
+    # page.should have_content valid_benchmark_definition.vagrantfile
+    page.should have_field('Vagrantfile', with: valid_benchmark_definition.vagrantfile)
     bm_definition = BenchmarkDefinition.find_by_name(valid_benchmark_definition.name)
     bm_definition.vagrantfile .should eq valid_benchmark_definition.vagrantfile
   end
@@ -31,12 +33,20 @@ feature "Benchmark definitions" do
     visit new_benchmark_definition_path
     within("#new_benchmark_definition") do
       fill_in 'Name', with: same_name_definition.name
-      fill_in 'vagrant_file_content', with: same_name_definition.vagrantfile
+      fill_in 'Vagrantfile', with: same_name_definition.vagrantfile
     end
 
     expect do
       click_button 'Create Benchmark definition'
     end.to change(BenchmarkDefinition, :count).by(0)
-    page.should have_content 'Name already exists'
+    page.should have_content 'has already been taken'
   end
+
+  scenario "Show a benchmark definition" do
+    visit benchmark_definition_path(existing_definition)
+    page.should have_content existing_definition.name
+
+    pending("should list vm instances")
+  end
+
 end

@@ -36,6 +36,17 @@ group :test do
   gem 'selenium-webdriver', '~> 2.41.0'
   gem 'database_cleaner', '~> 1.2.0'
   gem 'factory_girl_rails', '~> 4.4.1'
+
+  ## For Guard notifications:
+  # Uncomment this line on OS X.
+  # gem 'growl', '~> 1.0.3'
+
+  # Uncomment these lines on Linux.
+  # gem 'libnotify', '~> 0.8.2'
+
+  # Uncomment these lines on Windows.
+  # gem 'rb-notifu', '0.0.4'
+  # gem 'wdm', '0.1.0'
 end
 
 group :production do

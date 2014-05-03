@@ -29,6 +29,9 @@ module CloudBenchmarking
     config.log = File.join(Rails.root, 'log')
     config.templates = File.join(Rails.root, 'lib', 'templates')
 
+    # Benchmark definition
+    config.vagrantfile_template = File.join(config.templates, 'erb', 'Vagrantfile.erb')
+
     # Benchmark schedule
     config.benchmark_schedule_template = File.join(config.templates, 'erb', 'whenever_schedule.rb.erb')
     config.benchmark_schedule = File.join(config.storage, 'benchmark_schedules', 'whenever_schedule.rb')

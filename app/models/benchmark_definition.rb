@@ -13,11 +13,12 @@ class BenchmarkDefinition < ActiveRecord::Base
     end
   end
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
-  # that do not support case-sensitive indices.
+  # that do not support case-sensitive indices. This case should practically never occur is therefore not handled.
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false },
                    length: { in: 3..50 }
-  # validates :vagrantfile, presence: true # TODO: enable when switched from file to db backed Vagrantfile
+  # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
+  validates :vagrantfile, presence: true
   has_one :benchmark_schedule
 
   def self.start_execution_async_for_id(benchmark_definition_id)
