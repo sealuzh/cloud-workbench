@@ -1,7 +1,6 @@
 class BenchmarkExecution < ActiveRecord::Base
   belongs_to :benchmark_definition
   validates :benchmark_definition, presence: true
-  has_many :nominal_metric_observations
   has_many :virtual_machine_instances
 
   def active?
@@ -15,9 +14,14 @@ class BenchmarkExecution < ActiveRecord::Base
 
   def duration
     if active?
-      Time.now - start_time
+      Time.current - start_time
     else
       end_time - start_time
     end
+  end
+
+  def prepare
+    self.status = 'PREPARING'
+    self.start_time = Time.current
   end
 end

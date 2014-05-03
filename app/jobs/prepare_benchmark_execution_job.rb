@@ -10,7 +10,7 @@ class PrepareBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :bench
     benchmark_execution = BenchmarkExecution.find(benchmark_execution_id)
 
     benchmark_execution.status = 'PREPARING'
-    benchmark_execution.start_time = Time.now
+    benchmark_execution.start_time = Time.current
     benchmark_execution.save
 
     logging_path = "#{benchmark_definition.vagrant_directory_path}/.vagrant/log"
@@ -30,14 +30,14 @@ class PrepareBenchmarkExecutionJob < Struct.new(:benchmark_definition_id, :bench
 
     if $?.success?
       # TODO: Set StateTransitions for each VirtualMachineInstance
-      benchmark_execution.status = 'WAITING'
+      benchmark_execution.status = 'WAITING FOR RUN'
 
       # Schedule StartBenchmarkExecutionJobs with higher priority than PrepareBenchmarkExecutionJobs.
       # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
       Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(benchmark_definition.id, benchmark_execution.id), PRIORITY_HIGH)
     else
       puts "Vagrant up failed. See logfile: #{log_file}"
-      benchmark_execution.status = 'FAILED_ON_PREPARING'
+      benchmark_execution.status = 'FAILED ON PREPARING'
       benchmark_execution.save
     end
   end

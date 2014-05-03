@@ -15,7 +15,7 @@ class ReleaseResourcesJob < Struct.new(:benchmark_definition_id, :benchmark_exec
 
     if $?.success?
       benchmark_execution.status = 'FINISHED'
-      benchmark_execution.end_time = Time.now
+      benchmark_execution.end_time = Time.current
       benchmark_execution.save
     else
       puts "Vagrant destroy failed. See logfile: #{log_file}"
