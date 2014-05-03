@@ -36,9 +36,15 @@ describe BenchmarkDefinition do
 
   describe "start new execution" do
     before { @execution = @benchmark_definition.start_execution_async }
+
     it "should create a new benchmark execution" do
-      @execution.benchmark_definition .should eq(@benchmark_definition)
-      @execution.status .should eq('WAITING FOR PREPARATION')
+      @execution .should_not be_nil
+    end
+
+    describe "benchmark execution" do
+      subject { @execution }
+      its(:benchmark_definition) { should eq @benchmark_definition }
+      its(:status) { should eq 'WAITING FOR PREPARATION' }
     end
 
     it "should create an asynchronous job" do

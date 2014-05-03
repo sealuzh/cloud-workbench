@@ -12,4 +12,9 @@ FactoryGirl.define do
         template.result(namespace.instance_eval { binding })
     end
   end
+
+  factory :benchmark_execution do
+    association :benchmark_definition, factory: :benchmark_definition
+    status 'WAITING FOR PREPARATION'
+  end
 end

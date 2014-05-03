@@ -38,7 +38,7 @@ class BenchmarkDefinition < ActiveRecord::Base
   # May throw an exception on enqueue
   def enqueue_prepare_job(benchmark_execution)
     begin
-      prepare_job = PrepareBenchmarkExecutionJob.new(self.id, benchmark_execution.id)
+      prepare_job = PrepareBenchmarkExecutionJob.new(benchmark_execution.id)
       Delayed::Job.enqueue(prepare_job)
     rescue => e
       benchmark_execution.destroy
