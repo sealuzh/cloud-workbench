@@ -39,7 +39,7 @@ class BenchmarkExecution < ActiveRecord::Base
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
   rescue => e
     # TODO: Handle vagrant up failure appropriately!!! Throw and catch (here) app specific error.
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id)) if Rails.env.production?
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
   end
 
   def prepare_with(driver)
@@ -68,25 +68,20 @@ class BenchmarkExecution < ActiveRecord::Base
     # TODO: Think about is_alive timeout.
   rescue => e
     # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id)) if Rails.env.production?
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
   end
 
   def start_benchmark_with(benchmark_runner)
-    # Status update
-    status = 'RUNNING'
-    benchmark_start_time = Time.current
-    save!
-
     success = benchmark_runner.start_benchmark
 
     if success
       # Status update
       benchmark_end_time = Time.current
-      status = 'WAITING FOR POSTPROCESSING'
+      self.status = 'RUNNING'
       save!
     else
       # Status update
-      status = 'FAILED ON START BENCHMARK'
+      self.status = 'FAILED ON START BENCHMARK'
       save!
       fail status
     end
@@ -97,23 +92,18 @@ class BenchmarkExecution < ActiveRecord::Base
     start_benchmark_with(vagrant_runner)
   rescue => e
     # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id)) if Rails.env.production?
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
   end
 
   def start_postprocessing_with(benchmark_runner)
-    # Status update
-    status = 'POSTPROCESSING'
-    save!
-
     success = benchmark_runner.start_postprocessing
-
     if success
       # Status update
-      status = 'WAITING FOR RELEASE RESOURCES'
+      self.status = 'POSTPROCESSING'
       save!
     else
       # Status update
-      status = 'FAILED ON START POSTPROCESSING'
+      self.status = 'FAILED ON START POSTPROCESSING'
       save!
       fail status
     end
@@ -124,12 +114,12 @@ class BenchmarkExecution < ActiveRecord::Base
     release_resources_with(vagrant_driver)
   rescue => e
     # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id)) if Rails.env.production?
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
   end
 
   def release_resources_with(driver)
     # Update status
-    status = 'RELEASING_RESOURCES'
+    self.status = 'RELEASING_RESOURCES'
     save!
 
     success = driver.destroy
@@ -137,10 +127,10 @@ class BenchmarkExecution < ActiveRecord::Base
     if success
       # Update status
       end_time = Time.current
-      status = 'FINISHED'
+      self.status = 'FINISHED'
       save!
     else
-      status = 'FAILED ON RELEASING RESOURCES'
+      self.status = 'FAILED ON RELEASING RESOURCES'
       save!
       fail status
     end
