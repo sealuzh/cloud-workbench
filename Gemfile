@@ -11,6 +11,7 @@ gem 'enumerize', '~> 0.8.0'
 
 group :development do
   gem 'pry', '~> 0.9.12.6'
+  gem 'launchy', '~> 2.4.2'
   gem 'guard-livereload', '~> 2.1.2', require: false
 
   # Deploy with Capistrano
@@ -24,6 +25,7 @@ end
 group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails', '~> 2.14.2'
+  gem 'fuubar'
   gem 'guard-rspec', '~> 4.2.8'
 
   gem 'spork-rails', '~> 4.0.0'
