@@ -1,4 +1,3 @@
-require 'fileutils'
 class BenchmarkExecution < ActiveRecord::Base
   belongs_to :benchmark_definition
   validates :benchmark_definition, presence: true
@@ -24,15 +23,10 @@ class BenchmarkExecution < ActiveRecord::Base
   end
 
   def prepare
-    prepare_vagrantfile_for_driver
-    vagrant_driver = VagrantDriver(vagrantfile_path)
-    prepare_with(vagrant_driver)
-    vm_instances = vagrant_driver.detect_vm_instances
-    vm_instances.each do |vm|
-      virtual_machine_instances.create(status: self.status,
-                                       provider_name: vm[:provider_name],
-                                       provider_instance_id: vm[:provider_instance_id] )
-    end
+    set_driver_and_fs
+    @file_system.prepare_vagrantfile_for_driver
+    prepare_with(@driver)
+    detect_and_create_vm_instances_with(@driver)
 
     # Schedule StartBenchmarkExecutionJobs with higher priority than PrepareBenchmarkExecutionJobs.
     # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
@@ -62,9 +56,19 @@ class BenchmarkExecution < ActiveRecord::Base
     end
   end
 
+  def detect_and_create_vm_instances_with(driver)
+    vm_instances = driver.detect_vm_instances
+    vm_instances.each do |vm|
+      self.virtual_machine_instances.create(status: self.status,
+                                            provider_name: vm[:provider_name],
+                                            provider_instance_id: vm[:provider_instance_id] )
+
+    end
+  end
+
   def start_benchmark
-    vagrant_runner = VagrantRunner(vagrant_dir)
-    start_benchmark_with(vagrant_runner)
+    set_benchmark_runner_and_fs
+    start_benchmark_with(@benchmark_runner)
     # TODO: Think about is_alive timeout.
   rescue => e
     # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
@@ -88,8 +92,8 @@ class BenchmarkExecution < ActiveRecord::Base
   end
 
   def start_postprocessing
-    vagrant_runner = VagrantRunner(vagrant_dir)
-    start_benchmark_with(vagrant_runner)
+    set_benchmark_runner_and_fs
+    start_benchmark_with(@benchmark_runner)
   rescue => e
     # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
@@ -110,8 +114,8 @@ class BenchmarkExecution < ActiveRecord::Base
   end
 
   def release_resources
-    vagrant_driver = VagrantDriver(vagrantfile_path)
-    release_resources_with(vagrant_driver)
+    set_driver_and_fs
+    release_resources_with(@driver)
   rescue => e
     # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
@@ -138,61 +142,18 @@ class BenchmarkExecution < ActiveRecord::Base
 
   private
 
-    # Reuse in driver
-    # TODO: Move into own module that requires
-    # * benchmark_execution_id
-    # * benchmark_definition_id
-    # * benchmark_definition_name
-    # * benchmark_definition_vagrantfile
-    def prepare_vagrantfile_for_driver
-      create_directory_structure
-      write_vagrantfile_to_filesystem
+    def set_file_system
+      @file_system ||= VagrantFileSystem(benchmark_definition, self)
     end
 
-    def create_directory_structure
-      FileUtils.mkdir_p(root_dir)
-       FileUtils.mkdir_p(vagrant_dir)
-       FileUtils.mkdir_p(log_dir)
+    def set_driver_and_fs
+      set_file_system
+      @driver ||= VagrantDriver(@file_system.vagrantfile_path,
+                                        @file_system.log_dir)
     end
 
-    def write_vagrantfile_to_filesystem
-      vagrantfile = benchmark_definition.vagrantfile
-      File.open(vagrantfile_path, 'w') do |file|
-        file.write(vagrantfile)
-      end
-    end
-
-    def remove_vagrant_dir
-      FileUtils.remove_dir(root_dir)
-    end
-
-    def benchmark_definition_dir
-      File.join(Rails.application.config.benchmark_executions, benchmark_definition_dir_name, root_dir)
-    end
-
-    def benchmark_definition_dir_name
-      aligned_id = self.benchmark_definition_id.to_s.rjust(3, '0')
-      benchmark_definition_name = sanitize_dir_name(benchmark_definition.name)
-      "#{aligned_id}-#{benchmark_definition_name}"
-    end
-
-    def sanitize_dir_name(name)
-      name.gsub(/[^0-9A-z]/, '_')
-    end
-
-    def root_dir
-      aligned_id = self.id.to_s.rjust(4, '0')
-    end
-
-    def vagrant_dir
-      File.join(root_dir, 'vagrant')
-    end
-
-    def vagrantfile_path
-      File.join(vagrant_dir, 'Vagrantfile')
-    end
-
-    def log_dir
-      File.join(root_dir, 'log')
+    def set_benchmark_runner_and_fs
+      set_file_system
+      @benchmark_runner ||= VagrantRunner(@file_system.vagrant_dir)
     end
 end

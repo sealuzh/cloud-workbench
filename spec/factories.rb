@@ -17,4 +17,11 @@ FactoryGirl.define do
     association :benchmark_definition, factory: :benchmark_definition
     status 'WAITING FOR PREPARATION'
   end
+
+  factory :vagrant_file_system do
+    association :benchmark_execution, factory: :benchmark_execution
+    benchmark_definition { benchmark_execution.benchmark_definition }
+
+    initialize_with { new(benchmark_definition, benchmark_execution) }
+  end
 end
