@@ -11,7 +11,7 @@ class VagrantDriver
   end
 
   # Returns an array of hashes
-  # Example: [ { provider_name: 'aws', provider_instance_id: 'i-cn539k8x' }, ... ]
+  # Example: [ { provider_name: 'aws', provider_instance_id: 'i-cn539k8x', role: 'default' }, ... ]
   def detect_vm_instances
     virtual_machines = []
     Pathname(machines_dir).each_child do |machine|
@@ -20,21 +20,17 @@ class VagrantDriver
         virtual_machines.concat(detect_vms_with_role(base))
       end
     end
+    virtual_machines
   end
 
-  # TODO: refactor, simplify
   def detect_vms_with_role(role)
-    virtual_machines = []
-    Rails.application.config.supported_providers.each do |provider|
+    Rails.application.config.supported_providers.collect do |provider|
       provider_id_file = File.join(machines_dir, role, provider, 'id')
       if File.exist?(provider_id_file)
         provider_id = File.read(provider_id_file)
-        virtual_machines.push({ provider_name: provider,
-                                provider_instance_id: provider_id
-                              })
+        { provider_name: provider, provider_instance_id: provider_id, role: role }
       end
-      virtual_machines
-    end
+    end.compact # Clean up nil values in array in case of multiple providers
   end
 
   def up(provider)

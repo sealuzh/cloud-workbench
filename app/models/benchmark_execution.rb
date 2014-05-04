@@ -61,8 +61,8 @@ class BenchmarkExecution < ActiveRecord::Base
     vm_instances.each do |vm|
       self.virtual_machine_instances.create(status: self.status,
                                             provider_name: vm[:provider_name],
-                                            provider_instance_id: vm[:provider_instance_id] )
-
+                                            provider_instance_id: vm[:provider_instance_id],
+                                            role: vm[:role])
     end
   end
 

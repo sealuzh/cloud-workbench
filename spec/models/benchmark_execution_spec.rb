@@ -78,4 +78,24 @@ describe BenchmarkExecution do
     end
     its(:status) { should eq('FAILED ON RELEASING RESOURCES') }
   end
+
+  describe "detection and creation of vm instances" do
+    let(:vm_instance) { build(:virtual_machine_instance) }
+    let(:driver) { build(:vagrant_driver) }
+    before do
+      benchmark_execution.detect_and_create_vm_instances_with(driver)
+    end
+
+    it "should detect a single aws vm instance" do
+      expect do
+        benchmark_execution.detect_and_create_vm_instances_with(driver)
+      end.to change(VirtualMachineInstance, :count).by(1)
+    end
+
+    subject { VirtualMachineInstance.find_by_provider_instance_id(vm_instance.provider_instance_id) }
+    its(:provider_name) { should eq(vm_instance.provider_name) }
+    its(:provider_instance_id) { should eq(vm_instance.provider_instance_id) }
+    its(:role) { should eq(vm_instance.role) }
+
+  end
 end
