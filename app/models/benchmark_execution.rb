@@ -103,7 +103,7 @@ class BenchmarkExecution < ActiveRecord::Base
 
   def start_postprocessing
     set_benchmark_runner_and_fs
-    start_benchmark_with(@benchmark_runner)
+    start_postprocessing_with(@benchmark_runner)
   rescue => e
     # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?

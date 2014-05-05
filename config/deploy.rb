@@ -105,6 +105,8 @@ namespace :deploy do
       # invoke 'rake[cron:clean]'
       # Rake::Task['cron:clean'].invoke
       execute "sudo sv restart #{fetch(:application)}"
+      # TODO: Be aware that this will abort the delayed job worker!
+      execute 'sudo sv restart delayed_job'
     end
   end
 
