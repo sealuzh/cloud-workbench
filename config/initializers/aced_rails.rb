@@ -31,6 +31,6 @@ AcedRails.configure do |config|
 
   # select extensions:
   # available extensions:
-  #   searchbox, spellcheck, static_highlight, textarea, language_tools (for auto-completion), ...
+  #   searchbox, spellcheck, static_highlight, textarea
   config.exts = []
 end

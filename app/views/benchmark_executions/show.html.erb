@@ -21,21 +21,16 @@
 
 
 <br>
-<!--HACK: Push this functionality into the model-->
 <div class="container">
   <div class="span8">
-    <% log_file = File.join(@benchmark_execution.benchmark_definition.vagrant_directory_path, '.vagrant', 'log', 'vagrant_up.log' ) %>
-    <% log_content = File.read(log_file) rescue "no vagrant_up.log" %>
-    <p><%= log_file %></p>
-    <%= text_area_tag :log, log_content, {:readonly => true, rows: "15", class: "form-control span8" }%>
+    <p>Prepare log</p>
+    <%= text_area_tag :log, @benchmark_execution.prepare_log, {:readonly => true, rows: "15", class: "form-control span8" }%>
   </div>
   <br>
   <br>
   <div class="span4">
-    <% log_file = File.join(@benchmark_execution.benchmark_definition.vagrant_directory_path, '.vagrant', 'log', 'vagrant_destroy.log' ) %>
-    <% log_content = File.read(log_file) rescue "no vagrant_destroy.log" %>
-    <p><%= log_file %></p>
-    <%= text_area_tag :log, log_content, {:readonly => true, rows: "15", class: "form-control span8" }%>
+    <p>Release resources log</p>
+    <%= text_area_tag :log, @benchmark_execution.release_resources_log, {:readonly => true, rows: "15", class: "form-control span8" }%>
   </div>
 </div>
 

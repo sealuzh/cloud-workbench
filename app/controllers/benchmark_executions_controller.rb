@@ -31,7 +31,7 @@ class BenchmarkExecutionsController < ApplicationController
   # POST /benchmark_executions
   def create
     @benchmark_execution = @benchmark_definition.start_execution_async
-    flash[:success] = "#{view_context.link_to 'Benchmark execution', @benchmark_execution} for
+    flash[:success] = "Benchmark execution for
                        #{view_context.link_to @benchmark_definition.name, @benchmark_definition}
                        was successfully started asynchronously.".html_safe
     redirect_to @benchmark_execution

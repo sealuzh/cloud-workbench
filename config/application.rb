@@ -23,13 +23,29 @@ module CloudBenchmarking
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
-    # CloudBenchmarking settings
-    config.storage = File.join(Rails.root, 'storage')
+    ### CloudBenchmarking settings
+    # VMs
+    config.vm_benchmark_dir = '/usr/local/cloud-benchmark'
+    config.vm_start_runner = 'start_runner.sh'
+    config.vm_start_postprocessing = 'stop_and_postprocess_runner.sh'
+
+    # String of supported providers that Vagrant uses as directory name (should be the same as used with vagrant up)
+    config.supported_providers = %w(aws)
+
+    # Main paths
+    config.storage = File.join(Rails.root, 'storage', Rails.env)
     config.log = File.join(Rails.root, 'log')
     config.templates = File.join(Rails.root, 'lib', 'templates')
-    config.benchmark_schedule_template = File.join(config.templates, 'erb', 'whenever_schedule.rb.erb')
-    config.benchmark_schedule = File.join(config.storage, Rails.env, 'benchmark_schedules', 'whenever_schedule.rb')
 
+    # Benchmark definition
+    config.vagrantfile_template = File.join(config.templates, 'erb', 'Vagrantfile.erb')
+
+    # Benchmark execution
+    config.benchmark_executions = File.join(config.storage, 'benchmark_executions')
+
+    # Benchmark schedule
+    config.benchmark_schedule_template = File.join(config.templates, 'erb', 'whenever_schedule.rb.erb')
+    config.benchmark_schedule = File.join(config.storage, 'benchmark_schedules', 'whenever_schedule.rb')
     config.benchmark_schedule_log = File.join(config.log, 'benchmark_schedule.log')
   end
 end

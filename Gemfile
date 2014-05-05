@@ -11,6 +11,8 @@ gem 'enumerize', '~> 0.8.0'
 
 group :development do
   gem 'pry', '~> 0.9.12.6'
+  gem 'launchy', '~> 2.4.2'
+  gem 'guard-livereload', '~> 2.1.2', require: false
 
   # Deploy with Capistrano
   gem 'capistrano', '~> 3.2.1', require: false
@@ -22,6 +24,31 @@ end
 
 group :development, :test do
   gem 'sqlite3'
+  gem 'rspec-rails', '~> 2.14.2'
+  gem 'fuubar'
+  gem 'guard-rspec', '~> 4.2.8'
+
+  gem 'spork-rails', '~> 4.0.0'
+  gem 'guard-spork', '~> 1.5.1'
+  gem 'childprocess', '~> 0.5.3'
+end
+
+group :test do
+  gem 'capybara', '~> 2.2.1'
+  gem 'selenium-webdriver', '~> 2.41.0'
+  gem 'database_cleaner', '~> 1.2.0'
+  gem 'factory_girl_rails', '~> 4.4.1'
+
+  ## For Guard notifications:
+  # Uncomment this line on OS X.
+  # gem 'growl', '~> 1.0.3'
+
+  # Uncomment these lines on Linux.
+  # gem 'libnotify', '~> 0.8.2'
+
+  # Uncomment these lines on Windows.
+  # gem 'rb-notifu', '0.0.4'
+  # gem 'wdm', '0.1.0'
 end
 
 group :production do

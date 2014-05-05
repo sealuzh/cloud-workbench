@@ -46,7 +46,7 @@ class VirtualMachineInstancesController < ApplicationController
     if @virtual_machine_instance.status != 'POSTPROCESSING' # TODO: Replace with idempotence check on new state model. StateTransition MUST only exist once per VM
       @virtual_machine_instance.status = 'POSTPROCESSING'
       @virtual_machine_instance.save
-      Delayed::Job.enqueue(StartPostprocessingJob.new(@virtual_machine_instance.benchmark_execution.benchmark_definition_id))
+      Delayed::Job.enqueue(StartPostprocessingJob.new(@virtual_machine_instance.benchmark_execution_id))
       render status: 200, json: @virtual_machine_instance.to_json
     else
       render action: 'edit'
@@ -60,7 +60,7 @@ class VirtualMachineInstancesController < ApplicationController
     if @virtual_machine_instance.status != 'RELEASING_RESOURCES' # TODO: Replace with idempotence check on new state model. StateTransition MUST only exist once per VM
       @virtual_machine_instance.status = 'RELEASING_RESOURCES'
       @virtual_machine_instance.save
-      Delayed::Job.enqueue(ReleaseResourcesJob.new(@virtual_machine_instance.benchmark_execution.benchmark_definition_id, @virtual_machine_instance.benchmark_execution_id))
+      Delayed::Job.enqueue(ReleaseResourcesJob.new(@virtual_machine_instance.benchmark_execution_id))
       render status: 200, json: @virtual_machine_instance.to_json
     else
       render action: 'edit'

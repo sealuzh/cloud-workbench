@@ -10,7 +10,7 @@ namespace :cron do
   end
 end
 
-# Clean the cron schedule on db:drop for non-production environments.
+# Clean the cron schedule on db:drop
 Rake::Task['db:drop'].enhance do
-  Rake::Task['cron:clean'].invoke unless Rails.env.production?
+  Rake::Task['cron:clean'].invoke
 end
