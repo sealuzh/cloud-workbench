@@ -1,8 +1,10 @@
+# Capistrano 3 announcements: http://capistranorb.com/2013/06/01/release-announcement.html
+# Capistrano 3 docs: https://github.com/capistrano/capistrano
 # For path helpers see: 'Capistrano::DSL::Paths' in capistrano/lib/capistrano/dsl/paths.rb
 
 # Capistrano
 # ----------
-# config valid only for Capistrano 3.2
+# Config valid only for specific Capistrano version
 lock '3.2.1'
 set :log_level, :debug
 set :format, :pretty
@@ -34,13 +36,7 @@ set :deploy_user, 'deploy'
 set :keep_releases, 5
 set :use_sudo, false
 
-# Attempts to fix rails tasks such as rake which fail with 'Gemfile not found'
-# set :rake,  "#{fetch(:deploy_to)}/current/bin/rake"
-# set :default_env, { 'PATH' => '/opt/rbenv/shims:/opt/rbenv/bin:/usr/bin:$PATH',
-#                     'BUNDLE_GEMFILE' => "#{current_path}/Gemfile",
-#                     'BUNDLE_PATH'    => "#{shared_path}/vendor/bundle"}
-
-# which config files should be copied by deploy:setup_config
+# Defines which config files should be copied by deploy:setup_config
 # see documentation in lib/capistrano/tasks/setup_config.cap
 # for details of operations. Provide two values if you want
 # to rename e.g. 'database.secret.yml' to 'database.yml'
@@ -57,7 +53,7 @@ set :linked_files, %w{config/database.yml}
 # Also consider the following alternatives:
 # * Store the Vagrantfile in the database and create the file when creating a benchmark execution.
 # * Use Paperclip and Carrierwave to manage attachments
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/benchmark_definitions storage chef-repo}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system storage chef-repo}
 
 # Bundler
 # -------
@@ -71,8 +67,6 @@ set :bundle_without, %w{development test chef}.join(' ')
 # -----
 set :rbenv_path, '/opt/rbenv'
 set :rbenv_ruby, File.read('.ruby-version').strip # Use ruby version from file
-# Attempt to fix rake failure
-# set :rbenv_map_bins, %w{rake gem bundle ruby rails}
 
 # Shell
 # -----
@@ -94,44 +88,41 @@ namespace :deploy do
   before :deploy, 'deploy:check_revision'
   # Only allow a deploy with passing tests to deployed
   before :deploy, 'deploy:run_tests'
-
   # Compile assets locally then rsync. Enable if you want to burden assets compilation to the production server.
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
-
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
   after 'deploy:publishing', 'deploy:restart'
-
   after :finishing, 'deploy:cleanup'
 
 
-  task :start do
-    execute "sudo sv up #{fetch(:application)}"
-    execute 'sudo sv up delayed_job'
-    # rake 'cron:update'
-  end
-
-  task :stop do
-    # rake 'cron:clean'
-    execute "sudo sv down #{fetch(:application)}"
-    execute 'sudo sv down delayed_job'
-  end
-
-  # See Capistrano docs: http://capistranorb.com/2013/06/01/release-announcement.html
+  # The declarative approach does not work with the custom rake task.
+  # Even using the fully qualified name did not resolve this issue:
+  # https://github.com/capistrano/capistrano/issues/959
+  # before :'deploy:restart', :'rake[cron:clean]'
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      # WORKS
-      # execute "cd /home/apps/cloud_benchmarking/releases/20140501215318 && ( RBENV_ROOT=/opt/rbenv RBENV_VERSION=2.1.1 RAILS_ENV=production /opt/rbenv/bin/rbenv exec bundle exec rake about )"
-      # FAILS with: "Could not find rake-10.3.1 in any of the sources. Run `bundle install` to install missing gems."
-      # execute "cd #{release_path} && ( RBENV_ROOT=/opt/rbenv RBENV_VERSION=2.1.1 RAILS_ENV=production /opt/rbenv/bin/rbenv exec bundle exec rake about )"
-      # TODO: Fix cron update rake tasks
-      # Even this will fail with ''!
-      # rake 'about'
-      # execute :rake, 'cron:clean'
+      # invoke 'rake[cron:clean]'
       execute "sudo sv restart #{fetch(:application)}"
-      # rake 'cron:update'
-      # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
-      # execute 'sudo sv restart delayed_job'
     end
+  end
+
+  desc 'Restart the delayed job background worker'
+  task :restart_worker do
+    # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
+    execute 'sudo sv restart delayed_job'
+  end
+
+  task :start do
+    # invoke 'rake[cron:clean]'
+    execute "sudo sv up #{fetch(:application)}"
+    execute 'sudo sv up delayed_job'
+    # invoke 'rake[cron:update]'
+  end
+
+  task :stop do
+    # invoke 'rake[cron:clean]'
+    execute "sudo sv down #{fetch(:application)}"
+    execute 'sudo sv down delayed_job'
   end
 end
