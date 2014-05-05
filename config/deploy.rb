@@ -103,6 +103,7 @@ namespace :deploy do
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
       # invoke 'rake[cron:clean]'
+      # Rake::Task['cron:clean'].invoke
       execute "sudo sv restart #{fetch(:application)}"
     end
   end

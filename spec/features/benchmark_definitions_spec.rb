@@ -16,7 +16,7 @@ feature "Benchmark definitions" do
       fill_in 'Vagrantfile', with: valid_benchmark_definition.vagrantfile
     end
 
-    click_button 'Create Benchmark definition'
+    click_button 'Create New Benchmark'
     page.should have_content 'Benchmark definition was successfully created'
     # TODO: decide about show and edit
     # page.should have_content valid_benchmark_definition.name
@@ -37,7 +37,7 @@ feature "Benchmark definitions" do
     end
 
     expect do
-      click_button 'Create Benchmark definition'
+      click_button 'Create New Benchmark'
     end.to change(BenchmarkDefinition, :count).by(0)
     page.should have_content 'has already been taken'
   end
