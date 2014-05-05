@@ -49,4 +49,23 @@ feature "Benchmark definitions" do
     pending("should list vm instances")
   end
 
+  context "Editing a benchmark definition" do
+    given(:benchmark_definition) { create(:benchmark_definition) }
+    background { visit edit_benchmark_definition_path(benchmark_definition) }
+    given(:start_execution) { -> { click_button 'Start Execution'} }
+
+    scenario "Start an execution should create a new benchmark execution" do
+      expect(start_execution).to change(BenchmarkExecution, :count).by(1)
+    end
+
+    scenario "Start an execution should schedule a job" do
+      expect(start_execution).to change(Delayed::Job, :count).by(1)
+    end
+
+    scenario "Start an execution should redirect to the newly created benchmark execution " do
+      start_execution.call
+      execution = BenchmarkExecution.find_by_benchmark_definition_id(benchmark_definition.id)
+      expect(current_path).to eq benchmark_execution_path(execution)
+    end
+  end
 end

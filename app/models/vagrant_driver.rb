@@ -46,11 +46,11 @@ class VagrantDriver
   end
 
   def up_log
-    File.read(up_log_file)
+    File.read(up_log_file) rescue ''
   end
 
   def destroy_log
-    File.read(destroy_log_file)
+    File.read(destroy_log_file) rescue ''
   end
 
   def up_log_file

@@ -4,6 +4,7 @@ class BenchmarkDefinition < ActiveRecord::Base
     def has_active?
       actives.any?
     end
+    # TODO: Write test and refactor to collect.compact when new state model done
     def actives
       actives = []
       self.each { |execution| actives.append(execution) if execution.active? }

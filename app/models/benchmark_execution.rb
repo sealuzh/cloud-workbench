@@ -22,6 +22,11 @@ class BenchmarkExecution < ActiveRecord::Base
     end
   end
 
+  # TODO: Consider using the following method signature:
+  # + clearer dependencies
+  # + testable
+  # def prepare(file_system = default_file_system,
+  #     driver = default_driver)
   def prepare
     set_driver_and_fs
     @file_system.prepare_vagrantfile_for_driver
@@ -34,6 +39,16 @@ class BenchmarkExecution < ActiveRecord::Base
   rescue => e
     # TODO: Handle vagrant up failure appropriately!!! Throw and catch (here) app specific error.
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
+  end
+
+  def detect_and_create_vm_instances_with(driver)
+    vm_instances = driver.detect_vm_instances
+    vm_instances.each do |vm|
+      self.virtual_machine_instances.create(status: self.status,
+                                            provider_name: vm[:provider_name],
+                                            provider_instance_id: vm[:provider_instance_id],
+                                            role: vm[:role])
+    end
   end
 
   def prepare_with(driver)
@@ -56,14 +71,9 @@ class BenchmarkExecution < ActiveRecord::Base
     end
   end
 
-  def detect_and_create_vm_instances_with(driver)
-    vm_instances = driver.detect_vm_instances
-    vm_instances.each do |vm|
-      self.virtual_machine_instances.create(status: self.status,
-                                            provider_name: vm[:provider_name],
-                                            provider_instance_id: vm[:provider_instance_id],
-                                            role: vm[:role])
-    end
+  def prepare_log
+    set_driver_and_fs
+    @driver.up_log
   end
 
   def start_benchmark
@@ -140,20 +150,24 @@ class BenchmarkExecution < ActiveRecord::Base
     end
   end
 
+  def release_resources_log
+    set_driver_and_fs
+    @driver.destroy_log
+  end
+
   private
 
     def set_file_system
-      @file_system ||= VagrantFileSystem(benchmark_definition, self)
+      @file_system ||= VagrantFileSystem.new(self.benchmark_definition, self)
     end
 
     def set_driver_and_fs
       set_file_system
-      @driver ||= VagrantDriver(@file_system.vagrantfile_path,
-                                        @file_system.log_dir)
+      @driver ||= VagrantDriver.new(@file_system.vagrantfile_path, @file_system.log_dir)
     end
 
     def set_benchmark_runner_and_fs
       set_file_system
-      @benchmark_runner ||= VagrantRunner(@file_system.vagrant_dir)
+      @benchmark_runner ||= VagrantRunner.new(@file_system.vagrant_dir)
     end
 end
