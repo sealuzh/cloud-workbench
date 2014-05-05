@@ -1,10 +1,9 @@
 require 'fileutils'
 
 namespace :fs do
-  desc 'Clean the file system by removing the generated files (e.g. Vagrantfile)'
+  desc 'Clean the file system by removing the generated files (e.g. Vagrantfile, logs)'
   task clean: :environment do
-    # TODO: Define file system paths in a single configuration => no duplication!
-    FileUtils.rm_rf(Dir[Rails.root.join('public/benchmark_definitions')])
+    FileUtils.rm_rf(Dir[Rails.application.config.storage])
   end
 end
 
