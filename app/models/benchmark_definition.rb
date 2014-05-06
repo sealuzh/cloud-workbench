@@ -10,6 +10,11 @@ class BenchmarkDefinition < ActiveRecord::Base
       self.each { |execution| actives.append(execution) if execution.active? }
       actives
     end
+
+    def any_valid?
+      self.each { |execution| return true unless execution.id.nil? }
+      false
+    end
   end
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
   # that do not support case-sensitive indices. This case should practically never occur is therefore not handled.
@@ -19,6 +24,7 @@ class BenchmarkDefinition < ActiveRecord::Base
   # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
   validates :vagrantfile, presence: true
   has_one :benchmark_schedule
+  before_save :ensure_name_integrity
 
   def self.start_execution_async_for_id(benchmark_definition_id)
     benchmark_definition = find(benchmark_definition_id)
@@ -44,4 +50,10 @@ class BenchmarkDefinition < ActiveRecord::Base
       raise e
     end
   end
+
+  private
+
+    def ensure_name_integrity
+      !benchmark_executions.any?
+    end
 end

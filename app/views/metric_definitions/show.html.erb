@@ -3,7 +3,9 @@
   <%= link_to @metric_definition.benchmark_definition.name, @metric_definition.benchmark_definition %>
 </h2>
 
-
+<%= link_to 'Edit', edit_metric_definition_path(@metric_definition), class: 'btn btn-default' %>
+<br>
+<br>
 
 <span class="label label-warning">Currently used for unique referencing.
   Will be replaced with a logical, non-technical identifier.</span>

@@ -1,8 +1,7 @@
 class MetricDefinitionsController < ApplicationController
   before_action :set_metric_definition, only: [:show, :edit, :update, :destroy]
   before_action :set_benchmark_definition, only: [:new, :create]
-  # A metric definition with existing observations MUST NOT be edited
-  before_action :ensure_integrity_of_existing_observations , only: [:edit, :update]
+  before_action :check_and_show_observations_integrity_warning , only: [:edit, :update]
 
   # GET /metric_definitions/1
   def show
@@ -63,10 +62,9 @@ class MetricDefinitionsController < ApplicationController
       params.require(:metric_definition).permit(:benchmark_definition_id, :name, :unit, :scale_type)
     end
 
-    def ensure_integrity_of_existing_observations
+    def check_and_show_observations_integrity_warning
       if @metric_definition.has_any_observations?
-        flash[:error] = "You can't modify a metric definition that already has observed values!"
-        redirect_to @metric_definition
+        flash.now[:info] = "You try to modify a metric definition that already has observed values."
       end
     end
 end

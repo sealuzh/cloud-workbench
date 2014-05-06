@@ -1,4 +1,4 @@
-<h2>Edit <%= @benchmark_definition.name %></h2>
+<h2>Edit <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
 
 <%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
   <%= f.hidden_field :benchmark_definition_id %>

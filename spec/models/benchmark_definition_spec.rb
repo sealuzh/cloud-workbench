@@ -52,7 +52,18 @@ describe BenchmarkDefinition do
         @benchmark_definition.start_execution_async
       end.to change(Delayed::Job, :count).by(1)
     end
-
   end
 
+  context "with existing executions" do
+    describe "editing a benchmark definition" do
+      before do
+        @benchmark_definition.benchmark_executions.create
+        @benchmark_definition.name = "NEW and #{@benchmark_definition.name}"
+      end
+
+      it "should not allow to edit the name" do
+        expect(@benchmark_definition.save).to be_false
+      end
+    end
+  end
 end

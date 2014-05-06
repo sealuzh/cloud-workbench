@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-feature "Benchmark definitions" do
+feature "Benchmark definition management" do
 
   scenario "Listing benchmark definitions" do
     visit benchmark_definitions_path
@@ -54,6 +54,10 @@ feature "Benchmark definitions" do
     background { visit edit_benchmark_definition_path(benchmark_definition) }
     given(:start_execution) { -> { click_button 'Start Execution'} }
 
+    scenario "Name should be readonly" do
+      page.should_not have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
+    end
+
     scenario "Start an execution should create a new benchmark execution" do
       expect(start_execution).to change(BenchmarkExecution, :count).by(1)
     end
@@ -66,6 +70,19 @@ feature "Benchmark definitions" do
       start_execution.call
       execution = BenchmarkExecution.find_by_benchmark_definition_id(benchmark_definition.id)
       expect(current_path).to eq benchmark_execution_path(execution)
+    end
+  end
+
+  context "Existing benchmark executions" do
+    given(:benchmark_definition) { create(:benchmark_definition) }
+    background do
+      benchmark_definition.start_execution_async
+      visit edit_benchmark_definition_path(benchmark_definition)
+    end
+    feature "Edit a benchmark definition" do
+      scenario "Name should be readonly" do
+        page.should have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
+      end
     end
   end
 end
