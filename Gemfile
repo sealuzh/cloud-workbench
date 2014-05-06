@@ -10,8 +10,9 @@ gem 'delayed_job_active_record', '~> 4.0.0'
 gem 'enumerize', '~> 0.8.0'
 
 group :development do
-  gem 'pry', '~> 0.9.12.6'
-  gem 'launchy', '~> 2.4.2'
+  gem 'pry'
+  gem 'pry-rails' # Use pry as Rails console
+  gem 'launchy'
   gem 'guard-livereload', '~> 2.1.2', require: false
 
   # Deploy with Capistrano
