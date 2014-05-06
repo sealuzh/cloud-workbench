@@ -4,23 +4,28 @@
 // * HOWTO: http://ace.c9.io/#nav=howto
 // * API Reference: https://github.com/ajaxorg/ace/wiki/Embedding-API
 
-$( document ).ready(function() {
+var configure_ace_editor = function() {
     var textarea = $('#benchmark_definition_vagrantfile');
-    textarea.acedInitTA({ theme: 'github',
-                          mode: 'ruby'
-                        });
-    var editor = textarea.data('ace-div').aced();
-    var session = editor.getSession();
-    session.setTabSize(2);
-//    editor.setTheme("ace/theme/monokai");
-//    session.setMode("ace/mode/ruby");
+    if (textarea.exists()) {
+        textarea.acedInitTA({ theme: 'github',
+                              mode: 'ruby'
+        });
+        var editor = textarea.data('ace-div').aced();
+        var session = editor.getSession();
+        session.setTabSize(2);
+    //    editor.setTheme("ace/theme/monokai");
+    //    session.setMode("ace/mode/ruby");
 
-    // TODO: Language tools are not contained within the aced_rails gem. Consider installing the latest ace version without the gem.
-//    ace.require("ace/ext/language_tools");
-//    ace.require("ace/ext-language_tools");
-//    editor.setOptions({
-//        enableBasicAutocompletion: true,
-//        enableSnippets: true
-//    });
+        // TODO: Language tools are not contained within the aced_rails gem. Consider installing the latest ace version without the gem.
+    //    ace.require("ace/ext/language_tools");
+    //    ace.require("ace/ext-language_tools");
+    //    editor.setOptions({
+    //        enableBasicAutocompletion: true,
+    //        enableSnippets: true
+    //    });
+    }
+}
+
+$(document).on('ready page:load', function () {
+    configure_ace_editor()
 });
-
