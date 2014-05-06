@@ -43,8 +43,10 @@ class VagrantFileSystem
     "#{aligned_id}-#{benchmark_definition_name}"
   end
 
+  # Replace all non-word-characters [^\w] with an underscore '_'
+  # Word characters are [A-Za-z0-9_]
   def sanitize_dir_name(name)
-    name.gsub(/[^0-9A-z]/, '_').gsub("\\", '_')
+    name.gsub(/\W/, '_')
   end
 
   def benchmark_execution_dir

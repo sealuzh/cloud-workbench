@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe VagrantFileSystem do
-  let(:benchmark_definition) { build(:benchmark_definition, id: 7, name: 'bm-with_symbol%and\\') }
+  let(:benchmark_definition) { build(:benchmark_definition, id: 7, name: 'bm-with_symbol%and\\no.dot') }
   let(:benchmark_execution) { build(:benchmark_execution, benchmark_definition: benchmark_definition, id: 8) }
   let(:vagrant_fs) { build(:vagrant_file_system, benchmark_definition: benchmark_definition,
-                                                          benchmark_execution: benchmark_execution) }
+                                                 benchmark_execution: benchmark_execution) }
   let(:base_path) { Rails.application.config.benchmark_executions }
 
   describe "base_path" do
@@ -15,7 +15,7 @@ describe VagrantFileSystem do
 
   describe "benchmark_definition_dir_name" do
     it "returns the sanitized benchmark definition directory name" do
-      expect(vagrant_fs.benchmark_definition_dir_name).to eq('007-bm_with_symbol_and_')
+      expect(vagrant_fs.benchmark_definition_dir_name).to eq('007-bm_with_symbol_and_no_dot')
     end
   end
 
@@ -27,7 +27,7 @@ describe VagrantFileSystem do
 
   describe "benchmark_execution_dir" do
     it "returns the correct path to the benchmark execution directory" do
-      expect(vagrant_fs.benchmark_execution_dir).to eq("#{base_path}/007-bm_with_symbol_and_/0008")
+      expect(vagrant_fs.benchmark_execution_dir).to eq("#{base_path}/007-bm_with_symbol_and_no_dot/0008")
     end
   end
 
