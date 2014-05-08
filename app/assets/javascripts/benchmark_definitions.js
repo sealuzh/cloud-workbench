@@ -27,5 +27,6 @@ var configure_ace_editor = function() {
 }
 
 $(document).on('ready page:load', function () {
-    configure_ace_editor()
+    // TODO: Fix in production environment. Works as expection in Rails development environment.
+//    configure_ace_editor()
 });
