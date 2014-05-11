@@ -59,7 +59,7 @@ body {
 .loopingPattern (@i) when (@i > 0) {
   (~".pattern-switcher a.p@{i}") {
   // your resulting css
-    background-image: url("../img/pattern/p@{i}.png");
+    background-image: url("../images/pattern/p@{i}.png");
   }
   .loopingPattern(@i - 1);
 }

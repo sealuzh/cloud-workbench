@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
+//= require metis_admin/metis_admin
 //= require_tree .
 
 $.fn.exists = function () {

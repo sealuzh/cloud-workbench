@@ -70,7 +70,7 @@ var styleSwitcher = {
             }
             if (localStorage.pattern) {
                 $('body') .css({
-                    'background': 'url(assets/img/pattern/' + localStorage.pattern + '.png) repeat'
+                    'background': 'url(assets/images/pattern/' + localStorage.pattern + '.png) repeat'
                 });
             }
         }
@@ -337,7 +337,7 @@ var styleSwitcher = {
         ];
         $.each(patternImages, function (i) {
             var listElement = $('<li/>') .append($('<a/>') .css({
-                'background': 'url(assets/img/pattern/' + patternImages[i].image + '.png) repeat'
+                'background': 'url(assets/images/pattern/' + patternImages[i].image + '.png) repeat'
             }) .attr({
                 'href': '#',
                 'title': patternImages[i].title,
@@ -351,7 +351,7 @@ var styleSwitcher = {
         patternList.find('a') .on('click', function (e) {
             e.preventDefault();
             $('body') .css({
-                'background-image': 'url(assets/img/pattern/' + $(this) .data('patternImage') + '.png)',
+                'background-image': 'url(assets/images/pattern/' + $(this) .data('patternImage') + '.png)',
                 'background-repeat': ' repeat'
             });
             $this.patternImage = $(this) .data('patternImage');
@@ -454,7 +454,7 @@ var styleSwitcher = {
         var isBoxed = $('body') .hasClass('fixed');
         var cssBeautify = $('#cssbeautify');
         if (isBoxed) {
-            raw = 'body { background-image: url("../img/pattern/' + $this.patternImage + '.png"); }';
+            raw = 'body { background-image: url("../images/pattern/' + $this.patternImage + '.png"); }';
             $('#boxedBodyAlert') .removeClass('hide');
         } else {
             $('#boxedBodyAlert') .addClass('hide');
