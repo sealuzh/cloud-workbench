@@ -2,17 +2,20 @@
 
 require './benchmark_helper'
 
-# actually execute the benchmark (compiling the Linux kernel) and measure the time
-beginTime = Time.now
-success = system("cd /home/ubuntu/linux-3.13.0 && fakeroot debian/rules binary-headers binary-generic > /home/ubuntu/compilation.log 2> /home/ubuntu/compilation.log")
-duration = -1
-if success
-    endTime = Time.now
-    duration = (endTime - beginTime) * 1000
+<%= @repetitions %>.times do |id|
+    run_benchmark id
+    sleep(<%= @time_between_runs %>)
 end
-
-# submit result
-BenchmarkHelper.submit_metric(<%= @metric %>, 0, duration)
 
 # notify completed
 BenchmarkHelper.notify_postprocessing_completed
+
+def run_benchmark(runId)
+    File.open("/home/ubuntu/status", 'w') {|f| f.write("Currently running run "+runId) }
+    beginTime = Time.now
+    system("cd /home/ubuntu/linux-3.13.0 && fakeroot debian/rules binary-headers binary-generic > /home/ubuntu/compilation.log 2> /home/ubuntu/compilation.log")
+    endTime = Time.now
+    duration = (endTime - beginTime) * 1000
+    BenchmarkHelper.submit_metric(<%= @metric %>, runId, duration)
+    File.open("/home/ubuntu/status", 'w') {|f| f.write("Finished ) }
+end

@@ -1,0 +1,85 @@
+#!<%= @ruby %>
+
+require './benchmark_helper'
+
+puts "Starting benchmark run"
+
+# find out date
+date = `date`
+
+# find out our CPU
+cpu = `cat /proc/cpuinfo | grep 'model name' | cut -d ':' -f 2`
+
+puts "Finished static part"
+
+# run CPU benchmark
+cpuResultAsString = `sysbench --test=cpu --cpu-max-prime=20000 run`
+cpuResult = find_cpu_result_in_string cpuResultAsString
+if !cpuResult
+    fail("Failed to run CPU benchmark!")
+end
+
+puts "Finished CPU benchmark"
+
+# run mem benchmark
+memResultAsString = `mbw 64 | grep 'AVG'`
+memResult = find_mem_results_in_string memResultAsString
+if !memResult
+    fail("Failed to run Memory benchmark!")
+end
+
+puts "Finished memory benchmark"
+
+# prepare disk IO benchmark
+success = system("sysbench --test=fileio --file-total-size=5G prepare")
+if !success
+    fail("Preparing IO benchmark failed!")
+end
+
+puts "Finished preparing IO benchmark"
+
+# run disk IO benchmark
+ioResultAsString = `sysbench --test=fileio --file-total-size=5G --file-test-mode=rndrw --init-rng=on --max-time=300 --max-requests=0 run`
+ioResult = find_io_result_in_string ioResultAsString
+if !ioResult
+    fail("Failed to run IO benchmark!")
+end
+
+puts "Finished IO benchmark"
+
+# aggregate and submit result
+aggregatedResult = "Results (#{date}):
+CPU: #{cpu}
+CPU Benchmark: #{cpuResult[1]}
+IO Benchmark: #{ioResult[1]}
+Mem Benchmark: #{memResult}"
+
+BenchmarkHelper.submit_metric(<%= @metric %>, 1, aggregatedResult)
+
+puts aggregatedResult
+puts "Uploaded results"
+
+# notify completed
+BenchmarkHelper.notify_postprocessing_completed
+
+puts "All done. Tearing down."
+
+# helper methods
+BEGIN {
+    def fail(message)
+        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
+        exit
+    end
+
+    def find_cpu_result_in_string(string)
+        /total time:\s*(.*)/.match string
+    end
+
+    def find_io_result_in_string(string)
+        /\((.*sec.*)\)/.match string
+    end
+
+    def find_mem_results_in_string(string)
+        string.scan(/Copy: (.*) MiB/)
+    end
+}

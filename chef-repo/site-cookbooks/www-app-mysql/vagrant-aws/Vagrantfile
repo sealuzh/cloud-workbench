@@ -11,7 +11,7 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "aws"
   config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
-  config.vm.hostname = "CBench-Demo-Kernel-Compilation"
+  config.vm.hostname = "www-app-mysql"
 
   # AWS EC2 provider
   config.vm.provider :aws do |aws, override|
@@ -22,15 +22,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # AWS instance configuration
     aws.region = "eu-west-1"
     aws.region_config "eu-west-1" do |region|
-      region.ami = "ami-0b884f7c"
+      region.ami = "ami-896c96fe"
       region.keypair_name = ENV['EC2_KEYPAIR']
     end
     override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
     override.ssh.username = "ubuntu"
-    aws.instance_type = "m1.small"
+    aws.instance_type = "t1.micro"
     aws.security_groups = ["default"]
     aws.tags = {
-      'Name' => 'CBench-Demo-Kernel-Compilation'
+      'Name' => 'www-app-mysql'
      }
   end
 
@@ -52,19 +52,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
     chef.run_list = [
       "recipe[benchmark]",
-      "recipe[philipp-demo-cookbook@0.1.0]"
+      "recipe[www-app-mysql@0.1.0]"
     ]
 
     chef.json = {
-      "kernel" => {
-        "metric_definition_id" => 1,
-        "time_between_runs" => 14400,
-        "repetitions" => 10
+      "mysql" => {
+        "metric_definition_id" => 1
       }
     }
-    
-    # Cleanup when vm gets destroyed: Does not work due to bug https://github.com/mitchellh/vagrant/issues/2476
-    # chef.delete_node = true
-    # chef.delete_client = true
+
   end
 end

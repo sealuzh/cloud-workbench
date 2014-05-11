@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: philipp-demo-cookbook
+# Cookbook Name:: www-micro-benchmarks
 # Recipe:: default
 #
 # Copyright 2014, seal uzh
@@ -17,8 +17,8 @@
 # limitations under the License.
 #
 
-
-# Benchmark execution hooks
+# Install benchmarks
+include_recipe "www-micro-mem::install"
 
 RUBY = "#{Chef::Config.embedded_dir}/bin/ruby"
 # Start
@@ -29,8 +29,6 @@ template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
   mode "0755"
   variables(
       ruby: RUBY,
-      metric: node['kernel']['metric_definition_id'],
-      repetitions: node['kernel']['repetitions'],
-      time_between_runs: node['kernel']['time_between_runs']
+      metric: node['mem']['metric_definition_id']
   )
 end

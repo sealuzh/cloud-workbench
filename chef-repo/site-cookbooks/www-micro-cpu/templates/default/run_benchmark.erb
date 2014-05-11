@@ -1,0 +1,49 @@
+#!<%= @ruby %>
+
+require './benchmark_helper'
+
+puts "Starting benchmark run"
+
+# find out date
+date = `date`
+
+# find out our CPU
+cpu = `cat /proc/cpuinfo | grep 'model name' | cut -d ':' -f 2`
+
+puts "Finished static part"
+
+# run CPU benchmark
+cpuResultAsString = `sysbench --test=cpu --cpu-max-prime=20000 run`
+cpuResult = find_cpu_result_in_string cpuResultAsString
+if !cpuResult
+    fail("Failed to run CPU benchmark!")
+end
+
+puts "Finished CPU benchmark"
+
+# aggregate and submit result
+aggregatedResult = "Results (#{date}):
+CPU: #{cpu}
+CPU Benchmark: #{cpuResult[1]}"
+
+BenchmarkHelper.submit_metric(<%= @metric %>, 1, aggregatedResult)
+
+puts aggregatedResult
+puts "Uploaded results"
+
+# notify completed
+BenchmarkHelper.notify_postprocessing_completed
+
+puts "All done. Tearing down."
+
+# helper methods
+BEGIN {
+    def fail(message)
+        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
+        exit
+    end
+
+    def find_cpu_result_in_string(string)
+        /total time:\s*(.*)/.match string
+    end
+}

@@ -1,0 +1,49 @@
+#!<%= @ruby %>
+
+require './benchmark_helper'
+
+puts "Starting benchmark run"
+
+# find out date
+date = `date`
+
+# find out our CPU
+cpu = `cat /proc/cpuinfo | grep 'model name' | cut -d ':' -f 2`
+
+puts "Finished static part"
+
+# run mem benchmark
+memResultAsString = `mbw 64 | grep 'AVG'`
+memResult = find_mem_results_in_string memResultAsString
+if !memResult
+fail("Failed to run Memory benchmark!")
+end
+
+puts "Finished memory benchmark"
+
+# aggregate and submit result
+aggregatedResult = "Results (#{date}):
+CPU: #{cpu}
+Mem Benchmark: #{memResult}"
+
+BenchmarkHelper.submit_metric(<%= @metric %>, 1, aggregatedResult)
+
+puts aggregatedResult
+puts "Uploaded results"
+
+# notify completed
+BenchmarkHelper.notify_postprocessing_completed
+
+puts "All done. Tearing down."
+
+# helper methods
+BEGIN {
+def fail(message)
+    BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
+    exit
+end
+
+def find_mem_results_in_string(string)
+    string.scan(/Copy: (.*) MiB/)
+end
+}

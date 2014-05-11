@@ -1,0 +1,57 @@
+#!<%= @ruby %>
+
+require './benchmark_helper'
+
+puts "Starting benchmark run"
+
+# find out date
+date = `date`
+
+# find out our CPU
+cpu = `cat /proc/cpuinfo | grep 'model name' | cut -d ':' -f 2`
+
+puts "Finished static part"
+
+# prepare disk IO benchmark
+success = system("sysbench --test=fileio --file-total-size=5G prepare")
+if !success
+    fail("Preparing IO benchmark failed!")
+end
+
+puts "Finished preparing IO benchmark"
+
+# run disk IO benchmark
+ioResultAsString = `sysbench --test=fileio --file-total-size=5G --file-test-mode=rndrw --init-rng=on --max-time=300 --max-requests=0 run`
+ioResult = find_io_result_in_string ioResultAsString
+if !ioResult
+    fail("Failed to run IO benchmark!")
+end
+
+puts "Finished IO benchmark"
+
+# aggregate and submit result
+aggregatedResult = "Results (#{date}):
+CPU: #{cpu}
+IO Benchmark: #{ioResult[1]}"
+
+BenchmarkHelper.submit_metric(<%= @metric %>, 1, aggregatedResult)
+
+puts aggregatedResult
+puts "Uploaded results"
+
+# notify completed
+BenchmarkHelper.notify_postprocessing_completed
+
+puts "All done. Tearing down."
+
+# helper methods
+BEGIN {
+    def fail(message)
+        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
+        exit
+    end
+
+    def find_io_result_in_string(string)
+        /\((.*sec.*)\)/.match string
+    end
+}
