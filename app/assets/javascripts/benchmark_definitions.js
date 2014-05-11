@@ -27,5 +27,5 @@ var configure_ace_editor = function() {
 }
 
 $(document).on('ready page:load', function () {
-    configure_ace_editor()
+    configure_ace_editor();
 });
