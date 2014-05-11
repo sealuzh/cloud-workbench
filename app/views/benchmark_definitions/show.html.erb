@@ -13,11 +13,25 @@
 
     <div class="box span9">
       <header>
-        <h4><%= link_to benchmark_definition_benchmark_executions_path(@benchmark_definition) do %>
+        <h4 class="header-title">
+          <%= link_to benchmark_definition_benchmark_executions_path(@benchmark_definition) do %>
             <%= pluralize(@benchmark_definition.benchmark_executions.count, 'Execution') %>
-          <% end %></h4>
+          <% end %>
+        </h4>
+        <div class="toolbar">
+          <div class="toolbar-center">
+            <%= will_paginate @benchmark_executions %>
+          </div>
+          <div class="toolbar">
+            <a href="#benchmarkExecutionsTable" data-toggle="collapse" class="btn btn-sm btn-default minimize-box">
+              <i class="fa fa-angle-up"></i>
+            </a>
+          </div>
+        </div>
       </header>
-      <%= render 'shared/benchmark_executions', show_benchmark_definition: false %>
+      <div id='benchmarkExecutionsTable' class='collapse in'>
+        <%= render 'shared/benchmark_executions', show_benchmark_definition: false %>
+      </div>
     </div>
 
     <%= render 'shared/metric_definitions_sidebar' %>

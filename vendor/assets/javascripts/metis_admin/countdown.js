@@ -13,16 +13,16 @@ var startDate = new Date("01/01/2014"),
     defaultPercent = 0;
 
 
-$(function () {
-    $('#counter').countdown({
-        until: endDate,
-        layout: '<div></div>',
-        onTick: updateBar
-    });
-
-    $('a[rel=tooltip]').tooltip();
-    $('div[rel=tooltip]').tooltip();
-});
+//$(function () {
+//    $('#counter').countdown({
+//        until: endDate,
+//        layout: '<div></div>',
+//        onTick: updateBar
+//    });
+//
+//    $('a[rel=tooltip]').tooltip();
+//    $('div[rel=tooltip]').tooltip();
+//});
 
 
 function updateBar(periods) {
@@ -67,25 +67,6 @@ function fillTotalbar(percent) {
     $('#total-bar').css('width', defaultPercent + '%').html(currentPercent + '%');
 }
 
-
-/* Start Google Map*/
-
-var map;
-
-map = new GMaps({
-        el: '#map_canvas',
-        lat: -12.043333,
-        lng: -77.028333,
-        zoomControl: true,
-        zoomControlOpt: {
-            style: 'SMALL',
-            position: 'TOP_LEFT'
-        },
-        panControl: false,
-        streetViewControl: false,
-        mapTypeControl: false,
-        overviewMapControl: false
-    });
 
 
 /* Start Form validation*/

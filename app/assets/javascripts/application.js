@@ -14,7 +14,14 @@
 //= require jquery_ujs
 //= require twitter/bootstrap
 //= require turbolinks
+
+// Metis Admin Theme and dependencies
+//= require modernizr/modernizr.min
+//= require jquery-validation/jquery.validate
+//= require validVal/jquery.validVal
+//= require validationEngine/jquery.validationEngine
 //= require metis_admin/metis_admin
+
 //= require_tree .
 
 $.fn.exists = function () {

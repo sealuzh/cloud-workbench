@@ -10,7 +10,9 @@
     <div class="row">
 
       <div class="box span9">
+        <%= will_paginate @benchmark_executions %>
         <%= render 'shared/benchmark_executions', show_benchmark_definition: false %>
+        <%= will_paginate @benchmark_executions %>
       </div>
 
       <%= render 'shared/metric_definitions_sidebar' %>
@@ -19,6 +21,8 @@
 <% else %>
   <!-- Index all benchmark_executions -->
   <h2>Benchmark Executions</h2>
+  <%= will_paginate @benchmark_executions %>
   <%= render 'shared/benchmark_executions', show_benchmark_definition: true %>
+  <%= will_paginate @benchmark_executions %>
 <% end %>
 

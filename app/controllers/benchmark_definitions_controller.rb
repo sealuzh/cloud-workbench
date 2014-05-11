@@ -11,7 +11,7 @@ class BenchmarkDefinitionsController < ApplicationController
 
   # GET /benchmark_definitions/1
   def show
-    @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:page])
+    @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:page], per_page: 10)
   end
 
   # GET /benchmark_definitions/new
