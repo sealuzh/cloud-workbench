@@ -3,23 +3,26 @@ function scrollToBottom (textarea) {
     textarea.scrollTop(maxScrollHeight)
 }
 
-var logRefreshTimeouts = [];
+var logRefreshTimeouts = {};
 function setNextLogRefreshTimeout (logTextarea, action) {
     var logRefreshTimeoutInMilliseconds = 4000;
     var nextTimeout = setTimeout(function() {
-                                    liveUpdateLog(logTextarea, action);
+                                    liveRefreshLog(logTextarea, action);
                                  }, logRefreshTimeoutInMilliseconds);
-    logRefreshTimeouts.push(nextTimeout);
+    logRefreshTimeouts[action] = nextTimeout;
+}
+
+function resetLogRefreshTimeout(action) {
+    clearTimeout(logRefreshTimeouts[action]);
 }
 
 function resetAllLogRefreshTimeouts() {
-    for (var i = 0; i < logRefreshTimeouts.length; i++) {
-        clearTimeout(logRefreshTimeouts[i]);
-    }
-    logRefreshTimeouts = [];
+    Object.keys(logRefreshTimeouts).forEach( function(key) {
+        resetLogRefreshTimeout(key);
+    });
 }
 
-function updateLog(logTextarea, action, onSuccess) {
+function refreshLog(logTextarea, action, onSuccess) {
     var onSuccess = onSuccess || function() {};
     var benchmark_execution_id = $("#benchmark_execution").attr("data-id");
     var request_url = "/benchmark_executions/" + benchmark_execution_id + "/" + action + ".txt";
@@ -30,14 +33,14 @@ function updateLog(logTextarea, action, onSuccess) {
     });
 }
 
-function liveUpdateLog(logTextarea, action) {
+function liveRefreshLog(logTextarea, action) {
     var setNextTimeoutOnSuccess = function() {
         setNextLogRefreshTimeout(logTextarea, action);
     };
-    updateLog(logTextarea, action, setNextTimeoutOnSuccess);
+    refreshLog(logTextarea, action, setNextTimeoutOnSuccess);
 }
 
-function initLiveLog(id, action) {
+function initLiveRefresh(id, action) {
     var logTextarea = $("#" + id);
     if (logTextarea.exists()) {
         var start = $("#" + id + "RefreshStart");
@@ -45,23 +48,34 @@ function initLiveLog(id, action) {
         start.click( function() {
             start.toggle();
             stop.toggle();
-            liveUpdateLog(logTextarea, action);
+            liveRefreshLog(logTextarea, action);
         });
         stop.click( function() {
             start.toggle();
             stop.toggle();
-            resetAllLogRefreshTimeouts();
+            resetLogRefreshTimeout(action);
         });
-        updateLog(logTextarea, action);
+        refreshLog(logTextarea, action);
+    }
+}
+
+function resetLiveRefreshButton(id) {
+    var start = $("#" + id + "RefreshStart");
+    var stop  = $("#" + id + "RefreshStop");
+    if (start.is(":hidden")) {
+        start.toggle();
+        stop.toggle();
     }
 }
 
 $(document).on('ready page:load', function () {
-    initLiveLog('prepareLog', 'prepare_log');
-    initLiveLog('releaseResourcesLog', 'release_resources_log');
+    initLiveRefresh('prepareLog', 'prepare_log');
+    initLiveRefresh('releaseResourcesLog', 'release_resources_log');
 });
 
 // Reset timeout when leaving the page via Rails turbolinks.
 $(document).on('page:before-change', function() {
+    resetLiveRefreshButton('prepareLog');
+    resetLiveRefreshButton('releaseResourcesLog');
     resetAllLogRefreshTimeouts();
 });
