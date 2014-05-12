@@ -22,6 +22,15 @@
 //= require validationEngine/jquery.validationEngine
 //= require metis_admin/metis_admin
 
+// Ace editor extensions
+// =require ace/ace
+//= require ace/worker-javascript
+//= require ace/mode-ruby
+//= require ace/theme-github
+//= require ace/snippets/ruby
+//= require ace/ext-language_tools
+//= require aced-rails/aced-rails.js.coffee
+
 // Custom javascript
 //= require utilities
 //= require_tree .

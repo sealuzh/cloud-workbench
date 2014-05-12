@@ -64,22 +64,22 @@ group :production do
   gem 'execjs'
 end
 
+# Assets
 gem 'therubyracer', '~> 0.12.1'
 gem 'less-rails', '~> 2.5.0'
+gem 'uglifier', '>= 1.3.0'
+gem 'jquery-rails'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'turbolinks'
+gem 'jbuilder', '~> 1.2'
+
+## Bootstrap and UI
 gem 'twitter-bootstrap-rails', '~> 2.2.8'
 gem 'font-awesome-rails', '~> 4.0.3.1'
 gem 'will_paginate', '~> 3.0.5'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
-
 gem 'simple_form', '~> 3.0.2'
-# Fork of aced_rails gem with Rails 4 support: https://github.com/ffloyd/aced_rails
-# Alternative gem that simply integrates ace into the Rails assets pipeline: https://github.com/codykrieger/ace-rails-ap
-gem 'aced_rails', git: 'https://github.com/selbyk/aced_rails.git', ref: 'e733b0cd41deaf5dcd84a7ae5dee4fb2499842f4'
 
-gem 'uglifier', '>= 1.3.0'
-gem 'jquery-rails'
-gem 'turbolinks'
-gem 'jbuilder', '~> 1.2'
 
 group :chef do
   # Chef: Use the Chef gem since the omnibus installer with Chef-client version <=11.12.2

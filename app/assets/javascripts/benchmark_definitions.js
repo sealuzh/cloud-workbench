@@ -13,18 +13,19 @@ var configure_ace_editor = function() {
         var editor = textarea.data('ace-div').aced();
         var session = editor.getSession();
         session.setTabSize(2);
+
+        // Example how to set theme and mode via javascript
     //    editor.setTheme("ace/theme/monokai");
     //    session.setMode("ace/mode/ruby");
 
-        // TODO: Language tools are not contained within the aced_rails gem. Consider installing the latest ace version without the gem.
-    //    ace.require("ace/ext/language_tools");
-    //    ace.require("ace/ext-language_tools");
-    //    editor.setOptions({
-    //        enableBasicAutocompletion: true,
-    //        enableSnippets: true
-    //    });
+        // Auto-completion
+        require("ace/ext/language_tools");
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: true
+        });
     }
-}
+};
 
 $(document).on('ready page:load', function () {
     configure_ace_editor();
