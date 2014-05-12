@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 ruby '2.1.1'
 #ruby-gemset=cloud_benchmarking
 
-gem 'rails', '4.0.4'
+gem 'rails', '4.1.1'
 
 # NOTE: This gem is not thread-safe and SHOULD NOT be used with
 #       threaded web servers such as puma.
@@ -74,7 +74,9 @@ gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
 ## Bootstrap and UI
-gem 'twitter-bootstrap-rails', '~> 2.2.8'
+# Fix for Rails 4.1 flash message helper not released yet (2014-05-13)
+# See https://github.com/seyhunak/twitter-bootstrap-rails/issues/721
+gem 'twitter-bootstrap-rails', git: 'git://github.com/seyhunak/twitter-bootstrap-rails.git'
 gem 'font-awesome-rails', '~> 4.0.3.1'
 gem 'will_paginate', '~> 3.0.5'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
