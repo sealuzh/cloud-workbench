@@ -1,6 +1,6 @@
 class BenchmarkExecutionsController < ApplicationController
   before_action :set_benchmark_definition, only: [:new, :create]
-  before_action :set_benchmark_execution, only: [:show, :edit, :update, :destroy, :prepare_log]
+  before_action :set_benchmark_execution, only: [:show, :edit, :update, :destroy, :prepare_log, :release_resources_log]
 
   # GET /benchmark_definition/:id/benchmark_executions
   # GET /benchmark_executions
@@ -22,6 +22,12 @@ class BenchmarkExecutionsController < ApplicationController
   def prepare_log
     respond_to do |format|
       format.text { render(text: @benchmark_execution.prepare_log) }
+    end
+  end
+
+  def release_resources_log
+    respond_to do |format|
+      format.text { render(text: @benchmark_execution.release_resources_log) }
     end
   end
 

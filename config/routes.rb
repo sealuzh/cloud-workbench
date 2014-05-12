@@ -6,6 +6,7 @@ CloudBenchmarking::Application.routes.draw do
   end
   resources :benchmark_executions, except: [:new, :create]
   get '/benchmark_executions/:id/prepare_log', to: 'benchmark_executions#prepare_log'
+  get '/benchmark_executions/:id/release_resources_log', to: 'benchmark_executions#release_resources_log'
   resources :metric_definitions, except: [:index, :new, :create]
   resources :benchmark_schedules, only: [:edit, :update ]
 
