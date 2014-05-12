@@ -15,15 +15,18 @@
 /log/*.log
 /tmp
 
+# Ignore assets managed by the Rails assets pipeline
+/public/assets/**
+
 # Ignore file storage directory
 /storage/*
 
 # Ignore all files except that ones that contain '.example' in the name
-config/deploy/shared/*
-!config/deploy/shared/*.example*
+/config/deploy/shared/*
+!/config/deploy/shared/*.example*
 
-config/deploy/cloud_benchmarking_*/*
-!config/deploy/cloud_benchmarking_*/*.example*
+/config/deploy/cloud_benchmarking_*/*
+!/config/deploy/cloud_benchmarking_*/*.example*
 
 # Ignore other unneeded files.
 database.yml
