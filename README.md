@@ -1,6 +1,6 @@
 # Cloud Benchmarking
 
-## Installation
+## Installation (automated)
 
 ### Requirements
 * Git (1.9.2)
@@ -59,6 +59,42 @@ Consider: permissions, dynamic directories (node[appdir])
 1. `cd $GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/cbench-chef-server/vagrant-aws-production`
 2. `vagrant up --provider=aws`
 
+
+## Installation (manual)
+
+NOTE: The manual installation is not recommendend and has not been tested.
+
+### Requirements
+
+* UNIX like system (only tested with Ubuntu)
+* Git (1.7.9.5)
+* Ruby 2.1.1 (rbenv version manager used in automated installation)
+* NGINX
+* Unicorn
+* Nodejs
+* PostgreSQL 9.1.13
+    * Default table name: `cloud_benchmarking_production`
+* Vagrant 1.5.3 with plugins
+    * Chef 11.6.2
+    * vagrant-aws 0.4.1
+    * vagrant-omnibus 1.4.1
+* cron
+* runit (init scheme with service supervision)
+    * NGINX
+    * Unicorn
+    * delayed_job background worker
+* runit environment variable configuration depending on process
+    * `BUNDLE_GEMFILE` := path to the Gemfile of the current release
+    * `BUNDLE_PATH` := path to shared/vendor/bundle
+    * `EXECJS_RUNTIME=Node`
+    * `RAILS_ENV=production`
+    * `HOME=/home/apps`
+* svlogd [optional]
+* Deployment directory in /home/apps/cloud_benchmarking
+* User and group `apps`
+* User and group `deploy` with root privileges and ssh configuration for deployment
+
+
 ## Reconfiguration on IP address change
 
 ### WorkBench
@@ -83,7 +119,26 @@ Consider: permissions, dynamic directories (node[appdir])
     2. Enter the IP address of the Chef Server here
 
 
+## Deployment
+
+Requires a Ruby on Rails development environment and checkout of the project. Make sure you have run `bundle install --without production chef`.
+
+### Initial configuration
+1. Configure the hostname or ip-address of the target server in `config/deploy/production.rb`
+2. Provide the path to your private key in `config/deploy.rb` for `keys` in `ssh_options`
+3. Ensure you have added your private key to your ssh-agent. For more information see https://help.github.com/articles/using-ssh-agent-forwarding.
+4. Check your settings with `bundle exec cap production deploy:check`
+5. Setup your database config in `config/deploy/shared/database.secret.yml.erb`
+6. Copy the database settings to the server with `bundle exec cap production setup_config`
+
+### Deploy
+
+Simply deploy new releases with `bundle exec cap production deploy`
+
+
 ## Benchmarks
+
+TODO: Describe how to define a new benchmark
 
 ### Getting Started
 
@@ -96,7 +151,10 @@ You might have to run `bundle exec rake test:prepare` first if you have any pend
 
 ### Guard and Spork
 
-Start Guard and Spork with `bundle exec guard`. This will preload the testing environment once and automatically execute the test when files have been modified.
+Start Guard and Spork with `bundle exec guard`. This will preload the testing environment once and automatically execute the affeced tests when files have been modified.
+
+Automatic page reload on file change is supported for Safari, Chrome and Firefox via plugin from http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-
+
 
 ## Limitations
 
@@ -109,24 +167,4 @@ Start Guard and Spork with `bundle exec guard`. This will preload the testing en
 * Chef cookbooks must be uploaded to the Chef server
 
 * Log files from created VM instances are not accessible via web interface and get lost on VM shutdown
-* Benchmark definition requires Chef cookbook
-
-## Things you may want to cover
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Benchmark definition requires a Chef cookbook
