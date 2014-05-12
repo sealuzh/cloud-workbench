@@ -10,7 +10,7 @@ module CloudBenchmarking
   class Application < Rails::Application
     config.generators do |g|
       g.test_framework  :rspec, fixture: false
-      g.fixture_replacement :factory_girl, :dir => 'spec/factories'
+      g.fixture_replacement :factory_girl, dir: 'spec/factories'
       g.assets false
       g.helper false
     end
@@ -19,7 +19,7 @@ module CloudBenchmarking
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.autoload_paths += %W(
-      #{config.root}/app/jobs
+      #{Rails.root}/app/jobs
     )
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.

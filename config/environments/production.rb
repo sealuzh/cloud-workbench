@@ -77,4 +77,12 @@ CloudBenchmarking::Application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+
+  # Silencable logger to exclude ajax polling from logging: https://github.com/spagalloco/silencer
+  # NOTE: This is NOT thread-safe and SHOULD NOT be used with a threaded web server such as puma.
+  require 'silencer/logger'
+  config.middleware.swap Rails::Rack::Logger, Silencer::Logger,
+                         silence: [%r{/benchmark_executions/\d+/prepare_log.txt},
+                                   %r{/benchmark_executions/\d+/release_resources_log.txt},
+                         ]
 end

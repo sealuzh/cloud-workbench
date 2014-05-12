@@ -343,6 +343,8 @@ GEM
       rubyzip (~> 1.0)
       websocket (~> 1.0.4)
     semverse (1.1.0)
+    silencer (0.6.0)
+      railties (>= 3)
     simple_form (3.0.2)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
@@ -450,6 +452,7 @@ DEPENDENCIES
   rspec-rails (~> 2.14.2)
   sdoc
   selenium-webdriver (~> 2.41.0)
+  silencer (~> 0.6.0)
   simple_form (~> 3.0.2)
   spork-rails (~> 4.0.0)
   sqlite3
