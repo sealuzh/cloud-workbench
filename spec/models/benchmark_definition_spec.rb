@@ -44,7 +44,7 @@ describe BenchmarkDefinition do
     describe "benchmark execution" do
       subject { @execution }
       its(:benchmark_definition) { should eq @benchmark_definition }
-      its(:status) { should eq 'WAITING FOR PREPARATION' }
+      its(:status) { should eq 'WAITING FOR START PREPARING' }
     end
 
     it "should create an asynchronous job" do

@@ -16,8 +16,8 @@ Spork.prefork do
 # in spec/support/ and its subdirectories.
   Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
-# Checks for pending migrations before tests are run.
-  ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
+  # Run pending migrations automatically if any
+  ActiveRecord::Migration.maintain_test_schema!
 
   RSpec.configure do |config|
     # ## Mock Framework

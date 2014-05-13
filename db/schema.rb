@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140504222001) do
+ActiveRecord::Schema.define(version: 20140512195631) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
@@ -66,6 +66,15 @@ ActiveRecord::Schema.define(version: 20140504222001) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
+  create_table "events", force: true do |t|
+    t.integer  "name"
+    t.datetime "happened_at"
+    t.integer  "traceable_id"
+    t.string   "traceable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "metric_definitions", force: true do |t|
     t.string   "name"

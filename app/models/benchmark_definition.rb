@@ -18,24 +18,28 @@ class BenchmarkDefinition < ActiveRecord::Base
   end
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
   # that do not support case-sensitive indices. This case should practically never occur is therefore not handled.
+  MAX_NAME_LENGTH = 70
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false },
-                   length: { in: 3..50 }
+                   length: { in: 3..MAX_NAME_LENGTH }
   # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
   validates :vagrantfile, presence: true
   has_one :benchmark_schedule
   before_save :ensure_name_integrity
+
+  def self.max_name_length
+    MAX_NAME_LENGTH
+  end
 
   def self.start_execution_async_for_id(benchmark_definition_id)
     benchmark_definition = find(benchmark_definition_id)
     benchmark_definition.start_execution_async
   end
 
-  # May throw an exception on save or enqueue
+  # May throw an exception on create or enqueue
   def start_execution_async
-    benchmark_execution = benchmark_executions.build
-    benchmark_execution.status = "WAITING FOR PREPARATION"
-    benchmark_execution.save!
+    benchmark_execution = benchmark_executions.create!(status: "WAITING FOR PREPARATION")
+    benchmark_execution.events.create_with_name!(:created)
     enqueue_prepare_job(benchmark_execution)
     benchmark_execution
   end
