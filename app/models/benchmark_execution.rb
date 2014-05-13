@@ -2,48 +2,36 @@ class BenchmarkExecution < ActiveRecord::Base
   belongs_to :benchmark_definition
   validates :benchmark_definition, presence: true
   has_many :virtual_machine_instances
-  has_many :events, as: :traceable do
-    def create_with_name!(name)
-      create!(name: name, happened_at: Time.current)
-    end
-
-    def first_failed
-      first_failed_index = self.index { |event| event.failed? }
-      first_failed_index.nil? ? nil : self[first_failed_index]
-    end
-
-    def any_failed?
-      first_failed.present?
-      # self.select { |event| event.failed? }.any?
-    end
-
-    def status_from_history
-      if any_failed?
-        first_failed.status
-      elsif self.any?
-        self.last.status
-      else
-        'UNDEFINED'
-      end
-    end
+  has_many :events, as: :traceable, dependent: :destroy do
+    include EventsAsTraceableExtension
   end
 
+  PROVIDER = 'aws'
   PRIORITY_HIGH = 1
 
   def active?
-    # TODO: Implement based on new state model using symbolic values (enum) or based on end_time
-    status != 'FINISHED'
+    !has_event_with_name?(:finished_releasing_resources) && !has_event_with_name?(:failed_on_releasing_resources)
   end
 
   def inactive?
     !active?
   end
 
-  def duration
-    if active?
-      Time.current - start_time
+  def benchmark_duration
+    if active? && benchmark_started?
+      Time.current - benchmark_start_time
+    elsif inactive? && benchmark_started?
+      benchmark_end_time - benchmark_start_time
     else
-      end_time - start_time
+      nil
+    end
+  end
+
+  def execution_duration
+    if active?
+      Time.current - execution_start_time
+    else
+      execution_end_time - execution_start_time
     end
   end
 
@@ -53,6 +41,39 @@ class BenchmarkExecution < ActiveRecord::Base
 
   def status
     events.status_from_history
+  end
+
+  def has_event_with_name?(name)
+    events.first_with_name(name).present?
+  end
+
+  def time_of_first_event_with_name(name)
+    first = events.first_with_name(name)
+    first.present? ? first.happened_at : nil
+  end
+
+  def benchmark_start_time
+    time_of_first_event_with_name(:started_running)
+  end
+
+  def benchmark_started?
+    has_event_with_name?(:started_running)
+  end
+
+  def benchmark_end_time
+    time_of_first_event_with_name(:finished_running)
+  end
+
+  def execution_start_time
+    time_of_first_event_with_name(:created)
+  end
+
+  def execution_end_time
+    time_of_first_event_with_name(:finished_releasing_resources) || time_of_first_event_with_name(:failed_on_releasing_resources)
+  end
+
+  def finished?
+    has_event_with_name?(:finished_releasing_resources)
   end
 
   # TODO: Consider using the following method signature:
@@ -85,25 +106,13 @@ class BenchmarkExecution < ActiveRecord::Base
   end
 
   def prepare_with(driver)
-    # Update status
     events.create_with_name!(:started_preparing)
-    self.status = 'PREPARING'
-    self.start_time = Time.current
-    self.save!
-
-    provider = 'aws'
-    success = driver.up(provider)
+    success = driver.up(PROVIDER)
     if success
-      # Update status
       events.create_with_name!(:finished_preparing)
-      self.status = 'WAITING FOR RUN'
-      save!
     else
-      # Update status
-      events.create_with_name!(:failed_on_preparing)
-      self.status = 'FAILED ON PREPARING'
-      save!
-      fail status
+      event = events.create_with_name!(:failed_on_preparing)
+      fail event.name
     end
   end
 
@@ -124,17 +133,10 @@ class BenchmarkExecution < ActiveRecord::Base
   def start_benchmark_with(benchmark_runner)
     success = benchmark_runner.start_benchmark
     if success
-      # Status update
       events.create_with_name!(:started_running)
-      benchmark_end_time = Time.current
-      self.status = 'RUNNING'
-      save!
     else
-      # Status update
-      events.create_with_name!(:failed_on_start_running)
-      self.status = 'FAILED ON START BENCHMARK'
-      save!
-      fail status
+      event = events.create_with_name!(:failed_on_start_running)
+      fail event.name
     end
   end
 
@@ -149,16 +151,10 @@ class BenchmarkExecution < ActiveRecord::Base
   def start_postprocessing_with(benchmark_runner)
     success = benchmark_runner.start_postprocessing
     if success
-      # Status update
       events.create_with_name!(:started_postprocessing)
-      self.status = 'POSTPROCESSING'
-      save!
     else
-      # Status update
-      events.create_with_name!(:failed_on_start_postprocessing)
-      self.status = 'FAILED ON START POSTPROCESSING'
-      save!
-      fail status
+      event = events.create_with_name!(:failed_on_start_postprocessing)
+      fail event.name
     end
   end
 
@@ -171,24 +167,13 @@ class BenchmarkExecution < ActiveRecord::Base
   end
 
   def release_resources_with(driver)
-    # Update status
     events.create_with_name!(:started_releasing_resources)
-    self.status = 'RELEASING_RESOURCES'
-    save!
-
     success = driver.destroy
-
     if success
-      # Update status
       events.create_with_name!(:finished_releasing_resources)
-      end_time = Time.current
-      self.status = 'FINISHED'
-      save!
     else
-      events.create_with_name!(:failed_on_releasing_resources)
-      self.status = 'FAILED ON RELEASING RESOURCES'
-      save!
-      fail status
+      event = events.create_with_name!(:failed_on_releasing_resources)
+      fail event.name
     end
   end
 

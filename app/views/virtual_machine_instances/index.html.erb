@@ -25,8 +25,7 @@
         </td>
         <td><%= link_to benchmark_definition.name, benchmark_definition %></td>
         <td>
-          <% start_date = benchmark_execution.start_time.present? ? benchmark_execution.start_time.to_formatted_s(:db) : '-' %>
-          <%= link_to start_date, benchmark_execution %>
+          <%= link_to formatted_time(benchmark_execution.execution_start_time), benchmark_execution %>
         </td>
         <td><%= vm_instance.status %></td>
         <td><%= vm_instance.provider_name %></td>

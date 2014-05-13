@@ -11,19 +11,19 @@
             <td>
               <% if benchmark_definition.benchmark_executions.any?%>
                 <%= link_to benchmark_definition, class: 'first-row' do %>
-                  <%= benchmark_definition.name %>&nbsp;<i class='fa fa-eye'></i>
+                  <%= benchmark_definition.name %>&nbsp;<i class='fa <%= view_sign %>'></i>
                 <% end %>
                 <br>
                 <%= link_to edit_benchmark_definition_path(benchmark_definition) do %>
-                  Edit&nbsp;<i class='fa fa-edit'></i>
+                  Edit&nbsp;<i class='fa <%= edit_sign %>'></i>
                 <% end %>
               <% else %>
                 <%= link_to edit_benchmark_definition_path(benchmark_definition), class: 'first-row' do %>
-                  <%= benchmark_definition.name %>&nbsp;<i class='fa fa-edit'></i>
+                  <%= benchmark_definition.name %>&nbsp;<i class='fa <%= edit_sign %>'></i>
                 <% end %>
                 <br>
                 <%= link_to benchmark_definition do %>
-                  Show&nbsp;<i class='fa fa-eye'></i>
+                  Show&nbsp;<i class='fa <%= view_sign %>'></i>
                 <% end %>
               <% end %>
             </td>

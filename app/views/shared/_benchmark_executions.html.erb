@@ -6,9 +6,9 @@
     <th>Benchmark Definition</th>
     <% end %>
     <th>Status</th>
-    <th>Started</th>
-    <th>Ended</th>
-    <th>Duration</th>
+    <th>Benchmark started</th>
+    <th>Benchmark duration</th>
+    <th>Execution duration</th>
   </tr>
   </thead>
   <tbody>
@@ -25,16 +25,16 @@
       </td>
       <% end %>
       <td>
-        <%= benchmark_execution.status %>
+        <%= line_breaked_status(benchmark_execution.status) %>
       </td>
       <td>
-        <%= benchmark_execution.start_time.to_formatted_s(:db) rescue '-' %>
+        <%= formatted_time(benchmark_execution.benchmark_start_time) %>
       </td>
       <td>
-        <%= benchmark_execution.end_time.to_formatted_s(:db) rescue '-' %>
+        <%= distance_of_time_in_words(benchmark_execution.benchmark_duration) rescue '-' %>
       </td>
       <td>
-        <%= distance_of_time_in_words(benchmark_execution.duration) rescue '-' %>
+        <%= distance_of_time_in_words(benchmark_execution.execution_duration) rescue '-' %>
       </td>
     </tr>
   <% end %>

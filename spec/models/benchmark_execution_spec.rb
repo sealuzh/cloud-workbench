@@ -16,6 +16,7 @@ describe BenchmarkExecution do
   it "should have no failed events" do
     expect(benchmark_execution.events.first_failed).to be_nil
   end
+  its(:active?) { should be_true }
 
   describe "when benchmark definition is not present" do
     before { benchmark_execution.benchmark_definition_id = 77 }
@@ -89,6 +90,7 @@ describe BenchmarkExecution do
     its(:events) { should contain_event :started_releasing_resources }
     its(:events) { should contain_event :finished_releasing_resources }
     its(:status) { should eq('FINISHED') }
+    its(:active?) { should be_false }
   end
 
   describe "failed release resources" do
@@ -99,6 +101,7 @@ describe BenchmarkExecution do
     its(:events) { should contain_event :started_releasing_resources }
     its(:events) { should contain_event :failed_on_releasing_resources }
     its(:status) { should eq('FAILED ON RELEASING RESOURCES') }
+    its(:active?) { should be_false }
   end
 
   describe "detection and creation of vm instances" do

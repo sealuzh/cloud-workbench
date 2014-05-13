@@ -2,18 +2,18 @@
 
 <div class="container" id="benchmark_execution" data-id="<%= @benchmark_execution.id %>">
   <div class="span2">
-    <span class="label label-default"><%= @benchmark_execution.status %></span>
+    <%= execution_status_label(@benchmark_execution) %>
   </div>
   <div class="span3">
     <p>
-      <strong>Start time:</strong><br>
-      <%= @benchmark_execution.start_time.present? ? @benchmark_execution.start_time.to_formatted_s(:db) : '-' %>
+      <strong>Execution start time:</strong><br>
+      <%= formatted_time(@benchmark_execution.execution_start_time) %>
     </p>
   </div>
   <div class="span3">
     <p>
-      <strong>End time:</strong><br>
-      <%= @benchmark_execution.end_time.present? ? @benchmark_execution.end_time.to_formatted_s(:db) : '-' %>
+      <strong>Execution end time:</strong><br>
+      <%= formatted_time(@benchmark_execution.execution_end_time) %>
     </p>
   </div>
 </div>

@@ -4,18 +4,20 @@ class BenchmarkDefinition < ActiveRecord::Base
     def has_active?
       actives.any?
     end
-    # TODO: Write test and refactor to collect.compact when new state model done
+
     def actives
-      actives = []
-      self.each { |execution| actives.append(execution) if execution.active? }
-      actives
+      self.select { |execution| execution.active? }
     end
 
+    # any? does consider built executions via self.benchmark_execution.build
+    # Therefore the any valid check is required to determine whether there are existing executions.
+    # Otherwise unexpected results appear on views with a start execution button.
     def any_valid?
-      self.each { |execution| return true unless execution.id.nil? }
-      false
+      first_valid = self.find { |execution| execution.id.present? }
+      first_valid.present?
     end
   end
+
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
   # that do not support case-sensitive indices. This case should practically never occur is therefore not handled.
   MAX_NAME_LENGTH = 70
@@ -38,7 +40,7 @@ class BenchmarkDefinition < ActiveRecord::Base
 
   # May throw an exception on create or enqueue
   def start_execution_async
-    benchmark_execution = benchmark_executions.create!(status: "WAITING FOR PREPARATION")
+    benchmark_execution = benchmark_executions.create!
     benchmark_execution.events.create_with_name!(:created)
     enqueue_prepare_job(benchmark_execution)
     benchmark_execution

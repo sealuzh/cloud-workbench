@@ -30,12 +30,12 @@
           <tr><td>
             <% if metric_definition.has_any_observations? %>
               <%= link_to metric_definition do %>
-                <b><%= metric_definition.name %></b>&nbsp;<i class='fa fa-eye'></i><br>
+                <b><%= metric_definition.name %></b>&nbsp;<i class='fa <%= view_sign %>'></i><br>
                 <%= metric_definition.unit %> (<%= metric_definition.scale_type %>)
               <% end %>
             <% else %>
               <%= link_to edit_metric_definition_path(metric_definition) do %>
-                <b><%= metric_definition.name %></b>&nbsp;<i class='fa fa-edit'></i><br>
+                <b><%= metric_definition.name %></b>&nbsp;<i class='fa <%= edit_sign %>'></i><br>
                 <%= metric_definition.unit %> (<%= metric_definition.scale_type %>)
               <% end %>
             <% end %>
