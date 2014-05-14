@@ -12,7 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap
+//= require bootstrap/bootstrap
 //= require turbolinks
 
 // Metis Admin Theme and dependencies

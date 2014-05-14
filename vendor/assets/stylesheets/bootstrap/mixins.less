@@ -829,22 +829,21 @@
   }
 }
 
-// NOTE: This causes a hangup
 // Basic looping in LESS
-//.loop-grid-columns(@index, @class, @type) when (@index >= 0) {
-//  .calc-grid-column(@index, @class, @type);
-//  // next iteration
-//  .loop-grid-columns((@index - 1), @class, @type);
-//}
+.loop-grid-columns(@index, @class, @type) when (@index >= 0) {
+  .calc-grid-column(@index, @class, @type);
+  // next iteration
+  .loop-grid-columns((@index - 1), @class, @type);
+}
 
 // Create grid for specific class
-//.make-grid(@class) {
-//  .float-grid-columns(@class);
-//  .loop-grid-columns(@grid-columns, @class, width);
-//  .loop-grid-columns(@grid-columns, @class, pull);
-//  .loop-grid-columns(@grid-columns, @class, push);
-//  .loop-grid-columns(@grid-columns, @class, offset);
-//}
+.make-grid(@class) {
+  .float-grid-columns(@class);
+  .loop-grid-columns(@grid-columns, @class, width);
+  .loop-grid-columns(@grid-columns, @class, pull);
+  .loop-grid-columns(@grid-columns, @class, push);
+  .loop-grid-columns(@grid-columns, @class, offset);
+}
 
 // Form validation states
 //

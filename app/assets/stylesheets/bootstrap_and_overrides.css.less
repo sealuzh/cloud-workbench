@@ -1,25 +1,13 @@
-@import "twitter/bootstrap/bootstrap";
+@import "bootstrap/bootstrap";
 
-body { padding-top: 60px; }
-
-@import "twitter/bootstrap/responsive.less";
-
-// Set the correct sprite paths
-@iconSpritePath: image-url("twitter/bootstrap/glyphicons-halflings.png");
-@iconWhiteSpritePath: image-url("twitter/bootstrap/glyphicons-halflings-white.png");
-
-// Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
-@fontAwesomeEotPath: asset-url("fontawesome-webfont.eot");
-@fontAwesomeEotPath_iefix: asset-url("fontawesome-webfont.eot?#iefix");
-@fontAwesomeWoffPath: asset-url("fontawesome-webfont.woff");
-@fontAwesomeTtfPath: asset-url("fontawesome-webfont.ttf");
-@fontAwesomeSvgPath: asset-url("fontawesome-webfont.svg#fontawesomeregular");
-
-// Font Awesome
-@import "fontawesome/font-awesome";
-
-// Glyphicons
-//@import "twitter/bootstrap/sprites.less";
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: font-url('glyphicons/glyphicons-halflings-regular.eot');
+  src: font-url('glyphicons/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+  font-url('glyphicons/glyphicons-halflings-regular.woff') format('woff'),
+  font-url('glyphicons/glyphicons-halflings-regular.ttf') format('truetype'),
+  font-url('glyphicons/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+}
 
 // Your custom LESS stylesheets goes here
 //
@@ -31,3 +19,9 @@ body { padding-top: 60px; }
 //
 // Example:
 // @linkColor: #ff0000;
+
+// Fix for top navigation bar
+body { padding-top: 60px; }
+
+// Bootstrap admin theme from https://github.com/onokumus/Bootstrap-Admin-Template
+@import "metis_admin/style.less";
