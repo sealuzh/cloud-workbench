@@ -73,10 +73,7 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'turbolinks'
 gem 'jbuilder', '~> 1.2'
 
-## Bootstrap and UI
-# Fix for Rails 4.1 flash message helper not released yet (2014-05-14) in version 2.2.8
-# See https://github.com/seyhunak/twitter-bootstrap-rails/issues/721
-# gem 'twitter-bootstrap-rails', github: 'seyhunak/twitter-bootstrap-rails'
+## UI
 gem 'font-awesome-rails', '~> 4.0.3.1'
 gem 'will_paginate', '~> 3.0.5'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
