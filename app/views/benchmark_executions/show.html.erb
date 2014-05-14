@@ -1,16 +1,16 @@
 <h2>Execution of <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
 
 <div class="container" id="benchmark_execution" data-id="<%= @benchmark_execution.id %>">
-  <div class="span2">
+  <div class="col-md-2">
     <%= execution_status_label(@benchmark_execution) %>
   </div>
-  <div class="span3">
+  <div class="col-md-3">
     <p>
       <strong>Execution start time:</strong><br>
       <%= formatted_time(@benchmark_execution.execution_start_time) %>
     </p>
   </div>
-  <div class="span3">
+  <div class="col-md-3">
     <p>
       <strong>Execution end time:</strong><br>
       <%= formatted_time(@benchmark_execution.execution_end_time) %>
@@ -25,11 +25,3 @@
   <br>
   <%= render 'live_log', id: 'releaseResources', title: 'Release resources' %>
 </div>
-
-
-<span class="label label-default">Default</span>
-<span class="label label-primary">Primary</span>
-<span class="label label-success">Success</span>
-<span class="label label-info">Info</span>
-<span class="label label-warning">Warning</span>
-<span class="label label-danger">Danger</span>
