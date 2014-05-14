@@ -17,6 +17,7 @@ group :development do
   gem 'pry-rails' # Use pry as Rails console
   gem 'launchy'
   gem 'guard-livereload', '~> 2.1.2', require: false
+  gem "rack-livereload"
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'

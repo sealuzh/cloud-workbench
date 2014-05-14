@@ -264,6 +264,8 @@ GEM
     rack (1.5.2)
     rack-contrib (1.1.0)
       rack (>= 0.9.1)
+    rack-livereload (0.3.15)
+      rack
     rack-test (0.6.2)
       rack (>= 1.0)
     rails (4.1.1)
@@ -440,6 +442,7 @@ DEPENDENCIES
   pg
   pry
   pry-rails
+  rack-livereload
   rails (= 4.1.1)
   rspec-rails (~> 2.14.2)
   sdoc
