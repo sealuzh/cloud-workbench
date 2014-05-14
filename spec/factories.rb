@@ -15,7 +15,11 @@ FactoryGirl.define do
 
   factory :benchmark_execution do
     association :benchmark_definition, factory: :benchmark_definition
-    status 'WAITING FOR PREPARATION'
+  end
+
+  factory :event do
+    name :created
+    happened_at Time.zone.parse('14-05-2014 8:00:00')
   end
 
   factory :virtual_machine_instance do
