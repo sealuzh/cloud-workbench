@@ -22,6 +22,9 @@ module CloudBenchmarking
       #{Rails.root}/app/jobs
     )
 
+    # Add fonts in vendor directory to assets pipeline
+    config.assets.paths << "#{Rails.root}/vendor/assets/fonts"
+
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
     config.time_zone = 'CET' # CET := Central European Time

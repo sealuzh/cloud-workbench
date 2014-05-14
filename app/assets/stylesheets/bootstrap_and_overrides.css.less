@@ -1,14 +1,5 @@
 @import "bootstrap/bootstrap";
 
-@font-face {
-  font-family: 'Glyphicons Halflings';
-  src: font-url('glyphicons/glyphicons-halflings-regular.eot');
-  src: font-url('glyphicons/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
-  font-url('glyphicons/glyphicons-halflings-regular.woff') format('woff'),
-  font-url('glyphicons/glyphicons-halflings-regular.ttf') format('truetype'),
-  font-url('glyphicons/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
-}
-
 // Your custom LESS stylesheets goes here
 //
 // Since bootstrap was imported above you have access to its mixins which
@@ -22,6 +13,9 @@
 
 // Bootstrap admin theme from https://github.com/onokumus/Bootstrap-Admin-Template
 @import "metis_admin/style.less";
+
+// Fix the font path for rail (the default '../fonts' is set by bootstrap and metis theme in variables.less)
+@icon-font-path:          "/assets/";
 
 // Fix for top navigation bar
 body { padding-top: 60px; }
