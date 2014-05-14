@@ -12,8 +12,11 @@
  *= require font-awesome
  */
 
+@import "variables.css.less";
+
 @import "bootstrap_and_overrides.css.less";
 
-// Custom stylesheets
+// Custom stylesheets: Control load order manually
+@import "application_template.css.less";
 @import "benchmark_definitions.css.less";
 @import "benchmark_executions.css.less";
