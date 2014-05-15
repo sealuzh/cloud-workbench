@@ -12,8 +12,8 @@
 
 //= require jquery
 //= require jquery_ujs
+//= require jquery.turbolinks
 //= require bootstrap/bootstrap
-//= require turbolinks
 
 // Metis Admin Theme and dependencies
 //= require modernizr/modernizr.min
@@ -34,3 +34,8 @@
 // Custom javascript
 //= require utilities
 //= require_tree .
+
+
+
+// Require as last resource according to jquery turbolinks docs: https://github.com/kossnocorp/jquery.turbolinks
+//= require turbolinks
