@@ -11,20 +11,27 @@
             <td>
               <% if benchmark_definition.benchmark_executions.any?%>
                 <%= link_to benchmark_definition, class: 'first-row' do %>
-                  <%= benchmark_definition.name %>&nbsp;<i class='fa <%= view_sign %>'></i>
+                  <%= benchmark_definition.name %>&nbsp;<i class='<%= view_sign %>'></i>
                 <% end %>
                 <br>
                 <%= link_to edit_benchmark_definition_path(benchmark_definition) do %>
-                  Edit&nbsp;<i class='fa <%= edit_sign %>'></i>
+                  Edit&nbsp;<i class='<%= edit_sign %>'></i>
                 <% end %>
               <% else %>
                 <%= link_to edit_benchmark_definition_path(benchmark_definition), class: 'first-row' do %>
-                  <%= benchmark_definition.name %>&nbsp;<i class='fa <%= edit_sign %>'></i>
+                  <%= benchmark_definition.name %>&nbsp;<i class='<%= edit_sign %>'></i>
                 <% end %>
                 <br>
                 <%= link_to benchmark_definition do %>
-                  Show&nbsp;<i class='fa <%= view_sign %>'></i>
+                  Show&nbsp;<i class='<%= view_sign %>'></i>
                 <% end %>
+              <% end %>
+              <%= link_to benchmark_definition, method: :delete,
+                          data: { confirm: 'Are you sure? This action will delete all corresponding associations (benchmark schedule, benchmark executions and its virtual machine instances, metric definitions and its observed metrics.)' } do %>
+                Delete&nbsp;<i class='<%= delete_sign %>'></i>
+              <% end %>
+              <%= link_to clone_benchmark_definition_path(benchmark_definition), method: :post do %>
+                Clone&nbsp;<i class='<%= clone_sign %>'></i>
               <% end %>
             </td>
             <td>

@@ -3,10 +3,14 @@ CloudBenchmarking::Application.routes.draw do
     resources :benchmark_executions, only: [:index, :new, :create], context: :benchmark_definition
     resources :metric_definitions, only: [:new, :create], context: :benchmark_definition
     resources :benchmark_schedules, only: [:new, :create ]
+    post 'clone', on: :member
   end
-  resources :benchmark_executions, except: [:new, :create]
-  get '/benchmark_executions/:id/prepare_log', to: 'benchmark_executions#prepare_log'
-  get '/benchmark_executions/:id/release_resources_log', to: 'benchmark_executions#release_resources_log'
+  resources :benchmark_executions, except: [:new, :create] do
+    member do
+      get 'prepare_log'
+      get 'release_resources_log'
+    end
+  end
   resources :metric_definitions, except: [:index, :new, :create]
   resources :benchmark_schedules, only: [:edit, :update ]
 
@@ -14,9 +18,12 @@ CloudBenchmarking::Application.routes.draw do
   resources :nominal_metric_observations, only: [:show]
   resources :ordered_metric_observations, only: [:show]
 
-  resources :virtual_machine_instances
-  put 'virtual_machine_instance/benchmark_completed' => 'virtual_machine_instances#benchmark_completed'
-  put 'virtual_machine_instance/postprocessing_completed' => 'virtual_machine_instances#postprocessing_completed'
+  resources :virtual_machine_instances do
+    member do
+      put 'benchmark_completed'
+      put 'postprocessing_completed'
+    end
+  end
   resources :cloud_providers
 
 

@@ -11,6 +11,7 @@ gem 'whenever', '~> 0.9.2'
 gem 'cron2english', '~> 0.1.3'
 gem 'delayed_job_active_record', '~> 4.0.0'
 gem 'enumerize', '~> 0.8.0'
+gem 'deep_cloneable', '~> 1.6.1'
 
 group :development do
   gem 'pry'

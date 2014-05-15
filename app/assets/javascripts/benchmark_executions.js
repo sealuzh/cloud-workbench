@@ -62,10 +62,8 @@ function initLiveRefresh(id, action) {
 function resetLiveRefreshButton(id) {
     var start = $("#" + id + "RefreshStart");
     var stop  = $("#" + id + "RefreshStop");
-    if (start.is(":hidden")) {
-        start.toggle();
-        stop.toggle();
-    }
+    start.show();
+    stop.hide();
 }
 
 $(document).on('ready page:load', function () {

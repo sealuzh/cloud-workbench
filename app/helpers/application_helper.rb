@@ -4,11 +4,19 @@ module ApplicationHelper
   end
 
   def edit_sign
-    'fa-pencil'
+    'fa fa-pencil'
   end
 
   def view_sign
-    'fa-eye'
+    'fa fa-eye'
+  end
+
+  def delete_sign
+    'fa fa-trash-o'
+  end
+
+  def clone_sign
+    'fa fa-copy'
   end
 
   LINE_BREAK_STRINGS = [

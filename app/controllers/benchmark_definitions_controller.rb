@@ -1,3 +1,4 @@
+require 'securerandom'
 class BenchmarkDefinitionsController < ApplicationController
   include BenchmarkDefinitionsHelper
   before_action :set_benchmark_definition, only: [:show, :edit, :update, :destroy]
@@ -12,6 +13,29 @@ class BenchmarkDefinitionsController < ApplicationController
   # GET /benchmark_definitions/1
   def show
     @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:page], per_page: 10)
+  end
+
+  # POST /benchmark_definitions/1
+  def clone
+    # TODO: write model test and push this functionality into model
+    benchmark_definition_original = BenchmarkDefinition.find(params[:id])
+    # Block will be called for original and each included association
+    @benchmark_definition = benchmark_definition_original.dup include: [ :metric_definitions, :benchmark_schedule ] do |original, clone|
+      case clone.class.name
+        when 'BenchmarkDefinition'
+          clone.name = "#{original.name} copy (#{SecureRandom.hex(1)})"
+        when 'BenchmarkSchedule'
+          # binding.pry
+          clone.active = false if clone.present?
+      end
+    end
+    @benchmark_definition.save!
+
+    @metric_definitions = @benchmark_definition.metric_definitions
+    render action: 'edit'
+  rescue => e
+    flash[:error] = "Benchmark definition couldn't be cloned. Error: #{e.message}"
+    redirect_to :back
   end
 
   # GET /benchmark_definitions/new

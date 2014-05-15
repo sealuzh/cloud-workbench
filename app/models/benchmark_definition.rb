@@ -26,8 +26,9 @@ class BenchmarkDefinition < ActiveRecord::Base
                    length: { in: 3..MAX_NAME_LENGTH }
   # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
   validates :vagrantfile, presence: true
-  has_one :benchmark_schedule
+  has_one :benchmark_schedule, dependent: :destroy
   before_save :ensure_name_integrity
+
 
   def self.max_name_length
     MAX_NAME_LENGTH
@@ -60,6 +61,11 @@ class BenchmarkDefinition < ActiveRecord::Base
   private
 
     def ensure_name_integrity
-      !benchmark_executions.any?
+      if self.name_changed? && self.benchmark_executions.any?
+        errors.add(:base, 'The name of a benchmark definition cannot be changed if any benchmark executions are present.')
+        false
+      else
+        true
+      end
     end
 end

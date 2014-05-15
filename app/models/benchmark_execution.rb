@@ -1,7 +1,7 @@
 class BenchmarkExecution < ActiveRecord::Base
   belongs_to :benchmark_definition
   validates :benchmark_definition, presence: true
-  has_many :virtual_machine_instances
+  has_many :virtual_machine_instances, dependent: :destroy
   has_many :events, as: :traceable, dependent: :destroy do
     include EventsAsTraceableExtension
   end
