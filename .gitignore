@@ -15,8 +15,12 @@
 /log/*.log
 /tmp
 
+# TODO: move to storage dir
 # Ignore benchmark_definitions working directory
 /public/benchmark_definitions
+
+# Ignore file storage directory
+/storage/*
 
 # Ignore all files except that ones that contain '.example' in the name
 config/deploy/shared/*

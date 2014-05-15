@@ -1,8 +1,8 @@
-<%= form_for(@benchmark_definition) do |f| %>
-  <%= f.label :name %><br>
-  <%= f.text_field :name %><br><br>
-
-  <%= f.label 'Vagrantfile' %><br>
-  <%= text_area_tag :vagrant_file_content, params[:vagrant_file_content], rows: "20", :class => "form-control span9", :id => "autosize" %><br>
-  <%= f.submit class: 'btn btn-primary' %>
+<%= simple_form_for(@benchmark_definition) do |f| %>
+  <% with_executions = @benchmark_definition.benchmark_executions.any_valid? ? { readonly: true } : {} %>
+  <%= f.input :name, input_html: { maxlength: 50, class: 'span6'}.merge(with_executions) %>
+  <%= f.label :vagrantfile %>
+  <%= f.text_area :vagrantfile, { class: 'span9', rows: '23'} %>
+  <br>
+  <%= f.button :submit, class: 'btn btn-primary', value: submit_name %>
 <% end %>

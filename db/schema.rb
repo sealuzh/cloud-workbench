@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140427195001) do
+ActiveRecord::Schema.define(version: 20140504222001) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
@@ -32,6 +32,16 @@ ActiveRecord::Schema.define(version: 20140427195001) do
   end
 
   add_index "benchmark_executions", ["benchmark_definition_id"], name: "index_benchmark_executions_on_benchmark_definition_id"
+
+  create_table "benchmark_schedules", force: true do |t|
+    t.string   "cron_expression"
+    t.boolean  "active",                  default: true
+    t.integer  "benchmark_definition_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "benchmark_schedules", ["benchmark_definition_id"], name: "index_benchmark_schedules_on_benchmark_definition_id"
 
   create_table "cloud_providers", force: true do |t|
     t.string   "name"
@@ -99,6 +109,7 @@ ActiveRecord::Schema.define(version: 20140427195001) do
     t.integer  "benchmark_execution_id"
     t.string   "provider_name"
     t.string   "provider_instance_id"
+    t.string   "role"
   end
 
   add_index "virtual_machine_instances", ["benchmark_execution_id"], name: "index_virtual_machine_instances_on_benchmark_execution_id"

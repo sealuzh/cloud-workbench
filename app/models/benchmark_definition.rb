@@ -1,52 +1,59 @@
-require 'fileutils'
-
 class BenchmarkDefinition < ActiveRecord::Base
-  before_destroy :remove_vagrant_directory
-  has_many :metric_definitions
+  has_many :metric_definitions, dependent: :destroy
   has_many :benchmark_executions, dependent: :destroy do
     def has_active?
       actives.any?
     end
+    # TODO: Write test and refactor to collect.compact when new state model done
     def actives
       actives = []
       self.each { |execution| actives.append(execution) if execution.active? }
       actives
     end
-  end
 
+    def any_valid?
+      self.each { |execution| return true unless execution.id.nil? }
+      false
+    end
+  end
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
-  # that do not support case-sensitive indices.
-  validates :name, presence: true, uniqueness: { case_sensitive: false }
-  # validates :vagrantfile, presence: true # TODO: enable when switched from file to db backed Vagrantfile
+  # that do not support case-sensitive indices. This case should practically never occur is therefore not handled.
+  validates :name, presence: true,
+                   uniqueness: { case_sensitive: false },
+                   length: { in: 3..50 }
+  # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
+  validates :vagrantfile, presence: true
+  has_one :benchmark_schedule
+  before_save :ensure_name_integrity
 
-  VAGRANT_PATH = "#{Rails.root}/public/benchmark_definitions"
-  VAGRANT_FILE_NAME = 'Vagrantfile'
-
-# TODO: Consider using RESTful design for the vagrant file: Vagrantfile as RESTful resource. Refactor into module?
-# See: http://stackoverflow.com/questions/15889750/editing-file-in-rails-using-text-area
-  def save_vagrant_file(vagrant_file_content)
-    FileUtils.mkdir_p(vagrant_directory_path)
-    vagrant_file = File.new(vagrant_file_path, File::CREAT|File::TRUNC|File::WRONLY)
-    vagrant_file.write(vagrant_file_content)
-    vagrant_file.close
+  def self.start_execution_async_for_id(benchmark_definition_id)
+    benchmark_definition = find(benchmark_definition_id)
+    benchmark_definition.start_execution_async
   end
 
-  def vagrant_file_path
-    File.join(VAGRANT_PATH, self.id.to_s, VAGRANT_FILE_NAME)
+  # May throw an exception on save or enqueue
+  def start_execution_async
+    benchmark_execution = benchmark_executions.build
+    benchmark_execution.status = "WAITING FOR PREPARATION"
+    benchmark_execution.save!
+    enqueue_prepare_job(benchmark_execution)
+    benchmark_execution
   end
 
-  def vagrant_directory_path
-    File.dirname(vagrant_file_path)
+  # May throw an exception on enqueue
+  def enqueue_prepare_job(benchmark_execution)
+    begin
+      prepare_job = PrepareBenchmarkExecutionJob.new(benchmark_execution.id)
+      Delayed::Job.enqueue(prepare_job)
+    rescue => e
+      benchmark_execution.destroy
+      raise e
+    end
   end
-
-  def vagrant_file_content
-    File.read(vagrant_file_path)
-  end
-
 
   private
 
-    def remove_vagrant_directory
-      FileUtils.remove_dir(vagrant_directory_path)
+    def ensure_name_integrity
+      !benchmark_executions.any?
     end
 end

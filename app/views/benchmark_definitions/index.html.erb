@@ -10,12 +10,20 @@
           <tr>
             <td>
               <% if benchmark_definition.benchmark_executions.any?%>
-                <%= link_to benchmark_definition do %>
+                <%= link_to benchmark_definition, class: 'first-row' do %>
                   <%= benchmark_definition.name %>&nbsp;<i class='fa fa-eye'></i>
                 <% end %>
-              <% else %>
+                <br>
                 <%= link_to edit_benchmark_definition_path(benchmark_definition) do %>
+                  Edit&nbsp;<i class='fa fa-edit'></i>
+                <% end %>
+              <% else %>
+                <%= link_to edit_benchmark_definition_path(benchmark_definition), class: 'first-row' do %>
                   <%= benchmark_definition.name %>&nbsp;<i class='fa fa-edit'></i>
+                <% end %>
+                <br>
+                <%= link_to benchmark_definition do %>
+                  Show&nbsp;<i class='fa fa-eye'></i>
                 <% end %>
               <% end %>
             </td>
@@ -25,8 +33,13 @@
               <% end %>
               <% if benchmark_definition.benchmark_executions.has_active? %>
                 <br>
-                <i class='fa fa-play-circle'></i>&nbsp;<%= benchmark_definition.benchmark_executions.actives.count %>
+                <div>
+                  <i class='fa fa-play-circle'></i>&nbsp;<%= benchmark_definition.benchmark_executions.actives.count %>
+                </div>
               <% end %>
+            </td>
+            <td>
+              <%= render 'shared/conditional_benchmark_schedule_btn', benchmark_definition: benchmark_definition %>
             </td>
             <td>
               <%= form_for [benchmark_definition, benchmark_definition.benchmark_executions.build] do |f| %>

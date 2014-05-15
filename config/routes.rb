@@ -2,9 +2,11 @@ CloudBenchmarking::Application.routes.draw do
   resources :benchmark_definitions do
     resources :benchmark_executions, only: [:index, :new, :create], context: :benchmark_definition
     resources :metric_definitions, only: [:new, :create], context: :benchmark_definition
+    resources :benchmark_schedules, only: [:new, :create ]
   end
   resources :benchmark_executions, except: [:new, :create]
   resources :metric_definitions, except: [:index, :new, :create]
+  resources :benchmark_schedules, only: [:edit, :update ]
 
   resources :metric_observations, only: [:new, :create]
   resources :nominal_metric_observations, only: [:show]

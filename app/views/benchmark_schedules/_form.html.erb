@@ -1,0 +1,36 @@
+<div class="box">
+  <header><h5>Crontab Reference</h5></header>
+
+  <div class="body">
+    <li><%= link_to 'Visual crontab composer', 'http://www.corntab.com/pages/crontab-gui', target: '_blank' %></li>
+    <br>
+    <div class="span1">
+      Minute
+    </div>
+    <div class="span1">
+      Hour
+    </div>
+    <div class="span1">
+      Day of month
+    </div>
+    <div class="span1">
+      Month
+    </div>
+    <div class="span1">
+      Day of week
+    </div>
+  </div>
+</div>
+
+<br>
+<br>
+<br>
+<br>
+
+<%= simple_form_for(@benchmark_schedule,
+                    url: url,
+                    html: {class: 'form-horizontal' }) do |f| %>
+  <%= f.input :cron_expression %>
+  <%= f.input :active %>
+  <%= f.submit class: 'btn btn-primary' %>
+<% end %>

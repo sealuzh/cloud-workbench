@@ -1,4 +1,4 @@
-<h1>Editing benchmark_definition</h1>
+<h2>Edit <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
 
 <%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
   <%= f.hidden_field :benchmark_definition_id %>
@@ -10,12 +10,9 @@
   <div class="row">
 
     <div class="box span9">
-      <%= render 'form' %>
+      <%= render 'form', submit_name: 'Update Benchmark' %>
     </div>
 
     <%= render 'shared/metric_definitions_sidebar' %>
   </div>
 </div>
-
-<!--TODO: Remove link and think how to provide a start benchmark button without loosing edited values-->
-<h5><%= link_to 'Show', @benchmark_definition %></h5>

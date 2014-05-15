@@ -43,10 +43,8 @@ class VirtualMachineInstancesController < ApplicationController
   # TODO: How can this action be improved to adhere to RESTful design principles?
   def benchmark_completed
     @virtual_machine_instance = VirtualMachineInstance.where(provider_name: params[:provider_name], provider_instance_id: params[:provider_instance_id]).first
-    if @virtual_machine_instance.status != 'POSTPROCESSING' # TODO: Replace with idempotence check on new state model. StateTransition MUST only exist once per VM
-      @virtual_machine_instance.status = 'POSTPROCESSING'
-      @virtual_machine_instance.save
-      Delayed::Job.enqueue(StartPostprocessingJob.new(@virtual_machine_instance.benchmark_execution.benchmark_definition_id))
+    unless @virtual_machine_instance.nil?
+      Delayed::Job.enqueue(StartPostprocessingJob.new(@virtual_machine_instance.benchmark_execution_id))
       render status: 200, json: @virtual_machine_instance.to_json
     else
       render action: 'edit'
@@ -57,10 +55,8 @@ class VirtualMachineInstancesController < ApplicationController
   # TODO: How can this action be improved to adhere to RESTful design principles?
   def postprocessing_completed
     @virtual_machine_instance = VirtualMachineInstance.where(provider_name: params[:provider_name], provider_instance_id: params[:provider_instance_id]).first
-    if @virtual_machine_instance.status != 'RELEASING_RESOURCES' # TODO: Replace with idempotence check on new state model. StateTransition MUST only exist once per VM
-      @virtual_machine_instance.status = 'RELEASING_RESOURCES'
-      @virtual_machine_instance.save
-      Delayed::Job.enqueue(ReleaseResourcesJob.new(@virtual_machine_instance.benchmark_execution.benchmark_definition_id, @virtual_machine_instance.benchmark_execution_id))
+    unless @virtual_machine_instance.nil?
+      Delayed::Job.enqueue(ReleaseResourcesJob.new(@virtual_machine_instance.benchmark_execution_id))
       render status: 200, json: @virtual_machine_instance.to_json
     else
       render action: 'edit'

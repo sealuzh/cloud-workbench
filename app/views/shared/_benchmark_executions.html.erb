@@ -30,13 +30,13 @@
           <%= benchmark_execution.status %>
         </td>
         <td>
-          <%= benchmark_execution.start_time.present? ? benchmark_execution.start_time.to_formatted_s(:db) : '-' %>
+          <%= benchmark_execution.start_time.to_formatted_s(:db) rescue '-' %>
         </td>
         <td>
-          <%= benchmark_execution.end_time.present? ? benchmark_execution.end_time.to_formatted_s(:db) : '-' %>
+          <%= benchmark_execution.end_time.to_formatted_s(:db) rescue '-' %>
         </td>
         <td>
-          <%= benchmark_execution.start_time.present? ? distance_of_time_in_words(benchmark_execution.duration) : '-' %>
+          <%= distance_of_time_in_words(benchmark_execution.duration) rescue '-' %>
         </td>
       </tr>
     <% end %>
