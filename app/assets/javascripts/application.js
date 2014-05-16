@@ -15,13 +15,6 @@
 //= require jquery.turbolinks
 //= require bootstrap/bootstrap
 
-// Metis Admin Theme and dependencies
-//= require modernizr/modernizr.min
-//= require jquery-validation/jquery.validate
-//= require validVal/jquery.validVal
-//= require validationEngine/jquery.validationEngine
-//= require metis_admin/metis_admin
-
 // Ace editor extensions
 // =require ace/ace
 //= require ace/worker-javascript
