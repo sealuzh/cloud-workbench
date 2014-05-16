@@ -2,9 +2,21 @@
 
 // Bootstrap theme
 // ---------------
+// AdminLTE
+
+// Fix img url paths. MUST be defined before importing the theme.
+.lockscreen {
+  background: url(@{admin-lte-img-path}blur-background09.jpg) repeat center center fixed;
+}
+.box > .loading-img {
+  background: transparent url("@{admin-lte-img-path}ajax-loader1.gif") 50% 50% no-repeat;
+}
+
 @import "admin-lte/AdminLTE";
 @admin-lte-img-path: "../admin-lte/";
 
+
+// AdminLTE dependencies
 @import "ionicons/ionicons";
 @ionicons-font-path: @rails-assets-path;
 
@@ -26,15 +38,15 @@
 @icon-font-path:          @rails-assets-path;
 
 
-// Block with centered text for multi-line labels
-.label {
-  display:inline-block;
-}
-
-#top > .navbar {
-  border-top: 3px solid @seal-blue;
-}
-
-#wrap > #left {
-  background-color: #333;
-}
+//// Block with centered text for multi-line labels
+//.label {
+//  display:inline-block;
+//}
+//
+//#top > .navbar {
+//  border-top: 3px solid @seal-blue;
+//}
+//
+//#wrap > #left {
+//  background-color: #333;
+//}
