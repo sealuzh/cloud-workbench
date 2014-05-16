@@ -2,7 +2,11 @@
 
 // Bootstrap theme
 // ---------------
+@import "admin-lte/AdminLTE";
+@admin-lte-img-path: "../admin-lte/";
 
+@import "ionicons/ionicons";
+@ionicons-font-path: @rails-assets-path;
 
 // Custom bootstrap overrides
 // --------------------------
@@ -19,7 +23,7 @@
 // Fix the font path for rail
 // the default '../fonts' is set by bootstrap and
 // probably by a bootstrap theme in variables.less
-@icon-font-path:          "/assets/";
+@icon-font-path:          @rails-assets-path;
 
 
 // Block with centered text for multi-line labels

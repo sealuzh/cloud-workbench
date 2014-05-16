@@ -1,4 +1,14 @@
 CloudBenchmarking::Application.routes.draw do
+
+  root 'benchmark_definitions#index'
+  get '/dashboard', to: redirect('/benchmark_definitions#index')
+
+  # Exceptions
+  %w( 404 422 500 ).each do |code|
+    get code, :to => "errors#show", :code => code
+  end
+
+  # Resources
   resources :benchmark_definitions do
     resources :benchmark_executions, only: [:index, :new, :create], context: :benchmark_definition
     resources :metric_definitions, only: [:new, :create], context: :benchmark_definition
@@ -27,14 +37,10 @@ CloudBenchmarking::Application.routes.draw do
   resources :cloud_providers
 
 
+  ## Rails generated examples
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  root 'benchmark_definitions#index'
-
-  get '/dashboard', to: redirect('/benchmark_definitions#index')
-
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

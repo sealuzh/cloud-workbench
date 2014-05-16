@@ -8,12 +8,8 @@ Bundler.require(*Rails.groups)
 
 module CloudBenchmarking
   class Application < Rails::Application
-    config.generators do |g|
-      g.test_framework  :rspec, fixture: false
-      g.fixture_replacement :factory_girl, dir: 'spec/factories'
-      g.assets false
-      g.helper false
-    end
+    # Handle exceptions (e.g. 404 not found) in routes.rb
+    config.exceptions_app = self.routes
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
