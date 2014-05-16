@@ -15,7 +15,7 @@
       <br>
     <% end %>
 
-    <div class=""><%= schedule.cron_expression_in_english %></div>
+    <div class=""><%= schedule.cron_expression_in_english if schedule.present? %></div>
 
     <%= render 'shared/conditional_benchmark_schedule_btn', benchmark_definition: @benchmark_definition %>
     <br>

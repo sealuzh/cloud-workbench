@@ -18,83 +18,76 @@
     <!-- Size should be 32 x 32 pixels -->
     <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
   </head>
-  <body>
 
-  <div id="wrap">
-    <div id="top">
-      <nav class="navbar navbar-inverse navbar-static-top">
-        <div class="container-fluid">
 
-          <header class="navbar-header">
-            <%= link_to root_path, class: "navbar-brand" do %>
-              <i class="fa fa-cloud fa-2x"></i><span class="brand">&nbsp;WorkBench</span>
-            <% end %>
-          </header>
+  <!-- Overwrite all stylesheets min-heights to ensure that dropdowns work properly -->
+  <body class="skin-blue pace-done" style="min-height: 2114px;">
 
-          <div class="topnav">
-            <a data-placement="bottom" data-original-title="Show / Hide Left" data-toggle="tooltip" class="btn btn-primary btn-sm toggle-left" id="menu-toggle">
-              <i class="fa fa-bars"></i>
-            </a>
-          </div>
+  <!--Page loading progress bar-->
+  <div class="pace  pace-inactive"><div class="pace-progress" data-progress-text="100%" data-progress="99" style="width: 100%;">
+    <div class="pace-progress-inner"></div>
+  </div>
+  <div class="pace-activity"></div></div>
 
-          <div class="collapse navbar-collapse navbar-ex1-collapse">
-            <ul class="nav navbar-nav">
-              <li> <a href="/dashboard">Dashboard</a>  </li>
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </div>
+   <!-- Top header -->
+  <header class="header">
+    <!-- Branding -->
+    <%= link_to root_path, class: "logo" do %>
+      <i class="brand-icon fa fa-cloud fa-2x"></i><span class="brand">&nbsp;WorkBench</span>
+    <% end %>
 
-    <div id="left">
-      <ul id="menu">
-        <li class="nav-header">Benchmark&nbsp;<i class="fa fa-tachometer"></i></li>
-        <li>
-          <%= link_to benchmark_definitions_path do %>
-            <i class="fa fa-file-text"></i>&nbsp;<span class="link-title">Definitions</span>
-          <% end %>
-        </li>
-        <li>
-          <%= link_to benchmark_executions_path do %>
-            <i class="fa fa-play-circle"></i>&nbsp;<span class="link-title">Executions</span>
-          <% end %>
-        </li>
-        <li class="nav-divider"></li>
-        <li class="nav-header">Others</li>
-        <li>
-          <%= link_to virtual_machine_instances_path do %>
-            <i class="fa fa-desktop"></i>&nbsp;<span class="link-title">Virtual Machines</span>
-          <% end %>
-        </li>
-      </ul>
-    </div>
+    <!-- Top navigation bar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button right to the branding -->
+      <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
 
-    <div id="content">
-      <div class="inner">
-        <div class="container">
-          <div class="row">
-            <div>
-              <%= bootstrap_flash %>
-              <%= yield %>
-            </div>
-            <!-- Each view can decide whether to provide a sidebar or not -->
-            <% if content_for?(:sidebar) %>
-              <div class="col-md-3">
-                <div class="well sidebar-nav">
-                  <%= yield(:sidebar) %>
-                </div>
-              </div>
-            <% end %>
-          </div>
-        </div>
+      <!-- Top right navigation bar -->
+      <div class="navbar-right">
+        <ul class="nav navbar-nav">
+          <%= render 'layouts/notifications_example' %>
+        </ul>
       </div>
-    </div>
+    </nav>
+  </header>
+
+
+  <div class="wrapper row-offcanvas row-offcanvas-left" style="min-height: 319px;">
+    <!-- Left sidebar -->
+    <aside class="left-side sidebar-offcanvas" style="min-height: 2114px;">
+      <section class="sidebar">
+        <%= render 'layouts/sidebar' %>
+      </section>
+    </aside>
+
+    <!-- Main content -->
+    <aside class="right-side">
+      <section class="content">
+        <div class="row">
+          <div>
+            <%= bootstrap_flash %>
+            <%= yield %>
+          </div>
+          <!-- Each view can decide whether to provide a sidebar or not -->
+          <% if content_for?(:sidebar) %>
+            <div class="col-md-3">
+              <div class="well sidebar-nav">
+                <%= yield(:sidebar) %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </section>
+    </aside>
   </div>
 
-  </div>
 
   <% if Rails.env.development? %>
-  <div class="well well-lg">
+  <div class="well">
     <h4>Debugging</h4>
     <%= debug(params) %>
   </div>
