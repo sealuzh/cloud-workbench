@@ -24,6 +24,9 @@
 //= require ace/ext-language_tools
 //= require aced-rails/aced-rails.js.coffee
 
+// AdminLTE bootstrap theme and dependencies
+//= require admin-lte/app
+
 // Custom javascript
 //= require utilities
 //= require_tree .
