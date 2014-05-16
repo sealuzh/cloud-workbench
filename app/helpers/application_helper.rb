@@ -3,22 +3,6 @@ module ApplicationHelper
     time.present? ? time.to_formatted_s(:db) : '-'
   end
 
-  def edit_sign
-    'fa fa-pencil'
-  end
-
-  def view_sign
-    'fa fa-eye'
-  end
-
-  def delete_sign
-    'fa fa-trash-o'
-  end
-
-  def clone_sign
-    'fa fa-copy'
-  end
-
   LINE_BREAK_STRINGS = [
                          'WAITING FOR',
                          'FAILED ON',

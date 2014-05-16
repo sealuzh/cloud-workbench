@@ -49,7 +49,6 @@
     <div id="left">
       <ul id="menu">
         <li class="nav-header">Benchmark&nbsp;<i class="fa fa-tachometer"></i></li>
-        <li class="nav-divider"></li>
         <li>
           <%= link_to benchmark_definitions_path do %>
             <i class="fa fa-file-text"></i>&nbsp;<span class="link-title">Definitions</span>
@@ -60,8 +59,8 @@
             <i class="fa fa-play-circle"></i>&nbsp;<span class="link-title">Executions</span>
           <% end %>
         </li>
-        <br>
         <li class="nav-divider"></li>
+        <li class="nav-header">Others</li>
         <li>
           <%= link_to virtual_machine_instances_path do %>
             <i class="fa fa-desktop"></i>&nbsp;<span class="link-title">Virtual Machines</span>
