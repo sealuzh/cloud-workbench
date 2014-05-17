@@ -1,0 +1,46 @@
+<tr>
+  <td>
+    <%= link_to edit_icon, edit_benchmark_definition_path(benchmark_definition), class: 'edit' %>
+    <% confirm_delete_msg = { confirm: (render 'benchmark_definitions/confirm_delete', benchmark_definition: benchmark_definition) } %>
+    <%= link_to clone_icon, clone_benchmark_definition_path(benchmark_definition), method: :post, class: 'clone' %>
+    <% confirm_start_msg = { confirm: 'This will start a benchmark execution.' } %>
+    <%= link_to delete_icon, benchmark_definition, method: :delete, data: confirm_delete_msg, class: 'delete' %>
+    <%= link_to start_icon, [benchmark_definition, benchmark_definition.benchmark_executions.build], method: :post, class: 'start', data: confirm_start_msg %>
+  </td>
+  <td>
+    <%= link_to benchmark_definition.name, benchmark_definition, class: 'first-row' %>
+  </td>
+  <td>
+    <%= link_to benchmark_definition_benchmark_executions_path(benchmark_definition) do %>
+      <%= pluralize(benchmark_definition.benchmark_executions.count, 'Execution') %>
+    <% end %>
+    <% if benchmark_definition.benchmark_executions.has_active? %>
+      &nbsp;<small class="badge bg-green"><%= benchmark_definition.benchmark_executions.actives.count %></small>
+    <% end %>
+  </td>
+  <td>
+    <% schedule = benchmark_definition.benchmark_schedule %>
+    <% if schedule.present? %>
+      <div class="btn-group inline-flex">
+      <div class="tooltip-options inline-flex">
+        <% if schedule.active? %>
+          <span class="label label-success"><%= schedule.cron_expression %></span>
+        <% else %>
+          <%= link_to schedule.cron_expression, schedule, class: 'label label-default schedule-align', title: schedule.cron_expression_in_english.html_safe %>
+        <% end %>
+      </div>
+        <button type="button" class="btn btn-default btn-xs dropdown-toggle schedule-align" data-toggle="dropdown">
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li><%= link_to "#{edit_icon}&nbsp;Edit".html_safe, edit_benchmark_schedule_path(schedule), class: 'edit-color' %></li>
+          <li><%= toggle_benchmark_schedule_btn(schedule) %></li>
+        </ul>
+      </div>
+    <% else %>
+      <%= link_to new_benchmark_definition_benchmark_schedule_path(benchmark_definition), class: 'btn btn-default btn-xs' do %>
+        <%= schedule_icon %>&nbsp;Create Schedule
+      <% end %>
+    <% end %>
+  </td>
+</tr>

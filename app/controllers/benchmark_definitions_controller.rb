@@ -34,7 +34,8 @@ class BenchmarkDefinitionsController < ApplicationController
     @metric_definitions = @benchmark_definition.metric_definitions
     render action: 'edit'
   rescue => e
-    flash[:error] = "Benchmark definition couldn't be cloned. Error: #{e.message}"
+    link_to_original = view_context.link_to benchmark_definition_original.name, benchmark_definition_original, class: 'alert-link'
+    flash[:error] = "Benchmark definition #{link_to_original} couldn't be cloned. #{e.message}".html_safe
     redirect_to :back
   end
 

@@ -1,0 +1,40 @@
+// General
+.inline-flex {
+  display: inline-flex;
+}
+
+// Link icons
+.action-icon(@color) {
+  color: @color;
+  margin-right: 4px;
+  font-size: 13pt;
+}
+
+a.edit {
+  .action-icon(@seal-orange);
+}
+
+a.delete {
+  .action-icon(@red);
+}
+
+a.clone {
+  .action-icon(@green);
+}
+
+a.start {
+  .action-icon(@seal-blue);
+}
+
+// Link colors
+.edit-color {
+  color: @seal-orange !important;
+}
+
+.activate-color {
+  color: @green !important;
+}
+
+.deactivate-color {
+  color: @red !important;
+}

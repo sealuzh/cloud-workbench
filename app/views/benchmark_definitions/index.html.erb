@@ -1,69 +1,20 @@
-<div class="container">
-  <div class="row">
-    <div class="col-md-9">
-      <h2>Benchmark Definitions</h2>
-    </div>
-    <div class="col-md-1 action-sidebar">
-      <%= link_to 'Create New Benchmark', new_benchmark_definition_path, class: 'btn btn-primary' %>
-    </div>
+<div class="row">
+  <div class="col-md-9">
+    <h1>Benchmark Definitions</h1>
+  </div>
+  <div class="col-md-3 action-sidebar">
+    <%= link_to new_benchmark_definition_path, class: 'btn btn-primary btn-lg' do %>
+      <%= create_icon %>&nbsp;Create New Benchmark
+    <% end %>
   </div>
 </div>
 
-<%= will_paginate %>
-    <div id='defaultTable'>
-      <table class='table responsive-table'>
-        <tbody>
-          <% @benchmark_definitions.each do |benchmark_definition| %>
-          <tr>
-            <td>
-              <% if benchmark_definition.benchmark_executions.any?%>
-                <%= link_to benchmark_definition, class: 'first-row' do %>
-                  <%= benchmark_definition.name %>&nbsp;<i class='<%= view_sign %>'></i>
-                <% end %>
-                <br>
-                <%= link_to edit_benchmark_definition_path(benchmark_definition) do %>
-                  Edit&nbsp;<i class='<%= edit_sign %>'></i>
-                <% end %>
-              <% else %>
-                <%= link_to edit_benchmark_definition_path(benchmark_definition), class: 'first-row' do %>
-                  <%= benchmark_definition.name %>&nbsp;<i class='<%= edit_sign %>'></i>
-                <% end %>
-                <br>
-                <%= link_to benchmark_definition do %>
-                  Show&nbsp;<i class='<%= view_sign %>'></i>
-                <% end %>
-              <% end %>
-              <%= link_to benchmark_definition, method: :delete,
-                          data: { confirm: 'Are you sure? This action will delete all corresponding associations (benchmark schedule, benchmark executions and its virtual machine instances, metric definitions and its observed metrics.)' } do %>
-                Delete&nbsp;<i class='<%= delete_sign %>'></i>
-              <% end %>
-              <%= link_to clone_benchmark_definition_path(benchmark_definition), method: :post do %>
-                Clone&nbsp;<i class='<%= clone_sign %>'></i>
-              <% end %>
-            </td>
-            <td>
-              <%= link_to benchmark_definition_benchmark_executions_path(benchmark_definition) do %>
-                <%= pluralize(benchmark_definition.benchmark_executions.count, 'Execution') %>
-              <% end %>
-              <% if benchmark_definition.benchmark_executions.has_active? %>
-                <br>
-                <div>
-                  <i class='fa fa-play-circle'></i>&nbsp;<%= benchmark_definition.benchmark_executions.actives.count %>
-                </div>
-              <% end %>
-            </td>
-            <td>
-              <%= render 'shared/conditional_benchmark_schedule_btn', benchmark_definition: benchmark_definition %>
-            </td>
-            <td>
-              <%= form_for [benchmark_definition, benchmark_definition.benchmark_executions.build] do |f| %>
-                <%= f.hidden_field :benchmark_definition_id %>
-                <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
-              <% end %>
-            </td>
-          </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-<%= will_paginate %>
+<%= will_paginate class: 'pagining_bootstrap' %>
+<div class="box-body table-responsive no-padding">
+  <table class="table table-hover">
+    <tbody>
+      <%= render @benchmark_definitions %>
+    </tbody>
+  </table>
+</div>
+<%= will_paginate class: 'pagining_bootstrap' %>

@@ -44,7 +44,7 @@ class BenchmarkExecutionsController < ApplicationController
   def create
     @benchmark_execution = @benchmark_definition.start_execution_async
     flash[:success] = "Benchmark execution for
-                       #{view_context.link_to @benchmark_definition.name, @benchmark_definition}
+                       #{view_context.link_to @benchmark_definition.name, @benchmark_definition, class: 'alert-link'}
                        was successfully started asynchronously.".html_safe
     redirect_to @benchmark_execution
   rescue => e

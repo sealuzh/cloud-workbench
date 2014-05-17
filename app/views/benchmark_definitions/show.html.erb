@@ -34,16 +34,16 @@
 
     <div class="col-md-3 action-sidebar">
       <%= link_to edit_benchmark_definition_path(@benchmark_definition), class: 'btn btn-default' do %>
-        <i class='<%= edit_sign %>'></i>&nbsp;Edit
+        <%= edit_icon %>&nbsp;Edit
       <% end %>
       <%= link_to @benchmark_definition, method: :delete, class: 'btn btn-danger',
                   data: {confirm: 'Are you sure? This action will delete all corresponding associations (benchmark schedule, benchmark executions and its virtual machine instances, metric definitions and its observed metrics.)'} do %>
-        <i class='<%= delete_sign %>'></i>&nbsp;Delete
+        <%= delete_icon %>&nbsp;Delete
       <% end %>
       <br>
       <br>
       <%= button_to [@benchmark_definition, @benchmark_definition.benchmark_executions.build], method: :post, class: 'btn btn-primary', data: {confirm: 'Are you sure?'} do %>
-        <i class='<%= start_sign %>'></i>&nbsp;Start Execution
+        <%= start_icon %>&nbsp;Start Execution
       <% end %>
     </div>
     <%= render 'shared/metric_definitions_sidebar' %>
