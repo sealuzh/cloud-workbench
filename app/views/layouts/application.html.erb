@@ -69,22 +69,17 @@
       <section class="content">
         <div class="row">
           <div>
-            <%= bootstrap_flash %>
-            <%= yield %>
+            <section class="content">
+              <%= render 'layouts/bootstrap_flash', flash: flash %>
+              <%= yield %>
+            </section>
           </div>
-          <!-- Each view can decide whether to provide a sidebar or not -->
-          <% if content_for?(:sidebar) %>
-            <div class="col-md-3">
-              <div class="well sidebar-nav">
-                <%= yield(:sidebar) %>
-              </div>
-            </div>
-          <% end %>
         </div>
       </section>
     </aside>
   </div>
 
+  <%= render 'layouts/footer' %>
 
   <% if Rails.env.development? %>
   <div class="well">
