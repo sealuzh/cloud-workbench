@@ -3,7 +3,7 @@ module FlashHelper
   FLASH_MAPPINGS = {
       notice: %w(info info),
       info:   %w(info info),
-      sucess: %w(success check),
+      success: %w(success check),
       error: %w(danger warning),
       alert: %w(danger warning)
   }
@@ -22,5 +22,9 @@ module FlashHelper
 
   def default_icon
     fa_icon('question')
+  end
+
+  def alert_link(object)
+    link_to object.name, object, class: 'alert-link'
   end
 end

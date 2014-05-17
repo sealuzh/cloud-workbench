@@ -1,5 +1,5 @@
 class BenchmarkSchedulesController < ApplicationController
-  before_action :set_benchmark_schedule, only: [:edit, :update]
+  before_action :set_benchmark_schedule, only: [:edit, :update, :activate, :deactivate]
   before_action :set_benchmark_definition, only: [:new, :create]
 
   def new
@@ -13,7 +13,7 @@ class BenchmarkSchedulesController < ApplicationController
   def create
     @benchmark_schedule = @benchmark_definition.build_benchmark_schedule(benchmark_schedule_params)
     if @benchmark_schedule.save
-      flash_for 'created'
+      success_flash_for 'created'
       redirect_to @benchmark_definition
     else
       render action: 'new'
@@ -23,11 +23,31 @@ class BenchmarkSchedulesController < ApplicationController
   def update
     @benchmark_definition = @benchmark_schedule.benchmark_definition
     if @benchmark_schedule.update(benchmark_schedule_params)
-      flash_for 'updated'
+      success_flash_for 'updated'
       redirect_to @benchmark_definition
     else
       render action: 'edit'
     end
+  end
+
+  def activate
+    @benchmark_definition = @benchmark_schedule.benchmark_definition
+    @benchmark_schedule.activate!
+    success_flash_for 'activated'
+  rescue => e
+    error_flash_for('activated', e.message)
+  ensure
+    redirect_to :back
+  end
+
+  def deactivate
+    @benchmark_definition = @benchmark_schedule.benchmark_definition
+    @benchmark_schedule.deactivate!
+    success_flash_for 'deactivated'
+  rescue => e
+    error_flash_for('deactivated', e.message)
+  ensure
+    redirect_to :back
   end
 
   private
@@ -43,9 +63,12 @@ class BenchmarkSchedulesController < ApplicationController
       params.require(:benchmark_schedule).permit(:benchmark_definition_id, :cron_expression, :active)
     end
 
-    def flash_for(action)
-      flash[:success] = "Schedule for #{@benchmark_definition.name} was successfully #{action}:<br>
-                         #{@benchmark_schedule.cron_expression}  <i class='fa fa-arrow-right'></i>
-                         #{@benchmark_schedule.cron_expression_in_english}".html_safe
+    def success_flash_for(action)
+      flash[:success] = "Schedule for #{view_context.alert_link(@benchmark_definition)} was successfully #{action}:
+                         <strong>#{@benchmark_schedule.cron_expression}</strong> <em>(#{@benchmark_schedule.cron_expression_in_english})</em>".html_safe
+    end
+
+    def error_flash_for(action, message)
+      flash[:error] = "Schedule for #{view_context.alert_link(@benchmark_definition)} couldn't be #{action}. #{message}".html_safe
     end
 end

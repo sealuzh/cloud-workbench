@@ -17,9 +17,19 @@ class BenchmarkSchedule < ActiveRecord::Base
   before_destroy :update_system_crontab_if_active
   after_update :check_and_update_system_crontab_after_update
 
-  # The best known to english translator has been found here:
-  # http://www.joostbrugman.com/bitsofthought/page/4/Converting_Crontab_Entries_To_Plain_English_%28Or_Any_Other_Language%29
+  def activate!
+    self.active = true
+    save!
+  end
 
+  def deactivate!
+    self.active = false
+    save!
+  end
+
+  # Gem that with 'best effort' translation attempt
+  # The best known cron expression to english translator has been found here but this requires php installed:
+  # http://www.joostbrugman.com/bitsofthought/page/4/Converting_Crontab_Entries_To_Plain_English_%28Or_Any_Other_Language%29
   def cron_expression_in_english
     Cron2English.parse(self.cron_expression).join(' ')
   rescue Cron2English::ParseException => e

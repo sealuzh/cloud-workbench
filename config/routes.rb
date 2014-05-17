@@ -15,6 +15,12 @@ CloudBenchmarking::Application.routes.draw do
     resources :benchmark_schedules, only: [:new, :create ]
     post 'clone', on: :member
   end
+  resources :benchmark_schedules, only: [:index, :edit, :update ] do
+    member do
+      patch 'activate'
+      patch 'deactivate'
+    end
+  end
   resources :benchmark_executions, except: [:new, :create] do
     member do
       get 'prepare_log'
@@ -22,7 +28,6 @@ CloudBenchmarking::Application.routes.draw do
     end
   end
   resources :metric_definitions, except: [:index, :new, :create]
-  resources :benchmark_schedules, only: [:edit, :update ]
 
   resources :metric_observations, only: [:new, :create]
   resources :nominal_metric_observations, only: [:show]
