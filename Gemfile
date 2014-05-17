@@ -16,6 +16,7 @@ gem 'deep_cloneable', '~> 1.6.1'
 group :development do
   gem 'pry'
   gem 'pry-rails' # Use pry as Rails console
+  gem 'pry-byebug' # Use pry as debugger with step, next, finish, continue
   gem 'launchy'
   gem 'guard-livereload', '~> 2.1.2', require: false
   gem "rack-livereload"
@@ -81,6 +82,7 @@ gem 'font-awesome-rails', '~> 4.0.3.1'
 gem 'will_paginate', '~> 3.0.5'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
 gem 'simple_form', '~> 3.0.2'
+gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
 
 
 group :chef do
