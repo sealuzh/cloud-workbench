@@ -10,7 +10,8 @@ class BenchmarkExecution < ActiveRecord::Base
   PRIORITY_HIGH = 1
 
   def active?
-    !has_event_with_name?(:finished_releasing_resources) && !has_event_with_name?(:failed_on_releasing_resources)
+    # Executions without id may just be built from a view (e.g. start execution button) and does not really exist
+    id.present? && !has_event_with_name?(:finished_releasing_resources) && !has_event_with_name?(:failed_on_releasing_resources)
   end
 
   def inactive?
