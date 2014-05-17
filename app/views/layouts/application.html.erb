@@ -67,14 +67,8 @@
     <!-- Main content -->
     <aside class="right-side">
       <section class="content">
-        <div class="row">
-          <div>
-            <section class="content">
-              <%= render 'layouts/bootstrap_flash', flash: flash %>
-              <%= yield %>
-            </section>
-          </div>
-        </div>
+        <%= render 'layouts/bootstrap_flash', flash: flash %>
+        <%= yield %>
       </section>
     </aside>
   </div>
