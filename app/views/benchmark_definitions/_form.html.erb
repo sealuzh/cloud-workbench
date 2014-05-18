@@ -1,8 +1,9 @@
 <%= simple_form_for(@benchmark_definition) do |f| %>
-  <% with_executions = @benchmark_definition.benchmark_executions.any_valid? ? { readonly: true } : {} %>
-  <%= f.input :name, input_html: { maxlength: BenchmarkDefinition.max_name_length, class: 'col-md-6'}.merge(with_executions) %>
+  <% has_executions = @benchmark_definition.benchmark_executions.any_valid? ? { readonly: true } : {} %>
+  <%= f.input :name, input_html: { maxlength: BenchmarkDefinition.max_name_length }.merge(has_executions) %>
+  <br>
   <%= f.label :vagrantfile %>
-  <%= f.text_area :vagrantfile, { class: 'col-md-9', rows: '23'} %>
+  <%= f.text_area :vagrantfile %>
   <br>
   <%= f.button :submit, class: 'btn btn-primary', value: submit_name %>
 <% end %>
