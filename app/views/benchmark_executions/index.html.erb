@@ -15,7 +15,9 @@
         <%= will_paginate @benchmark_executions %>
       </div>
 
-      <%= render 'shared/metric_definitions_sidebar' %>
+      <%= render 'shared/schedule_metric_sidebar', benchmark_definition: @benchmark_definition,
+                                                   benchmark_schedule: @benchmark_definition.benchmark_schedule,
+                                                   metric_definitions: @benchmark_definition.metric_definitions %>
     </div>
   </div>
 <% else %>

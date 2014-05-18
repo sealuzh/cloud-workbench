@@ -2,7 +2,7 @@ require 'securerandom'
 class BenchmarkDefinitionsController < ApplicationController
   include BenchmarkDefinitionsHelper
   before_action :set_benchmark_definition, only: [:show, :edit, :update, :destroy]
-  before_action :set_metric_definitions, only: [:show, :edit, :update]
+  before_action :set_schedule_and_metric_definitions, only: [:show, :edit, :update]
   before_action :check_and_show_executions_integrity_warning , only: [:edit, :update]
 
   # GET /benchmark_definitions
@@ -91,8 +91,9 @@ class BenchmarkDefinitionsController < ApplicationController
       params.require(:benchmark_definition).permit(:name, :vagrantfile)
     end
 
-    def set_metric_definitions
+    def set_schedule_and_metric_definitions
       @metric_definitions = @benchmark_definition.metric_definitions
+      @benchmark_schedule = @benchmark_definition.benchmark_schedule
     end
 
     def check_and_show_executions_integrity_warning

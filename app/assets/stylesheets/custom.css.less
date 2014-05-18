@@ -1,4 +1,8 @@
 // General
+.label {
+  display: inline-block;
+}
+
 .inline-flex {
   display: inline-flex;
 }
@@ -9,11 +13,28 @@
   margin-bottom: 20px;
 }
 
+.wrap-line {
+  white-space: normal;
+}
+
+@bloackquote-active: @brand-success;
+blockquote.active {
+  border-left: 5px solid @bloackquote-active;
+  small {
+    color: @bloackquote-active;
+  }
+}
+
 // Link icons
+.icons-lg {
+  font-size: 13pt;
+  a {
+    margin-right: 4px;
+  }
+}
+
 .action-icon(@color) {
   color: @color;
-  margin-right: 4px;
-  font-size: 13pt;
 }
 
 a.edit {

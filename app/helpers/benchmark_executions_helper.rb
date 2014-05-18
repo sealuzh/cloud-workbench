@@ -1,18 +1,22 @@
 module BenchmarkExecutionsHelper
-  def execution_status_label(benchmark_execution)
-    if benchmark_execution.failed?
+  def execution_status_label(execution)
+    if execution.failed?
       type = 'danger'
-    elsif benchmark_execution.active?
+    elsif execution.active?
       type = 'default'
-    elsif benchmark_execution.finished?
+    elsif execution.finished?
       type = 'success'
-    elsif benchmark_execution.inactive?
+    elsif execution.inactive?
       type = 'warning'
     end
-    status_label(benchmark_execution.status, type)
+    status_label(execution.status, type)
   end
 
-  def confirm_start_execution_msg(benchmark_definition)
-    { confirm: "This will start a benchmark execution of the <strong>#{benchmark_definition.name}</strong> benchmark" }
+  def confirm_start_execution_msg(execution)
+    { confirm: "This will start a benchmark execution of the <strong>#{execution.name}</strong> benchmark" }
+  end
+
+  def confirm_delete_execution_msg(execution)
+    { confirm: (render 'benchmark_executions/confirm_delete', benchmark_execution: execution) }
   end
 end

@@ -1,12 +1,12 @@
 <div class="transparant-well">
   <div class="row">
     <div class="col-md-8">
-      <%= link_to edit_benchmark_definition_path(@benchmark_definition), class: 'btn btn-default btn-block btn-lg' do %>
+      <%= link_to edit_benchmark_definition_path(@benchmark_definition), class: 'btn btn-warning btn-block' do %>
         <%= edit_icon %>&nbsp;Edit
       <% end %>
     </div>
     <div class="col-md-4">
-      <%= link_to @benchmark_definition, method: :delete, class: 'btn btn-danger btn-block btn-lg',
+      <%= link_to @benchmark_definition, method: :delete, class: 'btn btn-danger btn-block',
                   data: confirm_delete_benchmark_msg(@benchmark_definition) do %>
         <%= delete_icon %>&nbsp;Delete
       <% end %>
