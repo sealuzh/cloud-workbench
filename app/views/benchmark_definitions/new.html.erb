@@ -1,5 +1,4 @@
-<% content_for :content_header do %>
-  Create New Benchmark
-<% end %>
+<% provide(:title, 'Create New Benchmark') %>
+<% content_header('Create New Benchmark') %>
 
 <%= render 'form', submit_name: 'Create New Benchmark' %>

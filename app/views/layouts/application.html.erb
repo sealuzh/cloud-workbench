@@ -68,7 +68,7 @@
     <aside class="right-side">
       <section class="content-header">
         <!-- Each view should provide a content header -->
-        <h1><%= yield :content_header %></h1>
+        <%= yield :content_header %>
       </section>
       <section class="content">
         <%= render 'layouts/bootstrap_flash', flash: flash %>

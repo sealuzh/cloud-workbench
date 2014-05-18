@@ -2,7 +2,14 @@
   <% has_executions = @benchmark_definition.benchmark_executions.any_valid? ? { readonly: true } : {} %>
   <%= f.input :name, input_html: { maxlength: BenchmarkDefinition.max_name_length }.merge(has_executions) %>
   <br>
-  <%= f.label :vagrantfile %>
+  <% if @benchmark_definition.errors.any? %>
+    <%= f.label :vagrantfile, class: 'vagrantfile_error', error: true %>
+  <% else %>
+    <%= f.label :vagrantfile %>
+  <% end %>
+  <br>
+  <%= f.error :vagrantfile, class: 'vagrantfile_error' %>
+  <br>
   <%= f.text_area :vagrantfile %>
   <br>
   <%= f.button :submit, class: 'btn btn-primary', value: submit_name %>
