@@ -1,18 +1,11 @@
-<h2>Edit <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
+<% provide(:title, "Edit #{@benchmark_definition.name}") %>
+<% content_header('Edit Benchmark Definition', link_to(@benchmark_definition.name, @benchmark_definition)) %>
 
-<%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
-  <%= f.hidden_field :benchmark_definition_id %>
-  <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
-<% end %>
-<br>
-
-<div class="container">
-  <div class="row">
-
-    <div class="box col-md-9">
-      <%= render 'form', submit_name: 'Update Benchmark' %>
-    </div>
-
+<div class="row">
+  <div class="col-md-9">
+    <%= render 'form', submit_name: 'Update Benchmark' %>
+  </div>
+  <div class="col-md-3">
     <%= render 'shared/metric_definitions_sidebar' %>
   </div>
 </div>

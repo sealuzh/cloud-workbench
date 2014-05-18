@@ -23,6 +23,7 @@ class BenchmarkDefinitionsController < ApplicationController
     @benchmark_definition = benchmark_definition_original.dup include: [ :metric_definitions, :benchmark_schedule ] do |original, clone|
       case clone.class.name
         when 'BenchmarkDefinition'
+          # Avoid name collision if copying a benchmark multiple times
           clone.name = "#{original.name} copy (#{SecureRandom.hex(1)})"
         when 'BenchmarkSchedule'
           # binding.pry
@@ -55,7 +56,7 @@ class BenchmarkDefinitionsController < ApplicationController
     @benchmark_definition = BenchmarkDefinition.new(benchmark_definition_params)
 
     if @benchmark_definition.save
-      flash[:success] = 'Benchmark definition was successfully created.'
+      show_success_flash 'created'
       redirect_to edit_benchmark_definition_path(@benchmark_definition)
     else
       render action: 'new'
@@ -64,17 +65,15 @@ class BenchmarkDefinitionsController < ApplicationController
 
   # PATCH/PUT /benchmark_definitions/1
   def update
-    if @benchmark_definition.update(benchmark_definition_params)
-      flash[:success] = 'Benchmark definition was successfully updated.'
-      if @benchmark_definition.benchmark_executions.any?
-        redirect_to @benchmark_definition
-      else
-        redirect_to edit_benchmark_definition_path(@benchmark_definition)
-      end
+    @benchmark_definition.update!(benchmark_definition_params)
+    show_success_flash 'updated'
+    if @benchmark_definition.benchmark_executions.any?
+      redirect_to @benchmark_definition
     else
-      flash.now[:error] = "Benchmark definition couldn't be updated."
-      render action: 'edit'
+      redirect_to edit_benchmark_definition_path(@benchmark_definition)
     end
+  rescue => e
+      render action: 'edit'
   end
 
   # DELETE /benchmark_definitions/1
@@ -100,5 +99,9 @@ class BenchmarkDefinitionsController < ApplicationController
       if @benchmark_definition.benchmark_executions.any?
         flash.now[:info] = "You try to modify a benchmark that has already been executed."
       end
+    end
+
+    def show_success_flash(action)
+      flash[:success] = "Benchmark definition <strong>#{@benchmark_definition.name}</strong> was successfully #{action}.".html_safe
     end
 end

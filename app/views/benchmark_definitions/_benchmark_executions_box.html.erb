@@ -1,0 +1,16 @@
+<div class="box collapsed-box">
+  <div class="box-header">
+    <h3 class="box-title">
+      <%= link_to benchmark_definition_benchmark_executions_path(@benchmark_definition) do %>
+        <%= pluralize(@benchmark_definition.benchmark_executions.count, 'Execution') %>
+      <% end %>
+    </h3>
+    <%= will_paginate @benchmark_executions, class: 'pagination-box' %>
+    <div class="box-tools pull-right">
+      <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><%= fa_icon 'minus' %></button>
+    </div>
+  </div>
+  <div class="box-body" style="display: block;">
+    <%= render 'shared/benchmark_executions', show_benchmark_definition: false %>
+  </div>
+</div>

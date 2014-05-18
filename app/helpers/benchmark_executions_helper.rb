@@ -11,4 +11,8 @@ module BenchmarkExecutionsHelper
     end
     status_label(benchmark_execution.status, type)
   end
+
+  def confirm_start_execution_msg(benchmark_definition)
+    { confirm: "This will start a benchmark execution of the <strong>#{benchmark_definition.name}</strong> benchmark" }
+  end
 end

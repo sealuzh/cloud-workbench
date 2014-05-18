@@ -1,54 +1,14 @@
 <% provide(:title, @benchmark_definition.name) %>
 <% content_header('Benchmark Definition', @benchmark_definition.name) %>
 
-<div class="container">
-  <div class="row">
-    <div class="col-md-8">
-      <h2><%= @benchmark_definition.name %></h2>
+<div class="row">
+  <div class="col-md-9">
+    <%= render 'vagrantfile_box' %>
+    <%= render 'benchmark_executions_box' %>
+  </div>
 
-
-
-      <div class="box">
-        <header>
-          <h4 class="header-title">
-            <%= link_to benchmark_definition_benchmark_executions_path(@benchmark_definition) do %>
-              <%= pluralize(@benchmark_definition.benchmark_executions.count, 'Execution') %>
-            <% end %>
-          </h4>
-
-          <div class="toolbar">
-            <div class="toolbar-center">
-              <%= will_paginate @benchmark_executions %>
-            </div>
-            <div class="toolbar">
-              <a href="#benchmarkExecutionsTable" data-toggle="collapse" class="btn btn-default minimize-box">
-                <i class="fa fa-angle-up"></i>
-              </a>
-            </div>
-          </div>
-        </header>
-        <div class="block">
-          <div id='benchmarkExecutionsTable' class='collapse in'>
-            <%= render 'shared/benchmark_executions', show_benchmark_definition: false %>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-3 action-sidebar">
-      <%= link_to edit_benchmark_definition_path(@benchmark_definition), class: 'btn btn-default' do %>
-        <%= edit_icon %>&nbsp;Edit
-      <% end %>
-      <%= link_to @benchmark_definition, method: :delete, class: 'btn btn-danger',
-                  data: {confirm: 'Are you sure? This action will delete all corresponding associations (benchmark schedule, benchmark executions and its virtual machine instances, metric definitions and its observed metrics.)'} do %>
-        <%= delete_icon %>&nbsp;Delete
-      <% end %>
-      <br>
-      <br>
-      <%= button_to [@benchmark_definition, @benchmark_definition.benchmark_executions.build], method: :post, class: 'btn btn-primary', data: {confirm: 'Are you sure?'} do %>
-        <%= start_icon %>&nbsp;Start Execution
-      <% end %>
-    </div>
+  <div class="col-md-3">
+    <%= render 'action_sidebar' %>
     <%= render 'shared/metric_definitions_sidebar' %>
   </div>
 </div>
