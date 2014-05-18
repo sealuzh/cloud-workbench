@@ -1,15 +1,14 @@
-<div class="row">
-  <div class="col-md-9">
-    <h1>Benchmark Definitions</h1>
-  </div>
-  <div class="col-md-3 action-sidebar">
-    <%= link_to new_benchmark_definition_path, class: 'btn btn-primary btn-lg' do %>
-      <%= create_icon %>&nbsp;Create New Benchmark
-    <% end %>
-  </div>
+<% content_for :content_header do %>
+  Benchmark Definitions
+<% end %>
+
+<div class="col-md-2">
+  <%= link_to new_benchmark_definition_path, class: 'btn btn-primary btn-lg' do %>
+    <%= create_icon %>&nbsp;Create New Benchmark
+  <% end %>
 </div>
 
-<%= will_paginate class: 'pagining_bootstrap' %>
+<%= will_paginate class: 'pagining_bootstrap col-md-6 col-md-offset-2' %>
 <div class="box-body table-responsive no-padding">
   <table class="table table-hover">
     <tbody>
@@ -17,4 +16,4 @@
     </tbody>
   </table>
 </div>
-<%= will_paginate class: 'pagining_bootstrap' %>
+<%= will_paginate class: 'pagining_bootstrap col-md-8 col-md-offset-4' %>
