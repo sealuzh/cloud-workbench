@@ -8,7 +8,7 @@
     <%= link_to start_icon, [benchmark_definition, benchmark_definition.benchmark_executions.build], method: :post, class: 'start', data: confirm_start_msg %>
   </td>
   <td>
-    <%= link_to benchmark_definition.name, benchmark_definition, class: 'first-row' %>
+    <%= link_to benchmark_definition.name, benchmark_definition, class: 'bold' %>
   </td>
   <td>
     <%= link_to benchmark_definition_benchmark_executions_path(benchmark_definition) do %>
@@ -23,11 +23,7 @@
     <% if schedule.present? %>
       <div class="btn-group inline-flex">
       <div class="tooltip-options inline-flex">
-        <% if schedule.active? %>
-          <span class="label label-success"><%= schedule.cron_expression %></span>
-        <% else %>
-          <%= link_to schedule.cron_expression, schedule, class: 'label label-default schedule-align', title: schedule.cron_expression_in_english.html_safe %>
-        <% end %>
+        <%= benchmark_schedule_label(schedule) %>
       </div>
         <button type="button" class="btn btn-default btn-xs dropdown-toggle schedule-align" data-toggle="dropdown">
           <span class="caret"></span>

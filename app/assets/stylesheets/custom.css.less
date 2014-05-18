@@ -26,15 +26,17 @@ a.start {
   .action-icon(@seal-blue);
 }
 
-// Link colors
-.edit-color {
-  color: @seal-orange !important;
-}
+// Link colors. Ignore existing hover rules to preserve readability on hover
+.dropdown-menu > li > a:not(:hover) {
+  &.edit-color {
+    color: @seal-orange;
+  }
 
-.activate-color {
-  color: @green !important;
-}
+  &.activate-color {
+    color: @green;
+  }
 
-.deactivate-color {
-  color: @red !important;
+  &.deactivate-color {
+    color: @red;
+  }
 }
