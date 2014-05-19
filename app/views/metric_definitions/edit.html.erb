@@ -1,17 +1,7 @@
-<h2>Edit <%= @metric_definition.name %></h2>
+<% benchmark_definition = @metric_definition.benchmark_definition %>
+<% provide(:title, "Edit #{@metric_definition.name} metric of #{benchmark_definition.name}") %>
+<% content_header("Edit Metric Definition", "#{@metric_definition.name} of #{link_to(benchmark_definition.name, benchmark_definition)}") %>
 
-
-<%= simple_form_for(@metric_definition, html: {class: 'form-horizontal' }) do |f| %>
-  <%= f.input :name %>
-  <%= f.input :unit %>
-  <%= f.input :scale_type, collection: MetricDefinition.scale_type.options, as: :radio_buttons %>
-  <%= f.submit class: 'btn btn-primary' %>
-<% end %>
-
-<br>
-<span class="label label-warning">Currently used for unique referencing.
-  Will be replaced with a logical, non-technical identifier.</span>
-<p>
-  <strong>metric_definition_id:</strong><br>
-  <input type="text" value="<%= @metric_definition.id %>" disabled="" class="form-control">
-</p>
+<div class="col-md-4">
+  <%= render 'form', submit_value: 'Update Metric Definition' %>
+</div>
