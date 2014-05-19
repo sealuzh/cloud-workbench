@@ -10,7 +10,8 @@ class BenchmarkSchedule < ActiveRecord::Base
   # 1) MUST contain 4 whitespaces (separating the 5 columns which may contain arbitrary characters)
   # 2) MUST NOT start with '*' to avoid the mistake that a benchmark is run every minute!
   VALID_CRON_EXPRESSION_REGEX = /[^\*].*\s.+\s.+\s.+\s.+/
-  validates :cron_expression, format: { with: VALID_CRON_EXPRESSION_REGEX,
+  validates :cron_expression, presence: true,
+                              format: { with: VALID_CRON_EXPRESSION_REGEX,
                                         message: "Cron expression MUST NOT start with '*' and
                                                   MUST contain 4 whitespaces separating the 5 columns." }
   after_create   :update_system_crontab_if_active

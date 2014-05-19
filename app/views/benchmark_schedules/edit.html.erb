@@ -1,3 +1,4 @@
-<h2>Schedule for <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
+<% provide(:title, "Edit Schedule for #{@benchmark_definition.name} Benchmark") %>
+<% content_header('Edit Schedule', "for #{link_to @benchmark_definition.name, @benchmark_definition } Benchmark") %>
 
-<%= render 'form', url: benchmark_schedule_path(@benchmark_schedule) %>
+<%= render 'form', submit_action: 'Update Schedule', url: benchmark_schedule_path(@benchmark_schedule) %>

@@ -1,36 +1,30 @@
-<div class="box">
-  <header><h5>Crontab Reference</h5></header>
-
-  <div class="body">
-    <li><%= link_to 'Visual crontab composer', 'http://www.corntab.com/pages/crontab-gui', target: '_blank' %></li>
-    <br>
-    <div class="col-md-1">
-      Minute
-    </div>
-    <div class="col-md-1">
-      Hour
-    </div>
-    <div class="col-md-1">
-      Day of month
-    </div>
-    <div class="col-md-1">
-      Month
-    </div>
-    <div class="col-md-1">
-      Day of week
+<div class="col-md-4">
+  <div class="box">
+    <div class="box-body">
+      <%= simple_form_for(@benchmark_schedule, url: url) do |f| %>
+        <%= f.input :cron_expression %>
+        <%= f.input :active %>
+        <%= f.submit class: 'btn btn-primary', value: submit_action %>
+      <% end %>
     </div>
   </div>
 </div>
 
-<br>
-<br>
-<br>
-<br>
-
-<%= simple_form_for(@benchmark_schedule,
-                    url: url,
-                    html: {class: 'form-horizontal' }) do |f| %>
-  <%= f.input :cron_expression %>
-  <%= f.input :active %>
-  <%= f.submit class: 'btn btn-primary' %>
-<% end %>
+<div class="col-md-8">
+  <div class="box">
+    <div class="box-header">
+      <h3 class="box-title">Cron-Expression Reference</h3>
+      <div class="box-tools pull-right">
+        <%= link_to 'http://www.corntab.com/pages/crontab-gui', target: '_blank', style: 'margin-right: 10px;' do %>
+          Corntab - Visual Crontab Composer&nbsp;<%= fa_icon('external-link') %>
+        <% end %>
+        <%= link_to 'http://www.corntab.com/pages/5+crontab', target: '_blank' do %>
+          Man pages - crontab(5)&nbsp;<%= fa_icon('external-link') %>
+        <% end %>
+      </div>
+    </div>
+    <div class="box-body">
+      <%= render 'cron_expression_reference' %>
+    </div>
+  </div>
+</div>

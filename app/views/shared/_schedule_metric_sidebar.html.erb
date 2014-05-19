@@ -3,10 +3,10 @@
 
     <% if benchmark_schedule.present? %>
       <%= render benchmark_schedule %>
-      <%= link_to "#{edit_icon}&nbsp;Edit Schedule".html_safe, edit_benchmark_schedule_path(benchmark_schedule), class: 'btn btn-default' %>
+      <%= link_to "#{edit_icon}&nbsp;Edit Schedule".html_safe, edit_benchmark_schedule_path(benchmark_schedule), class: 'btn btn-default btn-margin' %>
       <%= toggle_benchmark_schedule_btn(benchmark_schedule) %>
     <% else %>
-      <%= link_to "#{schedule_icon}&nbsp;Create Schedule".html_safe, new_benchmark_definition_benchmark_schedule_path(benchmark_definition), class: 'btn btn-default' %>
+      <%= link_to "#{schedule_icon}&nbsp;Create Schedule".html_safe, new_benchmark_definition_benchmark_schedule_path(benchmark_definition), class: 'btn btn-default btn-margin' %>
     <% end %>
 
 
