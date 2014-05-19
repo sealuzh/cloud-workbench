@@ -6,14 +6,16 @@
 
 // Fix img url paths. MUST be defined before importing the theme.
 .lockscreen {
-  background: url(@{admin-lte-img-path}blur-background09.jpg) repeat center center fixed;
+  background: url("@{admin-lte-img-path}/blur-background09.jpg") repeat center center fixed;
 }
 .box > .loading-img {
-  background: transparent url("@{admin-lte-img-path}ajax-loader1.gif") 50% 50% no-repeat;
+  background: transparent url("@{admin-lte-img-path}/ajax-loader1.gif") 50% 50% no-repeat;
 }
 
+
 @import "admin-lte/AdminLTE";
-@admin-lte-img-path: "../admin-lte/";
+@admin-lte-img-path: "@{rails-assets-path}/admin-lte";
+
 @yellow: @seal-orange;     // Warning (very similar compared with the default anyway)
 // It seems that the seal-blue is too dark
 //@brand-primary: @seal-blue;
@@ -22,6 +24,23 @@
 // AdminLTE dependencies
 @import "ionicons/ionicons";
 @ionicons-font-path: @rails-assets-path;
+
+// iCheck
+@icheck-img-path: "@{rails-assets-path}icheck/";
+.icheckbox_minimal,
+.iradio_minimal {
+  background-image: url("@{icheck-img-path}/minimal/minimal.png");
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+only screen and (-moz-min-device-pixel-ratio: 1.5),
+only screen and (-o-min-device-pixel-ratio: 3/2),
+only screen and (min-device-pixel-ratio: 1.5) {
+  .icheckbox_minimal,
+  .iradio_minimal {
+    background-image: url("@{icheck-img-path}/minimal/minimal@2x.png");
+  }
+}
 
 // Custom bootstrap overrides
 // --------------------------
