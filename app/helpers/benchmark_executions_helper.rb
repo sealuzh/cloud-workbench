@@ -19,4 +19,20 @@ module BenchmarkExecutionsHelper
   def confirm_delete_execution_msg(execution)
     { confirm: (render 'benchmark_executions/confirm_delete', benchmark_execution: execution) }
   end
+
+  def live_log_id(event)
+    if event.started_preparing?
+      'prepare'
+    elsif event.started_releasing_resources?
+      'releaseResources'
+    end
+  end
+
+  def live_log_path(event)
+    if event.started_preparing?
+      prepare_log_benchmark_execution_path(event.traceable, format: :txt)
+    elsif event.started_releasing_resources?
+      release_resources_log_benchmark_execution_path(event.traceable, format: :txt)
+    end
+  end
 end

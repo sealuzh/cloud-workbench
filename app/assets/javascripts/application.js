@@ -15,6 +15,10 @@
 //= require jquery.turbolinks
 //= require bootstrap/bootstrap
 
+// jquery plugins
+//= require jquery.jscrollpane
+//= require jquery.mousewheel
+
 // Replace default browser confirm dialog with bootstrap modal: https://github.com/ifad/data-confirm-modal
 //= require data-confirm-modal
 //= require data-confirm-modal-config
@@ -35,6 +39,7 @@
 // Note that the family of require directives prevents files from being included twice in the output.
 // from http://edgeguides.rubyonrails.org/asset_pipeline.html#manifest-files-and-directives
 //= require utilities
+//= require scrollbar
 //= require_tree .
 
 

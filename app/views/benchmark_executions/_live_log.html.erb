@@ -1,17 +1,4 @@
-<div class="box col-md-8">
-  <header>
-    <h5><%= title %> log</h5>
-    <div class="toolbar">
-      <div class="btn-group">
-        <a class="btn btn-default" id="<%= id %>LogRefreshStart"><i class="fa fa-refresh"></i>&nbsp;Start live refresh</a>
-        <a class="btn btn-success display-none" id="<%= id %>LogRefreshStop"><i class="fa fa-refresh fa-spin"></i>&nbsp;Stop live refresh</a>
-        <a href="#<%= id %>LogDiv" data-toggle="collapse" class="btn btn-default minimize-box">
-          <i class="fa fa-angle-up"></i>
-        </a>
-      </div>
-    </div>
-  </header>
-  <div id="<%= id %>LogDiv" class="collapse in">
-    <%= text_area_tag :log, 'Loading...', {:readonly => true, rows: "15", class: "form-control col-md-8", id: "#{id}Log"}%>
-  </div>
+<% id = live_log_id(event) %>
+<div id="<%= id %>LogDiv" class="timeline-body collapse in">
+  <%= text_area_tag 'log', 'Loading...', class: "live-log", id: "#{id}Log", readonly: true %>
 </div>

@@ -1,7 +1,7 @@
 module IconHelper
 
-  def ion_icon(name)
-    "<i class='ion ion-#{name}'></i>".html_safe
+  def ion_icon(name, html_class = '')
+    "<i class='ion ion-#{name} #{html_class}'></i>".html_safe
   end
 
   def edit_icon
@@ -62,5 +62,9 @@ module IconHelper
 
   def finished_icon
     fa_icon 'flag-checkered'
+  end
+
+  def expand_icon
+    fa_icon 'plus'
   end
 end

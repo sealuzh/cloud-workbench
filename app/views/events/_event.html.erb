@@ -1,0 +1,19 @@
+<% if previous_event_on_other_day(event) %>
+  <li class="time-label">
+    <span class="bg-aqua"><%= formatted_time(event.happened_at, :date_human) %></span>
+  </li>
+<% end %>
+
+<li>
+  <%= status_icon(event.failed?, status_bg_color(event.failed?)) %>
+  <div class="timeline-item">
+    <span class="time"><%= fa_icon('clock-o') %>&nbsp;<%= event.happened_at.to_formatted_s(:time_only) %></span>
+    <%= render('live_log_controls', id: live_log_id(event), path: live_log_path(event)) if has_log(event) %>
+    <h3 class="timeline-header <%= 'no-border' unless has_log(event) %>"><%= event.name.humanize %></h3>
+    <%= render('live_log', event: event) if has_log(event) %>
+  </div>
+</li>
+
+<% if event.finished_releasing_resources? %>
+  <li><%= fa_icon 'flag-checkered', class: status_bg_color(event.traceable.failed?) %></li>
+<% end %>

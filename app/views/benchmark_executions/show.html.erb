@@ -4,12 +4,8 @@
 <% subtitle = "#{formatted_time(start_time, :time_only)} of #{link_to @benchmark_definition.name, @benchmark_definition}" %>
 <% content_header(title, subtitle) %>
 
-<%= render 'dashboard', benchmark_execution: @benchmark_execution %>
-
-<br>
-<div class="container">
-  <%= render 'live_log', id: 'prepare', title: 'Prepare benchmark' %>
+<div id="benchmark_execution" data-id='<%= @benchmark_execution.id %>'>
+  <%= render 'dashboard', benchmark_execution: @benchmark_execution %>
   <br>
-  <br>
-  <%= render 'live_log', id: 'releaseResources', title: 'Release resources' %>
+  <%= render 'timeline', benchmark_execution: @benchmark_execution %>
 </div>

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-4">
-    <div class="small-box bg-<%= status_bg_color(benchmark_execution.failed?) %>">
+    <div class="small-box <%= status_bg_color(benchmark_execution.failed?) %>">
       <div class="inner">
         <h3>
           <%= benchmark_execution.status %>

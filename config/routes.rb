@@ -5,7 +5,7 @@ CloudBenchmarking::Application.routes.draw do
 
   # Exceptions
   %w( 404 422 500 ).each do |code|
-    get code, :to => "errors#show", :code => code
+    get code, :to => 'errors#show', :code => code
   end
 
   # Resources

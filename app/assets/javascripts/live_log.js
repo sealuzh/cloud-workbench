@@ -26,8 +26,8 @@ function refreshLog(logTextarea, action, onSuccess) {
     var onSuccess = onSuccess || function() {};
     var benchmark_execution_id = $("#benchmark_execution").attr("data-id");
     var request_url = "/benchmark_executions/" + benchmark_execution_id + "/" + action + ".txt";
-    $.get( request_url, function(data) {
-        logTextarea.val(data);
+    logTextarea.load(request_url, function() {
+        initScrollbar();
         scrollToBottom(logTextarea);
         onSuccess();
     });

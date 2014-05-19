@@ -21,11 +21,11 @@ module StatusHelper
   end
 
   def status_bg_color(failed)
-    failed ? 'red' : 'green'
+    failed ? 'bg-red' : 'bg-green'
   end
 
-  def status_icon(failed)
-    failed ? ion_icon('close') : ion_icon('checkmark')
+  def status_icon(failed, html_class = '')
+    failed ? ion_icon("close #{html_class}") : ion_icon("checkmark #{html_class}")
   end
 
   private
