@@ -6,8 +6,13 @@
     <%= render 'form', submit_name: 'Update Benchmark' %>
   </div>
   <div class="col-md-3">
-    <%= render 'shared/schedule_metric_sidebar', benchmark_definition: @benchmark_definition,
-                                                 benchmark_schedule: @benchmark_schedule,
-                                                 metric_definitions: @metric_definitions %>
+    <div class="transparant-well">
+      <%= button_to [@benchmark_definition, @benchmark_definition.benchmark_executions.build],
+                    method: :post, class: 'btn btn-primary btn-block btn-lg',
+                    data: confirm_start_execution_msg(@benchmark_definition) do %>
+        <%= start_icon %>&nbsp;Start Execution
+      <% end %>
+    </div>
+    <%= schedule_metric_sidebar(@benchmark_definition) %>
   </div>
 </div>

@@ -23,8 +23,7 @@ class MetricDefinitionsController < ApplicationController
     @metric_definition = @benchmark_definition.metric_definitions.build(metric_definition_params)
 
     if @metric_definition.save
-      flash[:success] = "Metric definition #{view_context.link_to @metric_definition.name, edit_metric_definition_path(@metric_definition)}
-                         was successfully created.".html_safe
+      success_flash 'created'
       redirect_to edit_benchmark_definition_path(@metric_definition.benchmark_definition)
     else
       render action: 'new'
@@ -34,8 +33,7 @@ class MetricDefinitionsController < ApplicationController
   # PATCH/PUT /metric_definitions/1
   def update
     if @metric_definition.update(metric_definition_params)
-      flash[:success] = "Metric definition #{view_context.link_to @metric_definition.name, edit_metric_definition_path(@metric_definition)}
-                         was successfully updated.".html_safe
+      success_flash 'updated'
       redirect_to @metric_definition.benchmark_definition
     else
       render action: 'edit'
@@ -66,5 +64,10 @@ class MetricDefinitionsController < ApplicationController
       if @metric_definition.has_any_observations?
         flash.now[:info] = "You try to modify a metric definition that already has observed values."
       end
+    end
+
+    def success_flash(action)
+      flash[:success] = "Metric definition #{view_context.link_to @metric_definition.name, edit_metric_definition_path(@metric_definition), class: 'alert-link' }
+                         was successfully created.".html_safe
     end
 end

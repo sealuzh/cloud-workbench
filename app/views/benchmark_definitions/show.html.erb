@@ -9,8 +9,6 @@
 
   <div class="col-md-3">
     <%= render 'action_sidebar' %>
-    <%= render 'shared/schedule_metric_sidebar', benchmark_definition: @benchmark_definition,
-                                                 benchmark_schedule: @benchmark_schedule,
-                                                 metric_definitions: @metric_definitions %>
+    <%= schedule_metric_sidebar(@benchmark_definition) %>
   </div>
 </div>
