@@ -65,6 +65,10 @@ class BenchmarkExecution < ActiveRecord::Base
     time_of_first_event_with_name(:finished_running)
   end
 
+  def benchmark_active?
+    has_event_with_name?(:finished_running)
+  end
+
   def execution_start_time
     time_of_first_event_with_name(:created)
   end

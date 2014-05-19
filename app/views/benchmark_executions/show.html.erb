@@ -1,22 +1,10 @@
-<h2>Execution of <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
+<% start_time = @benchmark_execution.execution_start_time %>
+<% provide(:title, "Execution #{formatted_time(start_time, :date_only)} of #{@benchmark_definition.name}") %>
+<% title = "Execution #{formatted_time(start_time, :date_human)}" %>
+<% subtitle = "#{formatted_time(start_time, :time_only)} of #{link_to @benchmark_definition.name, @benchmark_definition}" %>
+<% content_header(title, subtitle) %>
 
-<div class="container" id="benchmark_execution" data-id="<%= @benchmark_execution.id %>">
-  <div class="col-md-2">
-    <%= execution_status_label(@benchmark_execution) %>
-  </div>
-  <div class="col-md-3">
-    <p>
-      <strong>Execution start time:</strong><br>
-      <%= formatted_time(@benchmark_execution.execution_start_time) %>
-    </p>
-  </div>
-  <div class="col-md-3">
-    <p>
-      <strong>Execution end time:</strong><br>
-      <%= formatted_time(@benchmark_execution.execution_end_time) %>
-    </p>
-  </div>
-</div>
+<%= render 'dashboard', benchmark_execution: @benchmark_execution %>
 
 <br>
 <div class="container">

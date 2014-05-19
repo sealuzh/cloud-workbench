@@ -97,6 +97,6 @@ class BenchmarkDefinitionsController < ApplicationController
     end
 
     def show_success_flash(action)
-      flash[:success] = "Benchmark definition <strong>#{link_to @benchmark_definition.name, @benchmark_definition, class: 'alert-link'}</strong> was successfully #{action}.".html_safe
+      flash[:success] = "Benchmark definition <strong>#{view_context.link_to @benchmark_definition.name, @benchmark_definition, class: 'alert-link'}</strong> was successfully #{action}.".html_safe
     end
 end

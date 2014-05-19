@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-md-4">
+    <div class="small-box bg-<%= status_bg_color(benchmark_execution.failed?) %>">
+      <div class="inner">
+        <h3>
+          <%= benchmark_execution.status %>
+        </h3>
+      </div>
+      <div class="icon">
+        <%= status_icon(benchmark_execution) %>
+      </div>
+      <span class="small-box-footer">Status</span>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="small-box bg-blue">
+      <div class="inner">
+        <h3>
+          <%= distance_of_time_in_words(benchmark_execution.execution_duration).humanize rescue 'Not started yet.' %>
+        </h3>
+        <p><%= active_status(benchmark_execution.active?) %></p>
+      </div>
+      <div class="icon">
+        <%= fa_icon 'play-circle fa-2x' %>
+      </div>
+      <span class="small-box-footer">Execution Duration</span>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="small-box bg-yellow">
+      <div class="inner">
+        <h3>
+          <%= distance_of_time_in_words(benchmark_execution.benchmark_duration).humanize rescue 'Not started yet.' %>
+        </h3>
+        <p><%= active_status(benchmark_execution.benchmark_active?) %></p>
+      </div>
+      <div class="icon">
+        <%= ion_icon 'stats-bars' %>
+      </div>
+      <span class="small-box-footer">Benchmark Duration</span>
+    </div>
+  </div>
+</div>

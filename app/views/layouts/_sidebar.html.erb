@@ -1,31 +1,31 @@
 <ul class="sidebar-menu">
   <li>
     <%= link_to dashboard_path do %>
-      <%= fa_icon('dashboard') %>&nbsp;<span class="link-title">Dashboard</span>
+      <%= dashboard_icon %>&nbsp;<span class="link-title">Dashboard</span>
     <% end %>
   </li>
   <li class="sidebar-divider"></li>
   <li class="sidebar-header">Benchmark</li>
   <li>
     <%= link_to benchmark_definitions_path do %>
-      <%= fa_icon('file-text') %>&nbsp;<span class="link-title">Definitions</span>
+      <%= definition_icon %>&nbsp;<span class="link-title">Definitions</span>
     <% end %>
   </li>
   <li>
     <%= link_to benchmark_executions_path do %>
-      <%= fa_icon('play-circle') %>&nbsp;<span class="link-title">Executions</span>
+      <%= execution_icon %>&nbsp;<span class="link-title">Executions</span>
     <% end %>
   </li>
   <li>
     <%= link_to benchmark_schedules_path do %>
-      <%= fa_icon('clock-o') %>&nbsp;<span class="link-title">Schedules</span>
+      <%= schedule_icon %>&nbsp;<span class="link-title">Schedules</span>
     <% end %>
   </li>
   <li class="sidebar-divider"></li>
   <li class="sidebar-header">Others</li>
   <li>
     <%= link_to virtual_machine_instances_path do %>
-      <%= fa_icon('desktop') %>&nbsp;<span class="link-title">Virtual Machines</span>
+      <%= vm_icon %>&nbsp;<span class="link-title">Virtual Machines</span>
     <% end %>
   </li>
 </ul>
