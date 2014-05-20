@@ -37,8 +37,9 @@ Vagrant.configure('2') do |config|
   config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-12.04_chef-provisionerless.box'
   
   # VM
-  config.vm.hostname = 'chef-server-virtualbox-development'
+  config.vm.hostname = 'chef-server-vbox-development'
   config.ssh.forward_agent = true
+  #config.ssh.pty = true
 
   # VirtualBox
   config.vm.network :private_network, :ip => '33.33.33.50'
