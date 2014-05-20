@@ -1,7 +1,6 @@
-namespace :app do
-  # See sv man pages for more commands: http://smarden.org/runit/sv.8.html
-  # Example: 'cap production app:status'
-  %w(status up down once exit restart).each do |task_name|
+namespace :unicorn do
+  # Example: 'cap production unicorn:status'
+  RUNIT_COMMANDS.each do |task_name|
     desc "#{task_name} #{fetch(:application)}"
     task task_name do
       on roles(:app), in: :sequence, wait: 5 do

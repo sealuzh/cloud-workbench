@@ -1,6 +1,9 @@
 # Load DSL and Setup Up Stages
 require 'capistrano/setup'
 
+# See sv man pages for more commands: http://smarden.org/runit/sv.8.html
+RUNIT_COMMANDS = %w(status up down once exit restart)
+
 # Includes default deployment tasks
 require 'capistrano/deploy'
 

@@ -1,7 +1,8 @@
 # Source: https://github.com/TalkingQuickly/capistrano-3-rails-template
 
 namespace :logs do
-  task :tail, :file do |t, args|
+  # Example: 'cap production logs:tail[production]'
+  task :tail, :file do |task, args|
     if args[:file]
       on roles(:app) do
         execute "tail -f #{shared_path}/log/#{args[:file]}.log"

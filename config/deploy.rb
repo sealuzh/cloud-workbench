@@ -84,45 +84,40 @@ namespace :deploy do
   # Make sure we're deploying what we think we're deploying
   before :deploy, 'deploy:check_revision'
   # Only allow a deploy with passing tests to deployed
-  before :deploy, 'deploy:run_tests'
+  # before :deploy, 'deploy:run_tests'
   # Compile assets locally then rsync. Enable if you want to burden assets compilation to the production server.
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
   after 'deploy:publishing', 'deploy:restart'
   after :finishing, 'deploy:cleanup'
 
-
-  # The declarative approach does not work with the custom rake task.
-  # Even using the fully qualified name did not resolve this issue:
-  # https://github.com/capistrano/capistrano/issues/959
-  # before :'deploy:restart', :'rake[cron:clean]'
+  # Includes: Unicorn, delayed_job workers and system cron management (nginx and postgres are not considered here)
   desc 'Restart application'
   task :restart do
     on roles(:app), in: :sequence, wait: 5 do
-      # invoke 'rake[cron:clean]'
-      # Rake::Task['cron:clean'].invoke
-      invoke 'app:restart'
-      # NOTE: Be aware that this will abort the delayed job worker!
-      invoke 'worker:restart_all'
+      invoke 'rake', 'cron:clean'
+      invoke 'unicorn:restart'
+      # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
+      invoke 'worker:restart_all' # NOTE: Be aware that this will abort all delayed job worker and therefore interrupt running jobs!
+      invoke 'rake', 'cron:update'
     end
   end
 
-  desc 'Restart the delayed job background worker'
-  # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
-  task :restart_worker do
-    delayed_job_workers('restart')
+  desc 'Restart all delayed_job background workers'
+  task :restart_workers do
+    invoke 'worker:restart_all'
   end
 
   task :start do
-    # invoke 'rake[cron:clean]'
-    invoke 'app:up'
+    invoke 'rake', 'cron:clean'
+    invoke 'unicorn:up'
     invoke 'worker:up_all'
-    # invoke 'rake[cron:update]'
+    invoke 'rake', 'cron:update'
   end
 
   task :stop do
-    # invoke 'rake[cron:clean]'
-    invoke 'app:down'
+    invoke 'rake', 'cron:clean'
+    invoke 'unicorn:down'
     invoke 'worker:down_all'
   end
 end
