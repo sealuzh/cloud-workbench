@@ -7,8 +7,11 @@ long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          '0.1.0'
 
 depends 'apt'
+depends 'timezone-ii'
+depends 'ntp'
 depends 'vim'
-depends 'vagrant' # Customized cookbook. Improved version of a Github fork of the original cookbook.
+# Customized cookbook loaded from local repo. Improved version of a Github fork of the original vagrant cookbook.
+depends 'vagrant'
 depends 'cbench-databox'
 depends 'cbench-rackbox'
 depends 'cbench-nodejs'

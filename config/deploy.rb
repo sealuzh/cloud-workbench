@@ -15,6 +15,7 @@ set :application, 'cloud_benchmarking'
 # Used in case we're deploying multiple versions of the same app side by side.
 # Also provides quick sanity checks when looking at filepaths.
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
+set :delayed_job_workers, 1
 
 # Repository
 # ----------
@@ -49,10 +50,6 @@ set(:config_files, [
 set :linked_files, %w{config/database.yml}
 
 # Default value for linked_dirs is []
-# TODO: Use "#{Rails.root}/storage" (and symlink it) to store your files. Follow the advices here: http://makandracards.com/makandra/16999-common-mistakes-when-storing-file-uploads-with-rails
-# Also consider the following alternatives:
-# * Store the Vagrantfile in the database and create the file when creating a benchmark execution.
-# * Use Paperclip and Carrierwave to manage attachments
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system storage chef-repo}
 
 # Bundler
@@ -104,28 +101,39 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # invoke 'rake[cron:clean]'
       # Rake::Task['cron:clean'].invoke
-      execute "sudo sv restart #{fetch(:application)}"
+      app('restart')
       # TODO: Be aware that this will abort the delayed job worker!
-      execute 'sudo sv restart delayed_job'
+      delayed_job_workers('restart')
     end
   end
 
   desc 'Restart the delayed job background worker'
+  # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
   task :restart_worker do
-    # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
-    execute 'sudo sv restart delayed_job'
+    delayed_job_workers('restart')
   end
 
   task :start do
     # invoke 'rake[cron:clean]'
-    execute "sudo sv up #{fetch(:application)}"
-    execute 'sudo sv up delayed_job'
+    app('up')
+    delayed_job_workers('up')
     # invoke 'rake[cron:update]'
   end
 
   task :stop do
     # invoke 'rake[cron:clean]'
-    execute "sudo sv down #{fetch(:application)}"
-    execute 'sudo sv down delayed_job'
+    app(down)
+    delayed_job_workers('down')
+  end
+
+  def app(action)
+    execute "sudo sv #{action} #{fetch(:application)}"
+  end
+
+  def delayed_job_workers(action)
+    num_workers = fetch(:delayed_job_workers)
+    num_workers.times do |worker|
+      execute "sudo sv #{action} delayed_job#{worker + 1}"
+    end
   end
 end

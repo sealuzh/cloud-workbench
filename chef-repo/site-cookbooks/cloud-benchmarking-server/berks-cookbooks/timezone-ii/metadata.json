@@ -1,0 +1,36 @@
+{
+  "name": "timezone-ii",
+  "description": "Configure the system timezone on Linux systems",
+  "long_description": "",
+  "maintainer": "Lawrence Leonard Gilbert",
+  "maintainer_email": "larry@L2G.to",
+  "license": "Apache 2.0",
+  "platforms": {
+    "amazon": ">= 0.0.0",
+    "centos": ">= 0.0.0",
+    "debian": ">= 0.0.0",
+    "fedora": ">= 0.0.0",
+    "gentoo": ">= 0.0.0",
+    "ubuntu": ">= 0.0.0"
+  },
+  "dependencies": {
+  },
+  "recommendations": {
+  },
+  "suggestions": {
+  },
+  "conflicting": {
+  },
+  "providing": {
+  },
+  "replacing": {
+    "timezone": ">= 0.0.0"
+  },
+  "attributes": {
+  },
+  "groupings": {
+  },
+  "recipes": {
+  },
+  "version": "0.2.0"
+}
