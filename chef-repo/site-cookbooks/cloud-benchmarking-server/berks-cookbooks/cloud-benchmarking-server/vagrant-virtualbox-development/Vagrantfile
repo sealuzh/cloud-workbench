@@ -97,7 +97,7 @@ Vagrant.configure("2") do |config|
       },
       "postgresql" => {
         "config" => {
-          "max_connections" => "13"
+          "max_connections" => "18"
         },
         "config_pgtune" => {
           "db_type" => "desktop"

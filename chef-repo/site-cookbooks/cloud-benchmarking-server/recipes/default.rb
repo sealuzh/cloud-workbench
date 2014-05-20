@@ -55,7 +55,7 @@ template "#{config_dir}/database.yml" do
   source "database.yml.erb"
   owner node["appbox"]["deploy_user"]
   group node["appbox"]["apps_user"]
-  mode 0600
+  mode 0755
 end
 
 
