@@ -42,6 +42,31 @@ only screen and (min-device-pixel-ratio: 1.5) {
   }
 }
 
+// Ionicons font config without version parameter for production environment
+//@font-face {
+//  font-family: @ionicons-font-family;
+//  src: font-url('ionicons.eot');
+//  src: font-url('ionicons.eot?#iefix') format('embedded-opentype'),
+//  font-url('ionicons.woff') format('woff'),
+//  font-url('ionicons.ttf') format('truetype'),
+//  font-url('ionicons.svg#Ionicons') format('svg');
+//  font-weight: normal;
+//  font-style: normal;
+//}
+
+@ionicons-font-svg-id: 'Ionicons';
+@ionicons-font-name: 'ionicons';
+@font-face {
+  font-family: @ionicons-font-family;
+  src: ~"url('@{rails-assets-path}/@{ionicons-font-name}.eot')";
+  src: ~"url('@{rails-assets-path}/@{ionicons-font-name}.eot?#iefix') format('embedded-opentype')",
+  ~"url('@{rails-assets-path}/@{ionicons-font-name}.woff') format('woff')",
+  ~"url('@{rails-assets-path}/@{ionicons-font-name}.ttf') format('truetype')",
+  ~"url('@{rails-assets-path}/@{ionicons-font-name}.svg#@{ionicons-font-svg-id}') format('svg')";
+  font-weight: normal;
+  font-style: normal;
+}
+
 // Custom bootstrap overrides
 // --------------------------
 //
