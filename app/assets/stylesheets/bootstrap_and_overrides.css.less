@@ -26,7 +26,7 @@
 @ionicons-font-path: @rails-assets-path;
 
 // iCheck
-@icheck-img-path: "@{rails-assets-path}icheck/";
+@icheck-img-path: "@{rails-assets-path}/icheck/";
 .icheckbox_minimal,
 .iradio_minimal {
   background-image: url("@{icheck-img-path}/minimal/minimal.png");
@@ -57,18 +57,11 @@ only screen and (min-device-pixel-ratio: 1.5) {
 // Fix the font path for rail
 // the default '../fonts' is set by bootstrap and
 // probably by a bootstrap theme in variables.less
-@icon-font-path:          @rails-assets-path;
+// IMPORTANT: Requires trailing slash '/'
+@icon-font-path:          "@{rails-assets-path}/";
 
 
 //// Block with centered text for multi-line labels
 //.label {
 //  display:inline-block;
-//}
-//
-//#top > .navbar {
-//  border-top: 3px solid @seal-blue;
-//}
-//
-//#wrap > #left {
-//  background-color: #333;
 //}
