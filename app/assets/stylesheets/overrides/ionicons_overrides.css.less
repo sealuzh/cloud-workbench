@@ -1,0 +1,23 @@
+@import "ionicons/_ionicons-variables";
+
+// Ionicons font (override the Ionicons paths from less file)
+.font-face(@ionicons-font-family, 'ionicons', normal, normal, @ionicons-font-family);
+
+// Same content as _ionicons-font except without the Rails specific font-face definition
+//@import "_ionicons-font";
+.ion {
+  display: inline-block;
+  font-family: @ionicons-font-family;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  text-rendering: auto;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@import "ionicons/_ionicons-animation";
+@import "ionicons/_ionicons-icons";
