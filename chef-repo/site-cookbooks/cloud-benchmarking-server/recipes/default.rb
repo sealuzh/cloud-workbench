@@ -63,7 +63,8 @@ end
 # TODO: Refactor into own recipe later
 num_workers = node["cloud-benchmarking-server"]["delayed_job"]["worker_processes"].to_i
 num_workers.times do |worker|
-  runit_service "delayed_job#{worker + 1}" do
+  service_name = "delayed_job#{worker + 1}"
+  runit_service service_name do
     run_template_name  node["cloud-benchmarking-server"]["delayed_job"]["template_name"]
     log_template_name  node["cloud-benchmarking-server"]["delayed_job"]["template_name"]
     cookbook           node["cloud-benchmarking-server"]["delayed_job"]["template_cookbook"]
@@ -72,7 +73,7 @@ num_workers.times do |worker|
       :group                => node["appbox"]["apps_user"],
       :rack_env             => node["cloud-benchmarking-server"]["delayed_job"]["env"],
       :working_directory    => app_dir,
-      :service_name         => "delayed_job",
+      :service_name         => service_name,
       :home_dir             => node["appbox"]["apps_dir"]
     )
 
