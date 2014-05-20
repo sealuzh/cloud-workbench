@@ -36,7 +36,8 @@ end
 
 package_name = ::File.basename(omnibus_package)
 package_local_path = "#{Chef::Config[:file_cache_path]}/#{package_name}"
-
+require 'pry'
+binding.pry
 # Ensure :file_cache_path exists
 directory Chef::Config[:file_cache_path] do
   owner 'root'
