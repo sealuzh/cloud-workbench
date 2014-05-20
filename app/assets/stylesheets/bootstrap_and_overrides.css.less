@@ -1,14 +1,11 @@
 @import "bootstrap/bootstrap";
+@import "mixins.css.less";
+
+// Bootstrap dependencies
+// ----------------------
 
 // Glyphicons font (override the Bootstrap paths)
-@font-face {
-  font-family: 'Glyphicons Halflings';
-  src: font-url("@{icon-font-name}.eot");
-  src: font-url("@{icon-font-name}.eot?#iefix") format('embedded-opentype'),
-       font-url("@{icon-font-name}.woff") format('woff'),
-       font-url("@{icon-font-name}.ttf") format('truetype'),
-       font-url("@{icon-font-name}.svg#@{icon-font-svg-id}") format('svg');
-}
+.font-face('Glyphicons Halflings', @icon-font-name, normal, normal, @icon-font-svg-id);
 
 // AdminLTE Bootstrap theme
 // ------------------------
@@ -32,26 +29,12 @@
 // AdminLTE dependencies
 // ---------------------
 
-// Ionicons font (override the Ionicons paths from less file)
-@ionicons-font-name: 'ionicons';
-@ionicons-font-svg-id: 'Ionicons';
-@font-face {
-  font-family: @ionicons-font-family;
-  src: font-url("@{ionicons-font-name}.eot");
-  src: font-url("@{ionicons-font-name}.eot?#iefix") format('embedded-opentype'),
-       font-url("@{ionicons-font-name}.woff") format('woff'),
-       font-url("@{ionicons-font-name}.ttf") format('truetype'),
-       font-url("@{ionicons-font-name}.svg#@{ionicons-font-svg-id}") format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
 @import "ionicons/ionicons";
-// Shouldn't be necessary anymore
-//@ionicons-font-path: @rails-assets-path;
+// Ionicons font (override the Ionicons paths from less file)
+.font-face(@ionicons-font-family, 'ionicons', normal, normal, @ionicons-font-family);
 
 // iCheck
-@icheck-img-path: "@{rails-assets-path}/icheck/";
+@icheck-img-path: "@{rails-assets-path}/icheck";
 .icheckbox_minimal,
 .iradio_minimal {
   background-image: image-url("@{icheck-img-path}/minimal/minimal.png");
@@ -77,14 +60,6 @@ only screen and (min-device-pixel-ratio: 1.5) {
 //
 // Example:
 // @linkColor: #ff0000;
-
-// Fix the font path for rail
-// the default '../fonts' is set by bootstrap and
-// probably by a bootstrap theme in variables.less
-// IMPORTANT: Requires trailing slash '/'
-// Shouldn't be necessary anymore
-//@icon-font-path:          "@{rails-assets-path}/";
-
 
 //// Block with centered text for multi-line labels
 //.label {

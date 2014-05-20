@@ -1,0 +1,12 @@
+.font-face(@font-family, @font-asset-name, @font-weight: normal, @font-style: normal , @svg-id: @font-asset-name) {
+  @font-face {
+    font-family: @font-family;
+    src: font-url("@{font-asset-name}.eot");
+    src: font-url("@{font-asset-name}.eot?#iefix") format('embedded-opentype'),
+         font-url("@{font-asset-name}.woff") format('woff'),
+         font-url("@{font-asset-name}.ttf") format('truetype'),
+         font-url("@{font-asset-name}.svg#@{svg-id}") format('svg');
+    font-weight: @font-weight;
+    font-style: @font-style;
+  }
+}
