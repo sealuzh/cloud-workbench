@@ -101,9 +101,9 @@ namespace :deploy do
     on roles(:app), in: :sequence, wait: 5 do
       # invoke 'rake[cron:clean]'
       # Rake::Task['cron:clean'].invoke
-      app('restart')
-      # TODO: Be aware that this will abort the delayed job worker!
-      delayed_job_workers('restart')
+      invoke 'app:restart'
+      # NOTE: Be aware that this will abort the delayed job worker!
+      invoke 'worker:restart_all'
     end
   end
 
@@ -115,25 +115,14 @@ namespace :deploy do
 
   task :start do
     # invoke 'rake[cron:clean]'
-    app('up')
-    delayed_job_workers('up')
+    invoke 'app:up'
+    invoke 'worker:up_all'
     # invoke 'rake[cron:update]'
   end
 
   task :stop do
     # invoke 'rake[cron:clean]'
-    app(down)
-    delayed_job_workers('down')
-  end
-
-  def app(action)
-    execute "sudo sv #{action} #{fetch(:application)}"
-  end
-
-  def delayed_job_workers(action)
-    num_workers = fetch(:delayed_job_workers)
-    num_workers.times do |worker|
-      execute "sudo sv #{action} delayed_job#{worker + 1}"
-    end
+    invoke 'app:down'
+    invoke 'worker:down_all'
   end
 end
