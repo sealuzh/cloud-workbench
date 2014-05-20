@@ -69,7 +69,7 @@ num_workers.times do |worker|
     log_template_name  node["cloud-benchmarking-server"]["delayed_job"]["template_name"]
     cookbook           node["cloud-benchmarking-server"]["delayed_job"]["template_cookbook"]
     options(
-      :user                 => node["appbox"]["deploy_user"],
+      :user                 => node["appbox"]["apps_user"],
       :group                => node["appbox"]["apps_user"],
       :rack_env             => node["cloud-benchmarking-server"]["delayed_job"]["env"],
       :working_directory    => app_dir,
