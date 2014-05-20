@@ -84,9 +84,6 @@ gem 'will_paginate', '~> 3.0.5'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
 gem 'simple_form', '~> 3.0.2'
 gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
-gem 'jscrollpane-rails'
-gem 'jquery-mousewheel-rails'
-gem 'mwheelintent-rails'
 
 
 group :chef do

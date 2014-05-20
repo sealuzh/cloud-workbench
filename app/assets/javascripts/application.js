@@ -15,12 +15,12 @@
 //= require jquery.turbolinks
 //= require bootstrap/bootstrap
 
-// jquery plugins
-//= require jquery.jscrollpane
-//= require jquery.mousewheel
+// CUSTOM
+//= require utilities
 
 // Replace default browser confirm dialog with bootstrap modal: https://github.com/ifad/data-confirm-modal
 //= require data-confirm-modal
+// CUSTOM
 //= require data-confirm-modal-config
 
 // Ace editor extensions
@@ -31,6 +31,8 @@
 //= require ace/snippets/ruby
 //= require ace/ext-language_tools
 //= require aced-rails/aced-rails.js.coffee
+// CUSTOM
+//= require ace_config
 
 // AdminLTE bootstrap theme and dependencies
 //= require admin-lte/app
@@ -38,9 +40,8 @@
 // Custom javascript
 // Note that the family of require directives prevents files from being included twice in the output.
 // from http://edgeguides.rubyonrails.org/asset_pipeline.html#manifest-files-and-directives
-//= require utilities
-//= require scrollbar
-//= require_tree .
+//= require live_log
+//= require tooltips
 
 
 

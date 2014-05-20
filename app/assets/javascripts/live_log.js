@@ -27,7 +27,7 @@ function refreshLog(logTextarea, action, onSuccess) {
     var benchmark_execution_id = $("#benchmark_execution").attr("data-id");
     var request_url = "/benchmark_executions/" + benchmark_execution_id + "/" + action + ".txt";
     logTextarea.load(request_url, function() {
-        initScrollbar();
+        //initScrollbar();  // If using jscrollpane instead of default textarea
         scrollToBottom(logTextarea);
         onSuccess();
     });
