@@ -1,7 +1,7 @@
 <% if @benchmark_definition.present? %>
   <!-- Index benchmark_executions for a specific benchmark_definition -->
-  <% provide(:title, "Benchmark Executions of #{@benchmark_definition.name}") %>
-  <% content_header("#{pluralize(@benchmark_executions.count, 'Benchmark Execution')} of", link_to(@benchmark_definition.name, @benchmark_definition)) %>
+  <% provide(:title, "Executions of #{@benchmark_definition.name}") %>
+  <% content_header("#{pluralize(@benchmark_executions.count, 'Execution')} of", link_to(@benchmark_definition.name, @benchmark_definition)) %>
 
   <div class="row">
     <div class="col-md-9">
