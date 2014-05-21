@@ -1,7 +1,7 @@
 # Source: https://github.com/TalkingQuickly/capistrano-3-rails-template
 
-namespace :logs do
-  # Example: 'cap production logs:tail[production]'
+namespace :log do
+  # Example: 'cap production log:tail[production]'
   task :tail, :file do |task, args|
     if args[:file]
       on roles(:app) do

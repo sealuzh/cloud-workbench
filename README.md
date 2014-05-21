@@ -124,12 +124,8 @@ NOTE: The manual installation is not recommendend and has not been tested.
 Requires a Ruby on Rails development environment and checkout of the project. Make sure you have run `bundle install --without production chef`.
 
 ### Initial configuration
-1. Configure the hostname or ip-address of the target server in `config/deploy/production.rb`
-2. Provide the path to your private key in `config/deploy.rb` for `keys` in `ssh_options`
-3. Ensure you have added your private key to your ssh-agent. For more information see https://help.github.com/articles/using-ssh-agent-forwarding.
-4. Check your settings with `bundle exec cap production deploy:check`
-5. Setup your database config in `config/deploy/shared/database.secret.yml.erb`
-6. Copy the database settings to the server with `bundle exec cap production setup_config`
+1. Ensure you have added your private key to your ssh-agent. For more information see https://help.github.com/articles/using-ssh-agent-forwarding.
+2. Check your settings with `bundle exec cap production deploy:check`
 
 ### Deploy
 

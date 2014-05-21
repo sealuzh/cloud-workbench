@@ -34,6 +34,7 @@ set :ssh_options, {
 # --------------
 set :deploy_to, "/home/apps/#{fetch(:application)}"
 set :deploy_user, 'deploy'
+set :apps_user, 'apps'
 set :keep_releases, 5
 set :use_sudo, false
 
@@ -51,6 +52,11 @@ set :linked_files, %w{config/database.yml}
 
 # Default value for linked_dirs is []
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system storage chef-repo}
+
+# File system permissions:
+# the application and background workers must be able to read and write to the logs and storage directory
+set :file_permissions_paths, %w(log log/production.log storage)
+set :file_permissions_users, ["#{fetch(:apps_user)}"]
 
 # Bundler
 # -------
@@ -88,6 +94,8 @@ namespace :deploy do
   # Compile assets locally then rsync. Enable if you want to burden assets compilation to the production server.
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
+  # Set file system permissions
+  after 'deploy:publishing', 'deploy:set_permissions:acl'
   after 'deploy:publishing', 'deploy:restart'
   after :finishing, 'deploy:cleanup'
 

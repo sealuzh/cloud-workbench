@@ -25,11 +25,14 @@ group :development do
   gem 'meta_request'
 
   # Deploy with Capistrano
+  # None of the capistrano task should be loaded into the Rails environment by default
+  # as they must be required explicitly in the Capfile
   gem 'capistrano', '~> 3.2.1', require: false
   gem 'capistrano-rails', '~> 1.1', require: false
   gem 'capistrano-bundler', '~> 1.1.2', require: false
   gem 'capistrano-rbenv', '~> 2.0', require: false
   # gem 'rvm1-capistrano3', require: false # Use if deploying into RVM environments
+  gem 'capistrano-file-permissions', require: false
 end
 
 group :development, :test do

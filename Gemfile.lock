@@ -80,6 +80,8 @@ GEM
     capistrano-bundler (1.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
+    capistrano-file-permissions (0.1.0)
+      capistrano (>= 3.0.0)
     capistrano-rails (1.1.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
@@ -438,6 +440,7 @@ DEPENDENCIES
   bootstrap-will_paginate (~> 0.0.10)
   capistrano (~> 3.2.1)
   capistrano-bundler (~> 1.1.2)
+  capistrano-file-permissions
   capistrano-rails (~> 1.1)
   capistrano-rbenv (~> 2.0)
   capybara (~> 2.2.1)
