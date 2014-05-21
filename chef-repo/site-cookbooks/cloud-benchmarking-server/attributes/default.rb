@@ -6,6 +6,20 @@ default["cloud-benchmarking-server"]["delayed_job"]["template_name"] = "delayed_
 default["cloud-benchmarking-server"]["delayed_job"]["template_cookbook"] = "cloud-benchmarking-server"
 default["cloud-benchmarking-server"]["delayed_job"]["env"] = "production"
 
+# Chef
+default["cloud-benchmarking-server"]["chef"]["server_ip"] = "33.33.33.50"
+default["cloud-benchmarking-server"]["chef"]["node_name"] = "cloud-benchmarking"
+default["cloud-benchmarking-server"]["chef"]["client_key_name"] = "cloud-benchmarking"
+default["cloud-benchmarking-server"]["chef"]["client_key"] = ""
+default["cloud-benchmarking-server"]["chef"]["validator_key"] = ""
+
+default["cloud-benchmarking-server"]["preserve_secret_config"] = true
+# AWS
+default["cloud-benchmarking-server"]["aws"]["ssh_key_name"] = "cloud-benchmarking"
+default["cloud-benchmarking-server"]["aws"]["ssh_key"] = ""
+default["cloud-benchmarking-server"]["aws"]["access_key"] = ""
+default["cloud-benchmarking-server"]["aws"]["secret_key"] = ""
+
 # Rackbox
 default["rackbox"]["ruby"]["versions"] = 	   [ "2.1.1" ]
 default["rackbox"]["ruby"]["global_version"] =   "2.1.1"

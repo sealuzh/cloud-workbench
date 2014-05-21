@@ -16,3 +16,5 @@ Gemfile.lock
 bin/*
 .bundle/*
 
+# private keys
+*.pem

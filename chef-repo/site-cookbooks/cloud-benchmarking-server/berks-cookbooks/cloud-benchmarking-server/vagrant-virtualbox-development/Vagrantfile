@@ -1,9 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+# require 'json'
 
 SSH_USERNAME = 'vagrant'
 
-require 'json'
 Vagrant.configure("2") do |config|
   # Detects vagrant-omnibus plugin
   if Vagrant.has_plugin?('vagrant-omnibus')
@@ -68,10 +68,31 @@ Vagrant.configure("2") do |config|
     chef.run_list = [
       'recipe[cloud-benchmarking-server]'
     ]
+
+    chef_client_key = content_from_file("chef_client_key.pem")
+    chef_validator  = content_from_file("chef_validator.pem")
+    aws_ssh_key_path = ENV['AWS_WORK_BENCH_PRIVATE_KEY'].to_s
+    aws_ssh_key = (File.read(aws_ssh_key_path) rescue '')
+    aws_access_key = ENV['AWS_ACCESS_KEY'] || ''
+    aws_secret_key = ENV['AWS_SECRET_KEY'] || ''
     chef.json = {
       "cloud-benchmarking-server" => {
         "delayed_job" => {
           "worker_processes" => "2"
+        },
+        "preserve_secret_config" => false,
+        "chef" => {
+          "server_ip" => ENV['CHEF_SERVER_IP'] || "33.33.33.50",
+          "node_name"       => "cloud-benchmarking",
+          "client_key_name" => "cloud-benchmarking",
+          "client_key"      => chef_client_key || "EMPTY",
+          "validator_key"   => chef_validator  || "EMPTY",
+        },
+        "aws" => {
+          "ssh_key_name" => "cloud-benchmarking",
+          "ssh_key"      => aws_ssh_key || "",
+          "access_key"   => aws_access_key,
+          "secret_key"   => aws_secret_key,
         }
       },
       # For a list of time zones see: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
@@ -115,4 +136,9 @@ Vagrant.configure("2") do |config|
       }
     }
   end
+end
+
+def content_from_file(filename)
+  vagrantfile_dir = File.dirname(__FILE__)
+  File.read("#{vagrantfile_dir}/#{filename}") rescue ''
 end

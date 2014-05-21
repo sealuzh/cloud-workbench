@@ -26,6 +26,9 @@ include_recipe "cbench-nodejs"
 include_recipe "cbench-databox"
 include_recipe "cbench-rackbox"
 
+# Install file permission management utility acl used by Capistrano plugin during deployment
+apt_package 'acl'
+
 # Disable the default nginx site
 nginx_site 'default' do
   enable false
@@ -90,4 +93,65 @@ num_workers.times do |worker|
     )
     restart_on_update false
   end
+end
+
+
+app_user_home = node["appbox"]["apps_dir"]
+app_user = node["appbox"]["apps_user"]
+# .profile
+unless node["cloud-benchmarking-server"]["preserve_secret_config"]
+  template "#{app_user_home}/.profile" do
+    source "dot_profile.erb"
+    owner app_user
+    group app_user
+    mode 0600
+    variables chef: node["cloud-benchmarking-server"]["chef"],
+              aws:  node["cloud-benchmarking-server"]["aws"]
+  end
+end
+
+# Chef server config
+chef_dir = "#{app_user_home}/.chef"
+# .chef directory
+directory chef_dir do
+  owner app_user
+  group app_user
+  mode 00755
+end
+
+# knife.rb
+template "#{chef_dir}/knife.rb" do
+  source "knife.rb.erb"
+  owner app_user
+  group app_user
+  mode 0644
+  variables home_dir: app_user_home
+end
+
+# Client key of node
+template "#{chef_dir}/#{node["cloud-benchmarking-server"]["chef"]["client_key_name"]}.pem" do
+  source "empty.erb"
+  owner app_user
+  group app_user
+  mode 0600
+  variables content: node["cloud-benchmarking-server"]["chef"]["client_key"]
+end
+
+# Chef validator key
+template "#{chef_dir}/chef-validator.pem" do
+  source "empty.erb"
+  owner app_user
+  group app_user
+  mode 0600
+  variables content: node["cloud-benchmarking-server"]["chef"]["validator_key"]
+end
+
+
+# AWS config
+template "#{app_user_home}/.ssh/#{node["cloud-benchmarking-server"]["aws"]["ssh_key_name"]}.pem" do
+  source "empty.erb"
+  owner app_user
+  group app_user
+  mode 0600
+  variables content: node["cloud-benchmarking-server"]["aws"]["ssh_key"]
 end
