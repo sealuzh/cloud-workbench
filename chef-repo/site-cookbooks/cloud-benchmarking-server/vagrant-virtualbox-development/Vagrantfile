@@ -80,7 +80,7 @@ Vagrant.configure("2") do |config|
         "delayed_job" => {
           "worker_processes" => "2"
         },
-        "preserve_secret_config" => false,
+        "preserve_secret_config" => true,
         "chef" => {
           "server_ip" => ENV['CHEF_SERVER_IP'] || "33.33.33.50",
           "node_name"       => "cloud-benchmarking",
