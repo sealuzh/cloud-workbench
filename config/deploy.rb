@@ -101,12 +101,13 @@ namespace :deploy do
 
   # Includes: Unicorn, delayed_job workers and system cron management (nginx and postgres are not considered here)
   desc 'Restart application'
-  task :restart do
+  task :restart, :live do |task, args|
     on roles(:app), in: :sequence, wait: 5 do
       invoke 'rake', 'cron:clean'
       invoke 'unicorn:restart'
       # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
-      invoke 'worker:restart_all' # NOTE: Be aware that this will abort all delayed job worker and therefore interrupt running jobs!
+      # NOTE: Be aware that this will abort all delayed job worker and therefore interrupt running jobs!
+      invoke 'worker:restart_all' unless (args[:live].to_s == 'live')
       invoke 'rake', 'cron:update'
     end
   end
