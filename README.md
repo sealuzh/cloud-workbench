@@ -5,7 +5,6 @@
 ### Requirements
 * Git (1.9.2)
 * [Vagrant (1.5.4)](https://www.vagrantup.com/downloads)
-    * [chef (11.6.2)](https://rubygems.org/gems/chef/versions/11.6.2)
     * [vagrant-omnibus (1.3.1)](https://github.com/schisamo/vagrant-omnibus)
     * [[optional] vagrant-aws (0.4.1)](https://github.com/mitchellh/vagrant-aws)
         * For AWS EC2 Cloud
@@ -19,7 +18,7 @@
 2. The Vagrant plugins can be installed with this one-liner:
 
 ```bash
-vagrant plugin install vagrant-aws; vagrant plugin install vagrant-omnibus; vagrant plugin install chef
+vagrant plugin install vagrant-omnibus; vagrant plugin install vagrant-aws
 ```
 
 ### Initial Configuration
@@ -45,24 +44,24 @@ Note: The provided values are examples from AWS and do NOT work.
 2. `vagrant up --provider=aws`
 
 #### Configure WorkBench Server
-TODO:
- * Docs/automation for
- * Note about time (NTP cookbook)
 
-
-* Environment variables: `/home/apps/.profile`
-* Knife config file: `/home/apps/.chef/knife.rb`
-
-Consider: permissions, dynamic directories (node[appdir])
+* Use the Cookbook attributes to configure the WorkBench server
 
 ### Install Chef Server
+
 1. `cd $GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/cbench-chef-server/vagrant-aws-production`
 2. `vagrant up --provider=aws`
 
+Supported systems:
+
+* Ubuntu 12.04
+* Ubuntu 13.10
+
+Note Ubuntu 14.04 has some issues with the postgres cookbook and requirs some work to fix this. Other systems have not been tested.
 
 ## Installation (manual)
 
-NOTE: The manual installation is not recommendend and has not been tested.
+NOTE: The manual installation is not recommendend and has not been tested. The requirements listed below are probably not complete.
 
 ### Requirements
 
@@ -75,7 +74,6 @@ NOTE: The manual installation is not recommendend and has not been tested.
 * PostgreSQL 9.1.13
     * Default table name: `cloud_benchmarking_production`
 * Vagrant 1.5.3 with plugins
-    * Chef 11.6.2
     * vagrant-aws 0.4.1
     * vagrant-omnibus 1.4.1
 * cron
