@@ -13,7 +13,7 @@ default["cloud-benchmarking-server"]["chef"]["client_key_name"] = "cloud-benchma
 default["cloud-benchmarking-server"]["chef"]["client_key"] = ""
 default["cloud-benchmarking-server"]["chef"]["validator_key"] = ""
 
-default["cloud-benchmarking-server"]["preserve_secret_config"] = true
+default["cloud-benchmarking-server"]["apply_secret_config"] = true
 # AWS
 default["cloud-benchmarking-server"]["aws"]["ssh_key_name"] = "cloud-benchmarking"
 default["cloud-benchmarking-server"]["aws"]["ssh_key"] = ""
