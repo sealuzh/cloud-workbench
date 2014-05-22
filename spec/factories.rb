@@ -42,4 +42,21 @@ FactoryGirl.define do
 
     initialize_with { new(vagrantfile_path, log_dir) }
   end
+
+  factory :metric_definition do
+    association :benchmark_definition, factory: :benchmark_definition
+    name 'default metric'
+    scale_type 'ratio'
+
+    factory :ratio_metric_definition do
+      name 'seq. write'
+      unit 'mb/s'
+      scale_type 'ratio'
+    end
+
+    factory :nominal_metric_definition do
+      name 'cpu type'
+      scale_type 'nominal'
+    end
+  end
 end
