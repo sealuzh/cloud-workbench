@@ -36,3 +36,7 @@ doc/
 .project
 .idea
 .secret
+
+# Ignore private keys and secret files
+*.pem
+*.secret
