@@ -43,7 +43,7 @@ shared_dir = "#{main_dir}/shared"
 config_dir = "#{shared_dir}/config"
 
 # Database config
-# IMPORTANT: When using the 'recursive' attribute the owner and group will only
+# IMPORTANT: If using the 'recursive' attribute the owner and group will only
 #            be applied to the leaf directory. Therefore the directories must be
 #            created manually.
 [ main_dir, shared_dir, config_dir ].each do |path|
@@ -56,9 +56,14 @@ end
 
 template "#{config_dir}/database.yml" do
   source "database.yml.erb"
+  backup false
   owner node["appbox"]["deploy_user"]
   group node["appbox"]["apps_user"]
   mode 0755
+  variables database_name: node["databox"]["databases"]["postgresql"][0]["database_name"],
+            username:      node["databox"]["databases"]["postgresql"][0]["username"],
+            password:      node["databox"]["databases"]["postgresql"][0]["password"],
+            port:          node["postgresql"]["config"]["port"]
 end
 
 
@@ -102,6 +107,7 @@ app_user = node["appbox"]["apps_user"]
 if node["cloud-benchmarking-server"]["apply_secret_config"]
   template "#{app_user_home}/.profile" do
     source "dot_profile.erb"
+    backup false
     owner app_user
     group app_user
     mode 0600
@@ -121,6 +127,7 @@ if node["cloud-benchmarking-server"]["apply_secret_config"]
   # knife.rb
     template "#{chef_dir}/knife.rb" do
       source "knife.rb.erb"
+      backup false
       owner app_user
       group app_user
       mode 0644
@@ -130,6 +137,7 @@ if node["cloud-benchmarking-server"]["apply_secret_config"]
   # Client key of node
     template "#{chef_dir}/#{node["cloud-benchmarking-server"]["chef"]["client_key_name"]}.pem" do
       source "empty.erb"
+      backup false
       owner app_user
       group app_user
       mode 0600
@@ -139,6 +147,7 @@ if node["cloud-benchmarking-server"]["apply_secret_config"]
   # Chef validator key
     template "#{chef_dir}/chef-validator.pem" do
       source "empty.erb"
+      backup false
       owner app_user
       group app_user
       mode 0600
@@ -149,6 +158,7 @@ if node["cloud-benchmarking-server"]["apply_secret_config"]
   # AWS config
     template "#{app_user_home}/.ssh/#{node["cloud-benchmarking-server"]["aws"]["ssh_key_name"]}.pem" do
       source "empty.erb"
+      backup false
       owner app_user
       group app_user
       mode 0600
