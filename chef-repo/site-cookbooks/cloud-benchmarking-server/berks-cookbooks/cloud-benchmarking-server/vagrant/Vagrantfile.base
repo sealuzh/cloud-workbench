@@ -1,8 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+CONFIG_DIR     ||= 'NOT PROVIDED'
 COOKBOOKS_PATH ||= "../berks-cookbooks"
-CHEF_KEYS_DIR  ||= File.dirname(__FILE__) # NOTE: Default does not work with eval
+APPLY_SECRET_CONFIG ||= false
 SSH_USERNAME   ||= "ubuntu"
 
 Vagrant.configure('2') do |config|
@@ -31,33 +32,50 @@ Vagrant.configure('2') do |config|
 end
 
 # Workaround for Chef json merge as the vagrant override does not work here.
-def content_from_file(file_path)
+def string_from_file(file_path)
+  fail "Do not apply secret config #{args.join(', ')}" unless APPLY_SECRET_CONFIG
   File.read(file_path)
 rescue => e
-  puts "WARNING: Config file at #{directory}/#{filename} does not exist. #{e.message}"
+  puts "WARNING: Config file at #{file_path} does not exist. #{e.message}"
   'NOT PROVIDED'
 end
 
-def string_from_env(env_variable)
-  content = ENV[env_variable].to_s
-  if content.empty?
-    puts "WARNING: Environment variable #{env_variable} does not exist."
-    'NOT PROVIDED'
-  else
-    content
+def string_from_config(config, *args)
+  fail "Do not apply secret config #{args.join(', ')}" unless APPLY_SECRET_CONFIG
+  result = config
+  # Narrow down result
+  args.each do |arg_item|
+    result = result[arg_item]
   end
+  fail "Config #{args.join(', ')} not present" if result.empty?
+  result
+rescue => e
+  puts "WARNING: #{e.message}"
+  'NOT PROVIDED'
 end
 
-chef_client_key = content_from_file("#{CHEF_KEYS_DIR}/chef_client_key.pem")
-chef_validator  = content_from_file("#{CHEF_KEYS_DIR}/chef_validator.pem")
-aws_ssh_key     = content_from_file(string_from_env('AWS_WORK_BENCH_PRIVATE_KEY'))
-aws_access_key  = string_from_env('AWS_ACCESS_KEY')
-aws_secret_key  = string_from_env('AWS_SECRET_KEY')
+def load_config(config_file)
+  fail "Do not apply secret config #{args.join(', ')}" unless APPLY_SECRET_CONFIG
+  YAML.load_file(config_file)
+rescue => e
+  puts "WARINING: No config file found in #{config_file}. #{e.message}"
+  'CONFIG FILE NOT FOUND'
+end
+
+# Provide this information in the CHEF_CONFIG_DIR
+require 'yaml'
+config = load_config("#{CONFIG_DIR}/config.yml.secret")
+chef_client_key = string_from_file("#{CONFIG_DIR}/chef_client_key.pem")
+chef_validator  = string_from_file("#{CONFIG_DIR}/chef_validator.pem")
+aws_ssh_key     = string_from_file("#{CONFIG_DIR}/cloud-benchmarking.pem")
+aws_access_key  = string_from_config(config, 'aws', 'access_key')
+aws_secret_key  = string_from_config(config, 'aws', 'secret_key')
+chef_server_ip  = string_from_config(config, 'chef', 'server_ip')
 CHEF_JSON = {
     "cloud-benchmarking-server" => {
-        "apply_secret_config" => false,
+        "apply_secret_config" => APPLY_SECRET_CONFIG,
         "chef" => {
-            "server_ip"       => string_from_env('CHEF_SERVER_IP'),
+            "server_ip"       => chef_server_ip,
             "node_name"       => "cloud-benchmarking",
             "client_key_name" => "cloud-benchmarking",
             "client_key"      => chef_client_key || "EMPTY",
@@ -93,7 +111,6 @@ CHEF_JSON = {
         "default_config" => {
             "unicorn" => {
                 "worker_processes" => "2",
-                # "hostname" => "PUBLIC_IP_ADDRESS_OF_INSTANCE"
             }
         }
     },

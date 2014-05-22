@@ -1,12 +1,16 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Change on demand
+APPLY_SECRET_CONFIG = false
+SSH_USERNAME = "ubuntu"
+
 require 'pathname'
 vagrant_base_dir = Pathname.new(__FILE__).parent.parent.parent.expand_path
+chef_repo_base_dir = Pathname.new(vagrant_base_dir).parent.parent.parent.expand_path
 
 COOKBOOKS_PATH = File.expand_path("#{vagrant_base_dir}/../berks-cookbooks")
-CHEF_KEYS_DIR = vagrant_base_dir.to_s
-SSH_USERNAME = "ubuntu"
+CONFIG_DIR = "#{chef_repo_base_dir}/secret/vagrant-aws-staging"
 
 # Import parent configs and pass local context (e.g. variables)
 base_config = File.read "#{vagrant_base_dir}/Vagrantfile.base"
@@ -30,7 +34,6 @@ Vagrant.configure('2') do |config|
   config.vm.provision :chef_solo, id: 'chef_solo' do |chef|
     chef.json = CHEF_JSON.deep_merge({
       "cloud-benchmarking-server" => {
-          "apply_secret_config" => true,
           "delayed_job" => {
               "worker_processes" => "2"
           },
