@@ -27,7 +27,7 @@ include_recipe "cbench-databox"
 include_recipe "cbench-rackbox"
 
 # Install file permission management utility acl used by Capistrano plugin during deployment
-apt_package 'acl'
+package 'acl'
 
 # Disable the default nginx site
 nginx_site 'default' do
@@ -43,7 +43,7 @@ shared_dir = "#{main_dir}/shared"
 config_dir = "#{shared_dir}/config"
 
 # Database config
-# IMPORTANT: When using the 'recursive' attribute the owner and group will only
+# IMPORTANT: If using the 'recursive' attribute the owner and group will only
 #            be applied to the leaf directory. Therefore the directories must be
 #            created manually.
 [ main_dir, shared_dir, config_dir ].each do |path|
@@ -56,9 +56,14 @@ end
 
 template "#{config_dir}/database.yml" do
   source "database.yml.erb"
+  backup false
   owner node["appbox"]["deploy_user"]
   group node["appbox"]["apps_user"]
   mode 0755
+  variables database_name: node["databox"]["databases"]["postgresql"][0]["database_name"],
+            username:      node["databox"]["databases"]["postgresql"][0]["username"],
+            password:      node["databox"]["databases"]["postgresql"][0]["password"],
+            port:          node["postgresql"]["config"]["port"]
 end
 
 
@@ -99,59 +104,64 @@ end
 app_user_home = node["appbox"]["apps_dir"]
 app_user = node["appbox"]["apps_user"]
 # .profile
-unless node["cloud-benchmarking-server"]["preserve_secret_config"]
+if node["cloud-benchmarking-server"]["apply_secret_config"]
   template "#{app_user_home}/.profile" do
     source "dot_profile.erb"
+    backup false
     owner app_user
     group app_user
     mode 0600
     variables chef: node["cloud-benchmarking-server"]["chef"],
               aws:  node["cloud-benchmarking-server"]["aws"]
   end
-end
 
-# Chef server config
-chef_dir = "#{app_user_home}/.chef"
-# .chef directory
-directory chef_dir do
-  owner app_user
-  group app_user
-  mode 00755
-end
+  # Chef server config
+  chef_dir = "#{app_user_home}/.chef"
+  # .chef directory
+  directory chef_dir do
+    owner app_user
+    group app_user
+    mode 00755
+  end
 
-# knife.rb
-template "#{chef_dir}/knife.rb" do
-  source "knife.rb.erb"
-  owner app_user
-  group app_user
-  mode 0644
-  variables home_dir: app_user_home
-end
+  # knife.rb
+    template "#{chef_dir}/knife.rb" do
+      source "knife.rb.erb"
+      backup false
+      owner app_user
+      group app_user
+      mode 0644
+      variables home_dir: app_user_home
+    end
 
-# Client key of node
-template "#{chef_dir}/#{node["cloud-benchmarking-server"]["chef"]["client_key_name"]}.pem" do
-  source "empty.erb"
-  owner app_user
-  group app_user
-  mode 0600
-  variables content: node["cloud-benchmarking-server"]["chef"]["client_key"]
-end
+  # Client key of node
+    template "#{chef_dir}/#{node["cloud-benchmarking-server"]["chef"]["client_key_name"]}.pem" do
+      source "empty.erb"
+      backup false
+      owner app_user
+      group app_user
+      mode 0600
+      variables content: node["cloud-benchmarking-server"]["chef"]["client_key"]
+    end
 
-# Chef validator key
-template "#{chef_dir}/chef-validator.pem" do
-  source "empty.erb"
-  owner app_user
-  group app_user
-  mode 0600
-  variables content: node["cloud-benchmarking-server"]["chef"]["validator_key"]
-end
+  # Chef validator key
+    template "#{chef_dir}/chef-validator.pem" do
+      source "empty.erb"
+      backup false
+      owner app_user
+      group app_user
+      mode 0600
+      variables content: node["cloud-benchmarking-server"]["chef"]["validator_key"]
+    end
 
 
-# AWS config
-template "#{app_user_home}/.ssh/#{node["cloud-benchmarking-server"]["aws"]["ssh_key_name"]}.pem" do
-  source "empty.erb"
-  owner app_user
-  group app_user
-  mode 0600
-  variables content: node["cloud-benchmarking-server"]["aws"]["ssh_key"]
+  # AWS config
+    template "#{app_user_home}/.ssh/#{node["cloud-benchmarking-server"]["aws"]["ssh_key_name"]}.pem" do
+      source "empty.erb"
+      backup false
+      owner app_user
+      group app_user
+      mode 0600
+      variables content: node["cloud-benchmarking-server"]["aws"]["ssh_key"]
+    end
 end

@@ -3,9 +3,9 @@ production:
   timeout: 5000
   encoding: utf8
   reconnect: true
-  database: <%= node["databox"]["databases"]["postgresql"][0]["database_name"] %>
+  database: <%= @database_name %>
   pool: 5
-  username: <%= node["databox"]["databases"]["postgresql"][0]["username"] %>
-  password: <%= node["databox"]["databases"]["postgresql"][0]["password"] %>
+  username: <%= @username %>
+  password: <%= @password %>
   host: localhost
-  port: <%= node["postgresql"]["config"]["port"] %>
+  port: <%= @port %>
