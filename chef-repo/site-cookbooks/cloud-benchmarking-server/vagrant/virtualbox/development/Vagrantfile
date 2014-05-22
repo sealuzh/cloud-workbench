@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'pathname'
+vagrant_base_dir = Pathname.new(__FILE__).parent.parent.parent.expand_path
+
+COOKBOOKS_PATH = File.expand_path("#{vagrant_base_dir}/../berks-cookbooks")
+CHEF_KEYS_DIR = vagrant_base_dir.to_s
+
+# Import parent configs and pass local context (e.g. variables)
+base_config = File.read "#{vagrant_base_dir}/Vagrantfile.base"
+eval(base_config, binding)
+virtualbox_config = File.read "#{vagrant_base_dir}/virtualbox/Vagrantfile.virtualbox"
+eval(virtualbox_config, binding)
+
+Vagrant.configure("2") do |config|
+  # Enable if you want to use an attached terminal
+  # config.ssh.pty = true
+
+  # Give more power than the default config
+  config.vm.provider :virtualbox do |vb|
+    vb.memory = 3000
+    vb.cpus = 4
+  end
+
+  config.vm.provision :chef_solo, id: 'chef_solo' do |chef|
+    chef.json = CHEF_JSON.deep_merge(
+    {
+        "cloud-benchmarking-server" => {
+            "apply_secret_config" => true,
+            "chef" => {
+                "server_ip" => ENV['CHEF_SERVER_IP'] || "33.33.33.50",
+            },
+            "delayed_job" => {
+                "worker_processes" => "2"
+            },
+        },
+    })
+  end
+end
