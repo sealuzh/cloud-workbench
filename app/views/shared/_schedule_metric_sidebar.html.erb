@@ -1,23 +1,21 @@
-  <div class="well">
-    <h3>Schedule</h3>
+<div class="well">
+  <h3>Schedule</h3>
+  <% if benchmark_schedule.present? %>
+    <%= render benchmark_schedule %>
+    <%= link_to "#{edit_icon}&nbsp;Edit Schedule".html_safe, edit_benchmark_schedule_path(benchmark_schedule), class: 'btn btn-default btn-margin' %>
+    <%= toggle_benchmark_schedule_btn(benchmark_schedule) %>
+  <% else %>
+    <%= link_to "#{schedule_icon}&nbsp;Create Schedule".html_safe, new_benchmark_definition_benchmark_schedule_path(benchmark_definition), class: 'btn btn-default btn-margin' %>
+  <% end %>
 
-    <% if benchmark_schedule.present? %>
-      <%= render benchmark_schedule %>
-      <%= link_to "#{edit_icon}&nbsp;Edit Schedule".html_safe, edit_benchmark_schedule_path(benchmark_schedule), class: 'btn btn-default btn-margin' %>
-      <%= toggle_benchmark_schedule_btn(benchmark_schedule) %>
-    <% else %>
-      <%= link_to "#{schedule_icon}&nbsp;Create Schedule".html_safe, new_benchmark_definition_benchmark_schedule_path(benchmark_definition), class: 'btn btn-default btn-margin' %>
-    <% end %>
-
-
-    <h3>Metrics</h3>
-    <%= link_to "#{create_icon}&nbsp;Create New Metric Definition".html_safe,
-                new_benchmark_definition_metric_definition_path(benchmark_definition),
-                class: 'btn btn-primary btn-block wrap-line' %>
-    <br>
-    <table class="table">
-      <tbody>
-        <%= render metric_definitions %>
-      </tbody>
-    </table>
-  </div>
+  <h3>Metrics</h3>
+  <%= link_to "#{create_icon}&nbsp;Create New Metric Definition".html_safe,
+              new_benchmark_definition_metric_definition_path(benchmark_definition),
+              class: 'btn btn-primary btn-block wrap-line' %>
+  <br>
+  <table class="table">
+    <tbody>
+    <%= render metric_definitions %>
+    </tbody>
+  </table>
+</div>

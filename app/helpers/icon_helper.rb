@@ -67,4 +67,8 @@ module IconHelper
   def expand_icon
     fa_icon 'plus'
   end
+
+  def download_icon
+    fa_icon 'download'
+  end
 end

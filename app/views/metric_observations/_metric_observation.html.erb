@@ -1,0 +1,11 @@
+<% vm_instance = metric_observation.virtual_machine_instance %>
+<% benchmark_execution = vm_instance.benchmark_execution %>
+<tr>
+  <td><%= link_to formatted_time(benchmark_execution.benchmark_start_time), benchmark_execution %></td>
+  <td><%= vm_instance.provider_name %></td>
+  <td><%= vm_instance.provider_instance_id %></td>
+  <td><%= vm_instance.role %></td>
+  <td><%= metric_observation.time %></td>
+  <td><%= metric_observation.value %></td>
+  <td><%= link_to delete_icon, metric_observation, method: :delete, class: 'delete' %></td>
+</tr>

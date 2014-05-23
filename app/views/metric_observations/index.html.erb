@@ -1,0 +1,32 @@
+<% provide(:title, "Metric Observations of #{metric_definition_description(@metric_definition)}") %>
+<% benchmark_definition = @metric_definition.benchmark_definition %>
+<% content_header('Metric Observations',
+                  "of #{metric_definition_description(@metric_definition)}
+                   belonging to #{link_to benchmark_definition.name, benchmark_definition}
+                   and having <em>#{@metric_definition.scale_type}</em> scale") %>
+
+<%= link_to "#{download_icon}&nbsp;Download all as CSV".html_safe,
+            params.merge(format: :csv), class: 'btn btn-primary pull-right' %>
+
+<%= will_paginate %>
+<div class="box-body table-condensed">
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>Benchmark Start Time</th>
+      <th>Provider Name</th>
+      <th>Provider id</th>
+      <th>VM Role</th>
+      <th>Time</th>
+      <th>Value (<%= @metric_definition.unit %>)</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+      <% @metric_observations.each do |metric_observation| %>
+        <%= render 'metric_observation', metric_observation: metric_observation %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%= will_paginate %>
