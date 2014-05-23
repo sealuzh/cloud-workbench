@@ -144,9 +144,25 @@ Run the tests with `bundle exec rake` or `bundle exec rspec spec/`
 
 ### Guard and Spork
 
-Start Guard and Spork with `bundle exec guard`. This will preload the testing environment once and automatically execute the affeced tests when files have been modified.
+Start Guard and Spork with `bundle exec guard`.
+This will preload the testing environment once and automatically execute the affected tests when files have been modified. Manually run all test with `all` in the interactive Spork console.
 
 Automatic page reload on file change is supported for Safari, Chrome and Firefox via plugin from http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-
+
+
+### Slow tests
+
+Test tagged as slow are excluded from being run by default. Explicitly run them via `rspec --tag slow spec/`
+
+Tests can be tagged as slow by passing the :slow symbol
+```ruby
+describe 'a tagged test', :slow do
+  it 'does some complex calculations' do
+    expect(Universe.answer).to eq(42)
+  end
+end
+```
+Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-control-with-rspecs-tag-filters/
 
 
 ## Limitations

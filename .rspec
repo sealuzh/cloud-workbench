@@ -1,3 +1,9 @@
 --drb
---colour
+
+# Run the tests with console colored output
+--color
 --format Fuubar
+
+# Skip all tests tagged with "integration" or "slow"
+--tag ~integration
+--tag ~slow
