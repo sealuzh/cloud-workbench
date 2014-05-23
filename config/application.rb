@@ -1,5 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
+require 'csv'
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -46,7 +47,7 @@ module CloudBenchmarking
     config.templates = File.join(Rails.root, 'lib', 'templates')
 
     # Benchmark definition
-    config.vagrantfile_template = File.join(config.templates, 'erb', 'Vagrantfile.erb')
+    config.vagrantfile_template = File.join(config.templates, 'erb', 'Vagrantfile_template.erb')
 
     # Benchmark execution
     config.benchmark_executions = File.join(config.storage, 'benchmark_executions')

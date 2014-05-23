@@ -37,7 +37,7 @@ FactoryGirl.define do
   end
 
   factory :vagrant_driver do
-    vagrantfile_path "#{Rails.root}/spec/files/vagrant_driver/single_aws_instance/Vagrantfile"
+    vagrantfile_path "#{Rails.application.config.spec_files}/vagrant_driver/single_aws_instance/Vagrantfile"
     log_dir nil
 
     initialize_with { new(vagrantfile_path, log_dir) }

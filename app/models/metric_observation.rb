@@ -3,6 +3,7 @@ class MetricObservation
   attr_accessor(:provider_name, :provider_instance_id)
   attr_reader(:concrete_metric_observation)
 
+  extend TimeHelper
   include ActiveModel::Model
   extend Forwardable
 
@@ -20,23 +21,22 @@ class MetricObservation
     false
   end
 
-  def initialize(args = {})
-    # Delete used arguments to prevent mass assignment error later
-    @provider_name = args.delete :provider_name
-    @provider_instance_id = args.delete :provider_instance_id
-    # Use NominalMetricObservation as default implementation if none is provided as
-    # the string value is more generic than the float of OrderedMetricObservation
-    @concrete_metric_observation = args[:default_implementation] || NominalMetricObservation.new(args)
+  def self.create!(params)
+    metric_definition = MetricDefinition.find(params[:metric_definition_id])
+    vm_instance = VirtualMachineInstance.where(provider_name: params[:provider_name],
+                                               provider_instance_id: params[:provider_instance_id]).first
+    metric_definition.create_observation!(params[:time], params[:value], vm_instance.id)
   end
 
-  def save
-    complete_attributes
-    @concrete_metric_observation.save
-  end
-
-  def save!
-    complete_attributes
-    @concrete_metric_observation.save!
+  TIME_COL = 0
+  VALUE_COL = 1
+  def self.import!(params)
+    metric_definition = MetricDefinition.find(params[:metric_definition_id])
+    vm_instance = VirtualMachineInstance.where(provider_name: params[:provider_name],
+                                               provider_instance_id: params[:provider_instance_id]).first
+    CSV.foreach(params[:file].path) do |row|
+      metric_definition.create_observation!(row[TIME_COL], row[VALUE_COL], vm_instance.id)
+    end
   end
 
   # You MUST provide a metric_definition_id as argument
@@ -58,24 +58,37 @@ class MetricObservation
     # TODO: Continue impl.
   end
 
-  private
-
-    def complete_attributes
-      virtual_machine_instance = VirtualMachineInstance.where(provider_name: @provider_name,
-                                                              provider_instance_id: @provider_instance_id).first
-      metric_definition = MetricDefinition.find(metric_definition_id)
-      if metric_definition.scale_type.nominal?
-        @concrete_metric_observation = NominalMetricObservation.new(metric_definition_id: metric_definition_id,
-                                                                    virtual_machine_instance_id: virtual_machine_instance.id,
-                                                                    time: time, value: value)
-      else
-        @concrete_metric_observation = OrderedMetricObservation.new(metric_definition_id: metric_definition_id,
-                                                                    virtual_machine_instance_id: virtual_machine_instance.id,
-                                                                    time: time, value: value)
+  def self.to_csv(metric_observations)
+    CSV.generate do |csv|
+      csv << ['Benchmark Start Time', 'Provider Name', 'Provider VM Id', 'VM Role', 'Time', "Value #{first_observation.metric_definition.unit}"]
+      metric_observations.each do |metric_observation|
+        vm = metric_observation.virtual_machine_instance
+        csv << [formatted_time(vm.benchmark_execution.benchmark_start_time),
+                vm.provider_name,
+                vm.provider_instance_id,
+                vm.role,
+                metric_observation.time,
+                metric_observation.value
+               ]
       end
     end
+  end
 
-    def self.scope_builder
-      DynamicDelegator.new(scoped)
+  # Note: This query is expensive
+  def self.with_query_params(params)
+    metric_definition_id = params[:metric_definition_id]
+    fail 'Listing metric observations requires a <strong>metric_definition_id</strong> as parameter.' if params[:metric_definition_id].nil?
+    metric_definition = MetricDefinition.find(metric_definition_id)
+    fail "There exists no metric definition with the provided metric_definition_id #{metric_definition_id}" if metric_definition.nil?
+    observations = self.where(metric_definition_id: metric_definition.id)
+
+    # Filter by execution
+    execution_id = params[:benchmark_execution_id]
+    if execution_id.present?
+      execution = BenchmarkExecution.find(execution_id)
+      fail "There exists no benchmark_execution with the provided benchmark_execution_id #{metric_definition_id}" if execution.nil?
+      observations = observations.joins(execution.virtual_machine_instances)
     end
+    observations
+  end
 end

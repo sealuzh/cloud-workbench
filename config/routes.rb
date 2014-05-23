@@ -28,67 +28,17 @@ CloudBenchmarking::Application.routes.draw do
   end
   resources :metric_definitions, only: [:show, :edit]
 
-  resources :metric_observations, only: [:new, :create]
-  resources :nominal_metric_observations, only: [:show]
-  resources :ordered_metric_observations, only: [:show]
+  resources :metric_observations, only: [:create, :index] do
+    collection { post :import }
+  end
+  resources :nominal_metric_observations, only: [:destroy]
+  resources :ordered_metric_observations, only: [:destroy]
 
-  resources :virtual_machine_instances
-  # Used from benchmark helper on VMs
-  put 'virtual_machine_instance/benchmark_completed'      => 'virtual_machine_instances#benchmark_completed'
-  put 'virtual_machine_instance/postprocessing_completed' => 'virtual_machine_instances#postprocessing_completed'
-
-
-  ## Rails generated examples
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # Example of regular route:
-  #   get 'products/:id' => 'catalog#view'
-
-  # Example of named route that can be invoked with purchase_url(id: product.id)
-  #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
-
-  # Example resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
-
-  # Example resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
-
-  # Example resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Example resource route with more complex sub-resources:
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', on: :collection
-  #     end
-  #   end
-
-  # Example resource route with concerns:
-  #   concern :toggleable do
-  #     post 'toggle'
-  #   end
-  #   resources :posts, concerns: :toggleable
-  #   resources :photos, concerns: :toggleable
-
-  # Example resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
+  resources :virtual_machine_instances do
+    # Used from benchmark helper client on VMs
+    collection do
+      post :complete_benchmark
+      post :complete_postprocessing
+    end
+  end
 end

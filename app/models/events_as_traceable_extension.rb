@@ -1,6 +1,6 @@
 module EventsAsTraceableExtension
-  def create_with_name!(name)
-    create!(name: name, happened_at: Time.current)
+  def create_with_name!(name, message = '')
+    create!(name: name, happened_at: Time.current, message: message)
   end
 
   def first_with_name(name)

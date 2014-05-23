@@ -1,82 +1,49 @@
 class VirtualMachineInstancesController < ApplicationController
-  before_action :set_virtual_machine_instance, only: [:show, :edit, :update, :destroy]
+  before_action :set_virtual_machine_instance, only: [:destroy]
+  before_action :search_virtual_machine_instance, only: [:complete_benchmark, :complete_postprocessing]
 
-  # GET /virtual_machine_instances
   def index
     @virtual_machine_instances = VirtualMachineInstance.paginate(page: params[:page])
   end
 
-  # GET /virtual_machine_instances/1
-  def show
-  end
-
-  # GET /virtual_machine_instances/new
-  def new
-    @virtual_machine_instance = VirtualMachineInstance.new
-  end
-
-  # GET /virtual_machine_instances/1/edit
-  def edit
-  end
-
-  # POST /virtual_machine_instances
-  def create
-    @virtual_machine_instance = VirtualMachineInstance.new(virtual_machine_instance_params)
-
-    if @virtual_machine_instance.save
-      redirect_to @virtual_machine_instance, notice: 'Virtual machine instance was successfully created.'
+  def complete_benchmark
+    if @virtual_machine_instance.present?
+      continue = params[:continue].present? ? boolean_value(params[:continue]) : true
+      @virtual_machine_instance.complete_benchmark(continue, boolean_value(params[:success]))
+      head 200 # ok
     else
-      render action: 'new'
+      head 422 # unprocessable_entity
     end
   end
 
-  # PATCH/PUT /virtual_machine_instances/1
-  def update
-    if @virtual_machine_instance.update(virtual_machine_instance_params)
-      redirect_to @virtual_machine_instance, notice: 'Virtual machine instance was successfully updated.'
+  def complete_postprocessing
+    if @virtual_machine_instance.present?
+      @virtual_machine_instance.complete_postprocessing(boolean_value(params[:success]))
+      head 200 # ok
     else
-      render action: 'edit'
+      head 422 # unprocessable_entity
     end
   end
 
-  # PATCH/PUT /virtual_machine_instance/benchmark_completed
-  # TODO: How can this action be improved to adhere to RESTful design principles?
-  def benchmark_completed
-    @virtual_machine_instance = VirtualMachineInstance.where(provider_name: params[:provider_name], provider_instance_id: params[:provider_instance_id]).first
-    unless @virtual_machine_instance.nil?
-      Delayed::Job.enqueue(StartPostprocessingJob.new(@virtual_machine_instance.benchmark_execution_id))
-      render status: 200, json: @virtual_machine_instance.to_json
-    else
-      render action: 'edit'
-    end
-  end
-
-  # PATCH/PUT /virtual_machine_instance/postprocessing_completed
-  # TODO: How can this action be improved to adhere to RESTful design principles?
-  def postprocessing_completed
-    @virtual_machine_instance = VirtualMachineInstance.where(provider_name: params[:provider_name], provider_instance_id: params[:provider_instance_id]).first
-    unless @virtual_machine_instance.nil?
-      Delayed::Job.enqueue(ReleaseResourcesJob.new(@virtual_machine_instance.benchmark_execution_id))
-      render status: 200, json: @virtual_machine_instance.to_json
-    else
-      render action: 'edit'
-    end
-  end
-
-  # DELETE /virtual_machine_instances/1
   def destroy
     @virtual_machine_instance.destroy
     redirect_to virtual_machine_instances_url
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_virtual_machine_instance
       @virtual_machine_instance = VirtualMachineInstance.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def search_virtual_machine_instance
+      @virtual_machine_instance = VirtualMachineInstance.where(provider_name: params[:provider_name], provider_instance_id: params[:provider_instance_id]).first
+    end
+
     def virtual_machine_instance_params
       params.require(:virtual_machine_instance).permit(:benchmark_execution_id, :status, :provider_name, :provider_instance_id)
+    end
+
+    def boolean_value(param)
+      params[:continue].to_s == 'true'
     end
 end
