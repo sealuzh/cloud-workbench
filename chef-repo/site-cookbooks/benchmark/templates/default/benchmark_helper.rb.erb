@@ -2,49 +2,78 @@ require 'rest_client'
 require 'csv'
 class BenchmarkHelper
   SERVER_URL = '<%= @workbench_server %>'
-  INSTANCE_ID = '<%= @instance_id %>'
+  PROVIDER_INSTANCE_ID = '<%= @provider_instance_id %>'
+  PROVIDER_NAME = '<%= @provider_name %>'
+
+  METRIC_OBSERVATIONS = 'metric_observations'
+  METRIC_OBSERVATIONS_RESOURCE = RestClient::Resource.new "#{SERVER_URL}/#{METRIC_OBSERVATIONS}"
   
-  
-  METRIC_OBSERVATION = 'metric_observations'
-  METRIC_OBSERVATION_RESOURCE = RestClient::Resource.new "#{SERVER_URL}/#{METRIC_OBSERVATION}"
-  
-  VM_INSTANCE = 'virtual_machine_instance'
+  VM_INSTANCE = 'virtual_machine_instances'
   VM_INSTANCE_RESOURCE = RestClient::Resource.new "#{SERVER_URL}/#{VM_INSTANCE}"
-  
-  def self.notify_benchmark_completed
-    VM_INSTANCE_RESOURCE['benchmark_completed'].put(
-    provider_name: 'aws',
-    provider_instance_id: INSTANCE_ID,
-    :virtual_machine_instance => {
-      benchmark_state: 'POSTPROCESSING'
-    })
-  end
-  
+
+  # Submit a single metric
   def self.submit_metric(metric_definition_id, time, value)
-    METRIC_OBSERVATION_RESOURCE.post(
-      :metric_observation => {
-        metric_definition_id: metric_definition_id,
-        provider_name: 'aws',
-        provider_instance_id: INSTANCE_ID,
-        time: time,
-        value: value
+    METRIC_OBSERVATIONS_RESOURCE.post(
+      {
+        :metric_observation => {
+          metric_definition_id: metric_definition_id,
+          provider_name: PROVIDER_NAME,
+          provider_instance_id: PROVIDER_INSTANCE_ID,
+          time: time,
+          value: value
+        }
       })
   end
 
-  # TODO: Implement bulk upload (server side support missing yet)
+  # Submit a csv file with metrics
   def self.submit_metrics(metric_definition_id, csv_file)
-    CSV.foreach(csv_file) do |row|
-      self.submit_metric(metric_definition_id, row[0], row[1])
+    METRIC_OBSERVATIONS_RESOURCE['import'].post(
+        {
+            metric_observation: {
+              metric_definition_id: metric_definition_id,
+              provider_name: PROVIDER_NAME,
+              provider_instance_id: PROVIDER_INSTANCE_ID,
+              file: File.new(csv_file, 'rb')
+            }
+        })
+  end
+
+
+  ### Notifications to the Cloud-WorkBench
+
+  # Benchmark has been completed and postprocessing will be started immediately
+  def self.notify_benchmark_completed_and_continue(success = true, message = '')
+    self.notify_benchmark_completed(success, message, continue: true)
+  end
+
+  # Benchmark has been completed and postprocessing won't be started now
+  # The Cloud-WorkBench starts the postprocessing on the primary machine
+  def self.notify_benchmark_completed_and_wait(success = true, message = '')
+    self.notify_benchmark_completed(success, message, continue: false)
+  end
+
+  def self.notify_benchmark_completed(success = true, message = '', opts = {})
+    resource = VM_INSTANCE_RESOURCE['complete_benchmark']
+    post_notify(resource, success, message, opts)
+  end
+
+  # Postprocessing has been completed
+  # The Cloud-WorkBench will terminate all instances of this benchmark execution
+  def self.notify_postprocessing_completed(success = true, message = '')
+    resource = VM_INSTANCE_RESOURCE['complete_postprocessing']
+    post_notify(resource, success, message, opts)
+  end
+
+
+  private
+
+    def self.post_notify(resource, success = true, message = '', opts = {})
+      resource.post(
+          {
+              provider_name: PROVIDER_NAME,
+              provider_instance_id: PROVIDER_INSTANCE_ID,
+              success: success.to_s,
+              message: message,
+          }.merge(opts))
     end
-  end
-  
-  def self.notify_postprocessing_completed
-    VM_INSTANCE_RESOURCE['postprocessing_completed'].put(
-    provider_name: 'aws',
-    provider_instance_id: INSTANCE_ID,
-    :virtual_machine_instance => {
-      benchmark_state: 'RELEASING_RESOURCES'
-    })
-  end
-  
 end
