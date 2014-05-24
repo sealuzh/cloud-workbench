@@ -1,0 +1,12 @@
+<div class="box collapsed-box">
+  <div class="box-header">
+    <h3 class="box-title"><%= pluralize(vm_instances.count, 'Virtual Machine Instance') %></h3>
+    <%= will_paginate vm_instances, class: 'pagination-box' %>
+    <div class="box-tools pull-right">
+      <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><%= fa_icon 'minus' %></button>
+    </div>
+  </div>
+  <div class="box-body table-responsive">
+    <%= render 'shared/virtual_machine_instances', show_benchmark_definition: false %>
+  </div>
+</div>

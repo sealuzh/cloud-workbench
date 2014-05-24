@@ -1,6 +1,6 @@
 <ul class="sidebar-menu">
   <li>
-    <%= link_to dashboard_path do %>
+    <%= link_to dashboards_show_path do %>
       <%= dashboard_icon %>&nbsp;<span class="link-title">Dashboard</span>
     <% end %>
   </li>
@@ -14,12 +14,13 @@
   <li>
     <%= link_to benchmark_executions_path do %>
       <%= execution_icon %>&nbsp;<span class="link-title">Executions</span>
+      <%= actives_badge(BenchmarkExecution.actives.count) %>
     <% end %>
   </li>
   <li>
     <%= link_to benchmark_schedules_path do %>
       <%= schedule_icon %>&nbsp;<span class="link-title">Schedules</span>
-      <small class="badge badge-schedules pull-right bg-green"><%= BenchmarkSchedule.actives.count %></small>
+      <%= actives_badge(BenchmarkSchedule.actives.count) %>
     <% end %>
   </li>
   <li class="sidebar-divider"></li>

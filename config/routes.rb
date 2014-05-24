@@ -1,6 +1,6 @@
 CloudBenchmarking::Application.routes.draw do
   root 'benchmark_definitions#index'
-  get '/dashboard', to: redirect('/benchmark_definitions#index')
+  get 'dashboards/show'
 
   # Exceptions
   %w( 404 422 500 ).each do |code|

@@ -27,7 +27,7 @@ module BenchmarkSchedulesHelper
   def total_active_schedules_badge(opts = {})
     actives_count = BenchmarkSchedule.actives.count
     unless opts[:conditional].present? && opts[:conditional].to_s == 'true' && actives_count <= 0
-      link_to actives_count, benchmark_schedules_path(active: true), class: "badge bg-green badge-schedules #{opts[:html_class]}"
+      link_to actives_count, benchmark_schedules_path(active: true), class: "badge bg-green badge-total #{opts[:html_class]}"
     end
   end
 

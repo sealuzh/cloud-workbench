@@ -15,7 +15,7 @@
       <%= pluralize(benchmark_definition.benchmark_executions.count, 'Execution') %>
     <% end %>
     <% if benchmark_definition.benchmark_executions.has_active? %>
-      &nbsp;<small class="badge bg-green"><%= benchmark_definition.benchmark_executions.actives.count %></small>
+      &nbsp;<%= total_active_executions_badge %>
     <% end %>
   </td>
   <td>

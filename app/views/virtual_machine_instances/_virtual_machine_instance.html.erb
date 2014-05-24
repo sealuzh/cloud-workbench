@@ -1,0 +1,9 @@
+<% execution = virtual_machine_instance.benchmark_execution %>
+<% benchmark_definition = execution.benchmark_definition %>
+<tr>
+  <td><%= execution_status_label(execution) %></td>
+  <td><%= link_to benchmark_definition.name, benchmark_definition %></td>
+  <td><%= link_to formatted_time(execution.execution_start_time, :date_and_time_short), execution %></td>
+  <td><%= virtual_machine_instance.provider_name %></td>
+  <td><%= virtual_machine_instance.provider_instance_id %></td>
+</tr>

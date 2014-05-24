@@ -23,7 +23,8 @@
 <% else %>
   <!-- Index all benchmark_executions -->
   <% provide(:title, 'Benchmark Executions') %>
-  <% content_header('Benchmark Executions') %>
+  <% all_executions_link = link_to pluralize(@benchmark_executions.count, 'Benchmark Execution'), benchmark_executions_path %>
+  <% content_header("#{all_executions_link} #{total_active_executions_badge(html_class: 'badge-lg')}") %>
 
   <%= will_paginate @benchmark_executions %>
   <%= render 'shared/benchmark_executions', show_benchmark_definition: true %>

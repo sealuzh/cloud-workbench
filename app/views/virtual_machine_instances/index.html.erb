@@ -1,36 +1,22 @@
-<h2>VM-Instances</h2>
+<% vms = 'Virtual Machine Instances' %>
+<% provide(:title, vms) %>
+<% content_header(vms) %>
 
 <%= will_paginate @virtual_machine_instances %>
-<div id='defaultTable' class='body'>
-  <table class='table responsive-table'>
+
+<div class="box-body table-responsive">
+  <table class="table table-hover">
     <thead>
     <tr>
-      <th>Link</th>
-      <th>Benchmark</th>
-      <th>Execution</th>
-      <th>Status</th>
+      <th>Execution Status</th>
+      <th>Benchmark Definition</th>
+      <th>Execution Start Time</th>
       <th>Provider</th>
       <th>Provider Instance Id</th>
     </tr>
     </thead>
     <tbody>
-    <% @virtual_machine_instances.each do |vm_instance| %>
-      <% benchmark_execution = vm_instance.benchmark_execution %>
-      <% benchmark_definition = benchmark_execution.benchmark_definition %>
-      <tr>
-        <td>
-          <%= link_to vm_instance do %>
-            <i class='fa fa-link'></i>
-          <% end %>
-        </td>
-        <td><%= link_to benchmark_definition.name, benchmark_definition %></td>
-        <td>
-          <%= link_to formatted_time(benchmark_execution.execution_start_time), benchmark_execution %>
-        </td>
-        <td><%= vm_instance.status %></td>
-        <td><%= vm_instance.provider_name %></td>
-        <td><%= vm_instance.provider_instance_id %></td>
-    <% end %>
+    <%= render @virtual_machine_instances %>
     </tbody>
   </table>
 </div>

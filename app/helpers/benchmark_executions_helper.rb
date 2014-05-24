@@ -3,9 +3,9 @@ module BenchmarkExecutionsHelper
     if execution.failed?
       type = 'danger'
     elsif execution.active?
-      type = 'default'
-    elsif execution.finished?
       type = 'success'
+    elsif execution.finished?
+      type = 'default'
     elsif execution.inactive?
       type = 'warning'
     end
@@ -41,6 +41,13 @@ module BenchmarkExecutionsHelper
       distance_of_time_in_words(execution.benchmark_duration).humanize
     else
       'Not started yet.'
+    end
+  end
+
+  def total_active_executions_badge(opts = {})
+    actives_count = BenchmarkExecution.actives.count
+    unless opts[:conditional].present? && opts[:conditional].to_s == 'true' && actives_count <= 0
+      link_to actives_count, benchmark_executions_path(active: true), class: "badge bg-green badge-total #{opts[:html_class]}"
     end
   end
 end

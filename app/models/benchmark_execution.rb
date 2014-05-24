@@ -1,4 +1,6 @@
 class BenchmarkExecution < ActiveRecord::Base
+  PROVIDER = 'aws'
+  PRIORITY_HIGH = 1
   belongs_to :benchmark_definition
   validates :benchmark_definition, presence: true
   has_many :virtual_machine_instances, dependent: :destroy
@@ -6,12 +8,13 @@ class BenchmarkExecution < ActiveRecord::Base
     include EventsAsTraceableExtension
   end
 
-  PROVIDER = 'aws'
-  PRIORITY_HIGH = 1
-
   def active?
     # Executions without id may just be built from a view (e.g. start execution button) and does not really exist
     id.present? && !has_event_with_name?(:finished_releasing_resources) && !has_event_with_name?(:failed_on_releasing_resources)
+  end
+
+  def self.actives
+    select { |execution| execution.active? }
   end
 
   def inactive?
@@ -100,15 +103,13 @@ class BenchmarkExecution < ActiveRecord::Base
     # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
   rescue => e
-    # TODO: Handle vagrant up failure appropriately!!! Throw and catch (here) app specific error.
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
   end
 
   def detect_and_create_vm_instances_with(driver)
     vm_instances = driver.detect_vm_instances
     vm_instances.each do |vm|
-      self.virtual_machine_instances.create(status: self.status,
-                                            provider_name: vm[:provider_name],
+      self.virtual_machine_instances.create(provider_name: vm[:provider_name],
                                             provider_instance_id: vm[:provider_instance_id],
                                             role: vm[:role])
     end
@@ -135,7 +136,6 @@ class BenchmarkExecution < ActiveRecord::Base
     start_benchmark_with(@benchmark_runner)
     # TODO: Think about is_alive timeout.
   rescue => e
-    # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
   end
 
@@ -153,7 +153,6 @@ class BenchmarkExecution < ActiveRecord::Base
     set_benchmark_runner_and_fs
     start_postprocessing_with(@benchmark_runner)
   rescue => e
-    # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
   end
 
@@ -171,7 +170,6 @@ class BenchmarkExecution < ActiveRecord::Base
     set_driver_and_fs
     release_resources_with(@driver)
   rescue => e
-    # TODO: Handle vagrant ssh failure appropriately!!! Throw and catch (here) app specific error.
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
   end
 

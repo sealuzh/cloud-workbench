@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140523213549) do
+ActiveRecord::Schema.define(version: 20140524205047) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
@@ -110,7 +110,6 @@ ActiveRecord::Schema.define(version: 20140523213549) do
   add_index "ordered_metric_observations", ["virtual_machine_instance_id"], name: "index_ordered_metric_observations_on_vm_instance_id"
 
   create_table "virtual_machine_instances", force: true do |t|
-    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "benchmark_execution_id"

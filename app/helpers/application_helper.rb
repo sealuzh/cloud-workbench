@@ -5,5 +5,7 @@ module ApplicationHelper
     end
   end
 
-
+  def actives_badge(count)
+    "<small class='badge badge-total pull-right bg-green'>#{count}</small>".html_safe
+  end
 end
