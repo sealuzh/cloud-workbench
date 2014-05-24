@@ -6,6 +6,10 @@ class BenchmarkSchedulesController < ApplicationController
     @benchmark_schedule = @benchmark_definition.build_benchmark_schedule
   end
 
+  def index
+    @benchmark_schedules = BenchmarkSchedule.filter(params[:active]).paginate(page: params[:page])
+  end
+
   def edit
     @benchmark_definition = @benchmark_schedule.benchmark_definition
   end

@@ -4,4 +4,6 @@ module ApplicationHelper
       "<h1>#{title}<small>#{subtitle}</small></h1>".html_safe
     end
   end
+
+
 end

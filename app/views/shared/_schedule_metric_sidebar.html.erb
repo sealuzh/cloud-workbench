@@ -1,7 +1,10 @@
 <div class="well">
   <h3>Schedule</h3>
   <% if benchmark_schedule.present? %>
-    <%= render benchmark_schedule %>
+    <%= benchmark_schedule_label(benchmark_schedule, class: 'wrap-line', style: 'font-size: 13pt') %>
+    <br>
+    <br>
+    <blockquote <%= 'class=active' if benchmark_schedule.active? %> ><small><%= benchmark_schedule.cron_expression_in_english %></small></blockquote>
     <%= link_to "#{edit_icon}&nbsp;Edit Schedule".html_safe, edit_benchmark_schedule_path(benchmark_schedule), class: 'btn btn-default btn-margin' %>
     <%= toggle_benchmark_schedule_btn(benchmark_schedule) %>
   <% else %>

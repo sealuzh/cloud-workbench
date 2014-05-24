@@ -2,6 +2,7 @@ require 'pathname'
 require 'fileutils'
 require 'erb'
 class BenchmarkSchedule < ActiveRecord::Base
+  scope :actives, -> { where(active: true) }
   DEFAULT_TEMPLATE_PATH = Rails.application.config.benchmark_schedule_template
   DEFAULT_SCHEDULE_PATH = Rails.application.config.benchmark_schedule
   belongs_to :benchmark_definition
@@ -37,10 +38,6 @@ class BenchmarkSchedule < ActiveRecord::Base
     e.message
   end
 
-  def self.actives
-    BenchmarkSchedule.where("active = ?", true)
-  end
-
   def self.update_system_crontab
     schedule = generate_schedule_from_template(DEFAULT_TEMPLATE_PATH)
     write_content_to_file(schedule, DEFAULT_SCHEDULE_PATH)
@@ -61,6 +58,11 @@ class BenchmarkSchedule < ActiveRecord::Base
 
   def self.clear_system_crontab(schedule_path = DEFAULT_SCHEDULE_PATH)
     %x(whenever --clear-crontab -f "#{schedule_path}")
+  end
+
+  def self.filter(active_param)
+    active = active_param.to_bool rescue nil
+    active ? actives : all
   end
 
   private

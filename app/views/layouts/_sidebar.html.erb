@@ -19,6 +19,7 @@
   <li>
     <%= link_to benchmark_schedules_path do %>
       <%= schedule_icon %>&nbsp;<span class="link-title">Schedules</span>
+      <small class="badge badge-schedules pull-right bg-green"><%= BenchmarkSchedule.actives.count %></small>
     <% end %>
   </li>
   <li class="sidebar-divider"></li>
