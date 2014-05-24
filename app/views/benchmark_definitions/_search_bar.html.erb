@@ -1,0 +1,8 @@
+<%= form_tag benchmark_definitions_path, method: 'get', class: 'input-group' do %>
+  <%= text_field_tag :search, params[:search], class: 'form-control', placeholder: 'Search by name' %>
+  <div class="input-group-btn">
+    <%= button_tag(type: 'submit', class: 'btn btn-primary btn-flat') do %>
+      <%= search_icon %>
+    <% end %>
+  </div>
+<% end %>

@@ -71,4 +71,8 @@ module IconHelper
   def download_icon
     fa_icon 'download'
   end
+
+  def search_icon
+    fa_icon 'search'
+  end
 end

@@ -3,12 +3,7 @@
 
 <div class="row">
   <div class="col-xs-12 col-md-8 col-lg-6">
-    <%= form_tag benchmark_definitions_path, method: 'get', class: 'input-group' do %>
-      <%= text_field_tag :search, params[:search], class: 'form-control' %>
-      <span class="input-group-btn">
-        <%= submit_tag 'Search', name: nil, class: 'btn btn-primary btn-flat' %>
-      </span>
-    <% end %>
+    <%= render 'search_bar' %>
   </div>
   <div class="create-bm pull-right">
     <%= link_to new_benchmark_definition_path, class: 'btn btn-primary btn-lg' do %>
