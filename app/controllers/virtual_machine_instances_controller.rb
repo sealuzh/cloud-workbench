@@ -8,8 +8,9 @@ class VirtualMachineInstancesController < ApplicationController
 
   def complete_benchmark
     if @virtual_machine_instance.present?
-      continue = params[:continue].present? ? boolean_value(params[:continue]) : true
-      @virtual_machine_instance.complete_benchmark(continue, boolean_value(params[:success]))
+      cont = boolean_value(:continue, true)
+      success  = boolean_value(:success, true)
+      @virtual_machine_instance.complete_benchmark(cont, success)
       head 200 # ok
     else
       head 422 # unprocessable_entity
@@ -18,7 +19,8 @@ class VirtualMachineInstancesController < ApplicationController
 
   def complete_postprocessing
     if @virtual_machine_instance.present?
-      @virtual_machine_instance.complete_postprocessing(boolean_value(params[:success]))
+      success = boolean_value(:success, true)
+      @virtual_machine_instance.complete_postprocessing(success)
       head 200 # ok
     else
       head 422 # unprocessable_entity
@@ -43,7 +45,8 @@ class VirtualMachineInstancesController < ApplicationController
       params.require(:virtual_machine_instance).permit(:benchmark_execution_id, :status, :provider_name, :provider_instance_id)
     end
 
-    def boolean_value(param)
-      params[:continue].to_s == 'true'
+    def boolean_value(param, default)
+      string_boolean = params[param.to_sym]
+      string_boolean.present? ? string_boolean.to_bool : default
     end
 end
