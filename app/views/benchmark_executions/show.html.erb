@@ -4,8 +4,20 @@
 <% subtitle = "#{formatted_time(start_time, :time_only)} of #{link_to @benchmark_definition.name, @benchmark_definition}" %>
 <% content_header(title, subtitle) %>
 
-<div id="benchmark_execution" data-id='<%= @benchmark_execution.id %>'>
-  <%= render 'dashboard', benchmark_execution: @benchmark_execution %>
-  <br>
-  <%= render 'timeline', benchmark_execution: @benchmark_execution %>
+<%= render 'dashboard', benchmark_execution: @benchmark_execution %>
+<div class="row">
+  <div class="col-md-9" id="benchmark_execution" data-id='<%= @benchmark_execution.id %>'>
+    <br>
+    <%= render 'timeline', benchmark_execution: @benchmark_execution %>
+  </div>
+
+  <div class="col-md-3">
+    <div class="transparant-well">
+      <%= link_to @benchmark_execution, method: :delete, class: 'btn btn-danger btn-block',
+                  data: confirm_delete_execution_msg(@benchmark_execution) do %>
+        <%= delete_icon %>&nbsp;Delete
+      <% end %>
+    </div>
+    <%= schedule_metric_sidebar(@benchmark_definition, @benchmark_execution) %>
+  </div>
 </div>

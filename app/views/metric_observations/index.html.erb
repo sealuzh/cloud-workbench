@@ -1,14 +1,16 @@
 <% provide(:title, "Metric Observations of #{metric_definition_description(@metric_definition)}") %>
 <% benchmark_definition = @metric_definition.benchmark_definition %>
+<% execution_link = link_to("execution of #{formatted_time(@execution.execution_start_time, :date_and_time_short)}", @execution) rescue nil %>
 <% content_header('Metric Observations',
                   "of #{metric_definition_description(@metric_definition)}
-                   belonging to #{link_to benchmark_definition.name, benchmark_definition}
+                   belonging to #{(execution_link + ' of ') if execution_link.present?}
+                   #{link_to benchmark_definition.name, benchmark_definition}
                    and having <em>#{@metric_definition.scale_type}</em> scale") %>
 
 <%= link_to "#{download_icon}&nbsp;Download all as CSV".html_safe,
             params.merge(format: :csv), class: 'btn btn-primary pull-right' %>
 
-<%= will_paginate %>
+<%= will_paginate @metric_observations %>
 <div class="box-body table-condensed">
   <table class="table table-hover">
     <thead>
@@ -29,4 +31,4 @@
     </tbody>
   </table>
 </div>
-<%= will_paginate %>
+<%= will_paginate @metric_observations %>

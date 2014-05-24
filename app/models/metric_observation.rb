@@ -58,9 +58,11 @@ class MetricObservation
     # TODO: Continue impl.
   end
 
+  # Assumes that all observations are from the same metric_definition
   def self.to_csv(metric_observations)
+    metric_definition = metric_observations.first.metric_definition rescue nil
     CSV.generate do |csv|
-      csv << ['Benchmark Start Time', 'Provider Name', 'Provider VM Id', 'VM Role', 'Time', "Value #{first_observation.metric_definition.unit}"]
+      csv << ['Benchmark Start Time', 'Provider Name', 'Provider VM Id', 'VM Role', 'Time', "Value #{metric_definition.unit if metric_definition.present?}"]
       metric_observations.each do |metric_observation|
         vm = metric_observation.virtual_machine_instance
         csv << [formatted_time(vm.benchmark_execution.benchmark_start_time),
@@ -87,7 +89,7 @@ class MetricObservation
     if execution_id.present?
       execution = BenchmarkExecution.find(execution_id)
       fail "There exists no benchmark_execution with the provided benchmark_execution_id #{metric_definition_id}" if execution.nil?
-      observations = observations.joins(execution.virtual_machine_instances)
+      observations = observations.where(virtual_machine_instance_id: VirtualMachineInstance.select('id').where(benchmark_execution_id: execution_id))
     end
     observations
   end

@@ -73,6 +73,10 @@ class BenchmarkExecution < ActiveRecord::Base
     time_of_first_event_with_name(:created)
   end
 
+  def execution_started?
+    has_event_with_name?(:created)
+  end
+
   def execution_end_time
     time_of_first_event_with_name(:finished_releasing_resources) || time_of_first_event_with_name(:failed_on_releasing_resources)
   end

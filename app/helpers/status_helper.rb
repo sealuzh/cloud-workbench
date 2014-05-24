@@ -3,17 +3,30 @@ module StatusHelper
       'WAITING FOR',
       'FAILED ON',
   ]
-  def line_breaked_status(status)
+  def split_status(status)
     line_break_string = LINE_BREAK_STRINGS.find { |line_break_string| status.start_with?(line_break_string) }
-    if line_break_string
-      "#{line_break_string}<br>#{second_part(status, line_break_string)}".html_safe
-    else
-      status
-    end
+    line_break_string.present? ? [line_break_string, second_part(status, line_break_string)] : nil
+  end
+
+  def line_breaked_status(status)
+    parts = split_status(status)
+    parts.present? ? "#{parts[0]}<br>#{parts[1]}".html_safe : status
+  end
+
+  def status_first_part(status)
+    split_status(status)[0] rescue status
+  end
+
+  def status_second_part(status)
+    split_status(status)[1] rescue ''
   end
 
   def status_label(status, type = 'default')
     "<span class='label label-#{type}'>#{line_breaked_status(status)}</span>".html_safe
+  end
+
+  def status_link(status, type, path)
+    link_to line_breaked_status(status), path, class: "label label-#{type}"
   end
 
   def active_status(active)

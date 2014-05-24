@@ -1,42 +1,13 @@
-<table class='table responsive-table'>
+<table class='table table-hover'>
   <thead>
   <tr>
-    <th>Link</th>
-    <% if show_benchmark_definition %>
-    <th>Benchmark Definition</th>
-    <% end %>
     <th>Status</th>
-    <th>Benchmark started</th>
-    <th>Benchmark duration</th>
-    <th>Execution duration</th>
+    <th>Started (Execution/Benchmark)</th>
+    <th>Duration (Execution/Benchmark)</th>
+    <th></th>
   </tr>
   </thead>
   <tbody>
-  <% @benchmark_executions.each do |benchmark_execution| %>
-    <tr>
-      <td>
-        <%= link_to benchmark_execution do %>
-          <i class='fa fa-link fa-lg'></i>
-        <% end %>
-      </td>
-      <% if show_benchmark_definition %>
-      <td>
-        <%= link_to benchmark_execution.benchmark_definition.name, benchmark_execution.benchmark_definition %>
-      </td>
-      <% end %>
-      <td>
-        <%= line_breaked_status(benchmark_execution.status) %>
-      </td>
-      <td>
-        <%= formatted_time(benchmark_execution.benchmark_start_time) %>
-      </td>
-      <td>
-        <%= distance_of_time_in_words(benchmark_execution.benchmark_duration) rescue '-' %>
-      </td>
-      <td>
-        <%= distance_of_time_in_words(benchmark_execution.execution_duration) rescue '-' %>
-      </td>
-    </tr>
-  <% end %>
+    <%= render @benchmark_executions %>
   </tbody>
 </table>

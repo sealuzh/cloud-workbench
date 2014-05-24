@@ -1,0 +1,12 @@
+<div class="col-md-4">
+  <div class="small-box <%= widget_class %>">
+    <div class="inner">
+      <h3><%= header %></h3>
+      <p><%= paragraph.present? ? paragraph : "&nbsp;".html_safe %></p>
+    </div>
+    <div class="icon">
+      <%= icon %>
+    </div>
+    <span class="small-box-footer"><%= footer %></span>
+  </div>
+</div>

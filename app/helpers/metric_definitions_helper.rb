@@ -4,6 +4,6 @@ module MetricDefinitionsHelper
   end
 
   def metric_definition_description(metric_definition)
-    link_to "#{metric_definition.name} (#{metric_definition.unit})", metric_definition
+    link_to "#{metric_definition.name} (#{metric_definition.unit})", edit_metric_definition_path(metric_definition)
   end
 end

@@ -20,7 +20,7 @@ CloudBenchmarking::Application.routes.draw do
       patch 'deactivate'
     end
   end
-  resources :benchmark_executions, except: [:new, :create] do
+  resources :benchmark_executions, only: [:show, :index, :destroy] do
     member do
       get 'prepare_log'
       get 'release_resources_log'

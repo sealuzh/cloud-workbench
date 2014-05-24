@@ -9,7 +9,7 @@ module BenchmarkExecutionsHelper
     elsif execution.inactive?
       type = 'warning'
     end
-    status_label(execution.status, type)
+    status_link(execution.status, type, execution)
   end
 
   def confirm_start_execution_msg(execution)
@@ -33,6 +33,14 @@ module BenchmarkExecutionsHelper
       prepare_log_benchmark_execution_path(event.traceable, format: :txt)
     elsif event.started_releasing_resources?
       release_resources_log_benchmark_execution_path(event.traceable, format: :txt)
+    end
+  end
+
+  def benchmark_duration_formatted(execution)
+    if execution.benchmark_started?
+      distance_of_time_in_words(execution.benchmark_duration).humanize
+    else
+      'Not started yet.'
     end
   end
 end
