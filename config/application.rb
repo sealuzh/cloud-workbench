@@ -32,6 +32,9 @@ module CloudBenchmarking
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    # Suppress assets log in development
+    config.quiet_assets = true
+
     ### CloudBenchmarking settings
     # VMs
     config.vm_benchmark_dir = '/usr/local/cloud-benchmark'
