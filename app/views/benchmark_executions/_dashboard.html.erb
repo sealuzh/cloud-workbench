@@ -3,7 +3,7 @@
              widget_class: status_bg_color(benchmark_execution.failed?),
              header: status_first_part(benchmark_execution.status),
              paragraph: status_second_part(benchmark_execution.status),
-             icon: status_icon(benchmark_execution),
+             icon: status_icon(benchmark_execution.failed?),
              footer: 'Status' %>
 
 

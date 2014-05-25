@@ -27,7 +27,7 @@ CloudBenchmarking::Application.routes.draw do
       get 'release_resources_log'
     end
   end
-  resources :metric_definitions, only: [:show, :edit]
+  resources :metric_definitions, only: [:show, :edit, :destroy]
 
   resources :metric_observations, only: [:create, :index] do
     collection { post :import }

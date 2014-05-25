@@ -14,7 +14,7 @@ class MetricDefinitionsController < ApplicationController
     @metric_definition = @benchmark_definition.metric_definitions.build(metric_definition_params)
     if @metric_definition.save
       success_flash 'created'
-      redirect_to :back
+      redirect_to @metric_definition.benchmark_definition
     else
       render action: 'new'
     end
