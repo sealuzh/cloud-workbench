@@ -11,16 +11,6 @@ Vagrant.configure('2') do |config|
                  before continuing."
     exit
   end
-  
-  # Detects vagrant-berkshelf plugin
-  if Vagrant.has_plugin?('berkshelf')
-    # The path to the Berksfile to use with Vagrant Berkshelf
-    puts 'INFO:  Vagrant-berkshelf plugin detected.'
-    config.berkshelf.berksfile_path = '../Berksfile'
-  else
-    puts "FATAL: Vagrant-berkshelf plugin not detected. Please install the plugin with\n       'vagrant plugin install vagrant-berkshelf' from any other directory\n       before continuing."
-    exit
-  end
 
   # Box
   config.vm.box = 'aws-box'
@@ -54,9 +44,9 @@ Vagrant.configure('2') do |config|
      }
   end
 
-  # Chef solo provisioning via vagrant-berkshelf plugin
+  # Chef solo provisioning via berks-vendored cookbooks
   config.vm.provision :chef_solo do |chef|
-    # chef.cookbooks_path = "../berks-cookbooks"
+    chef.cookbooks_path = "../../../berks-cookbooks"
     chef.run_list = [
       'recipe[cbench-chef-server]'
     ]
