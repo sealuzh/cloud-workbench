@@ -27,7 +27,7 @@ class BenchmarkExecution < ActiveRecord::Base
     elsif inactive? && benchmark_started?
       benchmark_end_time - benchmark_start_time
     else
-      nil
+      0
     end
   end
 
@@ -64,8 +64,12 @@ class BenchmarkExecution < ActiveRecord::Base
     has_event_with_name?(:started_running)
   end
 
+  # Attempt to guess the end time even if the benchmark does not notify benchmark completed
   def benchmark_end_time
-    time_of_first_event_with_name(:finished_running)
+    time_of_first_event_with_name(:finished_running) ||
+        time_of_first_event_with_name(:finished_postprocessing) ||
+        time_of_first_event_with_name(:started_releasing_resources) ||
+        time_of_first_event_with_name(:finished_releasing_resources)
   end
 
   def benchmark_active?
