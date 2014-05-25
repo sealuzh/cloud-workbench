@@ -168,12 +168,9 @@ Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-co
 ## Limitations
 
 * Only AWS as provider supported due to the following dependencies
-  * Client side BenchmarkHelper uses AWS metadata API
-	* Vagrant up does not support multiple providers
-* Only single machine VM setting supported (Vagrant default VM)
-* Only single AWS region supported due to fix private key in server
+	* Vagrant does not support multiple providers in the same Vagrantfile
 * No user authentication and authorization (also technical user)
 * Chef cookbooks must be uploaded to the Chef server
 
 * Log files from created VM instances are not accessible via web interface and get lost on VM shutdown
-* Benchmark definition requires a Chef cookbook
+* Most Benchmark definitions require a Chef cookbook yet.
