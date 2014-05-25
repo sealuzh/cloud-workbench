@@ -4,24 +4,15 @@ Provides utilities for virtual machines (VMs) that execute benchmarks
 
 ## Supported Platforms
 
-Only tested on Ubuntu 12.04 64 bit
+Tested on the following platforms:
+
+* Ubuntu 12.04 64 bit
+* Ubuntu 13.10 64 bit
 
 ## Attributes
 
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['benchmark']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
-  </tr>
-</table>
+See comments in /attributes/default.rb
+
 
 ## Usage
 
@@ -29,12 +20,20 @@ Only tested on Ubuntu 12.04 64 bit
 
 Include `benchmark` in your node's `run_list`:
 
+You may specify a specific version with recipe[benchmark@0.2.0]"
+
 ```json
 {
   "run_list": [
     "recipe[benchmark::default]"
   ]
 }
+```
+
+```ruby
+config.vm.provision "chef_client" do |chef|
+  chef.add_recipe "benchmark"
+end
 ```
 
 
