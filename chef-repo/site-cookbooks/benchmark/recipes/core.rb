@@ -10,7 +10,7 @@ template "#{node["benchmark"]["dir"]}/#{node["benchmark"]["start_runner"]}" do
   group node["benchmark"]["group"]
   mode 00755
   variables(benchmark_start: node["benchmark"]["start"],
-            redirect_io: node["benchmark"]["redirect_io"].to == 'true')
+            redirect_io: node["benchmark"]["redirect_io"].to_s == 'true')
   source 'start_runner.sh.erb'
 end
 

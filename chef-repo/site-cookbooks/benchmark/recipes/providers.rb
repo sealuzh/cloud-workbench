@@ -1,4 +1,4 @@
-
+### Utility methods
 def detect_instance_id(instance_id_request)
   `#{instance_id_request}`
 end
@@ -10,7 +10,7 @@ def detect_and_configure_provider(providers)
       instance_id = detect_instance_id(provider_config["instance_id_request"])
       unless instance_id.empty?
         node.default["benchmark"]["provider_name"] = provider_config["name"]
-        node.default["benchmark"]["instance_id"] = instance_id
+        node.default["benchmark"]["provider_instance_id"] = instance_id
       end
     rescue => error
       log "Could not detect provider_instance_id for provider #{provider}. #{error.message}"
@@ -18,7 +18,7 @@ def detect_and_configure_provider(providers)
   end
 end
 
-
+### Detect and set instance id for provider
 providers = node["benchmark"]["providers"]
 unless providers.nil?
   detect_and_configure_provider(providers)
