@@ -36,6 +36,10 @@ module CloudBenchmarking
     config.quiet_assets = true
 
     ### CloudBenchmarking settings
+    # Default authentication
+    config.default_email = 'seal@uzh.ch'
+    config.default_password = 'seal-cloud'
+
     # VMs
     config.vm_benchmark_dir = '/usr/local/cloud-benchmark'
     config.vm_start_runner = 'start_runner.sh'

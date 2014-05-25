@@ -5,13 +5,15 @@ ruby '2.1.1'
 gem 'rails', '4.1.1'
 
 # NOTE: This gem is not thread-safe and SHOULD NOT be used with
-#       threaded web servers such as puma.
+#       threaded web servers such as puma. It is used to suppress
+#       the logs of polling javascript
 gem 'silencer', '~> 0.6.0'
 gem 'whenever', '~> 0.9.2'
 gem 'cron2english', '~> 0.1.3'
 gem 'delayed_job_active_record', '~> 4.0.0'
 gem 'enumerize', '~> 0.8.0'
 gem 'deep_cloneable', '~> 1.6.1'
+gem 'devise', '~> 3.2.4'
 
 group :development do
   gem 'pry'
@@ -23,6 +25,7 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
+  gem 'quiet_assets'
 
   # Deploy with Capistrano
   # None of the capistrano task should be loaded into the Rails environment by default

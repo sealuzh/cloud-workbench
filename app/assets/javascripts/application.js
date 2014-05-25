@@ -38,10 +38,9 @@
 //= require admin-lte/app
 
 // Custom javascript
-// Note that the family of require directives prevents files from being included twice in the output.
-// from http://edgeguides.rubyonrails.org/asset_pipeline.html#manifest-files-and-directives
 //= require live_log
 //= require tooltips
+//= require sign_in
 
 
 

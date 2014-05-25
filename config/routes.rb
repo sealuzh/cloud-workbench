@@ -1,4 +1,5 @@
 CloudBenchmarking::Application.routes.draw do
+  devise_for :users
   root 'dashboards#show'
   get 'dashboard' => 'dashboards#show'
 

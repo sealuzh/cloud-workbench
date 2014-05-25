@@ -1,7 +1,7 @@
 module FlashHelper
   # FLASH_LEVEL: [ CLASS_TYPE, ICON ]
   FLASH_MAPPINGS = {
-      notice: %w(info info),
+      notice: %w(success check),
       info:   %w(info info),
       success: %w(success check),
       error: %w(danger warning),

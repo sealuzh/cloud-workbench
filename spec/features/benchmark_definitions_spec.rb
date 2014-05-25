@@ -14,8 +14,8 @@ feature "Benchmark definition management" do
       expect(find_field('Vagrantfile').value).to match(/.*Vagrant.configure.*/)
     end
 
+    given(:valid_benchmark_definition) { build(:benchmark_definition) }
     scenario "With valid information" do
-      valid_benchmark_definition = build(:benchmark_definition)
       fill_in_create_form(valid_benchmark_definition)
 
       click_button 'Create New Benchmark'

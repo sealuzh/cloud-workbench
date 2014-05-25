@@ -1,0 +1,20 @@
+<div class="wrapper row-offcanvas row-offcanvas-left" style="min-height: 319px;">
+  <!-- Left sidebar -->
+  <aside class="left-side sidebar-offcanvas" style="min-height: 2114px;">
+    <section class="sidebar">
+      <%= render 'layouts/sidebar' %>
+    </section>
+  </aside>
+
+  <!-- Main content -->
+  <aside class="right-side">
+    <section class="content-header">
+      <!-- Each view should provide a content header -->
+      <%= yield :content_header %>
+    </section>
+    <section class="content">
+      <%= render 'layouts/bootstrap_flash', flash: flash %>
+      <%= yield %>
+    </section>
+  </aside>
+</div>
