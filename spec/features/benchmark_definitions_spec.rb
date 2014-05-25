@@ -50,8 +50,6 @@ feature "Benchmark definition management" do
   scenario "Show a benchmark definition" do
     visit benchmark_definition_path(existing_definition)
     page.should have_content existing_definition.name
-
-    pending("should list vm instances")
   end
 
   feature "Editing a benchmark definition" do

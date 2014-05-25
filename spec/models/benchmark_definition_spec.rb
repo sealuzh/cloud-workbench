@@ -31,7 +31,6 @@ describe BenchmarkDefinition do
   describe "when Vagrantfile is invalid" do
     before { @benchmark_definition.vagrantfile = ' ' }
     it { should_not be_valid }
-    pending("Add further Vagrantfile validations and sanity checks")
   end
 
   context "without existing executions" do
