@@ -8,7 +8,7 @@ class VirtualMachineInstancesController < ApplicationController
 
   def complete_benchmark
     if @virtual_machine_instance.present?
-      cont = boolean_value(:continue, true)
+      cont = boolean_value(:continue, false)
       success  = boolean_value(:success, true)
       @virtual_machine_instance.complete_benchmark(cont, success)
       head 200 # ok
