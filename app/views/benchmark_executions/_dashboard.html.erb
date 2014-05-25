@@ -16,7 +16,7 @@
 
   <%= render 'dashboard_widget',
              widget_class: 'bg-yellow',
-             header: (distance_of_time_in_words(benchmark_execution.execution_duration).humanize rescue 'Not started yet.'),
+             header: execution_duration_formatted(benchmark_execution),
              paragraph: (active_status(benchmark_execution.active?) if benchmark_execution.execution_started?),
              icon: fa_icon('play-circle fa-2x'),
              footer: 'Execution Duration' %>

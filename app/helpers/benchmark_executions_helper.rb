@@ -38,9 +38,27 @@ module BenchmarkExecutionsHelper
 
   def benchmark_duration_formatted(execution)
     if execution.benchmark_started?
-      distance_of_time_in_words(execution.benchmark_duration).humanize
+      duration = execution.benchmark_duration
+      duration == 0 ? '' : distance_of_time_in_words(duration).humanize
     else
-      'Not started yet.'
+      if execution.failed?
+        'Not started.'
+      else
+        'Not started yet'
+      end
+    end
+  end
+
+  def execution_duration_formatted(execution)
+    if execution.execution_started?
+      duration = execution.execution_duration
+      duration == 0 ? '' : distance_of_time_in_words(duration).humanize
+    else
+      if execution.failed?
+        'Not started.'
+      else
+        'Not started yet'
+      end
     end
   end
 

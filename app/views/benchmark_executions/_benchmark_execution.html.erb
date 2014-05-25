@@ -5,8 +5,8 @@
     <%= formatted_time(benchmark_execution.benchmark_start_time, :date_and_time_short) %>
   </td>
   <td>
-    <%= distance_of_time_in_words(benchmark_execution.execution_duration) rescue '-' %><br>
-    <%= distance_of_time_in_words(benchmark_execution.benchmark_duration) rescue '-' %>
+    <%= execution_duration_formatted(benchmark_execution) %><br>
+    <%= benchmark_duration_formatted(benchmark_execution) %>
   </td>
   <td><%= link_to delete_icon, benchmark_execution, method: :delete, data: confirm_delete_execution_msg(benchmark_execution), class: 'delete' %></td>
 </tr>
