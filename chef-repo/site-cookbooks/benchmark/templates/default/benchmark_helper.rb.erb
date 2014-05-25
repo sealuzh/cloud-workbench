@@ -59,7 +59,7 @@ class BenchmarkHelper
 
   # Postprocessing has been completed
   # The Cloud-WorkBench will terminate all instances of this benchmark execution
-  def self.notify_postprocessing_completed(success = true, message = '')
+  def self.notify_postprocessing_completed(success = true, message = '', opts = {})
     resource = VM_INSTANCE_RESOURCE['complete_postprocessing']
     post_notify(resource, success, message, opts)
   end
