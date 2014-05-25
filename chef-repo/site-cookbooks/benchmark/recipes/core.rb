@@ -5,12 +5,13 @@ directory node["benchmark"]["dir"] do
   action :create
 end
 
+redirect_io = node["benchmark"]["redirect_io"].to_s == 'true'
 template "#{node["benchmark"]["dir"]}/#{node["benchmark"]["start_runner"]}" do
   owner node["benchmark"]["owner"]
   group node["benchmark"]["group"]
   mode 00755
   variables(benchmark_start: node["benchmark"]["start"],
-            redirect_io: node["benchmark"]["redirect_io"].to_s == 'true')
+            redirect_io: redirect_io)
   source 'start_runner.sh.erb'
 end
 
@@ -18,7 +19,8 @@ template "#{node["benchmark"]["dir"]}/#{node["benchmark"]["stop_and_postprocess_
   owner node["benchmark"]["owner"]
   group node["benchmark"]["group"]
   mode 00755
-  variables(stop_and_postprocess: node["benchmark"]["stop_and_postprocess"])
+  variables(stop_and_postprocess: node["benchmark"]["stop_and_postprocess"],
+            redirect_io: redirect_io)
   source 'stop_and_postprocess_runner.sh.erb'
 end
 
