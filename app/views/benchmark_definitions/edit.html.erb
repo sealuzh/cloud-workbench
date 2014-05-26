@@ -7,6 +7,11 @@
   </div>
   <div class="col-md-3">
     <div class="transparant-well">
+      <%= link_to @benchmark_definition, method: :delete, class: 'btn btn-danger btn-block',
+                  data: confirm_delete_benchmark_msg(@benchmark_definition) do %>
+        <%= delete_icon %>&nbsp;Delete
+      <% end %>
+      <br>
       <%= button_to [@benchmark_definition, @benchmark_definition.benchmark_executions.build],
                     method: :post, class: 'btn btn-primary btn-block btn-lg',
                     data: confirm_start_execution_msg(@benchmark_definition) do %>

@@ -11,7 +11,7 @@ describe VirtualMachineInstancesController do
 
       describe "and continue" do
         before do
-          complete_benchmark(vm)
+          complete_benchmark(vm, continue: true)
         end
 
         it "should create a finished benchmark event" do
