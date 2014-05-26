@@ -25,6 +25,8 @@ CloudBenchmarking::Application.routes.draw do
     member do
       get :prepare_log
       get :release_resources_log
+      post :restart_benchmark
+      post :abort
     end
   end
   resources :metric_definitions, only: [:show, :edit, :destroy]

@@ -1,8 +1,9 @@
 class BenchmarkExecutionsController < ApplicationController
+  PRIORITY_HIGH = 1
   API_METHODS = [:prepare_log, :release_resources_log]
   before_action :authenticate_user!, except: API_METHODS
   before_action :set_benchmark_definition, only: [:new, :create]
-  before_action :set_benchmark_execution, only: [:show, :destroy, :prepare_log, :release_resources_log]
+  before_action :set_benchmark_execution, only: [:show, :destroy, :prepare_log, :release_resources_log, :restart_benchmark, :abort]
 
   def index
     if params[:context] == :benchmark_definition
@@ -15,6 +16,16 @@ class BenchmarkExecutionsController < ApplicationController
 
   def show
     @benchmark_definition = @benchmark_execution.benchmark_definition
+  end
+
+  def restart_benchmark
+    Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(@benchmark_execution.id), PRIORITY_HIGH)
+    redirect_to @benchmark_execution
+  end
+
+  def abort
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(@benchmark_execution.id), PRIORITY_HIGH)
+    redirect_to @benchmark_execution
   end
 
   def prepare_log

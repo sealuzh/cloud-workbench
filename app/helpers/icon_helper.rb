@@ -75,4 +75,12 @@ module IconHelper
   def search_icon
     fa_icon 'search'
   end
+
+  def abort_icon
+    fa_icon 'power-off'
+  end
+
+  def restart_icon
+    fa_icon 'repeat'
+  end
 end

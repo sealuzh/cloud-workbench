@@ -12,12 +12,7 @@
   </div>
 
   <div class="col-md-3">
-    <div class="transparant-well">
-      <%= link_to @benchmark_execution, method: :delete, class: 'btn btn-danger btn-block',
-                  data: confirm_delete_execution_msg(@benchmark_execution) do %>
-        <%= delete_icon %>&nbsp;Delete
-      <% end %>
-    </div>
+    <%= render 'action_sidebar', benchmark_execution: @benchmark_execution %>
     <%= schedule_metric_sidebar(@benchmark_definition, @benchmark_execution) %>
   </div>
 </div>
