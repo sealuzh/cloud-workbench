@@ -1,4 +1,7 @@
 class VirtualMachineInstancesController < ApplicationController
+  API_METHODS = [:complete_benchmark, :complete_postprocessing]
+  before_action :authenticate_user!, except: API_METHODS
+  protect_from_forgery except: API_METHODS
   before_action :set_virtual_machine_instance, only: [:destroy]
   before_action :search_virtual_machine_instance, only: [:complete_benchmark, :complete_postprocessing]
 

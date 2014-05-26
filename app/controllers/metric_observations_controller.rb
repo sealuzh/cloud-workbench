@@ -2,6 +2,9 @@
 # * The implementation detail which MetricObservation (e.g. nominal, ordered) should remain hidden for a client.
 # * The concrete implementation is chosen based on the metric_type from the associated MetricDefinition
 class MetricObservationsController < ApplicationController
+  API_METHODS = [:create, :import]
+  before_action :authenticate_user!, except: API_METHODS
+  protect_from_forgery except: API_METHODS
 
   # Currently only supports displaying the metric observation of a given metric definition
   def index

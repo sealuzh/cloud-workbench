@@ -13,18 +13,18 @@ CloudBenchmarking::Application.routes.draw do
     resources :benchmark_executions, only: [:index, :new, :create], context: :benchmark_definition
     resources :metric_definitions, only: [:new, :create], context: :benchmark_definition
     resources :benchmark_schedules, only: [:new, :create ]
-    post 'clone', on: :member
+    post :clone, on: :member
   end
   resources :benchmark_schedules, only: [:index, :edit, :update ] do
     member do
-      patch 'activate'
-      patch 'deactivate'
+      patch :activate
+      patch :deactivate
     end
   end
   resources :benchmark_executions, only: [:show, :index, :destroy] do
     member do
-      get 'prepare_log'
-      get 'release_resources_log'
+      get :prepare_log
+      get :release_resources_log
     end
   end
   resources :metric_definitions, only: [:show, :edit, :destroy]

@@ -1,4 +1,6 @@
 class BenchmarkExecutionsController < ApplicationController
+  API_METHODS = [:prepare_log, :release_resources_log]
+  before_action :authenticate_user!, except: API_METHODS
   before_action :set_benchmark_definition, only: [:new, :create]
   before_action :set_benchmark_execution, only: [:show, :destroy, :prepare_log, :release_resources_log]
 

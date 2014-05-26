@@ -59,4 +59,9 @@ FactoryGirl.define do
       scale_type 'nominal'
     end
   end
+
+  factory :user do
+    email Rails.application.config.default_email
+    password Rails.application.config.default_password
+  end
 end

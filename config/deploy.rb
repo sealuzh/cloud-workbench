@@ -95,6 +95,7 @@ namespace :deploy do
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
   # Set file system permissions
+  after 'deploy', 'user:create_default'
   after 'deploy:publishing', 'deploy:set_permissions:acl'
   after 'deploy:publishing', 'deploy:restart'
   after :finishing, 'deploy:cleanup'

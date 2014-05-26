@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 feature "Benchmark definition management" do
+  given(:user) { create(:user) }
+  before { sign_in(user) }
 
   scenario "Listing benchmark definitions" do
     visit benchmark_definitions_path
