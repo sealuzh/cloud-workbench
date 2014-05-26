@@ -1,4 +1,4 @@
-<% start_time = @benchmark_execution.execution_start_time %>
+<% start_time = @benchmark_execution.start_time %>
 <% provide(:title, "Execution #{formatted_time(start_time, :date_only)} of #{@benchmark_definition.name}") %>
 <% title = "Execution #{formatted_time(start_time, :date_human)}" %>
 <% subtitle = "#{formatted_time(start_time, :time_only)} of #{link_to @benchmark_definition.name, @benchmark_definition}" %>

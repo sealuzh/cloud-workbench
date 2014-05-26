@@ -49,15 +49,6 @@ class MetricObservation
     end
   end
 
-  # You MUST provide a metric_definition_id as argument
-  def self.search(params)
-    observations = scope_builder
-    benchmark_definition_id = BenchmarkDefinition.find_by_name(params[:benchmark_definition_name],
-                                                               case_sensitive: false).id
-    observations.where("benchmark_definition_id == ?", benchmark_definition_id)
-    # TODO: Continue impl.
-  end
-
   # Assumes that all observations are from the same metric_definition
   def self.to_csv(metric_observations)
     metric_definition = metric_observations.first.metric_definition rescue nil

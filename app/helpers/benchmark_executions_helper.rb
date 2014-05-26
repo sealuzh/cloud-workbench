@@ -50,8 +50,8 @@ module BenchmarkExecutionsHelper
   end
 
   def execution_duration_formatted(execution)
-    if execution.execution_started?
-      duration = execution.execution_duration
+    if execution.started?
+      duration = execution.duration
       duration == 0 ? '' : distance_of_time_in_words(duration).humanize
     else
       if execution.failed?
