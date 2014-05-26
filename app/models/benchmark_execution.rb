@@ -28,7 +28,8 @@ class BenchmarkExecution < ActiveRecord::Base
     # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
   rescue => e
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
+    timeout = Rails.application.config.failure_timeout
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.minutes.from_now) if Rails.env.production?
   end
 
   def detect_and_create_vm_instances_with(driver)
@@ -59,10 +60,11 @@ class BenchmarkExecution < ActiveRecord::Base
   def start_benchmark
     set_benchmark_runner_and_fs
     start_benchmark_with(@benchmark_runner)
-    # TODO: Think about is_alive timeout.
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 50.hours.from_now) if Rails.env.production?
+    timeout = benchmark_definition.running_timeout || Rails.application.config.default_running_timeout
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.hours.from_now) if Rails.env.production?
   rescue => e
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
+    timeout = Rails.application.config.failure_timeout
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.minutes.from_now) if Rails.env.production?
   end
 
   def start_benchmark_with(benchmark_runner)
@@ -79,7 +81,8 @@ class BenchmarkExecution < ActiveRecord::Base
     set_benchmark_runner_and_fs
     start_postprocessing_with(@benchmark_runner)
   rescue => e
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
+    timeout = Rails.application.config.failure_timeout
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.minutes.from_now) if Rails.env.production?
   end
 
   def start_postprocessing_with(benchmark_runner)
@@ -94,9 +97,10 @@ class BenchmarkExecution < ActiveRecord::Base
 
   def release_resources
     set_driver_and_fs
-    release_resources_with(@driver)
+    release_resources_with(@driver) if active?
   rescue => e
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, 15.minutes.from_now) if Rails.env.production?
+    timeout = Rails.application.config.failure_timeout
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.minutes.from_now) if Rails.env.production?
   end
 
   def release_resources_with(driver)

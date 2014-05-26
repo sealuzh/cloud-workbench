@@ -66,7 +66,7 @@ class BenchmarkDefinitionsController < ApplicationController
     end
 
     def benchmark_definition_params
-      params.require(:benchmark_definition).permit(:name, :vagrantfile)
+      params.require(:benchmark_definition).permit(:name, :running_timeout, :vagrantfile)
     end
 
     def check_and_show_executions_integrity_warning

@@ -43,6 +43,7 @@ feature "Benchmark definition management" do
     def fill_in_create_form(benchmark_definition)
       within("#new_benchmark_definition") do
         fill_in 'Name', with: benchmark_definition.name
+        fill_in 'Timeout for running benchmark', with: benchmark_definition.running_timeout
         fill_in 'Vagrantfile', with: benchmark_definition.vagrantfile
       end
     end

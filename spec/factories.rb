@@ -4,6 +4,7 @@ require 'ostruct'
 FactoryGirl.define do
   factory :benchmark_definition do
     sequence(:name) { |n| "fio-benchmark #{n}" }
+    running_timeout 10
     sequence(:vagrantfile) do |n|
         namespace = OpenStruct.new(n: n)
         file_dir = File.expand_path File.dirname(__FILE__)

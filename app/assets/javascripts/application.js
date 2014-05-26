@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require jquery.turbolinks
 //= require bootstrap/bootstrap
+//= require bootstrap-slider/bootstrap-slider
 
 // CUSTOM
 //= require utilities
@@ -34,13 +35,14 @@
 // CUSTOM
 //= require ace_config
 
-// AdminLTE bootstrap theme and dependencies
+// AdminLTE bootstrap theme and optional dependencies
 //= require admin-lte/app
 
-// Custom javascript
+// CUSTOM javascript
 //= require live_log
 //= require tooltips
 //= require sign_in
+//= require slider
 
 
 

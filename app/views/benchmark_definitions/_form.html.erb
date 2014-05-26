@@ -1,6 +1,23 @@
 <%= simple_form_for(@benchmark_definition) do |f| %>
   <% has_executions = @benchmark_definition.benchmark_executions.any_valid? ? { readonly: true } : {} %>
-  <%= f.input :name, input_html: { maxlength: BenchmarkDefinition.max_name_length }.merge(has_executions) %>
+
+  <div class="width-restricted">
+    <%= f.input :name, input_html: { maxlength: BenchmarkDefinition.max_name_length }.merge(has_executions) %>
+    <br>
+    <%= f.label :running_timeout, 'Timeout for running benchmark' %>
+    <br>
+    <br>
+    <%= f.text_field :running_timeout, class: 'hour-slider',
+                                                        'data-slider-value' =>  @benchmark_definition.running_timeout || Rails.application.config.default_running_timeout,
+                                                        'data-slider-min'   =>   '1',
+                                                        'data-slider-max'   => '100',
+                                                        'data-slider-step'  =>   '1',
+                                                        'data-slider-orientation'  =>   'horizontal',
+                                                        'data-slider-selection'  =>   'before',
+                                                        'data-slider-tooltip'  =>   'always',
+                                                        'data-slider-id'  =>   'yellow'
+                                                     %>
+  </div>
   <br>
   <% if @benchmark_definition.errors.any? %>
     <%= f.label :vagrantfile, class: 'vagrantfile_error', error: true %>

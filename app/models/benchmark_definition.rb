@@ -1,5 +1,6 @@
 require 'securerandom'
 class BenchmarkDefinition < ActiveRecord::Base
+  has_one :benchmark_schedule, dependent: :destroy
   has_many :metric_definitions, dependent: :destroy
   has_many :benchmark_executions, dependent: :destroy do
     def has_active?
@@ -19,6 +20,8 @@ class BenchmarkDefinition < ActiveRecord::Base
     end
   end
 
+  validates :running_timeout, presence: true,
+                              numericality: {only_integer: true, greater_than: 0}
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
   # that do not support case-sensitive indices. This case should practically never occur is therefore not handled.
   MAX_NAME_LENGTH = 70
@@ -27,7 +30,6 @@ class BenchmarkDefinition < ActiveRecord::Base
                    length: { in: 3..MAX_NAME_LENGTH }
   # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
   validates :vagrantfile, presence: true
-  has_one :benchmark_schedule, dependent: :destroy
   before_save :ensure_name_integrity
 
 
