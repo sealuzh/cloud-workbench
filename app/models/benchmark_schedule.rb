@@ -16,7 +16,7 @@ class BenchmarkSchedule < ActiveRecord::Base
                                         message: "Cron expression MUST NOT start with '*' and
                                                   MUST contain 4 whitespaces separating the 5 columns." }
   after_create   :update_system_crontab_if_active
-  before_destroy { self.active = false }
+  before_destroy { self.active = false; save }
   after_update :check_and_update_system_crontab_after_update
 
   def activate!

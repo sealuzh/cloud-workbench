@@ -53,8 +53,11 @@ class BenchmarkDefinitionsController < ApplicationController
   end
 
   def destroy
-    @benchmark_definition.destroy
-      redirect_to benchmark_definitions_url
+    @benchmark_definition.destroy!
+    redirect_to benchmark_definitions_url
+  rescue => e
+    flash[:error] = e.message
+    redirect_to @benchmark_definition
   end
 
   private
