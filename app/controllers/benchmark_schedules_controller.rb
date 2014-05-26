@@ -16,22 +16,22 @@ class BenchmarkSchedulesController < ApplicationController
 
   def create
     @benchmark_schedule = @benchmark_definition.build_benchmark_schedule(benchmark_schedule_params)
-    if @benchmark_schedule.save
+    @benchmark_schedule.save!
       success_flash_for 'created'
       redirect_to @benchmark_definition
-    else
-      render action: 'new'
-    end
+  rescue => error
+    flash.now[:error] = error.message
+    render action: 'new'
   end
 
   def update
     @benchmark_definition = @benchmark_schedule.benchmark_definition
-    if @benchmark_schedule.update(benchmark_schedule_params)
-      success_flash_for 'updated'
-      redirect_to @benchmark_definition
-    else
-      render action: 'edit'
-    end
+    @benchmark_schedule.update!(benchmark_schedule_params)
+    success_flash_for 'updated'
+    redirect_to @benchmark_definition
+  rescue => error
+    flash.now[:error] = error.message
+    render action: 'edit'
   end
 
   def activate

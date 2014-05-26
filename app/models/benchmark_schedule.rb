@@ -16,7 +16,7 @@ class BenchmarkSchedule < ActiveRecord::Base
                                         message: "Cron expression MUST NOT start with '*' and
                                                   MUST contain 4 whitespaces separating the 5 columns." }
   after_create   :update_system_crontab_if_active
-  before_destroy :update_system_crontab_if_active
+  before_destroy { self.active = false }
   after_update :check_and_update_system_crontab_after_update
 
   def activate!
@@ -52,8 +52,9 @@ class BenchmarkSchedule < ActiveRecord::Base
   def self.apply_schedule_to_system_crontab(schedule_path = DEFAULT_SCHEDULE_PATH)
     result = %x(whenever --update-crontab -f "#{schedule_path}")
     unless $?.success?
-      fail "Failed to update system crontab. Error: #{result}"
+      fail "Failed to update system crontab. #{result}"
     end
+    $?.success?
   end
 
   def self.clear_system_crontab(schedule_path = DEFAULT_SCHEDULE_PATH)
