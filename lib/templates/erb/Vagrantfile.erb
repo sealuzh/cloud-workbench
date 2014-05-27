@@ -15,8 +15,8 @@ class ::Hash
 end
 
 ### Variables
-benchmark_name = <%= benchmark_name %>
-benchmark_name_sanitized = <%= benchmark_name_sanitized %>
+benchmark_name = '<%= benchmark_name %>'
+benchmark_name_sanitized = '<%= benchmark_name_sanitized %>'
 benchmark_id = <%= benchmark_id %>
 execution_id = <%= execution_id %>
 chef_node_name = "#{execution_id}-benchmark_name_sanitized"
@@ -51,6 +51,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.tags = {
       'Name' => tag_name
     }
+  end
 
   # Chef client provisioner
   config.omnibus.chef_version = :latest
@@ -66,6 +67,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.run_list = [
       "recipe[benchmark]"
     ]
+  end
 end
 
 ### Custom Vagrantfile

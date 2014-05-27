@@ -30,6 +30,7 @@ class BenchmarkExecution < ActiveRecord::Base
   rescue => e
     timeout = Rails.application.config.failure_timeout
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.minutes.from_now) if Rails.env.production?
+    detect_and_create_vm_instances_with(@driver)
   end
 
   def detect_and_create_vm_instances_with(driver)

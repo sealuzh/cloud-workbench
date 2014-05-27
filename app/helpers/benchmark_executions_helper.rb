@@ -50,7 +50,7 @@ module BenchmarkExecutionsHelper
       duration == 0 ? '' : distance_of_time_in_words(duration).humanize
     else
       if execution.failed?
-        'Not started.'
+        'Not started'
       else
         'Not started yet'
       end
@@ -63,7 +63,7 @@ module BenchmarkExecutionsHelper
       duration == 0 ? '' : distance_of_time_in_words(duration).humanize
     else
       if execution.failed?
-        'Not started.'
+        'Not started'
       else
         'Not started yet'
       end
