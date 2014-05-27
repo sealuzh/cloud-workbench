@@ -40,9 +40,12 @@ module CloudBenchmarking
     config.default_email = 'seal@uzh.ch'
     config.default_password = 'seal-cloud'
 
+    # Schedule failed threshold (after x consecutive unsuccessful executions)
+    config.execution_failed_threshold = 3
+
     # Timeout
     config.default_running_timeout = 24 # Hours after a running benchmark will be terminated
-    config.failure_timeout = 15 # Minutes after which the instances will be terminated on failure
+    config.failure_timeout = 15.minutes # Minutes after which the instances will be terminated on failure
 
     # VMs
     config.vm_benchmark_dir = '/usr/local/cloud-benchmark'

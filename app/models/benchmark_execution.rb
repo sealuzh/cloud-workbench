@@ -29,7 +29,7 @@ class BenchmarkExecution < ActiveRecord::Base
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
   rescue => e
     timeout = Rails.application.config.failure_timeout
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.minutes.from_now) if Rails.env.production?
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.from_now) if Rails.env.production?
     detect_and_create_vm_instances_with(@driver)
   end
 
@@ -65,7 +65,7 @@ class BenchmarkExecution < ActiveRecord::Base
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.hours.from_now) if Rails.env.production?
   rescue => e
     timeout = Rails.application.config.failure_timeout
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.minutes.from_now) if Rails.env.production?
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.from_now) if Rails.env.production?
   end
 
   def start_benchmark_with(benchmark_runner)
@@ -83,7 +83,7 @@ class BenchmarkExecution < ActiveRecord::Base
     start_postprocessing_with(@benchmark_runner)
   rescue => e
     timeout = Rails.application.config.failure_timeout
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.minutes.from_now) if Rails.env.production?
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.from_now) if Rails.env.production?
   end
 
   def start_postprocessing_with(benchmark_runner)
@@ -98,10 +98,14 @@ class BenchmarkExecution < ActiveRecord::Base
 
   def release_resources
     set_driver_and_fs
+    events.create_with_name!(:failed_on_running, 'Running timeout elapsed.') unless benchmark_finished?
     release_resources_with(@driver) if active?
+    update_consecutive_failure_count
   rescue => e
     timeout = Rails.application.config.failure_timeout
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.minutes.from_now) if Rails.env.production?
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.from_now) if Rails.env.production?
+  ensure
+    benchmark_definition.benchmark_schedule.deactivate! if failed? && failed_threshold_reached?
   end
 
   def release_resources_with(driver)
@@ -118,6 +122,17 @@ class BenchmarkExecution < ActiveRecord::Base
   def release_resources_log
     set_driver_and_fs
     @driver.destroy_log
+  end
+
+  def update_consecutive_failure_count
+    schedule = benchmark_definition.benchmark_schedule
+    failed? ? schedule.consecutive_failure_count += 1 : schedule.consecutive_failure_count = 0
+  end
+
+  def failed_threshold_reached?
+    times = Rails.application.config.execution_failed_threshold
+    # Current execution is included as the counter is updated before
+    benchmark_definition.benchmark_schedule.consecutive_failure_count > times
   end
 
   private

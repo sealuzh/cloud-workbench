@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140527003050) do
+ActiveRecord::Schema.define(version: 20140527194814) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
@@ -33,10 +33,11 @@ ActiveRecord::Schema.define(version: 20140527003050) do
 
   create_table "benchmark_schedules", force: true do |t|
     t.string   "cron_expression"
-    t.boolean  "active",                  default: true
+    t.boolean  "active",                    default: true
     t.integer  "benchmark_definition_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "consecutive_failure_count"
   end
 
   add_index "benchmark_schedules", ["benchmark_definition_id"], name: "index_benchmark_schedules_on_benchmark_definition_id"
