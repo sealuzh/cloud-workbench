@@ -13,6 +13,9 @@ class Event < ActiveRecord::Base
                started_preparing:                  10,
                  failed_on_preparing:             111,
                finished_preparing:                 20,
+               started_reprovisioning:             25,
+                 failed_on_reprovisioning:        125,
+               finished_reprovisioning:            27,
                started_running:                    30,
                  failed_on_start_running:         130,
                  failed_on_running:               131,
@@ -26,11 +29,15 @@ class Event < ActiveRecord::Base
                finished_releasing_resources:       80,
              }
 
+  # TODO: This should be moved into a yml configuration file
   STATUS_MAPPINGS = {
                       created:                          'WAITING FOR START PREPARING',
                       started_preparing:                'PREPARING',
                         failed_on_preparing:            'FAILED ON PREPARING',
                       finished_preparing:               'WAITING FOR START RUNNING',
+                      started_reprovisioning:           'REPROVISIONING',
+                        failed_on_reprovisioning:       'FAILED ON REPROVISIONING',
+                      finished_reprovisioning:          'WAITING FOR START RUNNING',
                       started_running:                  'RUNNING',
                         failed_on_start_running:        'FAILED ON START RUNNING',
                         failed_on_running:              'FAILED ON RUNNING',

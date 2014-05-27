@@ -14,4 +14,10 @@ module BenchmarkDefinitionsHelper
   def vagrantfile_error?(benchmark_definition)
     benchmark_definition.errors[:vagrantfile].any?
   end
+
+  def start_execution_link(benchmark_definition, opts)
+    link_to "#{start_icon}&nbsp;Start Execution".html_safe, [benchmark_definition, benchmark_definition.benchmark_executions.build],
+                method: :post, class: opts[:class],
+                data: confirm_start_execution_msg(benchmark_definition)
+  end
 end

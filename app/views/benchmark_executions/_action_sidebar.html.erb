@@ -1,11 +1,15 @@
 <div class="transparant-well">
   <% if @benchmark_execution.active? %>
-  <%= link_to "#{restart_icon}&nbsp;Start Benchmark again".html_safe, restart_benchmark_benchmark_execution_path, method: :post, class: 'btn btn-info btn-block',
+  <%= toggle_keep_alive_execution_btn(@benchmark_execution) %>
+  <%= link_to "#{fa_icon 'wrench'}&nbsp;Reprovision".html_safe, reprovision_benchmark_execution_path(@benchmark_execution),
+              method: :post, class: 'btn btn-default btn-block', data: confirm_reprovision_msg %>
+  <%= link_to "#{restart_icon}&nbsp;Start Benchmark again".html_safe, restart_benchmark_benchmark_execution_path, method: :post, class: 'btn btn-default btn-block',
               data: confirm_restart_benchmark_msg(@benchmark_execution) %>
   <%= link_to "#{abort_icon}&nbsp;Abort".html_safe, abort_benchmark_execution_path, method: :post, class: 'btn btn-warning btn-block',
               data: confirm_abort_execution_msg(@benchmark_execution) %>
   <br>
   <% end %>
+  <%= start_execution_link(@benchmark_execution.benchmark_definition, class: 'btn btn-primary btn-block') %>
   <%= link_to "#{delete_icon}&nbsp;Delete".html_safe, @benchmark_execution, method: :delete, class: 'btn btn-danger btn-block',
               data: confirm_delete_execution_msg(@benchmark_execution) %>
 </div>

@@ -25,6 +25,8 @@ CloudBenchmarking::Application.routes.draw do
     member do
       get :prepare_log
       get :release_resources_log
+      patch :toggle_keep_alive
+      post :reprovision
       post :restart_benchmark
       post :abort
     end

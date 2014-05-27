@@ -28,9 +28,13 @@ class BenchmarkExecution < ActiveRecord::Base
     # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
   rescue => e
+    shutdown_after_failure_timeout
+    detect_and_create_vm_instances_with(@driver)
+  end
+
+  def shutdown_after_failure_timeout
     timeout = Rails.application.config.failure_timeout
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.from_now) if Rails.env.production?
-    detect_and_create_vm_instances_with(@driver)
   end
 
   def detect_and_create_vm_instances_with(driver)
@@ -58,14 +62,32 @@ class BenchmarkExecution < ActiveRecord::Base
     @driver.up_log
   end
 
+  def reprovision
+    set_driver_and_fs
+    reprovision_with(@driver)
+    Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
+  rescue => e
+    shutdown_after_failure_timeout
+  end
+
+  def reprovision_with(driver)
+    events.create_with_name!(:started_reprovisioning)
+    success = driver.reprovision
+    if success
+      events.create_with_name!(:finished_reprovisioning)
+    else
+      event = events.create_with_name!(:failed_on_reprovisioning)
+      fail event.name
+    end
+  end
+
   def start_benchmark
     set_benchmark_runner_and_fs
     start_benchmark_with(@benchmark_runner)
     timeout = benchmark_definition.running_timeout || Rails.application.config.default_running_timeout
     Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.hours.from_now) if Rails.env.production?
   rescue => e
-    timeout = Rails.application.config.failure_timeout
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.from_now) if Rails.env.production?
+    shutdown_after_failure_timeout
   end
 
   def start_benchmark_with(benchmark_runner)
@@ -82,8 +104,7 @@ class BenchmarkExecution < ActiveRecord::Base
     set_benchmark_runner_and_fs
     start_postprocessing_with(@benchmark_runner)
   rescue => e
-    timeout = Rails.application.config.failure_timeout
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.from_now) if Rails.env.production?
+    shutdown_after_failure_timeout
   end
 
   def start_postprocessing_with(benchmark_runner)
@@ -99,13 +120,17 @@ class BenchmarkExecution < ActiveRecord::Base
   def release_resources
     set_driver_and_fs
     events.create_with_name!(:failed_on_running, 'Running timeout elapsed.') unless benchmark_finished?
-    release_resources_with(@driver) if active?
-    update_consecutive_failure_count
+    if active? && !keep_alive?
+      release_resources_with(@driver)
+      update_consecutive_failure_count(benchmark_definition.benchmark_schedule)
+    end
   rescue => e
-    timeout = Rails.application.config.failure_timeout
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.from_now) if Rails.env.production?
+    shutdown_after_failure_timeout
   ensure
-    benchmark_definition.benchmark_schedule.deactivate! if failed? && failed_threshold_reached?
+    schedule = benchmark_definition.benchmark_schedule
+    if schedule.present? && failed? && failed_threshold_reached?(schedule)
+      schedule.deactivate!
+    end
   end
 
   def release_resources_with(driver)
@@ -124,16 +149,17 @@ class BenchmarkExecution < ActiveRecord::Base
     @driver.destroy_log
   end
 
-  def update_consecutive_failure_count
-    schedule = benchmark_definition.benchmark_schedule
-    failed? ? schedule.consecutive_failure_count += 1 : schedule.consecutive_failure_count = 0
+  def update_consecutive_failure_count(schedule)
+    if schedule.present?
+      failed? ? schedule.consecutive_failure_count += 1 : schedule.consecutive_failure_count = 0
+    end
   end
 
-  def failed_threshold_reached?
+  def failed_threshold_reached?(schedule)
     times = Rails.application.config.execution_failed_threshold
     # Current execution is included as the counter is updated before
-    benchmark_definition.benchmark_schedule.consecutive_failure_count > times
-  end
+    schedule.consecutive_failure_count > times
+end
 
   private
 

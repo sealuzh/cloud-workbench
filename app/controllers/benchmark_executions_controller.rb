@@ -3,7 +3,7 @@ class BenchmarkExecutionsController < ApplicationController
   API_METHODS = [:prepare_log, :release_resources_log]
   before_action :authenticate_user!, except: API_METHODS
   before_action :set_benchmark_definition, only: [:new, :create]
-  before_action :set_benchmark_execution, only: [:show, :destroy, :prepare_log, :release_resources_log, :restart_benchmark, :abort]
+  before_action :set_benchmark_execution, except: [:index, :new, :create, ]
 
   def index
     if params[:context] == :benchmark_definition
@@ -19,13 +19,30 @@ class BenchmarkExecutionsController < ApplicationController
     @virtual_machine_instances = @benchmark_execution.virtual_machine_instances
   end
 
+  def toggle_keep_alive
+    @benchmark_execution.update_attributes!({keep_alive: params[:keep_alive].to_bool})
+    flash[:success] = "Successfully #{@benchmark_execution.keep_alive? ? 'enabled' : 'disabled'} the keep alive flag."
+  rescue => e
+    flash[:error] = "Could not set the keep alive flage to #{params[:keep_alive]}. #{e.message}"
+  ensure
+    redirect_to @benchmark_execution
+  end
+
+  def reprovision
+    Delayed::Job.enqueue(ReprovisionBenchmarkExecutionJob.new(@benchmark_execution.id), PRIORITY_HIGH)
+    flash[:success] = "Successfully started a reprovisioning job asynchronously."
+    redirect_to @benchmark_execution
+  end
+
   def restart_benchmark
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(@benchmark_execution.id), PRIORITY_HIGH)
+    flash[:success] = "Successfully started a restart benchmark job asynchronously."
     redirect_to @benchmark_execution
   end
 
   def abort
     Delayed::Job.enqueue(ReleaseResourcesJob.new(@benchmark_execution.id), PRIORITY_HIGH)
+    flash[:success] = "Successfully started a release resources job asynchronously."
     redirect_to @benchmark_execution
   end
 

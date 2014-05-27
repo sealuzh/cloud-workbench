@@ -12,8 +12,37 @@ module BenchmarkExecutionsHelper
     status_link(execution.status, type, execution)
   end
 
+  def execution_active_indicator(execution)
+    fa_icon "cog #{'spin' if execution.active?}"
+  end
+
+  def toggle_keep_alive_execution_btn(execution)
+    if execution.keep_alive?
+      link_to "#{fa_icon("moon-o")}&nbsp;Disable keep alive".html_safe, toggle_keep_alive_benchmark_execution_path(execution, keep_alive: false),
+              method: :patch, class: 'btn btn-default btn-block', data: confirm_disable_keep_alive_execution_msg
+    else
+      link_to "#{fa_icon("sun-o")}&nbsp;Enable keep alive".html_safe, toggle_keep_alive_benchmark_execution_path(execution, keep_alive: true),
+              method: :patch, class: 'btn btn-default btn-block', data: confirm_enable_keep_alive_execution_msg
+    end
+  end
+
   def confirm_start_execution_msg(execution)
     { confirm: "This will start a benchmark execution of the <strong>#{execution.name}</strong> benchmark." }
+  end
+
+  def confirm_reprovision_msg
+    { confirm: "This action will reprovision the virtual machines again and continue with starting the benchmark." }
+  end
+
+  def confirm_enable_keep_alive_execution_msg
+    { confirm: "This action will prevent the virtual machines of this execution from being released.<br>
+                <strong>IMPORTANT: Make sure you release the resources of this execution e.g. by using the abort action.</strong>" }
+  end
+
+  def confirm_disable_keep_alive_execution_msg
+    { confirm: "This action will activate any scheduled release resources jobs again.<br>
+                <strong>IMPORTANT: Make sure you release the resources of this execution yourself (e.g. by using the abort action)
+                in case there are no more release resources jobs scheduled.</strong>" }
   end
 
   def confirm_restart_benchmark_msg(execution)
