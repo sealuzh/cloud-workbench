@@ -10,4 +10,8 @@ module BenchmarkDefinitionsHelper
                                              metric_definitions:   @benchmark_definition.metric_definitions,
                                              observation_link_params: observation_link_params
   end
+
+  def vagrantfile_error?(benchmark_definition)
+    benchmark_definition.errors[:vagrantfile].any?
+  end
 end

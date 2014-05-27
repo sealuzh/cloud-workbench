@@ -9,20 +9,22 @@
     <%= f.label :running_timeout, 'Timeout for running benchmark' %>
     <br>
     <br>
+    <% timeout = @benchmark_definition.running_timeout || Rails.application.config.default_running_timeout %>
     <%= f.text_field :running_timeout, class: 'hour-slider',
-                                                        'data-slider-value' =>  @benchmark_definition.running_timeout || Rails.application.config.default_running_timeout,
-                                                        'data-slider-min'   =>   '1',
-                                                        'data-slider-max'   => '100',
-                                                        'data-slider-step'  =>   '1',
-                                                        'data-slider-orientation'  =>   'horizontal',
-                                                        'data-slider-selection'  =>   'before',
-                                                        'data-slider-tooltip'  =>   'always',
-                                                        'data-slider-id'  =>   'yellow'
-                                                     %>
+                                       'value' => timeout,
+                                       'data-slider-value' =>  timeout,
+                                       'data-slider-min'   =>   '1',
+                                       'data-slider-max'   => '100',
+                                       'data-slider-step'  =>   '1',
+                                       'data-slider-orientation'  =>   'horizontal',
+                                       'data-slider-selection'  =>   'before',
+                                       'data-slider-tooltip'  =>   'always',
+                                       'data-slider-id'  =>   'yellow'
+    %>
     </div>
   </div>
   <br>
-  <% if @benchmark_definition.errors.any? %>
+  <% if vagrantfile_error?(@benchmark_definition) %>
     <%= f.label :vagrantfile, class: 'vagrantfile_error', error: true %>
   <% else %>
     <%= f.label :vagrantfile %>
