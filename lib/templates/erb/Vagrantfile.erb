@@ -19,7 +19,7 @@ benchmark_name = '<%= benchmark_name %>'
 benchmark_name_sanitized = '<%= benchmark_name_sanitized %>'
 benchmark_id = <%= benchmark_id %>
 execution_id = <%= execution_id %>
-chef_node_name = "#{execution_id}-benchmark_name_sanitized"
+chef_node_name = "#{execution_id}-#{benchmark_name_sanitized}"
 tag_name = "WorkBenchmark-#{benchmark_name_sanitized}"
 
 ### Default configuration

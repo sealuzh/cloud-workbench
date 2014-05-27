@@ -4,7 +4,15 @@ module EventsAsTraceableExtension
   end
 
   def first_with_name(name)
-    self.find { |event| event.name.to_s == name.to_s }
+    self.find { |event| same_name(event.name, name) }
+  end
+
+  def last_with_name(name)
+    self.select { |event| event if same_name(event.name, name) }.last rescue nil
+  end
+
+  def same_name(first, second)
+    first.to_s == second.to_s
   end
 
   def first_failed

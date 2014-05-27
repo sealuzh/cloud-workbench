@@ -40,7 +40,7 @@ module EventStatusHelper
   end
 
   def end_time
-    time_of_first_event_with_name(:finished_releasing_resources) || time_of_first_event_with_name(:failed_on_releasing_resources)
+    time_of_last_event_with_name(:finished_releasing_resources) || time_of_last_event_with_name(:failed_on_releasing_resources)
   end
 
   # Benchmark
@@ -63,7 +63,7 @@ module EventStatusHelper
   end
 
   def benchmark_start_time
-    time_of_first_event_with_name(:started_running)
+    time_of_last_event_with_name(:started_running)
   end
 
   def benchmark_finished?
@@ -75,10 +75,10 @@ module EventStatusHelper
 
   # Attempt to guess the end time even if the benchmark does not notify benchmark completed
   def benchmark_end_time
-    time_of_first_event_with_name(:finished_running) ||
-        time_of_first_event_with_name(:finished_postprocessing) ||
-        time_of_first_event_with_name(:started_releasing_resources) ||
-        time_of_first_event_with_name(:finished_releasing_resources)
+    time_of_last_event_with_name(:finished_running) ||
+        time_of_last_event_with_name(:finished_postprocessing) ||
+        time_of_last_event_with_name(:started_releasing_resources) ||
+        time_of_last_event_with_name(:finished_releasing_resources)
   end
 
   # Event Helpers
@@ -88,6 +88,11 @@ module EventStatusHelper
 
   def time_of_first_event_with_name(name)
     first = events.first_with_name(name)
-    first.present? ? first.happened_at : nil
+    first.happened_at rescue nil
+  end
+
+  def time_of_last_event_with_name(name)
+    last = events.last_with_name(name)
+    last.happened_at rescue nil
   end
 end
