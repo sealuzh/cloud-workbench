@@ -1,9 +1,11 @@
 <%= simple_form_for(@benchmark_definition) do |f| %>
   <% has_executions = @benchmark_definition.benchmark_executions.any_valid? ? { readonly: true } : {} %>
 
-  <div class="width-restricted">
-    <%= f.input :name, input_html: { maxlength: BenchmarkDefinition.max_name_length }.merge(has_executions) %>
-    <br>
+  <div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-5">
+      <%= f.input :name, input_html: { maxlength: BenchmarkDefinition.max_name_length }.merge(has_executions) %>
+    </div>
+    <div class="col-xs-12 col-md-6 col-lg-5">
     <%= f.label :running_timeout, 'Timeout for running benchmark' %>
     <br>
     <br>
@@ -17,6 +19,7 @@
                                                         'data-slider-tooltip'  =>   'always',
                                                         'data-slider-id'  =>   'yellow'
                                                      %>
+    </div>
   </div>
   <br>
   <% if @benchmark_definition.errors.any? %>

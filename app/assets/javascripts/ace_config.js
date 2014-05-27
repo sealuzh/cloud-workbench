@@ -7,7 +7,7 @@
 var tabSize = 2;
 var wrapLimit = null;
 var minHeight = 400;
-var minWidth  = 350;
+var minWidth  = 450;
 // Make sure you import the theme and mode to use in application.js
 var ace_theme = 'github';
 var ace_mode = 'ruby';
