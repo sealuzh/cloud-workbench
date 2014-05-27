@@ -1,6 +1,7 @@
 class Event < ActiveRecord::Base
   default_scope { order(happened_at: :asc) }
   scope :happened_before, lambda { |time| where("happened_at < ?", time).reorder(happened_at: :desc) }
+  scope :happened_after,  lambda { |time| where("happened_at > ?", time).reorder(happened_at: :asc) }
   belongs_to :traceable, polymorphic: true
   validates :name, presence: true
   validates :happened_at, presence: true
@@ -49,6 +50,11 @@ class Event < ActiveRecord::Base
 
   def status
     STATUS_MAPPINGS[self.name.to_sym]
+  end
+
+  def last?
+    db_name = Event.names[name]
+    traceable.events.happened_after(self.happened_at).where(name: db_name).none?
   end
 
   def previous

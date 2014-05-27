@@ -14,6 +14,6 @@
   </div>
 </li>
 
-<% if event.finished_releasing_resources? %>
+<% if event.finished_releasing_resources? && event.last? %>
   <li><%= fa_icon 'flag-checkered', class: status_bg_color(event.traceable.failed?) %></li>
 <% end %>
