@@ -115,6 +115,8 @@ ActiveRecord::Schema.define(version: 20140527003050) do
     t.datetime "updated_at"
   end
 
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
+
   create_table "virtual_machine_instances", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
