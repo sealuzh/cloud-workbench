@@ -44,7 +44,7 @@ describe MetricDefinitionsController do
 
     def post_create(metric, vm, time, value)
       post '/metric_observations', :metric_observation => {
-          metric_definition_id: metric.id,
+          metric_definition_id: metric.name, # metric.id should also be valid
           provider_name: vm.provider_name,
           provider_instance_id: vm.provider_instance_id,
           time: time,

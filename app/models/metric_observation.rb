@@ -22,21 +22,38 @@ class MetricObservation
   end
 
   def self.create!(params)
-    metric_definition = MetricDefinition.find(params[:metric_definition_id])
-    vm_instance = VirtualMachineInstance.where(provider_name: params[:provider_name],
-                                               provider_instance_id: params[:provider_instance_id]).first
+    vm_instance = identify_vm_instance(params)
+    metric_definition = identify_metric_definition(params, vm_instance)
     metric_definition.create_observation!(params[:time], params[:value], vm_instance.id)
   end
 
   TIME_COL = 0
   VALUE_COL = 1
   def self.import!(params)
-    metric_definition = MetricDefinition.find(params[:metric_definition_id])
-    vm_instance = VirtualMachineInstance.where(provider_name: params[:provider_name],
-                                               provider_instance_id: params[:provider_instance_id]).first
+    vm_instance = identify_vm_instance(params)
+    metric_definition = identify_metric_definition(params, vm_instance)
     CSV.foreach(params[:file].path) do |row|
       metric_definition.create_observation!(row[TIME_COL], row[VALUE_COL], vm_instance.id)
     end
+  end
+
+  def self.identify_vm_instance(params)
+    VirtualMachineInstance.where(provider_name: params[:provider_name],
+                                 provider_instance_id: params[:provider_instance_id]).first
+  end
+
+  def self.identify_metric_definition(params, vm_instance)
+    id_or_name = params[:metric_definition_id]
+    first_definition_by_id(id_or_name) || first_definition_by_name(id_or_name, vm_instance)
+  end
+
+  def self.first_definition_by_id(id)
+    MetricDefinition.where(id: id).first
+  end
+
+  def self.first_definition_by_name(name, vm_instance)
+    benchmark = vm_instance.benchmark_execution.benchmark_definition
+    MetricDefinition.where(benchmark_definition_id: benchmark.id, name: name).first
   end
 
   # You MUST provide a metric_definition_id as argument
