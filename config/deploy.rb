@@ -107,12 +107,12 @@ namespace :deploy do
   desc 'Restart application'
   task :restart, :live do |task, args|
     on roles(:app), in: :sequence, wait: 5 do
-      rake_command('cron:clean')
+      # rake_command('cron:clean') # The cron rake command does not work via Capistrano
       invoke 'unicorn:restart'
       # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
-      # NOTE: Be aware that this will abort all delayed job worker and therefore interrupt running jobs!
+      # NOTE: Deployment or jobs may fail if there are workers that currently process some jobs.
       invoke 'worker:restart_all' unless (args[:live].to_s == 'live')
-      rake_command('cron:update')
+      # rake_command('cron:update')
     end
   end
 
@@ -122,14 +122,14 @@ namespace :deploy do
   end
 
   task :start do
-    rake_command('cron:clean')
+    # rake_command('cron:clean')
     invoke 'unicorn:up'
     invoke 'worker:up_all'
-    rake_command('cron:update')
+    # rake_command('cron:update')
   end
 
   task :stop do
-    rake_command('cron:clean')
+    # rake_command('cron:clean')
     invoke 'unicorn:down'
     invoke 'worker:down_all'
   end
