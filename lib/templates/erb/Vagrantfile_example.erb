@@ -4,9 +4,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :aws do |aws, override|
     # AWS instance configuration
     aws.region = "eu-west-1"
-    # Official Ubuntu 12.04 image from Canonical:
+    # Official Ubuntu 14.04 LTS image for eu-west-1 from Canonical:
     #  https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = "ami-51e91b26"
+    aws.ami = "ami-896c96fe"
     override.ssh.username = "ubuntu"
     aws.instance_type = "t1.micro"
     # Add other security groups separated by spaces.
@@ -20,9 +20,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #       if you use chef.run_list = [...] which is NOT RECOMMENDED
     chef.add_recipe "recipe[fio-benchmark@0.2.0]"
     # NOTE: Do NOT use the ["benchmark"] attribute namespace for your own attributes
+    #       It is highly recommended to use the name of the cookbook as the attribute namespace.
     chef.json =
     {
-      "my_benchmark" => {
+      "fio" => {
         "metric_definition_id" => "seq. write"
       }
     }

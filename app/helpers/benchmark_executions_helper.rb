@@ -19,7 +19,7 @@ module BenchmarkExecutionsHelper
   def toggle_keep_alive_execution_btn(execution)
     if execution.keep_alive?
       link_to "#{fa_icon("moon-o")}&nbsp;Disable keep alive".html_safe, toggle_keep_alive_benchmark_execution_path(execution, keep_alive: false),
-              method: :patch, class: 'btn btn-default btn-block', data: confirm_disable_keep_alive_execution_msg
+              method: :patch, class: 'btn btn-warning btn-block', data: confirm_disable_keep_alive_execution_msg
     else
       link_to "#{fa_icon("sun-o")}&nbsp;Enable keep alive".html_safe, toggle_keep_alive_benchmark_execution_path(execution, keep_alive: true),
               method: :patch, class: 'btn btn-default btn-block', data: confirm_enable_keep_alive_execution_msg
@@ -36,7 +36,8 @@ module BenchmarkExecutionsHelper
 
   def confirm_enable_keep_alive_execution_msg
     { confirm: "This action will prevent the virtual machines of this execution from being released.<br>
-                <strong>IMPORTANT: Make sure you release the resources of this execution e.g. by using the abort action.</strong>" }
+                <strong>IMPORTANT: Make sure you release the resources of this execution e.g. by using the abort action.
+                Anyway you MUST disable the keep alive flag before you can successfully use the abort action.</strong>" }
   end
 
   def confirm_disable_keep_alive_execution_msg

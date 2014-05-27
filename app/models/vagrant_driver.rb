@@ -41,7 +41,7 @@ class VagrantDriver
 
   def reprovision
     %x( cd "#{@vagrant_dir_path}" &&
-        vagrant reprovision >> #{reprovision_log_file} 2>&1 )
+        vagrant provision >> #{reprovision_log_file} 2>&1 )
     $?.success?
   end
 
