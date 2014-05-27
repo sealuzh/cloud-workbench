@@ -1,11 +1,35 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-VAGRANTFILE_API_VERSION = "2"
+### Utilities
+class ::Hash
+  def deep_merge!(second)
+    result = deep_merge(second)
+    self.replace(result)
+  end
 
+  def deep_merge(second)
+    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    self.merge(second, &merger)
+  end
+end
+
+### Variables
+benchmark_name = <%= benchmark_name %>
+benchmark_name_sanitized = <%= benchmark_name_sanitized %>
+benchmark_id = <%= benchmark_id %>
+execution_id = <%= execution_id %>
+chef_node_name = "#{execution_id}-benchmark_name_sanitized"
+tag_name = "WorkBenchmark-#{benchmark_name_sanitized}"
+
+### Default configuration
+VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Box
   config.vm.box = "aws"
   config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
+
+  # VM
   config.vm.hostname = "benchmark"
 
   # AWS EC2 provider
@@ -25,80 +49,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.instance_type = "t1.micro"
     aws.security_groups = ["default"]
     aws.tags = {
-      'Name' => 'WorkBench-<%= @benchmark_name %>' # TODO: Sanitize string (max 256 chars allowed) + append benchmark + execution id
+      'Name' => tag_name
     }
 
+  # Chef client provisioner
+  config.omnibus.chef_version = :latest
+  config.vm.provision "chef_client", id: "chef_client" do |chef|
+    chef.log_level = :info
+    chef.provisioning_path = "/etc/chef"
+    chef.chef_server_url = ENV['KNIFE_CHEF_SERVER_URL']
+    chef.validation_key_path = ENV['KNIFE_VALIDATION_KEY']
+
+    # MUST be unique in scope of all benchmarks
+    chef.node_name = chef_node_name
+
+    chef.run_list = [
+      "recipe[benchmark]"
+    ]
 end
 
-# Utilities
-class ::Hash
-  def deep_merge!(second)
-    result = deep_merge(second)
-    self.replace(result)
-  end
-
-  def deep_merge(second)
-    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
-    self.merge(second, &merger)
-  end
-end
-
-# Variables
-benchmark_name = <%= @benchmark_name %>
-benchmark_id = <%= @benchmark_id %>
-execution_id = <%= @execution_id %>
-
-
-<%= @vagrantfile %>
-
-
-
-
-###### LEGACY
-
-require 'securerandom'
-require 'chef'  # DOES NOT WORK WITH NEWER RELEASES !!!
-# TODO: Fix this dependency:
-# * require knife.rb as ruby code
-# * serve all config via environment variables
-
-Chef::Config.from_file(File.join(ENV['HOME'], '.chef', 'knife.rb'))
-
-
-
-
-end
-
-#vagrant omnibus plugin that installs Chef with a bundled Ruby: https://github.com/schisamo/vagrant-omnibus
-# Exploit Ruby include to move infrastructure stuff to out. Use plugin detection.
-config.omnibus.chef_version = :latest
-
-# Chef provisioning
-config.vm.provision "chef_client" do |chef|
-chef.log_level = :info
-# Put the client.rb in /etc/chef such that the chef-client can be run via "sudo chef-client" without specifying the path
-chef.provisioning_path = "/etc/chef"
-chef.chef_server_url = Chef::Config[:chef_server_url]
-chef.validation_key_path = Chef::Config[:validation_key]
-
-# May use 6-digit random string to generate unique node names since Chef nodes MUST have unique names with: SecureRandom.hex(3)
-# MUST be unique in scope of all benchmarks!
-chef.node_name = "#{config.vm.hostname}-#{SecureRandom.hex(3)}"
-
-chef.run_list = [
-"recipe[benchmark]",
-"recipe[fio-benchmark@0.2.0]"
-]
-
-chef.json = {
-"fio" => {
-"metric_definition_id" => 1
-}
-}
-
-# @see vagrant-butcher for possible workaround: https://github.com/cassianoleal/vagrant-butcher/
-# Cleanup when vm gets destroyed: Does not work due to bug https://github.com/mitchellh/vagrant/issues/2476
-# chef.delete_node = true
-# chef.delete_client = true
-end
-end
+### Custom Vagrantfile
+<%= vagrantfile %>

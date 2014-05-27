@@ -1,3 +1,4 @@
+require 'erb'
 require 'fileutils'
 class VagrantFileSystem
   attr_reader :benchmark_definition, :benchmark_execution
@@ -9,7 +10,8 @@ class VagrantFileSystem
 
   def prepare_vagrantfile_for_driver
     create_directory_structure
-    create_vagrantfile
+    vagrantfile = evaluate_vagrantfile
+    create_vagrantfile(vagrantfile)
   end
 
   def create_directory_structure
@@ -18,8 +20,15 @@ class VagrantFileSystem
     FileUtils.mkdir_p(log_dir)
   end
 
-  def create_vagrantfile
-    vagrantfile = @benchmark_definition.vagrantfile
+  def evaluate_vagrantfile
+    template = ERB.new File.read(Rails.application.config.vagrantfile)
+    vagrantfile_binding = VagrantfileBinding.new(benchmark: @benchmark_definition,
+                                                 execution: @benchmark_execution,
+                                                 benchmark_name_sanitized: benchmark_name_sanitized)
+    template.result(vagrantfile_binding.get_binding)
+  end
+
+  def create_vagrantfile(vagrantfile)
     File.open(vagrantfile_path, 'w') do |file|
       file.write(vagrantfile)
     end
@@ -39,8 +48,11 @@ class VagrantFileSystem
 
   def benchmark_definition_dir_name
     aligned_id = @benchmark_definition.id.to_s.rjust(3, '0')
-    benchmark_definition_name = sanitize_dir_name(@benchmark_definition.name)
-    "#{aligned_id}-#{benchmark_definition_name}"
+    "#{aligned_id}-#{benchmark_name_sanitized}"
+  end
+
+  def benchmark_name_sanitized
+    sanitize_dir_name(@benchmark_definition.name)
   end
 
   # Replace all non-word-characters [^\w] with an underscore '_'

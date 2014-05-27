@@ -58,7 +58,8 @@ module CloudBenchmarking
     config.templates = File.join(Rails.root, 'lib', 'templates')
 
     # Benchmark definition
-    config.vagrantfile_template = File.join(config.templates, 'erb', 'Vagrantfile_template.erb')
+    config.vagrantfile_example = File.join(config.templates, 'erb', 'Vagrantfile_example.erb')
+    config.vagrantfile = File.join(config.templates, 'erb', 'Vagrantfile.erb')
 
     # Benchmark execution
     config.benchmark_executions = File.join(config.storage, 'benchmark_executions')

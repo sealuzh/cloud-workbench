@@ -8,8 +8,8 @@ FactoryGirl.define do
     sequence(:vagrantfile) do |n|
         namespace = OpenStruct.new(n: n)
         file_dir = File.expand_path File.dirname(__FILE__)
-        vagrantfile_template = "#{file_dir}/factories/Vagrantfile.erb"
-        template = ERB.new File.read(vagrantfile_template)
+        vagrantfile_example = "#{file_dir}/factories/Vagrantfile.erb"
+        template = ERB.new File.read(vagrantfile_example)
         template.result(namespace.instance_eval { binding })
     end
   end
