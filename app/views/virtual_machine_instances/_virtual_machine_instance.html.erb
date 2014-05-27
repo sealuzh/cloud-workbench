@@ -1,6 +1,7 @@
 <% execution = virtual_machine_instance.benchmark_execution %>
 <% benchmark_definition = execution.benchmark_definition %>
 <tr>
+  <td><%= execution_active_indicator(execution) %></td>
   <td><%= execution_status_label(execution) %></td>
   <% if show_benchmark_definition %><td><%= link_to benchmark_definition.name, benchmark_definition %></td><% end %>
   <td><%= link_to formatted_time(execution.start_time, :date_and_time_short), execution %></td>

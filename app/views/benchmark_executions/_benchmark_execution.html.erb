@@ -1,4 +1,5 @@
 <tr>
+  <td><%= execution_active_indicator(benchmark_execution) %></td>
   <td><%= execution_status_label(benchmark_execution) %></td>
   <td>
     <%= formatted_time(benchmark_execution.start_time, :date_and_time_short) %><br>
