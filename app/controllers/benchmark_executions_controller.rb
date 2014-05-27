@@ -16,6 +16,7 @@ class BenchmarkExecutionsController < ApplicationController
 
   def show
     @benchmark_definition = @benchmark_execution.benchmark_definition
+    @virtual_machine_instances = @benchmark_execution.virtual_machine_instances
   end
 
   def restart_benchmark

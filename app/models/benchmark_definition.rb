@@ -32,6 +32,10 @@ class BenchmarkDefinition < ActiveRecord::Base
   validates :vagrantfile, presence: true
   before_save :ensure_name_integrity
 
+  def virtual_machine_instances
+    VirtualMachineInstance.where(benchmark_execution_id:
+                                   BenchmarkExecution.select('id').where(benchmark_definition_id: self.id))
+  end
 
   def self.max_name_length
     MAX_NAME_LENGTH

@@ -13,6 +13,7 @@
 
   <div class="col-md-3">
     <%= render 'action_sidebar', benchmark_execution: @benchmark_execution %>
+    <%= render 'vm_instances' %>
     <%= schedule_metric_sidebar(@benchmark_definition, @benchmark_execution) %>
   </div>
 </div>

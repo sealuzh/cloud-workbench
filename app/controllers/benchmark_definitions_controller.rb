@@ -8,7 +8,8 @@ class BenchmarkDefinitionsController < ApplicationController
   end
 
   def show
-    @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:page], per_page: 10)
+    @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:exe_page], per_page: 10)
+    @virtual_machine_instances = @benchmark_definition.virtual_machine_instances.paginate(page: params[:vm_page], per_page: 10)
   end
 
   def clone
@@ -23,7 +24,7 @@ class BenchmarkDefinitionsController < ApplicationController
   end
 
   def new
-    @benchmark_definition = BenchmarkDefinition.new(vagrantfile: vagrantfile_template)
+    @benchmark_definition = BenchmarkDefinition.new(vagrantfile: vagrantfile_example)
   end
 
   def edit
@@ -77,5 +78,10 @@ class BenchmarkDefinitionsController < ApplicationController
 
     def show_success_flash(action)
       flash[:success] = "Benchmark definition <strong>#{view_context.link_to @benchmark_definition.name, @benchmark_definition, class: 'alert-link'}</strong> was successfully #{action}.".html_safe
+    end
+
+    def vagrantfile_example
+      template = ERB.new File.read(Rails.application.config.vagrantfile_example)
+      template.result
     end
 end

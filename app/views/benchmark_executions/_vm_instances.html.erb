@@ -1,0 +1,14 @@
+<div class="well">
+  <h3><%= pluralize(@virtual_machine_instances.count, 'Virtual Machine') %></h3>
+  <table class="table table-condensed">
+    <tbody>
+    <% @virtual_machine_instances.each do |vm| %>
+      <tr>
+        <td><strong><%= vm.provider_name %></strong></td>
+        <td><%= vm.provider_instance_id %></td>
+        <td><%= link_to delete_icon, vm, method: :delete, data: confirm_delete_vm_instance_msg(vm), class: 'delete' %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

@@ -3,21 +3,5 @@
 <% content_header(vms) %>
 
 <%= will_paginate @virtual_machine_instances %>
-
-<div class="box-body table-responsive">
-  <table class="table table-hover">
-    <thead>
-    <tr>
-      <th>Execution Status</th>
-      <th>Benchmark Definition</th>
-      <th>Execution Start Time</th>
-      <th>Provider</th>
-      <th>Provider Instance Id</th>
-    </tr>
-    </thead>
-    <tbody>
-    <%= render @virtual_machine_instances %>
-    </tbody>
-  </table>
-</div>
+<%= render 'shared/virtual_machine_instances', show_benchmark_definition: true %>
 <%= will_paginate @virtual_machine_instances %>

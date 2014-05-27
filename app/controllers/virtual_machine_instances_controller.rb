@@ -32,7 +32,7 @@ class VirtualMachineInstancesController < ApplicationController
 
   def destroy
     @virtual_machine_instance.destroy
-    redirect_to virtual_machine_instances_url
+    redirect_to :back
   end
 
   private
