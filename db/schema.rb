@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140526164700) do
+ActiveRecord::Schema.define(version: 20140527003050) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
@@ -40,14 +40,6 @@ ActiveRecord::Schema.define(version: 20140526164700) do
   end
 
   add_index "benchmark_schedules", ["benchmark_definition_id"], name: "index_benchmark_schedules_on_benchmark_definition_id"
-
-  create_table "cloud_providers", force: true do |t|
-    t.string   "name"
-    t.string   "credentials_path"
-    t.string   "ssh_key_path"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
