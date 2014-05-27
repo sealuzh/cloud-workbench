@@ -322,6 +322,7 @@ GEM
     rb-fsevent (0.9.4)
     rb-inotify (0.9.4)
       ffi (>= 0.5.0)
+    rb-readline (0.5.1)
     rdoc (4.1.1)
       json (~> 1.4)
     ref (1.0.5)
@@ -488,6 +489,7 @@ DEPENDENCIES
   quiet_assets
   rack-livereload
   rails (= 4.1.1)
+  rb-readline
   rspec-rails (~> 2.14.2)
   sdoc
   selenium-webdriver (~> 2.41.0)
