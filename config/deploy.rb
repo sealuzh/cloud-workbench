@@ -95,21 +95,24 @@ namespace :deploy do
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
   # Set file system permissions
-  after 'deploy', 'user:create_default'
   after 'deploy:publishing', 'deploy:set_permissions:acl'
   after 'deploy:publishing', 'deploy:restart'
   after :finishing, 'deploy:cleanup'
+
+  after 'deploy:restart', :create_default_user do
+    rake_command('user:create_default')
+  end
 
   # Includes: Unicorn, delayed_job workers and system cron management (nginx and postgres are not considered here)
   desc 'Restart application'
   task :restart, :live do |task, args|
     on roles(:app), in: :sequence, wait: 5 do
-      invoke 'rake', 'cron:clean'
+      rake_command('cron:clean')
       invoke 'unicorn:restart'
       # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
       # NOTE: Be aware that this will abort all delayed job worker and therefore interrupt running jobs!
       invoke 'worker:restart_all' unless (args[:live].to_s == 'live')
-      invoke 'rake', 'cron:update'
+      rake_command('cron:update')
     end
   end
 
@@ -119,15 +122,30 @@ namespace :deploy do
   end
 
   task :start do
-    invoke 'rake', 'cron:clean'
+    rake_command('cron:clean')
     invoke 'unicorn:up'
     invoke 'worker:up_all'
-    invoke 'rake', 'cron:update'
+    rake_command('cron:update')
   end
 
   task :stop do
-    invoke 'rake', 'cron:clean'
+    rake_command('cron:clean')
     invoke 'unicorn:down'
     invoke 'worker:down_all'
+  end
+
+  # Executes a rake task on the primary app within the correct path
+  # Alternative workaround (tested) for calling a rake task since invoking other capistrano tasks with arguments does not work.
+  # run_locally do
+  #   execute "bundle exec cap #{fetch(:stage)} rake[user:create_default]"
+  # end
+  def rake_command(task)
+    on primary(:app) do
+      within current_path do
+        with :rails_env => fetch(:rails_env) do
+          rake task
+        end
+      end
+    end
   end
 end
