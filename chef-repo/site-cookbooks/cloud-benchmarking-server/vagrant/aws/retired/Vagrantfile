@@ -10,7 +10,7 @@ vagrant_base_dir = Pathname.new(__FILE__).parent.parent.parent.expand_path
 chef_repo_base_dir = Pathname.new(vagrant_base_dir).parent.parent.parent.expand_path
 
 COOKBOOKS_PATH = File.expand_path("#{vagrant_base_dir}/../berks-cookbooks")
-CONFIG_DIR = "#{chef_repo_base_dir}/secret/vagrant-aws-staging"
+CONFIG_DIR = "#{chef_repo_base_dir}/secret/vagrant-aws-retired"
 
 # Import parent configs and pass local context (e.g. variables)
 base_config = File.read "#{vagrant_base_dir}/Vagrantfile.base"
@@ -26,7 +26,7 @@ Vagrant.configure('2') do |config|
   # AWS
   config.vm.provider :aws do |aws, override|
     aws.tags = {
-        'Name' => 'WorkBench-Server-Staging_OLD'
+        'Name' => 'WorkBench-Server-Retired'
     }
   end
 
@@ -35,7 +35,7 @@ Vagrant.configure('2') do |config|
     chef.json = CHEF_JSON.deep_merge({
       "cloud-benchmarking-server" => {
           "delayed_job" => {
-              "worker_processes" => "2"
+              "worker_processes" => "4"
           },
       },
     })
