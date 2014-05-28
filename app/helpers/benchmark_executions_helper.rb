@@ -19,7 +19,7 @@ module BenchmarkExecutionsHelper
   def toggle_keep_alive_execution_btn(execution)
     if execution.keep_alive?
       link_to "#{fa_icon("moon-o")}&nbsp;Disable keep alive".html_safe, toggle_keep_alive_benchmark_execution_path(execution, keep_alive: false),
-              method: :patch, class: 'btn btn-warning btn-block', data: confirm_disable_keep_alive_execution_msg
+              method: :patch, class: 'btn btn-info btn-block', data: confirm_disable_keep_alive_execution_msg
     else
       link_to "#{fa_icon("sun-o")}&nbsp;Enable keep alive".html_safe, toggle_keep_alive_benchmark_execution_path(execution, keep_alive: true),
               method: :patch, class: 'btn btn-default btn-block', data: confirm_enable_keep_alive_execution_msg
