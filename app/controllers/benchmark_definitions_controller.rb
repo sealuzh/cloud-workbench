@@ -8,8 +8,8 @@ class BenchmarkDefinitionsController < ApplicationController
   end
 
   def show
-    @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:exe_page], per_page: 10)
-    @virtual_machine_instances = @benchmark_definition.virtual_machine_instances.paginate(page: params[:vm_page], per_page: 10)
+    @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params['execution_page'], per_page: 10)
+    @virtual_machine_instances = @benchmark_definition.virtual_machine_instances.paginate(page: params[:page], per_page: 10)
   end
 
   def clone

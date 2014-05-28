@@ -5,7 +5,7 @@
         <%= pluralize(@benchmark_definition.benchmark_executions.count, 'Execution') %>
       <% end %>
     </h3>
-    <%= will_paginate @benchmark_executions, class: 'pagination-box' %>
+    <%= will_paginate @benchmark_executions, class: 'pagination-box', param_name: 'execution_page' %>
     <div class="box-tools pull-right">
       <button class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><%= fa_icon 'minus' %></button>
     </div>
