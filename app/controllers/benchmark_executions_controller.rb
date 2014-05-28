@@ -76,7 +76,7 @@ class BenchmarkExecutionsController < ApplicationController
 
   def destroy
     @benchmark_execution.destroy
-      redirect_to benchmark_definitions_path
+      redirect_to benchmark_executions_path
   end
 
   private
