@@ -23,6 +23,7 @@ include_recipe "www-app-mysql::install"
 include_recipe "www-app-mysql::configure"
 
 RUBY = "#{Chef::Config.embedded_dir}/bin/ruby"
+
 # Start
 template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
   source "run_benchmark.erb"
@@ -31,6 +32,12 @@ template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
   mode "0755"
   variables(
       ruby: RUBY,
-      metric: node['mysql']['metric_definition_id']
+      metric: node['mysql']['metric_definition_id'],
+      username: node['mysql']['username'],
+      pw: node['mysql']['password'],
+      db: node['mysql']['db'],
+      table_size: node['mysql']['table_size'],
+      max_time: node['mysql']['max_time'],
+      repetitions: node['mysql']['repetitions']
   )
 end

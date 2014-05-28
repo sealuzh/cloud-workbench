@@ -5,3 +5,10 @@ include_recipe 'apt'
 package "sysbench" do
   action :install
 end
+
+# copy ruby script with the benchmark
+cookbook_file "#{node['benchmark']['dir']}/sysbench-cpu.rb" do
+  source "sysbench-cpu.rb"
+  owner node['benchmark']['owner']
+  group node['benchmark']['group']
+end

@@ -16,3 +16,10 @@ mysql_database 'benchmark' do
   connection ({:host => "localhost", :username => 'root', :password => 'root'})
   action :create
 end
+
+# copy ruby script with the benchmark
+cookbook_file "#{node['benchmark']['dir']}/sysbench-mysql.rb" do
+  source "sysbench-mysql.rb"
+  owner node['benchmark']['owner']
+  group node['benchmark']['group']
+end

@@ -1,0 +1,35 @@
+#!<%= @ruby %>
+
+require './benchmark_helper'
+require './jcloudscale-compile-benchmark'
+require 'securerandom'
+
+compiler = CompileBenchmark.new
+
+execute(compiler, <%= @repetitions %>, "<%= @download_cmd %>", "<%= @compile_cmd %>", "<%=@cleanup_cmd %>")
+
+
+# notify completed
+BenchmarkHelper.notify_postprocessing_completed
+
+BEGIN {
+    def execute(compiler, times, download_cmd, compile_cmd, cleanup_cmd)
+        cpu = compiler.find_cpu_info
+        batch_id = SecureRandom.uuid
+        times.times do |t|
+
+            result = compiler.do_benchmark(download_cmd, compile_cmd)
+
+            # aggregate and submit result
+            aggregatedResult = "Results (#{compiler.now}):
+                Batch: #{batch_id}
+                CPU: #{cpu}
+                Compile Benchmark: #{result}"
+
+            BenchmarkHelper.submit_metric(<%= @metric %>, t, aggregatedResult)
+
+            # do cleanup
+            compiler.do_cleanup cleanup_cmd
+        end
+    end
+}

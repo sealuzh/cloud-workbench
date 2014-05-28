@@ -29,6 +29,8 @@ template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
   mode "0755"
   variables(
       ruby: RUBY,
-      metric: node['cpu']['metric_definition_id']
+      metric: node['cpu']['metric_definition_id'],
+      max_prime: node['cpu']['max_prime'],
+      repetitions: node['cpu']['repetitions']
   )
 end

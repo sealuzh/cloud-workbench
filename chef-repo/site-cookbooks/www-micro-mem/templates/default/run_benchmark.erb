@@ -1,49 +1,37 @@
 #!<%= @ruby %>
 
 require './benchmark_helper'
+require './membench'
+require 'securerandom'
 
-puts "Starting benchmark run"
+mbw = MBW.new
 
-# find out date
-date = `date`
+execute(mbw, <%= @repetitions %>, <%= @frame_size %>, <%= @bench_rep %>)
 
-# find out our CPU
-cpu = `cat /proc/cpuinfo | grep 'model name' | cut -d ':' -f 2`
-
-puts "Finished static part"
-
-# run mem benchmark
-memResultAsString = `mbw 64 | grep 'AVG'`
-memResult = find_mem_results_in_string memResultAsString
-if !memResult
-fail("Failed to run Memory benchmark!")
-end
-
-puts "Finished memory benchmark"
-
-# aggregate and submit result
-aggregatedResult = "Results (#{date}):
-CPU: #{cpu}
-Mem Benchmark: #{memResult}"
-
-BenchmarkHelper.submit_metric(<%= @metric %>, 1, aggregatedResult)
-
-puts aggregatedResult
-puts "Uploaded results"
-
-# notify completed
 BenchmarkHelper.notify_postprocessing_completed
-
-puts "All done. Tearing down."
 
 # helper methods
 BEGIN {
-def fail(message)
-    BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
-    exit
-end
+    def fail(message)
+        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
+        exit
+    end
 
-def find_mem_results_in_string(string)
-    string.scan(/Copy: (.*) MiB/)
-end
+    def execute(mbw, times, frame_size, bench_rep)
+        cpu = mbw.find_cpu_info
+        batch_id = SecureRandom.uuid
+        times.times do |t|
+            mem_result = mbw.run(frame_size, bench_rep)
+            if !mem_result
+                fail("Failed to run Memory benchmark!")
+            end
+
+            aggregated_result = "Results (#{mbw.now}):
+                Batch: #{batch_id}
+                CPU: #{cpu}
+                Mem Benchmark: #{mem_result}"
+
+            BenchmarkHelper.submit_metric(<%= @metric %>, t, aggregated_result)
+        end
+    end
 }

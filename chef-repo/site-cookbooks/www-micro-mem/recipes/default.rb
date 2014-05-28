@@ -29,6 +29,9 @@ template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
   mode "0755"
   variables(
       ruby: RUBY,
-      metric: node['mem']['metric_definition_id']
+      metric: node['mem']['metric_definition_id'],
+      frame_size: node["mem"]["frame_size"],
+      bench_rep: node["mem"]["bench_rep"],
+      repetitions: node["mem"]["repetitions"],
   )
 end

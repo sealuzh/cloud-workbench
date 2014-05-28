@@ -1,0 +1,65 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'securerandom'
+require 'chef'
+
+Chef::Config.from_file(File.join(ENV['HOME'], '.chef', 'knife.rb'))
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "aws"
+  config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
+  config.vm.hostname = 'www-app-compile'
+
+  # AWS EC2 provider
+  config.vm.provider :aws do |aws, override|
+    # AWS authentication
+    aws.access_key_id = ENV['AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['AWS_SECRET_KEY']
+    
+    # AWS instance configuration
+    aws.region = "eu-west-1"
+    aws.region_config "eu-west-1" do |region|
+      region.ami = "ami-896c96fe"
+      region.keypair_name = ENV['EC2_KEYPAIR']
+    end
+    override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
+    override.ssh.username = "ubuntu"
+    aws.instance_type = "t1.micro"
+    aws.security_groups = ["default"]
+    aws.tags = {
+      'Name' => 'www-app-compile'
+     }
+  end
+
+  #vagrant omnibus plugin that installs Chef with a bundled Ruby: https://github.com/schisamo/vagrant-omnibus
+  # Exploit Ruby include to move infrastructure stuff to out. Use plugin detection.
+  config.omnibus.chef_version = :latest
+
+  # Chef provisioning
+  config.vm.provision "chef_client" do |chef|
+    chef.log_level = :info
+    # Put the client.rb in /etc/chef such that the chef-client can be run via "sudo chef-client" without specifying the path
+    chef.provisioning_path = "/etc/chef"
+    chef.chef_server_url = Chef::Config[:chef_server_url]
+    chef.validation_key_path = Chef::Config[:validation_key]
+    
+    # May use 6-digit random string to generate unique node names since Chef nodes MUST have unique names with: SecureRandom.hex(3)
+    # MUST be unique in scope of all benchmarks!
+    chef.node_name = "#{config.vm.hostname}-#{SecureRandom.hex(3)}"
+    
+    chef.run_list = [
+      "recipe[benchmark]",
+      "recipe[www-app-compile@0.1.0]"
+    ]
+
+    chef.json = {
+      "compile" => {
+        "metric_definition_id" => 1
+      }
+    }
+
+  end
+end

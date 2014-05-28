@@ -1,0 +1,52 @@
+#!<%= @ruby %>
+
+require './benchmark_helper'
+require './sysbench-io'
+require 'securerandom'
+
+
+mysql = MySQL.new
+
+success = mysql.prepare_mysql_benchmark("<%= @username %>", "<%= @pw %>", "<%= @db %>", <%= @table_size %>)
+if !success
+    fail("Preparing mysql benchmark failed!")
+end
+
+while(true) do
+    do_run(mysql)
+    sleep <%= @long_delay %>
+end
+
+# helper methods
+BEGIN {
+    def fail(message)
+        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
+        exit
+    end
+
+    def do_run(mysql)
+        uuid = SecureRandom.uuid
+        <%= @short_repetitions %>.times do
+            do_single(uuid, mysql)
+            sleep <%= @short_delay %>
+        end
+    end
+
+    def do_single(uuid, mysql)
+
+        cpu = mysql.find_cpu_info
+        mysqlResult = mysql.run_mysql_benchmark("<%= @username %>", "<%= @pw %>", "<%= @db %>", <%= @table_size %>, <%= @max_time %>)
+        if !mysqlResult
+            fail("Failed to run MySQL benchmark!")
+        end
+
+        # aggregate and submit result
+        aggregatedResult = "Results (#{mysql.now}):
+        Batch ID: #{uuid}
+        CPU: #{cpu}
+        OLTP: #{mysqlResult}"
+
+        BenchmarkHelper.submit_metric(<%= @metric %>, 1, aggregatedResult)
+
+    end
+}

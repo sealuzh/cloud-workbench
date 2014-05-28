@@ -1,48 +1,20 @@
 #!<%= @ruby %>
 
 require './benchmark_helper'
+require './sysbench-mysql'
+require 'securerandom'
 
-puts "Starting benchmark run"
+mysql = MySQL.new
 
-# find out date
-date = `date`
-
-# find out our CPU
-cpu = `cat /proc/cpuinfo | grep 'model name' | cut -d ':' -f 2`
-
-puts "Finished static part"
-
-# prepare mysql benchmark
-success = system("sysbench --test=oltp --oltp-table-size=100000 --mysql-db=bench --mysql-user=root --mysql-password=root prepare")
+success = mysql.prepare_mysql_benchmark("<%= @username %>", "<%= @pw %>", "<%= @db %>", <%= @table_size %>)
 if !success
     fail("Preparing mysql benchmark failed!")
 end
 
-puts "Finished preparing MySQL benchmark"
-
-# run mysql benchmark
-mysqlResultAsString = `sysbench --test=oltp --oltp-table-size=100000 --max-time=120 --oltp-test-mode=complex --oltp-read-only=off --num-threads=6 --max-requests=0 --mysql-db=bench --mysql-user=root --mysql-password=root run`
-mysqlResult = find_mysql_result_in_string mysqlResultAsString
-if !mysqlResult
-    fail("Failed to run MySQL benchmark!")
-end
-
-puts "Finished MySQL benchmark"
-
-# aggregate and submit result
-aggregatedResult = "Results (#{date}):
-CPU: #{cpu}
-OLTP: #{mysqlResult[1]}"
-
-BenchmarkHelper.submit_metric(<%= @metric %>, 1, aggregatedResult)
-
-puts aggregatedResult
-puts "Uploaded results"
+execute(mysql, <%= @repetitions %>, "<%= @username %>", "<%= @pw %>", "<%= @db %>", <%= @table_size %>, <%= @max_time %>)
 
 # notify completed
 BenchmarkHelper.notify_postprocessing_completed
-
-puts "All done. Tearing down."
 
 # helper methods
 BEGIN {
@@ -51,7 +23,22 @@ BEGIN {
         exit
     end
 
-    def find_mysql_result_in_string(string)
-        /transactions:.*\((.*)\)/.match string
+    def execute(mysql, times, username, pw, db, table_size, max_time)
+        cpu = mysql.find_cpu_info
+        batch_id = SecureRandom.uuid
+        times.times do |t|
+            mysqlResult = mysql.run_mysql_benchmark(username, pw, db, table_size, max_time)
+            if !mysqlResult
+                fail("Failed to run MySQL benchmark!")
+            end
+
+            # aggregate and submit result
+            aggregatedResult = "Results (#{mysql.now}):
+                Batch: #{batch_id}
+                CPU: #{cpu}
+                OLTP: #{mysqlResult}"
+
+            BenchmarkHelper.submit_metric(<%= @metric %>, t, aggregatedResult)
+        end
     end
 }

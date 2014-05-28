@@ -1,0 +1,84 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'vagrant-openstack-plugin'
+
+SSH_USERNAME = "ubuntu"
+
+Vagrant.configure("2") do |config|
+
+  # Detects vagrant-omnibus plugin
+  if Vagrant.has_plugin?('vagrant-omnibus')
+    config.omnibus.chef_version = :latest
+  else
+    puts "FATAL: Vagrant-omnibus plugin not detected. Please install the plugin with\n
+                 'vagrant plugin install vagrant-omnibus' from any other directory\n
+                 before continuing."
+    exit
+  end
+
+  config.vm.box = "dummy"
+
+  # Make sure the private key from the key pair is provided
+  config.ssh.private_key_path = "/Users/philipp/Documents/Openstack/philipp.pem"
+
+  config.vm.provider :openstack do |os|
+    os.username     = "#{ENV['OS_USERNAME']}"          # e.g. "#{ENV['OS_USERNAME']}"
+    os.api_key      = "#{ENV['OS_PASSWORD']}"           # e.g. "#{ENV['OS_PASSWORD']}"
+    os.flavor       = /m1.small/                # Regex or String
+    os.image        = /Ubuntu.*13/                 # Regex or String
+    os.endpoint     = "http://openstack.infosys.tuwien.ac.at:5000/v2.0/tokens"      # e.g. "#{ENV['OS_AUTH_URL']}/tokens"
+    os.keypair_name = "philipp"      # as stored in Nova
+    os.ssh_username = "ubuntu"           # login for the VM
+    os.server_name  = "Cloud-Workbench"
+    os.floating_ip  = "128.130.172.179"
+  end
+
+  # Chef solo provisioning via Berkshelf vendored cookbooks
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = "../berks-cookbooks"
+    chef.run_list = [
+        'recipe[cloud-benchmarking-server]'
+    ]
+    chef.json = {
+        "appbox" => {
+            "deploy_keys" => [
+                "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCaea+LWlsLHA+NaIHDAETymdFToH9FcTvxDGHydE8bxAvlebXq625wF9/YX8qVN6ahcFME32JbNfFSYlp8KGDCa+qNazVawdhsOrEqsudOgZRuizlTI8AjEbbNvVyanQ+c5F/+zLW0v+/N+gk203k7v9lptYlmUQEmLg5EDEwpSrVAVmyfwZr5sMtSa6Ll3WFydGwTxmtGSfzTehMcRHCN/gyk5EOcJScP0PHq6RNSwN6ZPClXuOWBL+2wJ62yNUDm5fPM/X8RgB2IBczO0h7+j51zT85HiE99o5ILfMQjZ/yff6t+qJwJS+DXVZrGs2X3CM3pSxcONKYr9AlTfn+P joel-key-pair-ireland",
+                "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCD+BQ5ILiCrn4IIoabtQOz7iAhQV48LfqdSlrxTMIoDrAzKZdyfGlhaRydLz7acdfd/PJG8IzaskinGdQYM3NfkPFniyU72ir07/QykQDbgadEA5XP4o1Tm0hUPs1Wt7OHBWzYxYjhYJN7Rnun7Pc/Xj4D7Dr48FJQUxUvAPLYJQ== joel.scheuner.dev@gmail.com"
+            ],
+            "admin_keys" => [
+                "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCaea+LWlsLHA+NaIHDAETymdFToH9FcTvxDGHydE8bxAvlebXq625wF9/YX8qVN6ahcFME32JbNfFSYlp8KGDCa+qNazVawdhsOrEqsudOgZRuizlTI8AjEbbNvVyanQ+c5F/+zLW0v+/N+gk203k7v9lptYlmUQEmLg5EDEwpSrVAVmyfwZr5sMtSa6Ll3WFydGwTxmtGSfzTehMcRHCN/gyk5EOcJScP0PHq6RNSwN6ZPClXuOWBL+2wJ62yNUDm5fPM/X8RgB2IBczO0h7+j51zT85HiE99o5ILfMQjZ/yff6t+qJwJS+DXVZrGs2X3CM3pSxcONKYr9AlTfn+P joel-key-pair-ireland"
+            ]
+        },
+        "cbench-rackbox" => {
+            "add_group_sudoers" => ["ubuntu"]
+        },
+        # Optimize memory for m1.small(~1.7gb) instance
+        "rackbox" => {
+            "default_config" => {
+                "unicorn" => {
+                    "worker_processes" => "3"
+                }
+            }
+        },
+        "postgresql" => {
+            "config" => {
+                "max_connections" => "9"
+            },
+            "config_pgtune" => {
+                "db_type" => "desktop"
+            }
+        },
+        "databox" => {
+            "db_root_password" => "cloud-ba-Ri-Uv",
+            "databases" => {
+                "postgresql" => [
+                    { "username" => "cloud",
+                      "password" => "uc-Au",
+                      "database_name" => "cloud_benchmarking_production" }
+                ]
+            }
+        }
+    }
+  end
+end
