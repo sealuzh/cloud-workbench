@@ -100,10 +100,11 @@ module BenchmarkExecutionsHelper
     end
   end
 
-  def total_active_executions_badge(opts = {})
-    actives_count = BenchmarkExecution.actives.count
-    unless opts[:conditional].present? && opts[:conditional].to_s == 'true' && actives_count <= 0
-      link_to actives_count, benchmark_executions_path(active: true), class: "badge bg-green badge-total #{opts[:html_class]}"
-    end
-  end
+  # No usages yet: NOTE: This is a very expensive operation as the active state is calculated based on the event model
+  # def total_active_executions_badge(opts = {})
+  #   actives_count = BenchmarkExecution.actives.count
+  #   unless opts[:conditional].present? && opts[:conditional].to_s == 'true' && actives_count <= 0
+  #     link_to actives_count, benchmark_executions_path(active: true), class: "badge bg-green badge-total #{opts[:html_class]}"
+  #   end
+  # end
 end
