@@ -4,23 +4,40 @@
 # default["benchmark"]["server-ip"] = nil # No useful default value possible
 default["benchmark"]["dir"] = "/usr/local/cloud-benchmark"
 
-# System specific
+### System specific
 default["benchmark"]["owner"] = "ubuntu"
 default["benchmark"]["group"] = "ubuntu"
 
-# Runner that handles nohup and I/O redirection
-default["benchmark"]["redirect_io"] = true # TODO: implement this
+### Runner that handles nohup and I/O redirection
+default["benchmark"]["redirect_io"] = "false" # May later change to true if the log files from VMs are considered
 default["benchmark"]["start_runner"] = "start_runner.sh"
 default["benchmark"]["stop_and_postprocess_runner"] = "stop_and_postprocess_runner.sh"
 
-# Execution
+### Execution
 default["benchmark"]["start"] = "start.sh"
 default["benchmark"]["stop_and_postprocess"] = "stop_and_postprocess.sh"
 
-# May be supported later: Creates a shell script with the inline content provided
+
+### May be supported later
+# Creates a shell script with the inline content provided
 # default["benchmark"]["start"]["sh"] = nil
 # default["benchmark"]["stop_and_postprocess"]["sh"] = nil
 
-# May be supported later: Creates a ruby file and calls it from the shell script
+# Creates a ruby file and calls it from the shell script
 # default["benchmark"]["start"]["ruby"] = nil
 # default["benchmark"]["stop_and_postprocess"]["ruby"] = nil
+
+
+### VM instance identification information
+# IMPORTANT: Do not override these attributes manually unless you know what you are doing.
+# These values will be dynamically resolved based on the provider config
+default["benchmark"]["provider_name"] = ""
+# Provider instance id used to identify the VM instance from the Cloud-WorkBench
+default["benchmark"]["provider_instance_id"] = ""
+
+
+### Supported providers
+default["benchmark"]["providers"]["aws"]["name"] = "aws"
+# Instance id used by Vagrant to identify a VM. Example: 'i-6dd73b2d'
+default["benchmark"]["providers"]["aws"]["instance_id_request"] = "wget -q -O - http://169.254.169.254/latest/meta-data/instance-id"
+

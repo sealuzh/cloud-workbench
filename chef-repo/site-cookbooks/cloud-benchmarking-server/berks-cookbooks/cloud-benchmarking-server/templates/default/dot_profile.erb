@@ -9,7 +9,7 @@ export EC2_PRIVATE_KEY=$HOME/.ssh/<%= @aws["ssh_key_name"] %>.pem
 export AWS_ACCESS_KEY=<%= @aws["access_key"] %>
 export AWS_SECRET_KEY=<%= @aws["secret_key"] %>
 
-# Opscode chef configurations.
+# Opscode Chef configurations.
 export KNIFE_CHEF_SERVER_URL=https://$CHEF_SERVER_IP:443
 export KNIFE_CLIENT_KEY=$HOME/.chef/<%= @chef["client_key_name"] %>.pem
 export KNIFE_NODE_NAME=<%= @chef["node_name"] %>
