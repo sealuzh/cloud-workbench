@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Change on demand
-APPLY_SECRET_CONFIG = true
+APPLY_SECRET_CONFIG = false
 SSH_USERNAME = "ubuntu"
 
 require 'pathname'
