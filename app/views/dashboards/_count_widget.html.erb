@@ -1,0 +1,12 @@
+<div class="col-lg-3 col-xs-6">
+  <div class="small-box <%= html_class %>">
+    <div class="inner">
+      <h3><%= count %></h3>
+      <p><%= singular.pluralize(count) %></p>
+    </div>
+    <div class="icon">
+      <%= icon %>
+    </div>
+    <%= link_to "#{link_name} #{fa_icon('arrow-circle-right')}".html_safe, link_path, class: 'small-box-footer' %>
+  </div>
+</div>

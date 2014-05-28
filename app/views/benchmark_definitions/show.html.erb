@@ -1,26 +1,15 @@
-<h2><%= @benchmark_definition.name %></h2>
+<% provide(:title, @benchmark_definition.name) %>
+<% content_header('Benchmark Definition', @benchmark_definition.name) %>
 
-<%= link_to 'Edit', edit_benchmark_definition_path(@benchmark_definition), class: 'btn btn-default' %>
-<br>
-<br>
-<%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
-  <%= f.hidden_field :benchmark_definition_id %>
-  <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-primary' %>
-<% end %>
+<div class="row">
+  <div class="col-md-9">
+    <%= render 'vagrantfile_box' %>
+    <%= render 'benchmark_executions_box' %>
+    <%= render 'shared/virtual_machine_instances_box', show_benchmark_definition: false %>
+  </div>
 
-<div class="container">
-  <div class="row">
-
-    <div class="box span9">
-      <header>
-        <h4><%= link_to benchmark_definition_benchmark_executions_path(@benchmark_definition) do %>
-            <%= pluralize(@benchmark_definition.benchmark_executions.count, 'Execution') %>
-          <% end %></h4>
-      </header>
-      <%= render 'shared/benchmark_executions', show_benchmark_definition: false %>
-    </div>
-
-    <%= render 'shared/metric_definitions_sidebar' %>
+  <div class="col-md-3">
+    <%= render 'action_sidebar' %>
+    <%= schedule_metric_sidebar(@benchmark_definition) %>
   </div>
 </div>
-

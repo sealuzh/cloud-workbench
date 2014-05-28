@@ -1,55 +1,23 @@
-<h2>Benchmark Definitions</h2>
-<%= link_to 'Create New Benchmark', new_benchmark_definition_path, class: 'btn btn-primary btn-xs' %>
-<br>
+<% provide(:title, 'Benchmark Definitions') %>
+<% content_header('Benchmark Definitions') %>
 
-<%= will_paginate %>
-    <div id='defaultTable'>
-      <table class='table responsive-table'>
-        <tbody>
-          <% @benchmark_definitions.each do |benchmark_definition| %>
-          <tr>
-            <td>
-              <% if benchmark_definition.benchmark_executions.any?%>
-                <%= link_to benchmark_definition, class: 'first-row' do %>
-                  <%= benchmark_definition.name %>&nbsp;<i class='fa fa-eye'></i>
-                <% end %>
-                <br>
-                <%= link_to edit_benchmark_definition_path(benchmark_definition) do %>
-                  Edit&nbsp;<i class='fa fa-edit'></i>
-                <% end %>
-              <% else %>
-                <%= link_to edit_benchmark_definition_path(benchmark_definition), class: 'first-row' do %>
-                  <%= benchmark_definition.name %>&nbsp;<i class='fa fa-edit'></i>
-                <% end %>
-                <br>
-                <%= link_to benchmark_definition do %>
-                  Show&nbsp;<i class='fa fa-eye'></i>
-                <% end %>
-              <% end %>
-            </td>
-            <td>
-              <%= link_to benchmark_definition_benchmark_executions_path(benchmark_definition) do %>
-                <%= pluralize(benchmark_definition.benchmark_executions.count, 'Execution') %>
-              <% end %>
-              <% if benchmark_definition.benchmark_executions.has_active? %>
-                <br>
-                <div>
-                  <i class='fa fa-play-circle'></i>&nbsp;<%= benchmark_definition.benchmark_executions.actives.count %>
-                </div>
-              <% end %>
-            </td>
-            <td>
-              <%= render 'shared/conditional_benchmark_schedule_btn', benchmark_definition: benchmark_definition %>
-            </td>
-            <td>
-              <%= form_for [benchmark_definition, benchmark_definition.benchmark_executions.build] do |f| %>
-                <%= f.hidden_field :benchmark_definition_id %>
-                <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-default' %>
-              <% end %>
-            </td>
-          </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-<%= will_paginate %>
+<div class="row">
+  <div class="col-xs-12 col-md-8 col-lg-6">
+    <%= render 'search_bar' %>
+  </div>
+  <div class="create-bm pull-right">
+    <%= link_to new_benchmark_definition_path, class: 'btn btn-primary btn-lg' do %>
+      <%= create_icon %>&nbsp;Create New Benchmark
+    <% end %>
+  </div>
+</div>
+
+<%= will_paginate class: 'col-md-8 col-md-offset-4' %>
+<div class="box-body table-responsive">
+  <table class="table table-hover">
+    <tbody>
+      <%= render @benchmark_definitions %>
+    </tbody>
+  </table>
+</div>
+<%= will_paginate class: 'col-md-8 col-md-offset-4' %>

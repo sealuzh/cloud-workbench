@@ -34,6 +34,9 @@ CloudBenchmarking::Application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Local file resources used for testing
+  config.spec_files = "#{Rails.root}/spec/files"
+
   # Override aws environment key to prevent tests from starting instances.
   ENV['AWS_ACCESS_KEY'] = 'dummy_aws_access_key_for_testing'
   ENV['AWS_SECRET_KEY'] = 'dummy_aws_secret_key_for_testing'

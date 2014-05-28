@@ -15,19 +15,18 @@
 /log/*.log
 /tmp
 
-# TODO: move to storage dir
-# Ignore benchmark_definitions working directory
-/public/benchmark_definitions
+# Ignore assets managed by the Rails assets pipeline
+/public/assets/**
 
 # Ignore file storage directory
 /storage/*
 
 # Ignore all files except that ones that contain '.example' in the name
-config/deploy/shared/*
-!config/deploy/shared/*.example*
+/config/deploy/shared/*
+!/config/deploy/shared/*.example*
 
-config/deploy/cloud_benchmarking_*/*
-!config/deploy/cloud_benchmarking_*/*.example*
+/config/deploy/cloud_benchmarking_*/*
+!/config/deploy/cloud_benchmarking_*/*.example*
 
 # Ignore other unneeded files.
 database.yml
@@ -37,3 +36,7 @@ doc/
 .project
 .idea
 .secret
+
+# Ignore private keys and secret files
+*.pem
+*.secret

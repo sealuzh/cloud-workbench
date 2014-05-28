@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-<%= "./#{@stop_and_postprocess}" %> >> postprocessing.log 2>> postprocessing.log < /dev/null
+<%= "./#{@stop_and_postprocess}" %> <%= '  &>> postprocessing.log < /dev/null' if @redirect_io %>

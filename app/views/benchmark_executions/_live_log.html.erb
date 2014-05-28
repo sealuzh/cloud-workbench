@@ -1,0 +1,4 @@
+<% id = live_log_id(event) %>
+<div id="<%= id %>LogDiv" class="timeline-body collapse in">
+  <%= text_area_tag 'log', 'Loading...', class: "live-log", id: "#{id}Log", readonly: true %>
+</div>

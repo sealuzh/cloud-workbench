@@ -1,37 +1,19 @@
-<h2>Execution of <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
-<p id="notice"><%= notice %></p>
+<% start_time = @benchmark_execution.start_time %>
+<% provide(:title, "Execution #{formatted_time(start_time, :date_only)} of #{@benchmark_definition.name}") %>
+<% title = "#{execution_active_indicator(@benchmark_execution)} Execution from #{formatted_time(start_time, :date_human)}" %>
+<% subtitle = "#{formatted_time(start_time, :time_only)} of #{link_to @benchmark_definition.name, @benchmark_definition}" %>
+<% content_header(title, subtitle) %>
 
-<div class="container">
-  <div class="span2">
-    <span class="label label-default"><%= @benchmark_execution.status %></span>
+<%= render 'dashboard', benchmark_execution: @benchmark_execution %>
+<div class="row">
+  <div class="col-md-9" id="benchmark_execution" data-id='<%= @benchmark_execution.id %>'>
+    <br>
+    <%= render 'timeline', benchmark_execution: @benchmark_execution %>
   </div>
-  <div class="span3">
-    <p>
-      <strong>Start time:</strong><br>
-      <%= @benchmark_execution.start_time.present? ? @benchmark_execution.start_time.to_formatted_s(:db) : '-' %>
-    </p>
-  </div>
-  <div class="span3">
-    <p>
-      <strong>End time:</strong><br>
-      <%= @benchmark_execution.end_time.present? ? @benchmark_execution.end_time.to_formatted_s(:db) : '-' %>
-    </p>
-  </div>
-</div>
 
-
-<br>
-<div class="container">
-  <div class="span8">
-    <p>Prepare log</p>
-    <%= text_area_tag :log, @benchmark_execution.prepare_log, {:readonly => true, rows: "15", class: "form-control span8" }%>
-  </div>
-  <br>
-  <br>
-  <div class="span4">
-    <p>Release resources log</p>
-    <%= text_area_tag :log, @benchmark_execution.release_resources_log, {:readonly => true, rows: "15", class: "form-control span8" }%>
+  <div class="col-md-3">
+    <%= render 'action_sidebar', benchmark_execution: @benchmark_execution %>
+    <%= render 'vm_instances' %>
+    <%= schedule_metric_sidebar(@benchmark_definition, @benchmark_execution) %>
   </div>
 </div>
-
-

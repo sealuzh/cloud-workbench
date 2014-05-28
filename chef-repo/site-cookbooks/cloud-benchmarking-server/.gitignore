@@ -16,3 +16,12 @@ Gemfile.lock
 bin/*
 .bundle/*
 
+## IGNORE SECRET CONFIG
+# ignore secret directory
+/secret
+
+# private keys
+*.pem
+
+# secret config
+*.secret

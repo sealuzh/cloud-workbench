@@ -1,8 +1,38 @@
 <%= simple_form_for(@benchmark_definition) do |f| %>
-  <% with_executions = @benchmark_definition.benchmark_executions.any_valid? ? { readonly: true } : {} %>
-  <%= f.input :name, input_html: { maxlength: 50, class: 'span6'}.merge(with_executions) %>
-  <%= f.label :vagrantfile %>
-  <%= f.text_area :vagrantfile, { class: 'span9', rows: '23'} %>
+  <% has_executions = @benchmark_definition.benchmark_executions.any_valid? ? { readonly: true } : {} %>
+
+  <div class="row">
+    <div class="col-xs-12 col-md-6 col-lg-5">
+      <%= f.input :name, input_html: { maxlength: BenchmarkDefinition.max_name_length }.merge(has_executions) %>
+    </div>
+    <div class="col-xs-12 col-md-6 col-lg-5">
+    <%= f.label :running_timeout, 'Timeout for running benchmark' %>
+    <br>
+    <br>
+    <% timeout = @benchmark_definition.running_timeout || Rails.application.config.default_running_timeout %>
+    <%= f.text_field :running_timeout, class: 'hour-slider',
+                                       'value' => timeout,
+                                       'data-slider-value' =>  timeout,
+                                       'data-slider-min'   =>   '1',
+                                       'data-slider-max'   => '100',
+                                       'data-slider-step'  =>   '1',
+                                       'data-slider-orientation'  =>   'horizontal',
+                                       'data-slider-selection'  =>   'before',
+                                       'data-slider-tooltip'  =>   'always',
+                                       'data-slider-id'  =>   'yellow'
+    %>
+    </div>
+  </div>
   <br>
-  <%= f.button :submit, class: 'btn btn-primary', value: submit_name %>
+  <% if vagrantfile_error?(@benchmark_definition) %>
+    <%= f.label :vagrantfile, class: 'vagrantfile_error', error: true %>
+  <% else %>
+    <%= f.label :vagrantfile %>
+  <% end %>
+  <br>
+  <%= f.error :vagrantfile, class: 'vagrantfile_error' %>
+  <br>
+  <%= f.text_area :vagrantfile %>
+  <br>
+  <%= f.button :submit, class: 'btn btn-primary btn-lg', value: submit_name %>
 <% end %>

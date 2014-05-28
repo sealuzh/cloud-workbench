@@ -1,0 +1,11 @@
+<% execution = virtual_machine_instance.benchmark_execution %>
+<% benchmark_definition = execution.benchmark_definition %>
+<tr>
+  <td><%= execution_active_indicator(execution) %></td>
+  <td><%= execution_status_label(execution) %></td>
+  <% if show_benchmark_definition %><td><%= link_to benchmark_definition.name, benchmark_definition %></td><% end %>
+  <td><%= link_to formatted_time(execution.start_time, :date_and_time_short), execution %></td>
+  <td><%= virtual_machine_instance.provider_name %></td>
+  <td><%= virtual_machine_instance.provider_instance_id %></td>
+  <td><%= link_to delete_icon, virtual_machine_instance, method: :delete, data: confirm_delete_vm_instance_msg(virtual_machine_instance), class: 'delete' %></td>
+</tr>

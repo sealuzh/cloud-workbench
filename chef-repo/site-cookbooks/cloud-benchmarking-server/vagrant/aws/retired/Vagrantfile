@@ -1,0 +1,43 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Change on demand
+APPLY_SECRET_CONFIG = false
+SSH_USERNAME = "ubuntu"
+
+require 'pathname'
+vagrant_base_dir = Pathname.new(__FILE__).parent.parent.parent.expand_path
+chef_repo_base_dir = Pathname.new(vagrant_base_dir).parent.parent.parent.expand_path
+
+COOKBOOKS_PATH = File.expand_path("#{vagrant_base_dir}/../berks-cookbooks")
+CONFIG_DIR = "#{chef_repo_base_dir}/secret/vagrant-aws-retired"
+
+# Import parent configs and pass local context (e.g. variables)
+base_config = File.read "#{vagrant_base_dir}/Vagrantfile.base"
+eval(base_config, binding)
+aws_config = File.read "#{vagrant_base_dir}/aws/Vagrantfile.aws"
+eval(aws_config, binding)
+
+Vagrant.configure('2') do |config|
+  # VM
+  # Enable this if you want to use an attached terminal
+  # config.ssh.pty = true
+
+  # AWS
+  config.vm.provider :aws do |aws, override|
+    aws.tags = {
+        'Name' => 'WorkBench-Server-Retired'
+    }
+  end
+
+  # Chef solo provisioning via vagrant-berkshelf plugin
+  config.vm.provision :chef_solo, id: 'chef_solo' do |chef|
+    chef.json = CHEF_JSON.deep_merge({
+      "cloud-benchmarking-server" => {
+          "delayed_job" => {
+              "worker_processes" => "4"
+          },
+      },
+    })
+  end
+end

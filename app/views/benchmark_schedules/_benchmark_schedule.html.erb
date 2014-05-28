@@ -1,0 +1,7 @@
+<% benchmark = benchmark_schedule.benchmark_definition %>
+<tr>
+  <td><%= render 'benchmark_schedules/conditional_label', schedule: benchmark_schedule,
+                 benchmark_definition: benchmark %></td>
+  <td><%= link_to benchmark.name, benchmark %></td>
+  <td><%= benchmark_schedule.cron_expression_in_english %></td>
+</tr>

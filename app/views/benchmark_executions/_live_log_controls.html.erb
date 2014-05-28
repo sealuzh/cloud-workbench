@@ -1,0 +1,8 @@
+<div class="btn-group timeline-right">
+  <%= link_to path, class: 'btn btn-default btn-sm' do %>
+    <%= download_icon %>&nbsp;Download
+  <% end %>
+  <a class="btn btn-default btn-sm" id="<%= id %>LogRefreshStart"><%= fa_icon('refresh') %>&nbsp;Start live refresh</a>
+  <a class="btn btn-success btn-sm display-none" id="<%= id %>LogRefreshStop"><%= fa_icon('refresh spin') %>&nbsp;Stop live refresh</a>
+  <%= link_to expand_icon, "##{id}LogDiv", 'data-toggle' => 'collapse', class: 'btn btn-default btn-sm minimize-box' %>
+</div>

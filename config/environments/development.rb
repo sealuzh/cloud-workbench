@@ -1,6 +1,9 @@
 CloudBenchmarking::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Add Rack::LiveReload to the bottom of the middleware stack with the default options.
+  config.middleware.use Rack::LiveReload
+
   # In the development environment your application's code is reloaded on
   # every request. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
@@ -15,6 +18,7 @@ CloudBenchmarking::Application.configure do
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -26,4 +30,12 @@ CloudBenchmarking::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+
+  # Scaffoling
+  config.generators do |g|
+    g.test_framework  :rspec, fixture: false
+    g.fixture_replacement :factory_girl, dir: 'spec/factories'
+    g.assets false
+    g.helper false
+  end
 end

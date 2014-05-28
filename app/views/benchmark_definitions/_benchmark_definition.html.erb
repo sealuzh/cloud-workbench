@@ -1,0 +1,22 @@
+<tr>
+  <td>
+    <div class="icons-lg">
+      <%= link_to edit_icon, edit_benchmark_definition_path(benchmark_definition), class: 'edit' %>
+      <%= link_to clone_icon, clone_benchmark_definition_path(benchmark_definition), method: :post, class: 'clone' %>
+      <%= link_to delete_icon, benchmark_definition, method: :delete, data: confirm_delete_benchmark_msg(benchmark_definition), class: 'delete' %>
+      <%= link_to start_icon, [benchmark_definition, benchmark_definition.benchmark_executions.build], method: :post, class: 'start', data: confirm_start_execution_msg(benchmark_definition) %>
+    </div>
+  </td>
+  <td>
+    <%= link_to benchmark_definition.name, benchmark_definition, class: 'bold' %>
+  </td>
+  <td>
+    <%= link_to benchmark_definition_benchmark_executions_path(benchmark_definition) do %>
+      <%= pluralize(benchmark_definition.benchmark_executions.count, 'Execution') %>
+    <% end %>
+  </td>
+  <td>
+    <%= render 'benchmark_schedules/conditional_label', schedule: benchmark_definition.benchmark_schedule,
+                                                        benchmark_definition: benchmark_definition %>
+  </td>
+</tr>

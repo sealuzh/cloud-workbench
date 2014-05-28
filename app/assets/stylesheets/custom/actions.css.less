@@ -1,0 +1,42 @@
+// Link icons
+.icons-lg {
+  font-size: 13pt;
+  a {
+    margin-right: 4px;
+  }
+}
+
+.action-icon(@color) {
+  color: @color;
+}
+
+a.edit {
+  .action-icon(@seal-orange);
+}
+
+a.delete {
+  .action-icon(@red);
+}
+
+a.clone {
+  .action-icon(@green);
+}
+
+a.start {
+  .action-icon(@seal-blue);
+}
+
+// Link colors. Ignore existing hover rules to preserve readability on hover
+.dropdown-menu > li > a:not(:hover) {
+  &.edit-color {
+    color: @seal-orange;
+  }
+
+  &.activate-color {
+    color: @green;
+  }
+
+  &.deactivate-color {
+    color: @red;
+  }
+}

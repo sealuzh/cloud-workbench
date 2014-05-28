@@ -1,38 +1,7 @@
-<h2>VM-Instances</h2>
+<% vms = 'Virtual Machines' %>
+<% provide(:title, vms) %>
+<% content_header(vms) %>
 
 <%= will_paginate @virtual_machine_instances %>
-<div id='defaultTable' class='body'>
-  <table class='table responsive-table'>
-    <thead>
-    <tr>
-      <th>Link</th>
-      <th>Benchmark</th>
-      <th>Execution</th>
-      <th>Status</th>
-      <th>Provider</th>
-      <th>Provider Instance Id</th>
-    </tr>
-    </thead>
-    <tbody>
-    <% @virtual_machine_instances.each do |vm_instance| %>
-      <% benchmark_execution = vm_instance.benchmark_execution %>
-      <% benchmark_definition = benchmark_execution.benchmark_definition %>
-      <tr>
-        <td>
-          <%= link_to vm_instance do %>
-            <i class='fa fa-link'></i>
-          <% end %>
-        </td>
-        <td><%= link_to benchmark_definition.name, benchmark_definition %></td>
-        <td>
-          <% start_date = benchmark_execution.start_time.present? ? benchmark_execution.start_time.to_formatted_s(:db) : '-' %>
-          <%= link_to start_date, benchmark_execution %>
-        </td>
-        <td><%= vm_instance.status %></td>
-        <td><%= vm_instance.provider_name %></td>
-        <td><%= vm_instance.provider_instance_id %></td>
-    <% end %>
-    </tbody>
-  </table>
-</div>
+<%= render 'shared/virtual_machine_instances', show_benchmark_definition: true %>
 <%= will_paginate @virtual_machine_instances %>

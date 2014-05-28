@@ -9,3 +9,11 @@
 
 # subversion
 */.svn/*
+
+
+# Ignore private keys and secret files
+*.pem
+*.secret
+
+# Ignore secret directory
+/secret

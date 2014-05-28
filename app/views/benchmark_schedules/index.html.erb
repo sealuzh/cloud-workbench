@@ -1,0 +1,20 @@
+<% provide(:title, 'Schedules') %>
+<% all_schedules_link = link_to pluralize(@benchmark_schedules.count, 'Schedule'), benchmark_schedules_path %>
+<% content_header("#{all_schedules_link} #{total_active_schedules_badge(html_class: 'badge-lg')}") %>
+
+<%= will_paginate %>
+<div class="box-body table-responsive">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Cron-Expression</th>
+        <th>Benchmark Definition</th>
+        <th>Cron-Expression in English</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @benchmark_schedules %>
+    </tbody>
+  </table>
+</div>
+<%= will_paginate %>

@@ -1,0 +1,23 @@
+<div class="row">
+  <%= render 'dashboard_widget',
+             widget_class: status_bg_color(benchmark_execution.failed?),
+             header: status_first_part(benchmark_execution.status),
+             paragraph: status_second_part(benchmark_execution.status),
+             icon: status_icon(benchmark_execution.failed?),
+             footer: 'Status' %>
+
+
+  <%= render 'dashboard_widget',
+             widget_class: 'bg-blue',
+             header: benchmark_duration_formatted(benchmark_execution),
+             paragraph: (active_status(benchmark_execution.benchmark_active?) if benchmark_execution.benchmark_started?),
+             icon: ion_icon('stats-bars'),
+             footer: 'Benchmark Duration' %>
+
+  <%= render 'dashboard_widget',
+             widget_class: 'bg-yellow',
+             header: execution_duration_formatted(benchmark_execution),
+             paragraph: (active_status(benchmark_execution.active?) if benchmark_execution.started?),
+             icon: fa_icon('play-circle fa-2x'),
+             footer: 'Execution Duration' %>
+</div>

@@ -1,0 +1,13 @@
+<tr>
+  <td><%= execution_active_indicator(benchmark_execution) %></td>
+  <td><%= execution_status_label(benchmark_execution) %></td>
+  <td>
+    <%= formatted_time(benchmark_execution.start_time, :date_and_time_short) %><br>
+    <%= formatted_time(benchmark_execution.benchmark_start_time, :date_and_time_short) %>
+  </td>
+  <td>
+    <%= execution_duration_formatted(benchmark_execution) %><br>
+    <%= benchmark_duration_formatted(benchmark_execution) %>
+  </td>
+  <td><%= link_to delete_icon, benchmark_execution, method: :delete, data: confirm_delete_execution_msg(benchmark_execution), class: 'delete' %></td>
+</tr>

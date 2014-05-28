@@ -1,0 +1,11 @@
+production:
+  adapter: postgresql
+  timeout: 5000
+  encoding: utf8
+  reconnect: true
+  database: <%= @database_name %>
+  pool: 5
+  username: <%= @username %>
+  password: <%= @password %>
+  host: localhost
+  port: <%= @port %>

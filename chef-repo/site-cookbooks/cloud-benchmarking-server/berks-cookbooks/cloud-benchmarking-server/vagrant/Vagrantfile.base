@@ -1,0 +1,148 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+CONFIG_DIR     ||= 'NOT PROVIDED'
+COOKBOOKS_PATH ||= "../berks-cookbooks"
+APPLY_SECRET_CONFIG ||= false
+SSH_USERNAME   ||= "ubuntu"
+
+Vagrant.configure('2') do |config|
+  # Detects vagrant-omnibus plugin
+  if Vagrant.has_plugin?('vagrant-omnibus')
+    config.omnibus.chef_version = :latest
+  else
+    puts "FATAL: Vagrant-omnibus plugin not detected. Please install the plugin with\n
+                 'vagrant plugin install vagrant-omnibus' from any other directory\n
+                 before continuing."
+    exit
+  end
+
+  # VM
+  config.vm.hostname = 'work-bench' # MUST not contain spaces
+  config.ssh.forward_agent = true
+
+  # Chef solo provisioning via berks-vendored cookbooks
+  config.vm.provision :chef_solo, id: 'chef_solo' do |chef|
+    chef.cookbooks_path = COOKBOOKS_PATH
+    chef.provisioning_path = '/etc/chef'
+    chef.run_list = [
+        'recipe[cloud-benchmarking-server]'
+    ]
+  end
+end
+
+# Workaround for Chef json merge as the vagrant override does not work here.
+def string_from_file(file_path)
+  fail "Do not apply secret config #{args.join(', ')}" unless APPLY_SECRET_CONFIG
+  File.read(file_path)
+rescue => e
+  puts "WARNING: Config file at #{file_path} does not exist. #{e.message}"
+  'NOT PROVIDED'
+end
+
+def string_from_config(config, *args)
+  fail "Do not apply secret config #{args.join(', ')}" unless APPLY_SECRET_CONFIG
+  result = config
+  # Narrow down result
+  args.each do |arg_item|
+    result = result[arg_item]
+  end
+  fail "Config #{args.join(', ')} not present" if result.empty?
+  result
+rescue => e
+  puts "WARNING: #{e.message}"
+  'NOT PROVIDED'
+end
+
+def load_config(config_file)
+  fail "Do not apply secret config #{args.join(', ')}" unless APPLY_SECRET_CONFIG
+  YAML.load_file(config_file)
+rescue => e
+  puts "WARINING: No config file found in #{config_file}. #{e.message}"
+  'CONFIG FILE NOT FOUND'
+end
+
+# Provide this information in the CHEF_CONFIG_DIR
+require 'yaml'
+config = load_config("#{CONFIG_DIR}/config.yml.secret")
+chef_client_key = string_from_file("#{CONFIG_DIR}/chef_client_key.pem")
+chef_validator  = string_from_file("#{CONFIG_DIR}/chef_validator.pem")
+aws_ssh_key     = string_from_file("#{CONFIG_DIR}/cloud-benchmarking.pem")
+aws_access_key  = string_from_config(config, 'aws', 'access_key')
+aws_secret_key  = string_from_config(config, 'aws', 'secret_key')
+chef_server_ip  = string_from_config(config, 'chef', 'server_ip')
+CHEF_JSON = {
+    "cloud-benchmarking-server" => {
+        "apply_secret_config" => APPLY_SECRET_CONFIG,
+        "chef" => {
+            "server_ip"       => chef_server_ip,
+            "node_name"       => "cloud-benchmarking",
+            "client_key_name" => "cloud-benchmarking",
+            "client_key"      => chef_client_key || "EMPTY",
+            "validator_key"   => chef_validator  || "EMPTY",
+        },
+        "aws" => {
+            "ssh_key_name" => "cloud-benchmarking",
+            "ssh_key"      => aws_ssh_key || "",
+            "access_key"   => aws_access_key,
+            "secret_key"   => aws_secret_key,
+        },
+        "delayed_job" => {
+            "worker_processes" => "2"
+        },
+    },
+    # For a list of time zones see: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+    "tz" => "Europe/Zurich",
+    "appbox" => {
+        "deploy_keys" => [
+            "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCaea+LWlsLHA+NaIHDAETymdFToH9FcTvxDGHydE8bxAvlebXq625wF9/YX8qVN6ahcFME32JbNfFSYlp8KGDCa+qNazVawdhsOrEqsudOgZRuizlTI8AjEbbNvVyanQ+c5F/+zLW0v+/N+gk203k7v9lptYlmUQEmLg5EDEwpSrVAVmyfwZr5sMtSa6Ll3WFydGwTxmtGSfzTehMcRHCN/gyk5EOcJScP0PHq6RNSwN6ZPClXuOWBL+2wJ62yNUDm5fPM/X8RgB2IBczO0h7+j51zT85HiE99o5ILfMQjZ/yff6t+qJwJS+DXVZrGs2X3CM3pSxcONKYr9AlTfn+P joel-key-pair-ireland",
+            "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQCD+BQ5ILiCrn4IIoabtQOz7iAhQV48LfqdSlrxTMIoDrAzKZdyfGlhaRydLz7acdfd/PJG8IzaskinGdQYM3NfkPFniyU72ir07/QykQDbgadEA5XP4o1Tm0hUPs1Wt7OHBWzYxYjhYJN7Rnun7Pc/Xj4D7Dr48FJQUxUvAPLYJQ== joel.scheuner.dev@gmail.com",
+            "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCmGFGNrQv0JXubuWTb5gXfTUko1KY0aDAERN328aJjjXmckjYkSzufzD532VWXOWinIdZn/Tudsx4XQCWZKVzdatvk6iH7RfSdn7pkdOVmjfuGYFR0FdIieqqfRzEAoxiQH9AqtEXREzcDosTFWJkMwytWjCi6irNCIv+NoedgWyuFYAsgxb5N+o/amei6Rch19tsjTTbIiRcjTyr7/MudT5c5X6FVDoRCI2/0B0DxORDw18IMCgWEtsD0zBAEhHOKhIB+siYH0edV6lFf7qnSOTzQWds9I7aiu2acAJve8VxegFbNbv1gjUTZ01HSSR4dTZUOOwyKT6SwjUxnT9u3 philipp@e215-111.eduroam.tuwien.ac.at"
+        ],
+        "admin_keys" => [
+            "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCaea+LWlsLHA+NaIHDAETymdFToH9FcTvxDGHydE8bxAvlebXq625wF9/YX8qVN6ahcFME32JbNfFSYlp8KGDCa+qNazVawdhsOrEqsudOgZRuizlTI8AjEbbNvVyanQ+c5F/+zLW0v+/N+gk203k7v9lptYlmUQEmLg5EDEwpSrVAVmyfwZr5sMtSa6Ll3WFydGwTxmtGSfzTehMcRHCN/gyk5EOcJScP0PHq6RNSwN6ZPClXuOWBL+2wJ62yNUDm5fPM/X8RgB2IBczO0h7+j51zT85HiE99o5ILfMQjZ/yff6t+qJwJS+DXVZrGs2X3CM3pSxcONKYr9AlTfn+P joel-key-pair-ireland",
+        ]
+    },
+    "cbench-rackbox" => {
+        "add_group_sudoers" => [ SSH_USERNAME ]
+    },
+    # Optimize memory for t1.small(~500mb) instance
+    "rackbox" => {
+        "default_config" => {
+            "unicorn" => {
+                "worker_processes" => "2",
+            }
+        }
+    },
+    "postgresql" => {
+        "config" => {
+            "max_connections" => "17"
+        },
+        "config_pgtune" => {
+            "db_type" => "desktop"
+        }
+    },
+    "databox" => {
+        "db_root_password" => "cloud-ba-Ri-Uv",
+        "databases" => {
+            "postgresql" => [
+                { "username" => "cloud",
+                  "password" => "uc-Au",
+                  "database_name" => "cloud_benchmarking_production" }
+            ]
+        }
+    }
+}
+
+# Add deep_merge method to Hash. Code based on: http://stackoverflow.com/a/9381776
+class ::Hash
+  def deep_merge!(second)
+    result = deep_merge(second)
+    self.replace(result)
+  end
+
+  def deep_merge(second)
+    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    self.merge(second, &merger)
+  end
+end

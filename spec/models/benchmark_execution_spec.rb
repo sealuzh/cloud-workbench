@@ -1,14 +1,22 @@
 require 'spec_helper'
 
 describe BenchmarkExecution do
-  let(:benchmark_execution) { create(:benchmark_execution) }
+  let(:benchmark_definition) { create(:benchmark_definition) }
+  let(:benchmark_execution) { benchmark_definition.start_execution_async }
 
   subject { benchmark_execution }
 
+  it { should respond_to(:events) }
   it { should respond_to(:benchmark_definition) }
   it { should respond_to(:virtual_machine_instances) }
 
   it { should be_valid }
+  its(:events) { should contain_event :created }
+  its(:failed?) { should be_false }
+  it "should have no failed events" do
+    expect(benchmark_execution.events.first_failed).to be_nil
+  end
+  its(:active?) { should be_true }
 
   describe "when benchmark definition is not present" do
     before { benchmark_execution.benchmark_definition_id = 77 }
@@ -20,7 +28,8 @@ describe BenchmarkExecution do
     before do
       benchmark_execution.prepare_with(driver)
     end
-    its(:status) { should eq 'WAITING FOR RUN' }
+    its(:events) { should contain_event :started_preparing }
+    its(:status) { should eq 'WAITING FOR START RUNNING' }
     end
 
   describe "failed prepare" do
@@ -28,23 +37,31 @@ describe BenchmarkExecution do
     before do
       benchmark_execution.prepare_with(driver) rescue nil
     end
+    its(:events) { should contain_event :failed_on_preparing }
     its(:status) { should eq('FAILED ON PREPARING') }
+    its(:failed?) { should be_true }
+    it "should have a failed event with the correct name" do
+      expect(benchmark_execution.events.first_failed.name).to eq(:failed_on_preparing.to_s)
+    end
   end
 
-  describe "successful start" do
+  describe "successful start running" do
     let(:benchmark_runner) { double('benchmark runner', start_benchmark: true) }
     before do
       benchmark_execution.start_benchmark_with(benchmark_runner)
     end
+    its(:events) { should contain_event :started_running }
+    its(:events) { should_not contain_event :finished_running }
     its(:status) { should eq('RUNNING') }
     end
 
-  describe "failed start" do
+  describe "failed start running" do
     let(:benchmark_runner) { double('benchmark runner', start_benchmark: false) }
     before do
       benchmark_execution.start_benchmark_with(benchmark_runner) rescue nil
     end
-    its(:status) { should eq('FAILED ON START BENCHMARK') }
+    its(:events) { should contain_event :failed_on_start_running }
+    its(:status) { should eq('FAILED ON START RUNNING') }
   end
 
   describe "successful start postprocessing" do
@@ -52,6 +69,7 @@ describe BenchmarkExecution do
     before do
       benchmark_execution.start_postprocessing_with(benchmark_runner)
     end
+    its(:events) { should contain_event :started_postprocessing }
     its(:status) { should eq('POSTPROCESSING') }
     end
 
@@ -60,6 +78,7 @@ describe BenchmarkExecution do
     before do
       benchmark_execution.start_postprocessing_with(benchmark_runner) rescue nil
     end
+    its(:events) { should contain_event :failed_on_start_postprocessing }
     its(:status) { should eq('FAILED ON START POSTPROCESSING') }
   end
 
@@ -68,7 +87,10 @@ describe BenchmarkExecution do
     before do
       benchmark_execution.release_resources_with(driver)
     end
+    its(:events) { should contain_event :started_releasing_resources }
+    its(:events) { should contain_event :finished_releasing_resources }
     its(:status) { should eq('FINISHED') }
+    its(:active?) { should be_false }
   end
 
   describe "failed release resources" do
@@ -76,7 +98,10 @@ describe BenchmarkExecution do
     before do
       benchmark_execution.release_resources_with(driver) rescue nil
     end
+    its(:events) { should contain_event :started_releasing_resources }
+    its(:events) { should contain_event :failed_on_releasing_resources }
     its(:status) { should eq('FAILED ON RELEASING RESOURCES') }
+    its(:active?) { should be_false }
   end
 
   describe "detection and creation of vm instances" do
@@ -96,6 +121,5 @@ describe BenchmarkExecution do
     its(:provider_name) { should eq(vm_instance.provider_name) }
     its(:provider_instance_id) { should eq(vm_instance.provider_instance_id) }
     its(:role) { should eq(vm_instance.role) }
-
   end
 end

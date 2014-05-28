@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" class="lockscreen">
+<head>
+  <%= render 'layouts/head' %>
+</head>
+<body class="skin-blue pace-done" style="min-height: 2114px;">
+<%= render 'layouts/progress_bar' %>
+
+<div class="transparant-well">
+  <%= render 'layouts/bootstrap_flash', flash: flash %>
+</div>
+<%= yield %>
+
+</body>
+</html>

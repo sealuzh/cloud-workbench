@@ -1,7 +1,7 @@
 # config/initializers/delayed_job_config.rb
 # see https://github.com/collectiveidea/delayed_job
 Delayed::Worker.backend = :active_record
-Delayed::Worker.destroy_failed_jobs = false
+Delayed::Worker.destroy_failed_jobs = true
 Delayed::Worker.sleep_delay = 5
 Delayed::Worker.max_attempts = 1
 Delayed::Worker.max_run_time = 4.hours

@@ -1,82 +1,55 @@
 class VirtualMachineInstancesController < ApplicationController
-  before_action :set_virtual_machine_instance, only: [:show, :edit, :update, :destroy]
+  API_METHODS = [:complete_benchmark, :complete_postprocessing]
+  before_action :authenticate_user!, except: API_METHODS
+  protect_from_forgery except: API_METHODS
+  before_action :set_virtual_machine_instance, only: [:destroy]
+  before_action :search_virtual_machine_instance, only: [:complete_benchmark, :complete_postprocessing]
 
-  # GET /virtual_machine_instances
   def index
     @virtual_machine_instances = VirtualMachineInstance.paginate(page: params[:page])
   end
 
-  # GET /virtual_machine_instances/1
-  def show
-  end
-
-  # GET /virtual_machine_instances/new
-  def new
-    @virtual_machine_instance = VirtualMachineInstance.new
-  end
-
-  # GET /virtual_machine_instances/1/edit
-  def edit
-  end
-
-  # POST /virtual_machine_instances
-  def create
-    @virtual_machine_instance = VirtualMachineInstance.new(virtual_machine_instance_params)
-
-    if @virtual_machine_instance.save
-      redirect_to @virtual_machine_instance, notice: 'Virtual machine instance was successfully created.'
+  def complete_benchmark
+    if @virtual_machine_instance.present?
+      cont = boolean_value(:continue, false)
+      success  = boolean_value(:success, true)
+      @virtual_machine_instance.complete_benchmark(cont, success)
+      head 200 # ok
     else
-      render action: 'new'
+      head 422 # unprocessable_entity
     end
   end
 
-  # PATCH/PUT /virtual_machine_instances/1
-  def update
-    if @virtual_machine_instance.update(virtual_machine_instance_params)
-      redirect_to @virtual_machine_instance, notice: 'Virtual machine instance was successfully updated.'
+  def complete_postprocessing
+    if @virtual_machine_instance.present?
+      success = boolean_value(:success, true)
+      @virtual_machine_instance.complete_postprocessing(success)
+      head 200 # ok
     else
-      render action: 'edit'
+      head 422 # unprocessable_entity
     end
   end
 
-  # PATCH/PUT /virtual_machine_instance/benchmark_completed
-  # TODO: How can this action be improved to adhere to RESTful design principles?
-  def benchmark_completed
-    @virtual_machine_instance = VirtualMachineInstance.where(provider_name: params[:provider_name], provider_instance_id: params[:provider_instance_id]).first
-    unless @virtual_machine_instance.nil?
-      Delayed::Job.enqueue(StartPostprocessingJob.new(@virtual_machine_instance.benchmark_execution_id))
-      render status: 200, json: @virtual_machine_instance.to_json
-    else
-      render action: 'edit'
-    end
-  end
-
-  # PATCH/PUT /virtual_machine_instance/postprocessing_completed
-  # TODO: How can this action be improved to adhere to RESTful design principles?
-  def postprocessing_completed
-    @virtual_machine_instance = VirtualMachineInstance.where(provider_name: params[:provider_name], provider_instance_id: params[:provider_instance_id]).first
-    unless @virtual_machine_instance.nil?
-      Delayed::Job.enqueue(ReleaseResourcesJob.new(@virtual_machine_instance.benchmark_execution_id))
-      render status: 200, json: @virtual_machine_instance.to_json
-    else
-      render action: 'edit'
-    end
-  end
-
-  # DELETE /virtual_machine_instances/1
   def destroy
     @virtual_machine_instance.destroy
-    redirect_to virtual_machine_instances_url
+    redirect_to :back
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_virtual_machine_instance
       @virtual_machine_instance = VirtualMachineInstance.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    def search_virtual_machine_instance
+      @virtual_machine_instance = VirtualMachineInstance.where(provider_name: params[:provider_name], provider_instance_id: params[:provider_instance_id]).first
+    end
+
     def virtual_machine_instance_params
       params.require(:virtual_machine_instance).permit(:benchmark_execution_id, :status, :provider_name, :provider_instance_id)
+    end
+
+    def boolean_value(param, default)
+      string_boolean = params[param.to_sym]
+      string_boolean.present? ? string_boolean.to_bool : default
     end
 end

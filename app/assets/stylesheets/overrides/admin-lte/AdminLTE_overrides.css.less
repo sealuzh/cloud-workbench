@@ -1,0 +1,60 @@
+/*! 
+ *   AdminLTE v1.2
+ *   Author: AlmsaeedStudio.com
+ *   License: Open source - MIT
+ *           Please visit http://opensource.org/licenses/MIT for more information
+!*/
+
+// Assets directory
+@admin-lte-dir: 'admin-lte';
+
+//google fonts
+@import url(//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic,400italic,600italic);
+@import url(//fonts.googleapis.com/css?family=Kaushan+Script);
+
+//MISC
+//----
+@import "admin-lte/core";
+@import "admin-lte/vars";
+@import "admin-lte/mixins";
+
+//COMPONENTS
+//-----------
+@import "admin-lte/header";
+@import "admin-lte/sidebar";
+@import "admin-lte/dropdown";
+@import "admin-lte/forms";
+@import "admin-lte/progress-bars";
+@import "admin-lte/small-box";
+@import "admin-lte/boxes";
+.box > .loading-img {
+  background: transparent image-url("@{admin-lte-dir}/ajax-loader1.gif") 50% 50% no-repeat;
+}
+@import "admin-lte/timeline";
+@import "admin-lte/buttons";
+@import "admin-lte/callout";
+@import "admin-lte/alerts";
+@import "admin-lte/navs";
+
+//PAGES
+//------
+@import "admin-lte/mailbox";
+@import "admin-lte/lockscreen";
+.lockscreen {
+  background: image-url("@{admin-lte-dir}/blur-background09.jpg") repeat center center fixed;
+}
+@import "admin-lte/login_and_register";
+@import "admin-lte/404_500_errors";
+@import "admin-lte/invoice";
+
+//Skins
+//-------
+@import "admin-lte/skins";
+
+//Plugins
+//--------
+@import "admin-lte/iCheck";
+@import "iCheck_overrides.css.less";  // Image path override
+
+@import "admin-lte/pace";
+@import "admin-lte/bootstrap-social";

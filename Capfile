@@ -1,6 +1,9 @@
 # Load DSL and Setup Up Stages
 require 'capistrano/setup'
 
+# See sv man pages for more commands: http://smarden.org/runit/sv.8.html
+RUNIT_COMMANDS = %w(status up down once exit restart)
+
 # Includes default deployment tasks
 require 'capistrano/deploy'
 
@@ -21,6 +24,7 @@ require 'capistrano/rbenv'
 require 'capistrano/bundler'
 require 'capistrano/rails/assets'
 require 'capistrano/rails/migrations'
+require 'capistrano/file-permissions'
 
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/**/*.rb').each { |r| import r }

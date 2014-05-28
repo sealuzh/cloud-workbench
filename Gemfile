@@ -2,29 +2,46 @@ source 'https://rubygems.org'
 ruby '2.1.1'
 #ruby-gemset=cloud_benchmarking
 
-gem 'rails', '4.0.4'
+gem 'rails', '4.1.1'
 
+# NOTE: This gem is not thread-safe and SHOULD NOT be used with
+#       threaded web servers such as puma. It is used to suppress
+#       the logs of polling javascript
+gem 'silencer', '~> 0.6.0'
 gem 'whenever', '~> 0.9.2'
 gem 'cron2english', '~> 0.1.3'
 gem 'delayed_job_active_record', '~> 4.0.0'
 gem 'enumerize', '~> 0.8.0'
+gem 'deep_cloneable', '~> 1.6.1'
+gem 'devise', '~> 3.2.4'
 
 group :development do
   gem 'pry'
   gem 'pry-rails' # Use pry as Rails console
+  gem 'pry-byebug' # Use pry as debugger with step, next, finish, continue
   gem 'launchy'
   gem 'guard-livereload', '~> 2.1.2', require: false
+  gem "rack-livereload"
+  gem 'better_errors'
+  gem 'binding_of_caller'
+  gem 'meta_request'
+  gem 'quiet_assets'
+  gem 'rb-readline' # Fixes guard issues with interactive pry
 
   # Deploy with Capistrano
+  # None of the capistrano task should be loaded into the Rails environment by default
+  # as they must be required explicitly in the Capfile
   gem 'capistrano', '~> 3.2.1', require: false
   gem 'capistrano-rails', '~> 1.1', require: false
   gem 'capistrano-bundler', '~> 1.1.2', require: false
   gem 'capistrano-rbenv', '~> 2.0', require: false
   # gem 'rvm1-capistrano3', require: false # Use if deploying into RVM environments
+  gem 'capistrano-file-permissions', require: false
 end
 
 group :development, :test do
   gem 'sqlite3'
+  gem 'faker'
   gem 'rspec-rails', '~> 2.14.2'
   gem 'fuubar'
   gem 'guard-rspec', '~> 4.2.8'
@@ -58,22 +75,23 @@ group :production do
   gem 'execjs'
 end
 
+# Assets
 gem 'therubyracer', '~> 0.12.1'
 gem 'less-rails', '~> 2.5.0'
-gem 'twitter-bootstrap-rails', '~> 2.2.8'
+gem 'uglifier', '>= 1.3.0'
+gem 'jquery-rails'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'turbolinks'
+gem 'jquery-turbolinks'
+gem 'jbuilder', '~> 1.2'
+
+## UI
 gem 'font-awesome-rails', '~> 4.0.3.1'
 gem 'will_paginate', '~> 3.0.5'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
-
 gem 'simple_form', '~> 3.0.2'
-# Fork of aced_rails gem with Rails 4 support: https://github.com/ffloyd/aced_rails
-# Alternative gem that simply integrates ace into the Rails assets pipeline: https://github.com/codykrieger/ace-rails-ap
-gem 'aced_rails', git: 'https://github.com/selbyk/aced_rails.git', ref: 'e733b0cd41deaf5dcd84a7ae5dee4fb2499842f4'
+gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
 
-gem 'uglifier', '>= 1.3.0'
-gem 'jquery-rails'
-gem 'turbolinks'
-gem 'jbuilder', '~> 1.2'
 
 group :chef do
   # Chef: Use the Chef gem since the omnibus installer with Chef-client version <=11.12.2

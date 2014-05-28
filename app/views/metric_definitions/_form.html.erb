@@ -1,0 +1,11 @@
+<div class="box box-primary">
+  <div class="box-body">
+    <% opts = defined?(url).present? ? { url: url } : {} %>
+    <%= simple_form_for(@metric_definition, opts) do |f| %>
+      <%= f.input :name %>
+      <%= f.input :unit %>
+      <%= f.input :scale_type, collection: MetricDefinition.scale_type.options, as: :radio_buttons %>
+      <%= f.button :submit, class: 'btn btn-primary', value: submit_value  %>
+    <% end %>
+  </div>
+</div>

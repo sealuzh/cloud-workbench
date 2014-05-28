@@ -11,45 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140504222001) do
+ActiveRecord::Schema.define(version: 20140527202817) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "vagrantfile"
+    t.integer  "running_timeout"
   end
 
   add_index "benchmark_definitions", ["name"], name: "index_benchmark_definitions_on_name", unique: true
 
   create_table "benchmark_executions", force: true do |t|
-    t.string   "status"
-    t.datetime "start_time"
-    t.datetime "end_time"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "benchmark_definition_id"
+    t.boolean  "keep_alive",              default: false
   end
 
   add_index "benchmark_executions", ["benchmark_definition_id"], name: "index_benchmark_executions_on_benchmark_definition_id"
 
   create_table "benchmark_schedules", force: true do |t|
     t.string   "cron_expression"
-    t.boolean  "active",                  default: true
+    t.boolean  "active",                    default: true
     t.integer  "benchmark_definition_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "consecutive_failure_count", default: 0
   end
 
   add_index "benchmark_schedules", ["benchmark_definition_id"], name: "index_benchmark_schedules_on_benchmark_definition_id"
-
-  create_table "cloud_providers", force: true do |t|
-    t.string   "name"
-    t.string   "credentials_path"
-    t.string   "ssh_key_path"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "delayed_jobs", force: true do |t|
     t.integer  "priority",   default: 0, null: false
@@ -66,6 +58,16 @@ ActiveRecord::Schema.define(version: 20140504222001) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
+  create_table "events", force: true do |t|
+    t.integer  "name"
+    t.datetime "happened_at"
+    t.integer  "traceable_id"
+    t.string   "traceable_type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.text     "message"
+  end
 
   create_table "metric_definitions", force: true do |t|
     t.string   "name"
@@ -102,8 +104,22 @@ ActiveRecord::Schema.define(version: 20140504222001) do
   add_index "ordered_metric_observations", ["metric_definition_id"], name: "index_ordered_metric_observations_on_metric_definition_id"
   add_index "ordered_metric_observations", ["virtual_machine_instance_id"], name: "index_ordered_metric_observations_on_vm_instance_id"
 
+  create_table "users", force: true do |t|
+    t.string   "email",               default: "", null: false
+    t.string   "encrypted_password",  default: "", null: false
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",       default: 0,  null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "users", ["email"], name: "index_users_on_email", unique: true
+
   create_table "virtual_machine_instances", force: true do |t|
-    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "benchmark_execution_id"

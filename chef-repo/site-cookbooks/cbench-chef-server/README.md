@@ -5,7 +5,6 @@ Wrapper cookbook for the chef-server cookbook from:
 * Opscode: http://community.opscode.com/cookbooks/chef-server
 * Github: https://github.com/opscode-cookbooks/chef-server
 
-TODO: Find workaround for dynamic public ip/hostname detection that does not require the AWS metadata service as this is now used!!!
 
 ## Supported Platforms
 

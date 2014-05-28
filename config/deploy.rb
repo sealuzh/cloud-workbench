@@ -15,6 +15,7 @@ set :application, 'cloud_benchmarking'
 # Used in case we're deploying multiple versions of the same app side by side.
 # Also provides quick sanity checks when looking at filepaths.
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
+set :delayed_job_workers, 1
 
 # Repository
 # ----------
@@ -33,6 +34,7 @@ set :ssh_options, {
 # --------------
 set :deploy_to, "/home/apps/#{fetch(:application)}"
 set :deploy_user, 'deploy'
+set :apps_user, 'apps'
 set :keep_releases, 5
 set :use_sudo, false
 
@@ -49,11 +51,12 @@ set(:config_files, [
 set :linked_files, %w{config/database.yml}
 
 # Default value for linked_dirs is []
-# TODO: Use "#{Rails.root}/storage" (and symlink it) to store your files. Follow the advices here: http://makandracards.com/makandra/16999-common-mistakes-when-storing-file-uploads-with-rails
-# Also consider the following alternatives:
-# * Store the Vagrantfile in the database and create the file when creating a benchmark execution.
-# * Use Paperclip and Carrierwave to manage attachments
 set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system storage chef-repo}
+
+# File system permissions:
+# the application and background workers must be able to read and write to the logs and storage directory
+set :file_permissions_paths, %w(log log/production.log storage)
+set :file_permissions_users, ["#{fetch(:apps_user)}"]
 
 # Bundler
 # -------
@@ -87,45 +90,62 @@ namespace :deploy do
   # Make sure we're deploying what we think we're deploying
   before :deploy, 'deploy:check_revision'
   # Only allow a deploy with passing tests to deployed
-  before :deploy, 'deploy:run_tests'
+  # before :deploy, 'deploy:run_tests'
   # Compile assets locally then rsync. Enable if you want to burden assets compilation to the production server.
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
+  # Set file system permissions
+  after 'deploy:publishing', 'deploy:set_permissions:acl'
   after 'deploy:publishing', 'deploy:restart'
   after :finishing, 'deploy:cleanup'
 
+  after 'deploy:restart', :create_default_user do
+    rake_command('user:create_default')
+  end
 
-  # The declarative approach does not work with the custom rake task.
-  # Even using the fully qualified name did not resolve this issue:
-  # https://github.com/capistrano/capistrano/issues/959
-  # before :'deploy:restart', :'rake[cron:clean]'
+  # Includes: Unicorn, delayed_job workers and system cron management (nginx and postgres are not considered here)
   desc 'Restart application'
-  task :restart do
+  task :restart, :live do |task, args|
     on roles(:app), in: :sequence, wait: 5 do
-      # invoke 'rake[cron:clean]'
-      # Rake::Task['cron:clean'].invoke
-      execute "sudo sv restart #{fetch(:application)}"
-      # TODO: Be aware that this will abort the delayed job worker!
-      execute 'sudo sv restart delayed_job'
+      # rake_command('cron:clean') # The cron rake command does not work via Capistrano
+      invoke 'unicorn:restart'
+      # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
+      # NOTE: Deployment or jobs may fail if there are workers that currently process some jobs.
+      invoke 'worker:restart_all' unless (args[:live].to_s == 'live')
+      # rake_command('cron:update')
     end
   end
 
-  desc 'Restart the delayed job background worker'
-  task :restart_worker do
-    # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
-    execute 'sudo sv restart delayed_job'
+  desc 'Restart all delayed_job background workers'
+  task :restart_workers do
+    invoke 'worker:restart_all'
   end
 
   task :start do
-    # invoke 'rake[cron:clean]'
-    execute "sudo sv up #{fetch(:application)}"
-    execute 'sudo sv up delayed_job'
-    # invoke 'rake[cron:update]'
+    # rake_command('cron:clean')
+    invoke 'unicorn:up'
+    invoke 'worker:up_all'
+    # rake_command('cron:update')
   end
 
   task :stop do
-    # invoke 'rake[cron:clean]'
-    execute "sudo sv down #{fetch(:application)}"
-    execute 'sudo sv down delayed_job'
+    # rake_command('cron:clean')
+    invoke 'unicorn:down'
+    invoke 'worker:down_all'
+  end
+
+  # Executes a rake task on the primary app within the correct path
+  # Alternative workaround (tested) for calling a rake task since invoking other capistrano tasks with arguments does not work.
+  # run_locally do
+  #   execute "bundle exec cap #{fetch(:stage)} rake[user:create_default]"
+  # end
+  def rake_command(task)
+    on primary(:app) do
+      within current_path do
+        with :rails_env => fetch(:rails_env) do
+          rake task
+        end
+      end
+    end
   end
 end

@@ -1,0 +1,13 @@
+<tr>
+  <td>
+    <% link_params.merge!({ metric_definition_id: metric_definition.id }) %>
+    <%= link_to metric_observations_path(link_params) do %>
+      <strong><%= metric_definition.name %></strong><br>
+      <%= metric_definition.unit %> (<%= metric_definition.scale_type %>)
+    <% end %>
+  </td>
+  <td>
+    <%= link_to edit_icon, edit_metric_definition_path(metric_definition), class: 'edit' %><br>
+    <%= link_to delete_icon, metric_definition, method: :delete, data: confirm_delete_metric_msg(metric_definition), class: 'delete' %>
+  </td>
+</tr>

@@ -1,61 +1,64 @@
 class BenchmarkDefinitionsController < ApplicationController
   include BenchmarkDefinitionsHelper
   before_action :set_benchmark_definition, only: [:show, :edit, :update, :destroy]
-  before_action :set_metric_definitions, only: [:show, :edit, :update]
   before_action :check_and_show_executions_integrity_warning , only: [:edit, :update]
 
-  # GET /benchmark_definitions
   def index
-    @benchmark_definitions = BenchmarkDefinition.paginate(page: params[:page])
+    @benchmark_definitions = BenchmarkDefinition.search(params[:search]).paginate(page: params[:page])
   end
 
-  # GET /benchmark_definitions/1
   def show
-    @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:page])
+    @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params['execution_page'], per_page: 10)
+    @virtual_machine_instances = @benchmark_definition.virtual_machine_instances.paginate(page: params[:page], per_page: 10)
   end
 
-  # GET /benchmark_definitions/new
+  def clone
+    benchmark_definition_original = BenchmarkDefinition.find(params[:id])
+    @benchmark_definition = benchmark_definition_original.clone
+    @metric_definitions = @benchmark_definition.metric_definitions
+    render action: 'edit'
+  rescue => e
+    link_to_original = view_context.link_to benchmark_definition_original.name, benchmark_definition_original, class: 'alert-link'
+    flash[:error] = "Benchmark definition #{link_to_original} couldn't be cloned. #{e.message}".html_safe
+    redirect_to :back
+  end
+
   def new
-    @benchmark_definition = BenchmarkDefinition.new(vagrantfile: vagrantfile_template)
+    @benchmark_definition = BenchmarkDefinition.new(vagrantfile: vagrantfile_example)
   end
 
-  # GET /benchmark_definitions/1/edit
   def edit
-    # TODO: Implement file locking mechanism during edit. Lock must expire after N minutes.
-    # See: http://stackoverflow.com/questions/1803574/rails-implementing-a-simple-lock-to-prevent-users-from-editing-the-same-data
   end
 
-  # POST /benchmark_definitions
   def create
     @benchmark_definition = BenchmarkDefinition.new(benchmark_definition_params)
 
     if @benchmark_definition.save
-      flash[:success] = 'Benchmark definition was successfully created.'
+      show_success_flash 'created'
       redirect_to edit_benchmark_definition_path(@benchmark_definition)
     else
       render action: 'new'
     end
   end
 
-  # PATCH/PUT /benchmark_definitions/1
   def update
-    if @benchmark_definition.update(benchmark_definition_params)
-      flash[:success] = 'Benchmark definition was successfully updated.'
-      if @benchmark_definition.benchmark_executions.any?
-        redirect_to @benchmark_definition
-      else
-        redirect_to edit_benchmark_definition_path(@benchmark_definition)
-      end
+    @benchmark_definition.update!(benchmark_definition_params)
+    show_success_flash 'updated'
+    if @benchmark_definition.benchmark_executions.any?
+      redirect_to @benchmark_definition
     else
-      flash.now[:error] = "Benchmark definition couldn't be updated."
-      render action: 'edit'
+      redirect_to edit_benchmark_definition_path(@benchmark_definition)
     end
+  rescue => e
+      render action: 'edit'
   end
 
-  # DELETE /benchmark_definitions/1
   def destroy
-    @benchmark_definition.destroy
-      redirect_to benchmark_definitions_url
+    @benchmark_definition.destroy!
+    redirect_to benchmark_definitions_url
+  rescue => e
+    flash[:error] = e.message
+    redirect_to @benchmark_definition
   end
 
   private
@@ -64,16 +67,21 @@ class BenchmarkDefinitionsController < ApplicationController
     end
 
     def benchmark_definition_params
-      params.require(:benchmark_definition).permit(:name, :vagrantfile)
-    end
-
-    def set_metric_definitions
-      @metric_definitions = @benchmark_definition.metric_definitions
+      params.require(:benchmark_definition).permit(:name, :running_timeout, :vagrantfile)
     end
 
     def check_and_show_executions_integrity_warning
       if @benchmark_definition.benchmark_executions.any?
         flash.now[:info] = "You try to modify a benchmark that has already been executed."
       end
+    end
+
+    def show_success_flash(action)
+      flash[:success] = "Benchmark definition <strong>#{view_context.link_to @benchmark_definition.name, @benchmark_definition, class: 'alert-link'}</strong> was successfully #{action}.".html_safe
+    end
+
+    def vagrantfile_example
+      template = ERB.new File.read(Rails.application.config.vagrantfile_example)
+      template.result
     end
 end

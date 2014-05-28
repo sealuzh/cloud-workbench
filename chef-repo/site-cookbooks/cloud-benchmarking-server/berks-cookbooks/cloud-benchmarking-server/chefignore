@@ -2,6 +2,16 @@
 # or sharing to the community site.
 # Lines that start with '# ' are comments.
 
+## IGNORE SECRET CONFIG
+# ignore secret directory
+/secret
+
+# private keys
+*.pem
+
+# secret config
+*.secret
+
 # OS generated files #
 ######################
 .DS_Store

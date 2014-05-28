@@ -1,0 +1,61 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure('2') do |config|
+  # Detects vagrant-omnibus plugin
+  if Vagrant.has_plugin?('vagrant-omnibus')
+    config.omnibus.chef_version = :latest
+  else
+    puts "FATAL: Vagrant-omnibus plugin not detected. Please install the plugin with\n
+                 'vagrant plugin install vagrant-omnibus' from any other directory\n
+                 before continuing."
+    exit
+  end
+
+  # Box
+  config.vm.box = 'aws-box'
+  config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
+
+  # VM
+  config.vm.hostname = 'chef-server-aws-staging'
+  config.ssh.forward_agent = true
+
+  # AWS EC2 provider
+  config.vm.provider :aws do |aws, override|
+    # AWS authentication
+    aws.access_key_id = ENV['AWS_ACCESS_KEY']
+    aws.secret_access_key = ENV['AWS_SECRET_KEY']
+    
+    # AWS instance configuration
+    aws.region = "eu-west-1"
+    aws.region_config "eu-west-1" do |region|
+      # Official Ubuntu 12.04 image from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
+      region.ami = "ami-51e91b26"
+      region.keypair_name = ENV['EC2_KEYPAIR']
+    end
+    override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
+    override.ssh.username = "ubuntu"
+    # t1.micro cannot satisfy the memory requirements of the chef-server
+    aws.instance_type = "m1.small"
+    aws.security_groups = ["aic13-cloud_benchmarking-web"]
+    # aws.elastic_ip = true # Always creates a new elastic ip
+    aws.tags = {
+      'Name' => 'ChefServer-Staging (WorkBench)'
+     }
+  end
+
+  # Chef solo provisioning via berks-vendored cookbooks
+  config.vm.provision :chef_solo do |chef|
+    chef.cookbooks_path = "../../../berks-cookbooks"
+    chef.run_list = [
+      'recipe[cbench-chef-server]'
+    ]
+    chef.json = {
+      'chef-server' => {
+        'version' => :latest
+        # Required in order to work properly! Try autodetection in wrapper cbench wrapper cookbook
+        # 'api_fqdn' => "ec2-54-216-50-158.eu-west-1.compute.amazonaws.com"
+      }
+    }
+  end
+end

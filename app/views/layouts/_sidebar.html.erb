@@ -1,0 +1,31 @@
+<ul class="sidebar-menu">
+  <li>
+    <%= link_to dashboard_path do %>
+      <%= dashboard_icon %>&nbsp;<span class="link-title">Dashboard</span>
+    <% end %>
+  </li>
+  <li class="sidebar-divider"></li>
+  <li class="sidebar-header">Benchmark</li>
+  <li>
+    <%= link_to benchmark_definitions_path do %>
+      <%= definition_icon %>&nbsp;<span class="link-title">Definitions</span>
+    <% end %>
+  </li>
+  <li>
+    <%= link_to benchmark_executions_path do %>
+      <%= execution_icon %>&nbsp;<span class="link-title">Executions</span>
+    <% end %>
+  </li>
+  <li>
+    <%= link_to benchmark_schedules_path do %>
+      <%= schedule_icon %>&nbsp;<span class="link-title">Schedules</span>
+    <% end %>
+  </li>
+  <li class="sidebar-divider"></li>
+  <li class="sidebar-header">Others</li>
+  <li>
+    <%= link_to virtual_machine_instances_path do %>
+      <%= vm_icon %>&nbsp;<span class="link-title">Virtual Machines</span>
+    <% end %>
+  </li>
+</ul>

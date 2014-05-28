@@ -1,11 +1,10 @@
 # Cloud Benchmarking
 
-## Installation
+## Installation (automated)
 
 ### Requirements
 * Git (1.9.2)
 * [Vagrant (1.5.4)](https://www.vagrantup.com/downloads)
-    * [chef (11.6.2)](https://rubygems.org/gems/chef/versions/11.6.2)
     * [vagrant-omnibus (1.3.1)](https://github.com/schisamo/vagrant-omnibus)
     * [[optional] vagrant-aws (0.4.1)](https://github.com/mitchellh/vagrant-aws)
         * For AWS EC2 Cloud
@@ -19,7 +18,7 @@
 2. The Vagrant plugins can be installed with this one-liner:
 
 ```bash
-vagrant plugin install vagrant-aws; vagrant plugin install vagrant-omnibus; vagrant plugin install chef
+vagrant plugin install vagrant-omnibus; vagrant plugin install vagrant-aws
 ```
 
 ### Initial Configuration
@@ -45,19 +44,54 @@ Note: The provided values are examples from AWS and do NOT work.
 2. `vagrant up --provider=aws`
 
 #### Configure WorkBench Server
-TODO:
- * Docs/automation for
- * Note about time (NTP cookbook)
 
-
-* Environment variables: `/home/apps/.profile`
-* Knife config file: `/home/apps/.chef/knife.rb`
-
-Consider: permissions, dynamic directories (node[appdir])
+* Use the Cookbook attributes to configure the WorkBench server
 
 ### Install Chef Server
+
 1. `cd $GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/cbench-chef-server/vagrant-aws-production`
 2. `vagrant up --provider=aws`
+
+Supported systems:
+
+* Ubuntu 12.04
+* Ubuntu 13.10
+
+Note Ubuntu 14.04 has some issues with the postgres cookbook and requirs some work to fix this. Other systems have not been tested.
+
+## Installation (manual)
+
+NOTE: The manual installation is not recommendend and has not been tested. The requirements listed below are probably not complete.
+
+### Requirements
+
+* UNIX like system (only tested with Ubuntu)
+* Git (1.7.9.5)
+* Ruby 2.1.1 (rbenv version manager used in automated installation)
+* NGINX
+* Unicorn
+* Nodejs
+* PostgreSQL 9.1.13
+    * Default table name: `cloud_benchmarking_production`
+* Vagrant 1.5.3 with plugins
+    * vagrant-aws 0.4.1
+    * vagrant-omnibus 1.4.1
+* cron
+* runit (init scheme with service supervision)
+    * NGINX
+    * Unicorn
+    * delayed_job background worker
+* runit environment variable configuration depending on process
+    * `BUNDLE_GEMFILE` := path to the Gemfile of the current release
+    * `BUNDLE_PATH` := path to shared/vendor/bundle
+    * `EXECJS_RUNTIME=Node`
+    * `RAILS_ENV=production`
+    * `HOME=/home/apps`
+* svlogd [optional]
+* Deployment directory in /home/apps/cloud_benchmarking
+* User and group `apps`
+* User and group `deploy` with root privileges and ssh configuration for deployment
+
 
 ## Reconfiguration on IP address change
 
@@ -83,7 +117,22 @@ Consider: permissions, dynamic directories (node[appdir])
     2. Enter the IP address of the Chef Server here
 
 
+## Deployment
+
+Requires a Ruby on Rails development environment and checkout of the project. Make sure you have run `bundle install --without production chef`.
+
+### Initial configuration
+1. Ensure you have added your private key to your ssh-agent. For more information see https://help.github.com/articles/using-ssh-agent-forwarding.
+2. Check your settings with `bundle exec cap production deploy:check`
+
+### Deploy
+
+Simply deploy new releases with `bundle exec cap production deploy`
+
+
 ## Benchmarks
+
+TODO: Describe how to define a new benchmark
 
 ### Getting Started
 
@@ -92,41 +141,36 @@ Consider: permissions, dynamic directories (node[appdir])
 
 Run the tests with `bundle exec rake` or `bundle exec rspec spec/`
 
-You might have to run `bundle exec rake test:prepare` first if you have any pending migration for the test environment.
 
 ### Guard and Spork
 
-Start Guard and Spork with `bundle exec guard`. This will preload the testing environment once and automatically execute the test when files have been modified.
+Start Guard and Spork with `bundle exec guard`.
+This will preload the testing environment once and automatically execute the affected tests when files have been modified. Manually run all test with `all` in the interactive Spork console.
+
+Automatic page reload on file change is supported for Safari, Chrome and Firefox via plugin from http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-
+
+
+### Slow tests
+
+Test tagged as slow are excluded from being run by default. Explicitly run them via `rspec --tag slow spec/`
+
+Tests can be tagged as slow by passing the :slow symbol
+```ruby
+describe 'a tagged test', :slow do
+  it 'does some complex calculations' do
+    expect(Universe.answer).to eq(42)
+  end
+end
+```
+Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-control-with-rspecs-tag-filters/
+
 
 ## Limitations
 
 * Only AWS as provider supported due to the following dependencies
-  * Client side BenchmarkHelper uses AWS metadata API
-	* Vagrant up does not support multiple providers
-* Only single machine VM setting supported (Vagrant default VM)
-* Only single AWS region supported due to fix private key in server
+	* Vagrant does not support multiple providers in the same Vagrantfile
 * No user authentication and authorization (also technical user)
 * Chef cookbooks must be uploaded to the Chef server
 
 * Log files from created VM instances are not accessible via web interface and get lost on VM shutdown
-* Benchmark definition requires Chef cookbook
-
-## Things you may want to cover
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Most Benchmark definitions require a Chef cookbook yet.

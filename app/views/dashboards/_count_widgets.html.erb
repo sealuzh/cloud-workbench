@@ -1,0 +1,26 @@
+<div class="row">
+  <%= render 'count_widget', html_class: 'bg-aqua',
+             count: BenchmarkDefinition.all.count,
+             singular: 'Benchmark Definition',
+             icon: definition_icon,
+             link_name: 'Definitions',
+             link_path: benchmark_definitions_path %>
+  <%= render 'count_widget', html_class: 'bg-purple',
+             count: BenchmarkSchedule.all.count,
+             singular: 'Schedule',
+             icon: schedule_icon,
+             link_name: 'Schedules',
+             link_path: benchmark_schedules_path %>
+  <%= render 'count_widget', html_class: 'bg-blue',
+             count: BenchmarkExecution.all.count,
+             singular: 'Benchmark Execution',
+             icon: execution_icon,
+             link_name: 'Executions',
+             link_path: benchmark_executions_path %>
+  <%= render 'count_widget', html_class: 'bg-orange',
+             count: VirtualMachineInstance.all.count,
+             singular: 'Virtual Machine',
+             icon: vm_icon,
+             link_name: 'Virtual Machines',
+             link_path: virtual_machine_instances_path %>
+</div>

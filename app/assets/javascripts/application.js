@@ -9,25 +9,42 @@
 //
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
-//
+
 //= require jquery
 //= require jquery_ujs
-//= require twitter/bootstrap
+//= require jquery.turbolinks
+//= require bootstrap/bootstrap
+//= require bootstrap-slider/bootstrap-slider
+
+// CUSTOM
+//= require utilities
+
+// Replace default browser confirm dialog with bootstrap modal: https://github.com/ifad/data-confirm-modal
+//= require data-confirm-modal
+// CUSTOM
+//= require data-confirm-modal-config
+
+// Ace editor extensions
+// =require ace/ace
+//= require ace/worker-javascript
+//= require ace/mode-ruby
+//= require ace/theme-github
+//= require ace/snippets/ruby
+//= require ace/ext-language_tools
+//= require aced-rails/aced-rails.js.coffee
+// CUSTOM
+//= require ace_config
+
+// AdminLTE bootstrap theme and optional dependencies
+//= require admin-lte/app
+
+// CUSTOM javascript
+//= require live_log
+//= require tooltips
+//= require sign_in
+//= require slider
+
+
+
+// Require as last resource according to jquery turbolinks docs: https://github.com/kossnocorp/jquery.turbolinks
 //= require turbolinks
-//= require_tree .
-
-$.fn.exists = function () {
-    return this.length !== 0;
-}
-
-// The on page:load hook is required in order to support Rails turbolinks.
-// For more information see: https://github.com/rails/turbolinks#events
-// RailsCast with example and background: http://railscasts.com/episodes/390-turbolinks
-$(document).on('ready page:load', function () {
-    // Tooltips
-    $(function () { $('.tooltip-show').tooltip('show');});
-    $(function () { $('.tooltip-hide').tooltip('hide');});
-    $(function () { $('.tooltip-destroy').tooltip('destroy');});
-    $(function () { $('.tooltip-toggle').tooltip('toggle');});
-    $(function () { $(".tooltip-options a").tooltip({html : true });});
-});

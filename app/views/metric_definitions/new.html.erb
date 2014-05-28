@@ -1,13 +1,11 @@
-<h2>
-  New Metric Definition for
-  <%= link_to @benchmark_definition.name, @benchmark_definition %>
-</h2>
+<% benchmark_definition = @metric_definition.benchmark_definition %>
+<% provide(:title, "Create Metric Definition for #{benchmark_definition.name}") %>
+<% content_header("Create Metric Definition", "for #{link_to(benchmark_definition.name, benchmark_definition)}") %>
 
-<%= simple_form_for(@metric_definition,
-                    url: benchmark_definition_metric_definitions_path(@benchmark_definition),
-                    html: {class: 'form-horizontal' }) do |f| %>
-  <%= f.input :name %>
-  <%= f.input :unit %>
-  <%= f.input :scale_type, collection: MetricDefinition.scale_type.options, as: :radio_buttons %>
-  <%= f.submit class: 'btn btn-primary' %>
-<% end %>
+<div class="col-md-4">
+  <%= render 'form', submit_value: 'Create Metric Definition', url: benchmark_definition_metric_definitions_path(benchmark_definition) %>
+</div>
+
+<div class="col-md-8">
+  <%= render 'scale_types' %>
+</div>

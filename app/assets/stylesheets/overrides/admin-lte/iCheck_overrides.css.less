@@ -1,0 +1,17 @@
+// Assets directory
+@icheck-img-dir: 'icheck';
+
+.icheckbox_minimal,
+.iradio_minimal {
+  background-image: image-url("@{icheck-img-dir}/minimal/minimal.png");
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+only screen and (-moz-min-device-pixel-ratio: 1.5),
+only screen and (-o-min-device-pixel-ratio: 3/2),
+only screen and (min-device-pixel-ratio: 1.5) {
+  .icheckbox_minimal,
+  .iradio_minimal {
+    background-image: image-url("@{icheck-img-dir}/minimal/minimal@2x.png");
+  }
+}

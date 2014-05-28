@@ -10,7 +10,7 @@ module Rackbox
       runit_service app["appname"] do
         run_template_name  config["template_name"]
         log_template_name  config["template_name"]
-        cookbook       config["template_cookbook"]
+        cookbook           config["template_cookbook"]
         options(
           :user                 => node["appbox"]["apps_user"],
           :group                => node["appbox"]["apps_user"],

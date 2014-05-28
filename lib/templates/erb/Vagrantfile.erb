@@ -1,16 +1,35 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-require 'securerandom'
-require 'chef'
+### Utilities
+class ::Hash
+  def deep_merge!(second)
+    result = deep_merge(second)
+    self.replace(result)
+  end
 
-Chef::Config.from_file(File.join(ENV['HOME'], '.chef', 'knife.rb'))
+  def deep_merge(second)
+    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
+    self.merge(second, &merger)
+  end
+end
 
+### Variables
+benchmark_name = '<%= benchmark_name %>'
+benchmark_name_sanitized = '<%= benchmark_name_sanitized %>'
+benchmark_id = <%= benchmark_id %>
+execution_id = <%= execution_id %>
+chef_node_name = "#{execution_id}-#{benchmark_name_sanitized}"
+tag_name = "WorkBenchmark-#{benchmark_name_sanitized}"
+
+### Default configuration
 VAGRANTFILE_API_VERSION = "2"
-
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Box
   config.vm.box = "aws"
   config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
+
+  # VM
   config.vm.hostname = "benchmark"
 
   # AWS EC2 provider
@@ -18,51 +37,65 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # AWS authentication
     aws.access_key_id = ENV['AWS_ACCESS_KEY']
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
-
-    # AWS instance configuration
-    aws.region = "eu-west-1"
-    aws.region_config "eu-west-1" do |region|
-      region.ami = "ami-51e91b26" # Official Ubuntu 12.04 image from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
-      region.keypair_name = ENV['EC2_KEYPAIR']
-    end
+    aws.keypair_name = ENV['EC2_KEYPAIR']
     override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
     override.ssh.username = "ubuntu"
+
+    # Official Ubuntu 13.10 image from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
+    aws.ami = "ami-b72ee8c0"
+
+    # AWS default instance configuration
+    aws.region = "eu-west-1" # Europe/Ireland as default configuration
     aws.instance_type = "t1.micro"
     aws.security_groups = ["default"]
     aws.tags = {
-      'Name' => 'CloudBenchmarking-Benchmark'
+      'Name' => tag_name
     }
   end
 
-  #vagrant omnibus plugin that installs Chef with a bundled Ruby: https://github.com/schisamo/vagrant-omnibus
-  # Exploit Ruby include to move infrastructure stuff to out. Use plugin detection.
+  # Chef client provisioner
   config.omnibus.chef_version = :latest
-
-  # Chef provisioning
-  config.vm.provision "chef_client" do |chef|
+  config.vm.provision "chef_client", id: "chef_client" do |chef|
     chef.log_level = :info
-    # Put the client.rb in /etc/chef such that the chef-client can be run via "sudo chef-client" without specifying the path
     chef.provisioning_path = "/etc/chef"
-    chef.chef_server_url = Chef::Config[:chef_server_url]
-    chef.validation_key_path = Chef::Config[:validation_key]
+    chef.chef_server_url = ENV['KNIFE_CHEF_SERVER_URL']
+    chef.validation_key_path = ENV['KNIFE_VALIDATION_KEY']
 
-    # May use 6-digit random string to generate unique node names since Chef nodes MUST have unique names with: SecureRandom.hex(3)
-    # MUST be unique in scope of all benchmarks!
-    chef.node_name = "#{config.vm.hostname}-#{SecureRandom.hex(3)}"
+    # MUST be unique in scope of all benchmarks
+    chef.node_name = chef_node_name
 
     chef.run_list = [
-      "recipe[benchmark]",
-      "recipe[fio-benchmark@0.2.0]"
+      "recipe[benchmark]"
     ]
-
-    chef.json = {
-      "fio" => {
-        "metric_definition_id" => 1
-      }
-    }
-
-    # Cleanup when vm gets destroyed: Does not work due to bug https://github.com/mitchellh/vagrant/issues/2476
-    # chef.delete_node = true
-    # chef.delete_client = true
   end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Custom Vagrantfile
+<%= vagrantfile %>

@@ -1,3 +1,3 @@
 #!/usr/bin/env sh
 
-<%= "./#{@start}" %> >> start.log 2>> start.log < /dev/null
+<%= "./#{@benchmark_start}" %> <%= ' &>> start.log < /dev/null' if @redirect_io %>

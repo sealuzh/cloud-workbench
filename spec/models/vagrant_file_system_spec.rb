@@ -50,8 +50,8 @@ describe VagrantFileSystem do
       it "should create the Vagrantfile at the vagrantfile_path" do
         expect(File).to exist(vagrant_fs.vagrantfile_path)
       end
-      it "should have the same content as the Vagranfile in the db" do
-        expect(File.read(vagrant_fs.vagrantfile_path)).to eq(benchmark_definition.vagrantfile)
+      it "should include the content of the Vagranfile in the db" do
+        expect(File.read(vagrant_fs.vagrantfile_path)).to include(benchmark_definition.vagrantfile)
       end
     end
   end

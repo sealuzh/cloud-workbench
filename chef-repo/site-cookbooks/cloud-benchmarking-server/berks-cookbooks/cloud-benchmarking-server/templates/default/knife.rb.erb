@@ -1,0 +1,26 @@
+# Logging.
+log_level :info
+log_location STDOUT
+
+# Chef server configuration.
+chef_server_url ENV['KNIFE_CHEF_SERVER_URL'].to_s
+client_key ENV['KNIFE_CLIENT_KEY'].to_s
+node_name ENV['KNIFE_NODE_NAME'].to_s
+validation_client_name ENV['KNIFE_VALIDATION_CLIENT_NAME'].to_s
+validation_key ENV['KNIFE_VALIDATION_KEY'].to_s
+syntax_check_cache_path  "<%= @home_dir %>/.chef/syntax_check_cache"
+#cookbook_path [ '/home/apps/shared/chef-repo/cookbooks' ]
+
+# Use markdown as default readme format language instead of rdoc
+knife[:readme_format] = 'md'
+cookbook_copyright ''
+cookbook_license 'apachev2'
+
+# AWS - Amazon Web Services
+knife[:aws_access_key_id] = ENV['AWS_ACCESS_KEY'].to_s
+knife[:aws_secret_access_key] = ENV['AWS_SECRET_KEY'].to_s
+knife[:aws_ssh_key_id] = ENV['EC2_KEYPAIR'].to_s
+knife[:region] = "eu-west-1"
+knife[:flavor] = "t1.micro"
+knife[:ssh_user] = "ubuntu" # Depends on image!
+knife[:groups] = ["default"] # Security groups

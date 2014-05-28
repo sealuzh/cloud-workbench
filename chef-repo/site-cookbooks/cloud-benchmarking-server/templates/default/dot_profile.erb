@@ -1,0 +1,40 @@
+# THIS FILE IS MANAGED BY CHEF.
+# MANUAL CHANGES WILL BE NUKED ON THE NEXT CHEF RUN
+
+CHEF_SERVER_IP=<%= @chef["server_ip"] %>
+
+# AWS
+export EC2_KEYPAIR=<%= @aws["ssh_key_name"] %>
+export EC2_PRIVATE_KEY=$HOME/.ssh/<%= @aws["ssh_key_name"] %>.pem
+export AWS_ACCESS_KEY=<%= @aws["access_key"] %>
+export AWS_SECRET_KEY=<%= @aws["secret_key"] %>
+
+# Opscode Chef configurations.
+export KNIFE_CHEF_SERVER_URL=https://$CHEF_SERVER_IP:443
+export KNIFE_CLIENT_KEY=$HOME/.chef/<%= @chef["client_key_name"] %>.pem
+export KNIFE_NODE_NAME=<%= @chef["node_name"] %>
+export KNIFE_VALIDATION_CLIENT_NAME=chef-validator
+export KNIFE_VALIDATION_KEY=$HOME/.chef/chef-validator.pem
+
+# ~/.profile: executed by the command interpreter for login shells.
+# This file is not read by bash(1), if ~/.bash_profile or ~/.bash_login
+# exists.
+# see /usr/share/doc/bash/examples/startup-files for examples.
+# the files are located in the bash-doc package.
+
+# the default umask is set in /etc/profile; for setting the umask
+# for ssh logins, install and configure the libpam-umask package.
+#umask 022
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+# include .bashrc if it exists
+if [ -f "$HOME/.bashrc" ]; then
+. "$HOME/.bashrc"
+fi
+fi
+
+# set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] ; then
+PATH="$HOME/bin:$PATH"
+fi

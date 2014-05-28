@@ -1,24 +1,32 @@
 <% if @benchmark_definition.present? %>
   <!-- Index benchmark_executions for a specific benchmark_definition -->
-  <h2>Benchmark Executions of <%= link_to @benchmark_definition.name, @benchmark_definition %></h2>
-  <%= form_for [@benchmark_definition, @benchmark_definition.benchmark_executions.build] do |f| %>
-    <%= f.hidden_field :benchmark_definition_id %>
-    <%= f.submit 'Start Execution', data: { confirm: 'Are you sure?' }, class: 'btn btn-primary' %>
-  <% end %>
+  <% provide(:title, "Executions of #{@benchmark_definition.name}") %>
+  <% content_header("#{pluralize(@benchmark_executions.count, 'Execution')} of", link_to(@benchmark_definition.name, @benchmark_definition)) %>
 
-  <div class="container">
-    <div class="row">
-
-      <div class="box span9">
-        <%= render 'shared/benchmark_executions', show_benchmark_definition: false %>
+  <div class="row">
+    <div class="col-md-9">
+      <%= will_paginate @benchmark_executions %>
+      <%= render 'shared/benchmark_executions', show_benchmark_definition: false %>
+      <%= will_paginate @benchmark_executions %>
+    </div>
+    <div class="col-md-3">
+      <div class="transparant-well">
+        <%= button_to [@benchmark_definition, @benchmark_definition.benchmark_executions.build],
+                      method: :post, class: 'btn btn-primary btn-block btn-lg',
+                      data: confirm_start_execution_msg(@benchmark_definition) do %>
+          <%= start_icon %>&nbsp;Start Execution
+        <% end %>
       </div>
-
-      <%= render 'shared/metric_definitions_sidebar' %>
+      <%= schedule_metric_sidebar(@benchmark_definition) %>
     </div>
   </div>
 <% else %>
   <!-- Index all benchmark_executions -->
-  <h2>Benchmark Executions</h2>
-  <%= render 'shared/benchmark_executions', show_benchmark_definition: true %>
-<% end %>
+  <% provide(:title, 'Benchmark Executions') %>
+  <% all_executions_link = link_to pluralize(@benchmark_executions.count, 'Benchmark Execution'), benchmark_executions_path %>
+  <% content_header("#{all_executions_link}") %>
 
+  <%= will_paginate @benchmark_executions %>
+  <%= render 'shared/benchmark_executions', show_benchmark_definition: true %>
+  <%= will_paginate @benchmark_executions %>
+<% end %>

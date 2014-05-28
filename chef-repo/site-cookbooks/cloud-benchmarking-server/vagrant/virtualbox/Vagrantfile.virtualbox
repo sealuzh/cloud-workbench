@@ -1,0 +1,32 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+PRIVATE_IP ||= '33.33.33.10'
+
+Vagrant.configure('2') do |config|
+  # Detects vagrant-cachier plugin
+  if Vagrant.has_plugin?('vagrant-cachier')
+    puts 'INFO:  Vagrant-cachier plugin detected. Optimizing caches.'
+    # config.cache.auto_detect = true
+    config.cache.enable :chef
+    config.cache.enable :apt
+    config.cache.enable :gem
+  else
+    puts 'WARN:  Vagrant-cachier plugin not detected. Continuing unoptimized.'
+  end
+
+  # Box
+  config.vm.box = 'opscode-ubuntu-13.10' # 14.04 seems to have problems with postgres installation
+  config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-13.10_chef-provisionerless.box'
+
+  # VM
+  config.vm.hostname = 'work-bench-virtualbox-development'
+  config.vm.network :private_network, ip: PRIVATE_IP
+
+  # Virtualbox
+  config.vm.provider :virtualbox do |vb|
+    # Try to approximate an AWS m1.small instance
+    vb.memory = 2500
+    vb.cpus = 3
+  end
+end

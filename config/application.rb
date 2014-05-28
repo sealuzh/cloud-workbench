@@ -1,5 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
+require 'csv'
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -8,19 +9,20 @@ Bundler.require(*Rails.groups)
 
 module CloudBenchmarking
   class Application < Rails::Application
-    config.generators do |g|
-      g.test_framework  :rspec, fixture: false
-      g.fixture_replacement :factory_girl, :dir => 'spec/factories'
-      g.assets false
-      g.helper false
-    end
+    # Handle exceptions (e.g. 404 not found) in routes.rb
+    config.exceptions_app = self.routes
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.autoload_paths += %W(
-      #{config.root}/app/jobs
+      #{Rails.root}/app/jobs
     )
+
+    # Add fonts in vendor directory to assets pipeline
+    config.assets.paths << "#{Rails.root}/vendor/assets/fonts"
+    # config.assets.precompile += %w( *.ttf *.eot *.svg *.woff *.png *.gif *.jpg )
+    config.assets.precompile << %r{.(?:svg|eot|woff|ttf|png|gif|jpg)}
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
@@ -30,7 +32,21 @@ module CloudBenchmarking
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    # Suppress assets log in development
+    config.quiet_assets = true
+
     ### CloudBenchmarking settings
+    # Default authentication
+    config.default_email = 'seal@uzh.ch'
+    config.default_password = 'seal-cloud'
+
+    # Schedule failed threshold (after x consecutive unsuccessful executions)
+    config.execution_failed_threshold = 3
+
+    # Timeout
+    config.default_running_timeout = 24 # Hours after a running benchmark will be terminated
+    config.failure_timeout = 15.minutes # Minutes after which the instances will be terminated on failure
+
     # VMs
     config.vm_benchmark_dir = '/usr/local/cloud-benchmark'
     config.vm_start_runner = 'start_runner.sh'
@@ -45,7 +61,8 @@ module CloudBenchmarking
     config.templates = File.join(Rails.root, 'lib', 'templates')
 
     # Benchmark definition
-    config.vagrantfile_template = File.join(config.templates, 'erb', 'Vagrantfile.erb')
+    config.vagrantfile_example = File.join(config.templates, 'erb', 'Vagrantfile_example.erb')
+    config.vagrantfile = File.join(config.templates, 'erb', 'Vagrantfile.erb')
 
     # Benchmark execution
     config.benchmark_executions = File.join(config.storage, 'benchmark_executions')
