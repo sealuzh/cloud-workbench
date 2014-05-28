@@ -1,3 +1,14 @@
+# The following variables are available
+# benchmark_name: Name of the benchmark definition from the web interface
+# benchmark_name_sanitized: benchmark_name where all non-word-characters are replaced with an underscore '_'
+# benchmark_id: The unique benchmark definition identifier
+# execution_id: The unique benchmark execution identifier
+# chef_node_name: The default node name used for Chef client provisioning
+# tag_name: The default tag name set as aws name tag
+
+# NOTE: The automatically generated content inserted before influences the line numbers
+#       that are displayed in the log files. Just calculate -100 to get your actual line number.
+
 # VAGRANTFILE_API_VERSION = "2"  # Already initialized before
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # AWS EC2 provider
@@ -12,6 +23,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Add other security groups separated by spaces.
     # Example: %w(default my_own_group)
     aws.security_groups = %w(default)
+    # A default tag name is set that you may override.
+    # aws.tags = {
+    #   'Name' => tag_name
+    # }
   end
 
   # Chef client provisioning
