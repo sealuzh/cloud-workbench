@@ -1,4 +1,4 @@
-# Cloud Benchmarking
+# Cloud WorkBench
 
 ## Installation (automated)
 
@@ -43,6 +43,13 @@ Note: The provided values are examples from AWS and do NOT work.
 1. `cd $GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/cloud-benchmarking-server/vagrant-aws-production`
 2. `vagrant up --provider=aws`
 
+Supported systems:
+
+* Ubuntu 12.04
+* Ubuntu 13.10
+
+Note Ubuntu 14.04 has some issues with the postgres cookbook and requirs some work to fix this. Other systems have not been tested.
+
 #### Configure WorkBench Server
 
 * Use the Cookbook attributes to configure the WorkBench server
@@ -52,12 +59,6 @@ Note: The provided values are examples from AWS and do NOT work.
 1. `cd $GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/cbench-chef-server/vagrant-aws-production`
 2. `vagrant up --provider=aws`
 
-Supported systems:
-
-* Ubuntu 12.04
-* Ubuntu 13.10
-
-Note Ubuntu 14.04 has some issues with the postgres cookbook and requirs some work to fix this. Other systems have not been tested.
 
 ## Installation (manual)
 
@@ -107,7 +108,11 @@ NOTE: The manual installation is not recommendend and has not been tested. The r
 
 ### Chef Server
 
-* WorkBench ~/.profile
+* WorkBench ~/.profile (automated)
+    1. Enter the IP address of the Chef Server in the yaml config file at `chef-repo/secret/vagrant-aws-production` (Example for production environment)
+    2. Set the `APPLY_SECRET_CONFIG` to true in the Vagrantfile. Make sure you also provide the chef_client_key.pem, chef_validator.pem and cloud-benchmarking.pem in the secret config
+    3. Run `vagrant provision` in order to apply the new configuration
+* WorkBench ~/.profile (manual)
     1. `cd $GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/cloud-benchmarking-server/vagrant-aws-production`
     2. `vagrant ssh`
     3. `sudo vim /home/apps/.profile`
@@ -132,10 +137,57 @@ Simply deploy new releases with `bundle exec cap production deploy`
 
 ## Benchmarks
 
-TODO: Describe how to define a new benchmark
-
 ### Getting Started
 
+1. Create a Cookbook that installs your benchmarks or use a VM image wherein your benchmark is already installed.
+    * See the README.md in chef-repo/site-cookbooks for more information about how to get started with creating a cookbook.
+    * Chef resources docs: http://docs.opscode.com/chef/resources.html
+2. Upload the Cookbook with [`knife cookbook upload`](http://docs.opscode.com/knife_cookbook.html#upload) or [`berks upload`] to the Chef-Server
+3. Create a new Benchmark-Definition with the web interface of Cloud WorkBench under `BENCHMARK > Definitions > Create New Benchmark`
+4. Create a metric definition for the new benchmark
+5. Configure your Benchmark within the Vagranfile (e.g. region, vm image, instance type,) and add your Chef recipe via `chef.add_recipe "recipe[fio@0.1.0]"` (The @version is optional)
+6. Start or schedule the benchmark via the Cloud WorkBench web interface.
+
+
+### Hooks
+
+The following hooks are available at `node["benchmark"]["dir"]` which currently defaults to `/usr/local/cloud-benchmark`:
+
+* `start.sh` (required)
+    * Invoked to start the benchmark
+* `stop_and_postprocess.sh`
+    * Invoked after `notify_benchmark_completed_and_wait` has been called
+
+### Benchmark Helper (Client-side utility)
+
+The benchmark helper is the client-side utility to manage the execution of a benchmark.
+
+#### Notifications
+
+* `notify_benchmark_completed_and_continue(success = true, message = '')`
+    * Immediately continue with postprocessing.
+    * success: Indicate whether the benchmark has been run sucessfully or failed (e.g. true or false). Submitting false will release the acquired resources.
+    * message: Optional message (e.g. error log)
+* `notify_benchmark_completed_and_wait(success = true, message = '')`
+   * Do not continue with postprocessing. The Cloud WorkBench will ssh into the primary VM instance and start the prostprocessing.
+    * success: Indicate whether the benchmark has been run sucessfully or failed (e.g. true or false). Submitting false will release the acquired resources.
+    * message: Optional message (e.g. error log)
+* `notify_postprocessing_completed(success = true, message = '', opts = {})`
+    * The Cloud WorkBench will release the acquired resources.
+    * success: Indicate whether the postprocessing has been completed successfully or failed (e.g. true or false) 
+    * message: Optional message (e.g. error log)
+    * opts: Not used yet
+
+#### Metric submission
+
+* `submit_metric(metric_definition_id, time, value)`
+    * Submit a single metric to the Cloud WorkBench
+    * metric_definition_id: The unique id (e.g. 12) or the name (e.g. seq. write) of the metric definition
+    * time: An integer time for 2D metrics (e.g. 500)
+    * value: The value of the metric (e.g. 1142)
+* `submit_metrics(metric_definition_id, csv_file)`
+    * Bulk submit multiple metrics for the same metric definition
+    * csv_file: path to a csv file with 2 columns without header. (1st: time) (2nd: value)
 
 ## Tests
 
