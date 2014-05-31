@@ -302,6 +302,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    railroady (1.1.1)
     rails (4.1.1)
       actionmailer (= 4.1.1)
       actionpack (= 4.1.1)
@@ -381,6 +382,10 @@ GEM
     simple_form (3.0.2)
       actionpack (~> 4.0)
       activemodel (~> 4.0)
+    simplecov (0.7.1)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.7.1)
+    simplecov-html (0.7.1)
     slop (3.5.0)
     solve (1.2.0)
       dep_selector (~> 1.0)
@@ -488,6 +493,7 @@ DEPENDENCIES
   pry-rails
   quiet_assets
   rack-livereload
+  railroady
   rails (= 4.1.1)
   rb-readline
   rspec-rails (~> 2.14.2)
@@ -495,6 +501,7 @@ DEPENDENCIES
   selenium-webdriver (~> 2.41.0)
   silencer (~> 0.6.0)
   simple_form (~> 3.0.2)
+  simplecov (~> 0.7.1)
   spork-rails (~> 4.0.0)
   sqlite3
   therubyracer (~> 0.12.1)

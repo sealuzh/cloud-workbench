@@ -7,6 +7,13 @@ require 'spork'
 # if you change any configuration or code from libraries loaded here, you'll
 # need to restart spork for it take effect.
 Spork.prefork do
+  unless ENV['DRB']
+    require 'simplecov_rails_custom'
+    SimpleCov.start 'rails' do
+      configure_simple_cov
+    end
+  end
+
   ENV["RAILS_ENV"] ||= 'test'
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
@@ -92,5 +99,10 @@ end
 
 Spork.each_run do
   # This code will be run each time you run your specs.
-
+  if ENV['DRB']
+    require 'simplecov_rails_custom'
+    SimpleCov.start 'rails' do
+      configure_simple_cov
+    end
+  end
 end

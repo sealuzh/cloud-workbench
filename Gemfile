@@ -27,6 +27,7 @@ group :development do
   gem 'meta_request'
   gem 'quiet_assets'
   gem 'rb-readline' # Fixes guard issues with interactive pry
+  gem 'railroady'
 
   # Deploy with Capistrano
   # None of the capistrano task should be loaded into the Rails environment by default
@@ -45,6 +46,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 2.14.2'
   gem 'fuubar'
   gem 'guard-rspec', '~> 4.2.8'
+  gem 'simplecov', '~> 0.7.1', require: false
 
   gem 'spork-rails', '~> 4.0.0'
   gem 'guard-spork', '~> 1.5.1'
