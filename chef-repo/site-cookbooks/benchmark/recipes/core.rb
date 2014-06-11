@@ -1,3 +1,6 @@
+# TODO: Support hierarchical directory creation.
+#       Do NOT use the hierarchical flag of the Chef resource as this
+#       does not correctly apply owner and group permissions.
 directory node["benchmark"]["dir"] do
   owner node["benchmark"]["owner"]
   group node["benchmark"]["group"]

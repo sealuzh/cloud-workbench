@@ -26,6 +26,7 @@ class BenchmarkExecution < ActiveRecord::Base
 
     # Schedule StartBenchmarkExecutionJobs with higher priority than PrepareBenchmarkExecutionJobs.
     # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
+    # Usually the start execution job can be executed immediately here!
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
   rescue => e
     shutdown_after_failure_timeout

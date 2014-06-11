@@ -19,7 +19,8 @@ describe BenchmarkExecution do
   its(:active?) { should be_true }
 
   describe "when benchmark definition is not present" do
-    before { benchmark_execution.benchmark_definition_id = 77 }
+    let(:non_existent_id) { 77 }
+    before { benchmark_execution.benchmark_definition_id = non_existent_id }
     it { should_not be_valid }
   end
 
