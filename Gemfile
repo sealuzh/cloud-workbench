@@ -15,6 +15,10 @@ gem 'enumerize', '~> 0.8.0'
 gem 'deep_cloneable', '~> 1.6.1'
 gem 'devise', '~> 3.2.4'
 
+# Uncomment and run bundle install for installation.
+# Docs at https://github.com/metricfu/metric_fu/
+#gem 'metric_fu', group: :metrics, require: false
+
 group :development do
   gem 'pry'
   gem 'pry-rails' # Use pry as Rails console
