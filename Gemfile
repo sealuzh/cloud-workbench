@@ -20,6 +20,7 @@ gem 'devise', '~> 3.2.4'
 #gem 'metric_fu', group: :metrics, require: false
 
 group :development do
+  gem 'thin'
   gem 'pry'
   gem 'pry-rails' # Use pry as Rails console
   gem 'pry-byebug' # Use pry as debugger with step, next, finish, continue
