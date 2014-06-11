@@ -15,6 +15,9 @@
 /log/*.log
 /tmp
 
+# Ignore auto generated coverage report
+/coverage
+
 # Ignore assets managed by the Rails assets pipeline
 /public/assets/**
 
