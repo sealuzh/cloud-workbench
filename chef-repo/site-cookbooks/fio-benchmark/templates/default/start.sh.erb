@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-
-# Start benchmark
-<%= @fio %> <%= @config_file %>
-
-# Notify benchmark completed
-<%= @ruby %> -r "./benchmark_helper.rb" -e "BenchmarkHelper.notify_benchmark_completed"

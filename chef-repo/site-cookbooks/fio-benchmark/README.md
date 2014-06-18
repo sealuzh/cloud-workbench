@@ -12,7 +12,7 @@ Requirements
 
 #### Tested with
 * Ubuntu 12.04 LTS 64 bit
-
+* Ubuntu 14.04 LTS 64 bit
 
 #### packages
 - apt: Update package list for build-essential installation
@@ -30,18 +30,20 @@ Attributes
     <th>Default</th>
   </tr>
   <tr>
-    <td><tt>[:fio][:version]</tt></td>
+    <td><tt>['fio']['version']</tt></td>
     <td>String</td>
     <td>Version of FIO</td>
-    <td><tt>2.1.8</tt></td>
+    <td><tt>2.1.10</tt></td>
   </tr>
   <tr>
-    <td><tt>[:fio][:install_source_]</tt></td>
+    <td><tt>['fio']['install_source']</tt></td>
     <td>String</td>
     <td>Install from sources (true) or via apt (false)</td>
     <td><tt>true</tt></td>
   </tr>
 </table>
+
+=> See attributes/default.rb for more configuration options
 
 Usage
 -----

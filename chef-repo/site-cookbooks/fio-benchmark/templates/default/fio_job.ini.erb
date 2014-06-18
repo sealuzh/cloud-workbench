@@ -1,8 +1,4 @@
-[fio.out]
-rw=<%= @rw %>
-direct=1
-thread
-ioengine=sync
-size=<%= @size %>
-bs=<%= @bs %>
-<%= "write_bw_log=#{@write_bw_log}" if @write_bw_log %>
+[job1]
+<% @config.each do |key, value| %>
+<%= key %>=<%= value %>
+<% end %>

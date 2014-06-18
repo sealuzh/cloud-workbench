@@ -1,0 +1,41 @@
+#!<%= @ruby %>
+
+require './benchmark_helper'
+require './fio_log_parser'
+
+RESULT_FILE = 'fio_results.csv'
+FIO_LOG_FILE = '<%= @fio_log %>'
+CONFIG_FILE = '<%= @config_file %>'
+METRIC_DEFINITION_ID = '<%= @metric_definition_id %>'
+CPU = '<%= @cpu %>'
+
+begin
+  # Start benchmark
+  result = %x(fio #{CONFIG_FILE})
+  success = $?.success?
+  # Notify benchmark completed
+  BenchmarkHelper.notify_benchmark_completed_and_continue(success)
+  # Alternatively use "notify_benchmark_completed_and_wait"
+rescue => exception
+  log "FAILED_ON_RUNNING: #{exception.message}"
+  BenchmarkHelper.notify_benchmark_completed_and_continue(false, exception.message)
+end
+
+begin
+  # Parse results
+  FioLogParser.parse_log(FIO_LOG_FILE, RESULT_FILE)
+
+  # Submit multiple metrics (bulk submit)
+  #	Params: metric_definition_id, file_name of csv file with format: time,value
+  BenchmarkHelper.submit_metrics(METRIC_DEFINITION_ID, RESULT_FILE)
+
+  # Submit single metric
+  # 	Params: metric_definition_id, time, value
+  BenchmarkHelper.submit_metric('cpu', '0', CPU)
+
+  # Notify postprocessing completed
+  BenchmarkHelper.notify_postprocessing_completed
+rescue => exception
+  log "FAILED_ON_POSTPROCESSING: #{exception.message}"
+  BenchmarkHelper.notify_postprocessing_completed(false, exception.message)
+end
