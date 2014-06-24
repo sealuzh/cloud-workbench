@@ -45,6 +45,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.ami = "ami-b72ee8c0"
 
     # AWS default instance configuration
+    aws.instance_ready_timeout = 240 # Default is 120
     aws.region = "eu-west-1" # Europe/Ireland as default configuration
     aws.instance_type = "t1.micro"
     aws.security_groups = ["default"]
