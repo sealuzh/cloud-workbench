@@ -1,3 +1,7 @@
+# 0.3.0 (2014-06)
+
+* Add Google Compute Engine support
+
 # 0.2.0 (2014-05)
 
 * Add multi-provider support
