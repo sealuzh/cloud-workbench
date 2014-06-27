@@ -10,7 +10,7 @@ template "#{app_user_home}/.profile" do
   mode 0600
   variables chef:   node["cloud-benchmarking-server"]["chef"],
             aws:    node["cloud-benchmarking-server"]["aws"],
-            google: node["cloud-benchmarking-server"]["google"],
+            google: node["cloud-benchmarking-server"]["google"]
 end
 
 # Chef server config
