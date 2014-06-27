@@ -1,5 +1,5 @@
 class BenchmarkExecution < ActiveRecord::Base
-  PROVIDER = 'aws'
+  DEFAULT_PROVIDER = Rails.application.config.supported_providers.first
   PRIORITY_HIGH = 1
   belongs_to :benchmark_definition
   validates :benchmark_definition, presence: true
@@ -49,7 +49,8 @@ class BenchmarkExecution < ActiveRecord::Base
 
   def prepare_with(driver)
     events.create_with_name!(:started_preparing)
-    success = driver.up(PROVIDER)
+    provider = self.benchmark_definition.provider_name || DEFAULT_PROVIDER
+    success = driver.up(provider)
     if success
       events.create_with_name!(:finished_preparing)
     else

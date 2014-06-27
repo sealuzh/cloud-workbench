@@ -1,5 +1,8 @@
 require 'securerandom'
 class BenchmarkDefinition < ActiveRecord::Base
+  extend Enumerize
+  PROVIDERS = Rails.application.config.supported_providers
+  enumerize :provider_name, in: PROVIDERS, default: PROVIDERS.first
   has_one :benchmark_schedule, dependent: :destroy
   has_many :metric_definitions, dependent: :destroy
   has_many :benchmark_executions, dependent: :destroy do
@@ -28,6 +31,7 @@ class BenchmarkDefinition < ActiveRecord::Base
   validates :name, presence: true,
                    uniqueness: { case_sensitive: false },
                    length: { in: 3..MAX_NAME_LENGTH }
+  validates :provider_name, presence: true
   # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
   validates :vagrantfile, presence: true
   before_save :ensure_name_integrity

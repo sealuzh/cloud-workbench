@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140527202817) do
+ActiveRecord::Schema.define(version: 20140627112533) do
 
   create_table "benchmark_definitions", force: true do |t|
     t.string   "name"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20140527202817) do
     t.datetime "updated_at"
     t.text     "vagrantfile"
     t.integer  "running_timeout"
+    t.string   "provider_name"
   end
 
   add_index "benchmark_definitions", ["name"], name: "index_benchmark_definitions_on_name", unique: true

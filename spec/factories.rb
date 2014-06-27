@@ -3,6 +3,7 @@ require 'ostruct'
 
 FactoryGirl.define do
   factory :benchmark_definition do
+    provider_name 'aws'
     sequence(:name) { |n| "fio-benchmark #{n}" }
     running_timeout 10
     sequence(:vagrantfile) do |n|

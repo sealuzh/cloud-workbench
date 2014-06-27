@@ -53,7 +53,7 @@ module CloudBenchmarking
     config.vm_start_postprocessing = 'stop_and_postprocess_runner.sh'
 
     # String of supported providers that Vagrant uses as directory name (should be the same as used with vagrant up)
-    config.supported_providers = %w(aws)
+    config.supported_providers = %w(aws google)
 
     # Main paths
     config.storage = File.join(Rails.root, 'storage', Rails.env)

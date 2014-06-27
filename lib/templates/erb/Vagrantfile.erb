@@ -25,12 +25,13 @@ tag_name = "WorkBenchmark-#{benchmark_name_sanitized}"
 ### Default configuration
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  # Box
-  config.vm.box = "aws"
-  config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
-
   # VM
   config.vm.hostname = "benchmark"
+
+  <% if provider_name == 'aws' %>
+  # AWS box
+  config.vm.box = "aws"
+  config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
 
   # AWS EC2 provider
   config.vm.provider :aws do |aws, override|
@@ -53,6 +54,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       'Name' => tag_name
     }
   end
+  <% elsif provider_name == 'google' %>
+  # Google box
+  config.vm.box = 'google'
+  config.vm.box_url = 'https://github.com/mitchellh/vagrant-google/raw/master/google.box'
+
+  # Google Compute Engine provider
+  config.vm.provider :google do |google, override|
+    google.google_project_id = ENV['GOOGLE_PROJECT_ID']
+    google.google_client_email = ENV['GOOGLE_CLIENT_EMAIL']
+    google.google_key_location = ENV['GOOGLE_KEY_LOCATION']
+
+    override.ssh.username = "root"
+    override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
+
+    # Used to uniquely identify the VM
+    google.name = chef_node_name
+    google.metadata = {'vagrant-id' => chef_node_name}
+
+    # Override provider defaults
+    google.image = "debian-7-wheezy-v20140619"
+    google.machine_type = "n1-standard-1"
+    google.zone = "europe-west1-a"
+  end
+  <% end %>
 
   # Chef client provisioner
   config.omnibus.chef_version = :latest
@@ -73,30 +98,5 @@ end
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Custom Vagrantfile
+###### BEGIN custom Vagrantfile ######
 <%= vagrantfile %>

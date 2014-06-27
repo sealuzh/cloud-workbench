@@ -27,6 +27,10 @@ class VagrantfileBinding
     @execution.id
   end
 
+  def provider_name
+    @benchmark.provider_name
+  end
+
   # Expose methods of this class
   def get_binding
     binding

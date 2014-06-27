@@ -6,23 +6,20 @@
 # chef_node_name: The default node name used for Chef client provisioning
 # tag_name: The default tag name set as aws name tag
 
-# NOTE: The automatically generated content inserted before influences the line numbers
-#       that are displayed in the log files. Just calculate -100 to get your actual line number.
-
 # VAGRANTFILE_API_VERSION = "2"  # Already initialized before
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # AWS EC2 provider
   config.vm.provider :aws do |aws, override|
     # AWS instance configuration
-    aws.region = "eu-west-1"
+    # aws.region = "eu-west-1"
     # Official Ubuntu 14.04 LTS image for eu-west-1 from Canonical:
     #  https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = "ami-896c96fe"
-    override.ssh.username = "ubuntu"
-    aws.instance_type = "t1.micro"
+    # aws.ami = "ami-896c96fe"
+    # override.ssh.username = "ubuntu"
+    # aws.instance_type = "t1.micro"
     # Add other security groups separated by spaces.
     # Example: %w(default my_own_group)
-    aws.security_groups = %w(default)
+    # aws.security_groups = %w(default)
     # A default tag name is set that you may override.
     # aws.tags = {
     #   'Name' => tag_name
@@ -39,8 +36,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.json =
     {
       "fio" => {
-        "metric_definition_id" => "seq. write"
+        "metric_definition_id" => "seq. write",
+        "config" => {
+          "refill_buffers" => "1"
+        }
       }
     }
   end
 end
+
+# Google Compute Engine example
+# config.vm.provider :google do |google, override|
+#   google.image = "debian-7-wheezy-v20140619"
+#   google.machine_type = "n1-standard-1"
+#   google.zone = "europe-west1-a"
+# end
+
+# NOTE: You MUST pass the following arguments to chef_json when using another username than 'ubuntu'
+# chef.json =
+# {
+#   "benchmark" =>  {
+#     "owner" => "root",
+#     "group" => "root"
+#   }
+# }
