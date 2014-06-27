@@ -20,6 +20,12 @@ default["cloud-benchmarking-server"]["aws"]["ssh_key"] = ""
 default["cloud-benchmarking-server"]["aws"]["access_key"] = ""
 default["cloud-benchmarking-server"]["aws"]["secret_key"] = ""
 
+# Google
+default["cloud-benchmarking-server"]["google"]["project_id"] = ""
+default["cloud-benchmarking-server"]["google"]["client_email"] = ""
+default["cloud-benchmarking-server"]["google"]["api_key_name"] = "google-compute"
+default["cloud-benchmarking-server"]["google"]["api_key"] = ""
+
 # Rackbox
 default["rackbox"]["ruby"]["versions"] = 	   [ "2.1.1" ]
 default["rackbox"]["ruby"]["global_version"] =   "2.1.1"
