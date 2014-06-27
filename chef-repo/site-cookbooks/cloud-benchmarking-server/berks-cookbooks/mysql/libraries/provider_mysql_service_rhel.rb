@@ -24,9 +24,29 @@ class Chef
               prefix_dir = '/usr'
               lc_messages_dir = nil
               run_dir = '/var/run/mysqld'
-              pid_file = '/var/run/mysql/mysql.pid'
+              pid_file = '/var/run/mysqld/mysql.pid'
               socket_file = '/var/lib/mysql/mysql.sock'
               package_name = 'mysql-server'
+              service_name = 'mysqld'
+            when '5.5'
+              base_dir = ''
+              include_dir = "#{base_dir}/etc/mysql/conf.d"
+              prefix_dir = '/usr'
+              lc_messages_dir = nil
+              run_dir = '/var/run/mysqld'
+              pid_file = '/var/run/mysqld/mysql.pid'
+              socket_file = '/var/lib/mysql/mysql.sock'
+              package_name = 'mysql-community-server'
+              service_name = 'mysqld'
+            when '5.6'
+              base_dir = ''
+              include_dir = "#{base_dir}/etc/mysql/conf.d"
+              prefix_dir = '/usr'
+              lc_messages_dir = nil
+              run_dir = '/var/run/mysqld'
+              pid_file = '/var/run/mysqld/mysql.pid'
+              socket_file = '/var/lib/mysql/mysql.sock'
+              package_name = 'mysql-community-server'
               service_name = 'mysqld'
             end
           when '2014'
@@ -37,7 +57,7 @@ class Chef
               prefix_dir = '/usr'
               lc_messages_dir = nil
               run_dir = '/var/run/mysqld'
-              pid_file = '/var/run/mysql/mysql.pid'
+              pid_file = '/var/run/mysqld/mysql.pid'
               socket_file = '/var/lib/mysql/mysql.sock'
               package_name = 'mysql-server'
               service_name = 'mysqld'
@@ -47,9 +67,19 @@ class Chef
               prefix_dir = '/usr'
               lc_messages_dir = nil
               run_dir = '/var/run/mysqld'
-              pid_file = '/var/run/mysql/mysql.pid'
+              pid_file = '/var/run/mysqld/mysql.pid'
               socket_file = '/var/lib/mysql/mysql.sock'
-              package_name = 'mysql-server'
+              package_name = 'mysql-community-server'
+              service_name = 'mysqld'
+            when '5.6'
+              base_dir = ''
+              include_dir = "#{base_dir}/etc/mysql/conf.d"
+              prefix_dir = '/usr'
+              lc_messages_dir = nil
+              run_dir = '/var/run/mysqld'
+              pid_file = '/var/run/mysqld/mysql.pid'
+              socket_file = '/var/lib/mysql/mysql.sock'
+              package_name = 'mysql-community-server'
               service_name = 'mysqld'
             end
           when '6'
@@ -60,9 +90,29 @@ class Chef
               prefix_dir = '/usr'
               lc_messages_dir = nil
               run_dir = '/var/run/mysqld'
-              pid_file = '/var/run/mysql/mysql.pid'
+              pid_file = '/var/run/mysqld/mysql.pid'
               socket_file = '/var/lib/mysql/mysql.sock'
               package_name = 'mysql-server'
+              service_name = 'mysqld'
+            when '5.5'
+              base_dir = ''
+              include_dir = "#{base_dir}/etc/mysql/conf.d"
+              prefix_dir = '/usr'
+              lc_messages_dir = nil
+              run_dir = '/var/run/mysqld'
+              pid_file = '/var/run/mysqld/mysql.pid'
+              socket_file = '/var/lib/mysql/mysql.sock'
+              package_name = 'mysql-community-server'
+              service_name = 'mysqld'
+            when '5.6'
+              base_dir = ''
+              include_dir = "#{base_dir}/etc/mysql/conf.d"
+              prefix_dir = '/usr'
+              lc_messages_dir = nil
+              run_dir = '/var/run/mysqld'
+              pid_file = '/var/run/mysqld/mysql.pid'
+              socket_file = '/var/lib/mysql/mysql.sock'
+              package_name = 'mysql-community-server'
               service_name = 'mysqld'
             end
           when '5'
@@ -73,7 +123,7 @@ class Chef
               prefix_dir = '/usr'
               lc_messages_dir = nil
               run_dir = '/var/run/mysqld'
-              pid_file = '/var/run/mysql/mysql.pid'
+              pid_file = '/var/run/mysqld/mysql.pid'
               socket_file = '/var/lib/mysql/mysql.sock'
               package_name = 'mysql-server'
               service_name = 'mysqld'
@@ -83,7 +133,7 @@ class Chef
               prefix_dir = '/opt/rh/mysql51/root/usr'
               lc_messages_dir = nil
               run_dir = '/opt/rh/mysql51/root/var/run/mysqld/'
-              pid_file = '/var/run/mysql/mysql.pid'
+              pid_file = '/var/run/mysqld/mysql.pid'
               socket_file = '/var/lib/mysql/mysql.sock'
               package_name = 'mysql51-mysql-server'
               service_name = 'mysql51-mysqld'
@@ -93,7 +143,7 @@ class Chef
               prefix_dir = '/opt/rh/mysql55/root/usr'
               lc_messages_dir = nil
               run_dir = '/opt/rh/mysql55/root/var/run/mysqld/'
-              pid_file = '/var/run/mysql/mysql.pid'
+              pid_file = '/var/run/mysqld/mysql.pid'
               socket_file = '/var/lib/mysql/mysql.sock'
               package_name = 'mysql55-mysql-server'
               service_name = 'mysql55-mysqld'
@@ -101,6 +151,20 @@ class Chef
           end
 
           converge_by 'rhel pattern' do
+            # we need to enable the yum-mysql-community repository to get packages
+            unless node['platform_version'].to_i == 5
+              case new_resource.version
+              when '5.5'
+                recipe_eval do
+                  run_context.include_recipe 'yum-mysql-community::mysql55'
+                end
+              when '5.6'
+                recipe_eval do
+                  run_context.include_recipe 'yum-mysql-community::mysql56'
+                end
+              end
+            end
+
             package package_name do
               action :install
             end
@@ -124,7 +188,7 @@ class Chef
             directory new_resource.data_dir do
               owner 'mysql'
               group 'mysql'
-              mode '0750'
+              mode '0755'
               recursive true
               action :create
             end
@@ -146,14 +210,15 @@ class Chef
               owner 'root'
               group 'root'
               mode '0600'
+              variables(:config => new_resource)
               action :create
               notifies :run, 'execute[install-grants]'
             end
 
-            if node['mysql']['server_root_password'].empty?
+            if new_resource.server_root_password.empty?
               pass_string = ''
             else
-              pass_string = '-p' + Shellwords.escape(node['mysql']['server_root_password'])
+              pass_string = '-p' + Shellwords.escape(new_resource.server_root_password)
             end
 
             execute 'install-grants' do
@@ -195,15 +260,15 @@ class Chef
               && for i in `ls #{base_dir}/var/lib/mysql | grep -v mysql.sock` ; do mv #{base_dir}/var/lib/mysql/$i #{new_resource.data_dir} ; done
               EOH
               action :nothing
-              only_if "[ '#{base_dir}/var/lib/mysql' != #{new_resource.data_dir} ]"
-              only_if "[ `stat -c %h #{new_resource.data_dir}` -eq 2 ]"
-              not_if "[ `stat -c %h #{base_dir}/var/lib/mysql/` -eq 2 ]"
+              creates "#{new_resource.data_dir}/ibdata1"
+              creates "#{new_resource.data_dir}/ib_logfile0"
+              creates "#{new_resource.data_dir}/ib_logfile1"
             end
 
             execute 'assign-root-password' do
               cmd = "#{prefix_dir}/bin/mysqladmin"
               cmd << ' -u root password '
-              cmd << Shellwords.escape(node['mysql']['server_root_password'])
+              cmd << Shellwords.escape(new_resource.server_root_password)
               command cmd
               action :run
               only_if "#{prefix_dir}/bin/mysql -u root -e 'show databases;'"

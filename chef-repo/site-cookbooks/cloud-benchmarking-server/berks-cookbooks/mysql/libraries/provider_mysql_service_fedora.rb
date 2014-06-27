@@ -45,7 +45,7 @@ class Chef
             directory new_resource.data_dir do
               owner 'mysql'
               group 'mysql'
-              mode '0750'
+              mode '0755'
               action :create
               recursive true
             end
@@ -67,14 +67,15 @@ class Chef
               owner 'root'
               group 'root'
               mode '0600'
+              variables(:config => new_resource)
               action :create
               notifies :run, 'execute[install-grants]'
             end
 
-            if node['mysql']['server_root_password'].empty?
+            if new_resource.server_root_password.empty?
               pass_string = ''
             else
-              pass_string = '-p' + Shellwords.escape(node['mysql']['server_root_password'])
+              pass_string = '-p' + Shellwords.escape(new_resource.server_root_password)
             end
 
             execute 'install-grants' do
@@ -116,15 +117,15 @@ class Chef
               && for i in `ls /var/lib/mysql | grep -v mysql.sock` ; do mv /var/lib/mysql/$i #{new_resource.data_dir} ; done
               EOH
               action :nothing
-              only_if "[ '/var/lib/mysqld' != #{new_resource.data_dir} ]"
-              only_if "[ `stat -c %h #{new_resource.data_dir}` -eq 2 ]"
-              not_if '[ `stat -c %h /var/lib/mysql/` -eq 2 ]'
+              creates "#{new_resource.data_dir}/ibdata1"
+              creates "#{new_resource.data_dir}/ib_logfile0"
+              creates "#{new_resource.data_dir}/ib_logfile1"
             end
 
             execute 'assign-root-password' do
               cmd = "#{prefix_dir}/bin/mysqladmin"
               cmd << ' -u root password '
-              cmd << Shellwords.escape(node['mysql']['server_root_password'])
+              cmd << Shellwords.escape(new_resource.server_root_password)
               command cmd
               action :run
               only_if "#{prefix_dir}/bin/mysql -u root -e 'show databases;'"

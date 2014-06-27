@@ -1,0 +1,52 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require 'vagrant-openstack-plugin'
+
+# Change on demand
+APPLY_SECRET_CONFIG = false
+SSH_USERNAME = "ubuntu"
+
+require 'pathname'
+vagrant_base_dir = Pathname.new(__FILE__).parent.parent.expand_path
+chef_repo_base_dir = Pathname.new(vagrant_base_dir).parent.parent.expand_path
+
+COOKBOOKS_PATH = File.expand_path("#{vagrant_base_dir}/../berks-cookbooks")
+CONFIG_DIR = "#{chef_repo_base_dir}/secret/vagrant-os-production"
+
+# Import parent configs and pass local context (e.g. variables)
+base_config = File.read "#{vagrant_base_dir}/Vagrantfile.base"
+eval(base_config, binding)
+
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "dummy"
+
+  # Make sure the private key from the key pair is provided
+  config.ssh.private_key_path = "/Users/philipp/Documents/Openstack/philipp.pem"
+
+  config.vm.provider :openstack do |os|
+    os.username     = "#{ENV['OS_USERNAME']}"          # e.g. "#{ENV['OS_USERNAME']}"
+    os.api_key      = "#{ENV['OS_PASSWORD']}"           # e.g. "#{ENV['OS_PASSWORD']}"
+    os.flavor       = /m1.small/                # Regex or String
+    os.image        = /Ubuntu.*13/                 # Regex or String
+    os.endpoint     = "http://openstack.infosys.tuwien.ac.at:5000/v2.0/tokens"      # e.g. "#{ENV['OS_AUTH_URL']}/tokens"
+    os.keypair_name = "philipp"      # as stored in Nova
+    os.ssh_username = "ubuntu"           # login for the VM
+    os.server_name  = "Cloud-Workbench"
+    os.floating_ip  = "128.130.172.195"
+  end
+
+  # Chef solo provisioning via vagrant-berkshelf plugin
+  config.vm.provision :chef_solo, id: 'chef_solo' do |chef|
+    chef.add_recipe("build-essential")
+    chef.json = CHEF_JSON.deep_merge({
+                                        "compile_time" => true,
+                                         "cloud-benchmarking-server" => {
+                                             "delayed_job" => {
+                                                 "worker_processes" => "8"
+                                             },
+                                         },
+                                     })
+  end
+end
