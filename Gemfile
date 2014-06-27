@@ -15,14 +15,11 @@ gem 'enumerize', '~> 0.8.0'
 gem 'deep_cloneable', '~> 1.6.1'
 gem 'devise', '~> 3.2.4'
 
-# Uncomment and run bundle install for installation.
-# Docs at https://github.com/metricfu/metric_fu/
-#gem 'metric_fu', group: :metrics, require: false
+gem 'pry'
+gem 'pry-rails' # Use pry as Rails console
 
 group :development do
   gem 'thin'
-  gem 'pry'
-  gem 'pry-rails' # Use pry as Rails console
   gem 'pry-byebug' # Use pry as debugger with step, next, finish, continue
   gem 'launchy'
   gem 'guard-livereload', '~> 2.1.2', require: false
@@ -76,6 +73,10 @@ group :test do
   # gem 'wdm', '0.1.0'
 end
 
+# Uncomment and run bundle install for installation.
+# Docs at https://github.com/metricfu/metric_fu/
+#gem 'metric_fu', group: :metrics, require: false
+
 group :production do
   gem 'unicorn'
   gem 'pg'
@@ -113,9 +114,3 @@ group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
 end
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]

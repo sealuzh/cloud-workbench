@@ -29,8 +29,10 @@ class BenchmarkExecution < ActiveRecord::Base
     # Usually the start execution job can be executed immediately here!
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
   rescue => e
+    # TODO: Handle exception appropriately
+    puts e.message
     shutdown_after_failure_timeout
-    detect_and_create_vm_instances_with(@driver)
+    detect_and_create_vm_instances_with(@driver) rescue nil
   end
 
   def shutdown_after_failure_timeout
