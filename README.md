@@ -134,6 +134,10 @@ Requires a Ruby on Rails development environment and checkout of the project. Ma
 
 Simply deploy new releases with `bundle exec cap production deploy`
 
+WARNING: This will restart the background job workers and should fail if there are currently running jobs.
+Worker restart can be avoided by passing the live attribute `bundle exec cap production deploy[live]`.
+This is especially useful for GUI updates
+
 
 ## Benchmarks
 
@@ -142,7 +146,7 @@ Simply deploy new releases with `bundle exec cap production deploy`
 1. Create a Cookbook that installs your benchmarks or use a VM image wherein your benchmark is already installed.
     * See the README.md in chef-repo/site-cookbooks for more information about how to get started with creating a cookbook.
     * Chef resources docs: http://docs.opscode.com/chef/resources.html
-2. Upload the Cookbook with [`knife cookbook upload`](http://docs.opscode.com/knife_cookbook.html#upload) or [`berks upload`] to the Chef-Server
+2. Upload the Cookbook with [`knife cookbook upload`](http://docs.opscode.com/knife_cookbook.html#upload) or [`berks upload`](http://berkshelf.com/) to the Chef-Server
 3. Create a new Benchmark-Definition with the web interface of Cloud WorkBench under `BENCHMARK > Definitions > Create New Benchmark`
 4. Create a metric definition for the new benchmark
 5. Configure your Benchmark within the Vagranfile (e.g. region, vm image, instance type,) and add your Chef recipe via `chef.add_recipe "recipe[fio@0.1.0]"` (The @version is optional)
