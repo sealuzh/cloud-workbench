@@ -43,6 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "fio" => {
         "metric_definition_id" => "seq. write",
         "config" => {
+          "size" => "10m",
           "refill_buffers" => "1"
         }
       }

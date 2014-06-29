@@ -73,7 +73,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     google.metadata = {'vagrant-id' => chef_node_name}
 
     # Override provider defaults
-    google.instance_ready_timeout = 60 # Default is 20 seconds
     google.image = "debian-7-wheezy-v20140619"
     google.machine_type = "n1-standard-1"
     google.zone = "europe-west1-a"
