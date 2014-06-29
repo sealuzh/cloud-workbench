@@ -21,6 +21,8 @@ benchmark_id = <%= benchmark_id %>
 execution_id = <%= execution_id %>
 chef_node_name = "#{execution_id}-#{benchmark_name_sanitized}"
 tag_name = "WorkBenchmark-#{benchmark_name_sanitized}"
+# Private variables
+vagrant_id = "cwb-#{benchmark_id}-#{execution_id}"
 
 ### Default configuration
 VAGRANTFILE_API_VERSION = "2"
@@ -69,8 +71,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
 
     # Used to uniquely identify the VM
-    google.name = chef_node_name
-    google.metadata = {'vagrant-id' => chef_node_name}
+    google.name = vagrant_id
+    google.metadata = {'vagrant_id' => vagrant_id}
 
     # Override provider defaults
     google.image = "debian-7-wheezy-v20140619"
