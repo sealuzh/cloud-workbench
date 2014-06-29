@@ -35,28 +35,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #       It is highly recommended to use the name of the cookbook as the attribute namespace.
     chef.json =
     {
+# Uncomment the following lines to change the default username 'ubuntu'
+#     "benchmark" =>  {
+#       "owner" => "root",
+#       "group" => "root"
+#     },
       "fio" => {
         "metric_definition_id" => "seq. write",
         "config" => {
           "refill_buffers" => "1"
         }
       }
-    }
+    } # END json
   end
 end
 
-# Google Compute Engine example
+# Google Compute Engine provider
 # config.vm.provider :google do |google, override|
 #   google.image = "debian-7-wheezy-v20140619"
+#   override.ssh.username = "root"
 #   google.machine_type = "n1-standard-1"
 #   google.zone = "europe-west1-a"
 # end
-
-# NOTE: You MUST pass the following arguments to chef_json when using another username than 'ubuntu'
-# chef.json =
-# {
-#   "benchmark" =>  {
-#     "owner" => "root",
-#     "group" => "root"
-#   }
-# }
