@@ -72,7 +72,9 @@ aws_access_key  = string_from_config(config, 'aws', 'access_key')
 aws_secret_key  = string_from_config(config, 'aws', 'secret_key')
 google_project_id    = string_from_config(config, 'google', 'project_id')
 google_client_email  = string_from_config(config, 'google', 'client_email')
+require "base64"
 google_api_key = string_from_file("#{CONFIG_DIR}/google-compute.p12")
+google_api_key_encoded = Base64.encode64(google_api_key)
 chef_server_ip  = string_from_config(config, 'chef', 'server_ip')
 CHEF_JSON = {
     "cloud-benchmarking-server" => {
@@ -93,7 +95,7 @@ CHEF_JSON = {
         "google" => {
             "project_id" => google_project_id,
             "client_email" => google_client_email,
-            "api_key" => google_api_key
+            "api_key" => google_api_key_encoded
         },
         "delayed_job" => {
             "worker_processes" => "2"

@@ -10,7 +10,7 @@ template "#{app_user_home}/.profile" do
   mode 0600
   variables chef:   node["cloud-benchmarking-server"]["chef"],
             aws:    node["cloud-benchmarking-server"]["aws"],
-            google: node["cloud-benchmarking-server"]["google"],
+            google: node["cloud-benchmarking-server"]["google"]
 end
 
 # Chef server config
@@ -64,11 +64,13 @@ template "#{app_user_home}/.ssh/#{node["cloud-benchmarking-server"]["aws"]["ssh_
 end
 
 # Google config
+require "base64"
+api_key = Base64.decode64(node["cloud-benchmarking-server"]["google"]["api_key"])
 template "#{app_user_home}/.ssh/#{node["cloud-benchmarking-server"]["google"]["api_key_name"]}.p12" do
   source "empty.erb"
   backup false
   owner app_user
   group app_user
   mode 0600
-  variables content: node["cloud-benchmarking-server"]["google"]["api_key"]
+  variables content: api_key
 end
