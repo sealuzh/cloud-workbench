@@ -104,3 +104,5 @@ end
 if node["cloud-benchmarking-server"]["apply_secret_config"]
   include_recipe "cloud-benchmarking-server::configure_secrets"
 end
+
+include_recipe "cloud-benchmarking-server::install_vagrant_google"
