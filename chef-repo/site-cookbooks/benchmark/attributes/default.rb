@@ -41,4 +41,4 @@ default["benchmark"]["providers"]["aws"]["name"] = "aws"
 # Instance id used by Vagrant to identify a VM. Example: 'i-6dd73b2d'
 default["benchmark"]["providers"]["aws"]["instance_id_request"] = "wget -q -O - http://169.254.169.254/latest/meta-data/instance-id"
 default["benchmark"]["providers"]["google"]["name"] = "google"
-default["benchmark"]["providers"]["google"]["instance_id_request"] = "wget -q -O - 'http://metadata.google.internal/computeMetadata/v1/instance/attributes/vagrant-id' -H 'Metadata-Flavor: Google'"
+default["benchmark"]["providers"]["google"]["instance_id_request"] = "curl 'http://metadata.google.internal/computeMetadata/v1/instance/attributes/vagrant_id' -H 'Metadata-Flavor: Google'"
