@@ -1,5 +1,5 @@
 <% vm_instance = metric_observation.virtual_machine_instance %>
-<% benchmark_execution = vm_instance.benchmark_execution %>
+<% benchmark_execution = vm_instance.benchmark_execution # MAY be the cause of the metrics link bug ?!? %>
 <tr>
   <td><%= link_to formatted_time(benchmark_execution.benchmark_start_time), benchmark_execution %></td>
   <td><%= vm_instance.provider_name %></td>
