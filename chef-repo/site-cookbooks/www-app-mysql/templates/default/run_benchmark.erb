@@ -8,7 +8,8 @@ mysql = MySQL.new
 
 success = mysql.prepare_mysql_benchmark("<%= @username %>", "<%= @pw %>", "<%= @db %>", <%= @table_size %>)
 if !success
-    fail("Preparing mysql benchmark failed!")
+    puts("Preparing mysql benchmark failed!")
+    exit
 end
 
 execute(mysql, <%= @repetitions %>, "<%= @username %>", "<%= @pw %>", "<%= @db %>", <%= @table_size %>, <%= @max_time %>)
@@ -18,27 +19,21 @@ BenchmarkHelper.notify_postprocessing_completed
 
 # helper methods
 BEGIN {
-    def fail(message)
-        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
-        exit
-    end
 
     def execute(mysql, times, username, pw, db, table_size, max_time)
-        cpu = mysql.find_cpu_info
         batch_id = SecureRandom.uuid
         times.times do |t|
-            mysqlResult = mysql.run_mysql_benchmark(username, pw, db, table_size, max_time)
-            if !mysqlResult
-                fail("Failed to run MySQL benchmark!")
+            mysql_result = mysql.run_mysql_benchmark(username, pw, db, table_size, max_time)
+            cpu = mysql.find_cpu_info
+            if !mysql_result
+                puts("Failed to run MySQL benchmark!")
+                exit
             end
-
-            # aggregate and submit result
-            aggregatedResult = "Results (#{mysql.now}):
-                Batch: #{batch_id}
-                CPU: #{cpu}
-                OLTP: #{mysqlResult}"
-
-            BenchmarkHelper.submit_metric(<%= @metric %>, t, aggregatedResult)
+			
+			cpu_metric, mysql_metric = <%= @metric %>
+			
+            BenchmarkHelper.submit_metric(cpu_metric, t, cpu)
+            BenchmarkHelper.submit_metric(mysql_metric, t, mysql_result)
         end
     end
 }

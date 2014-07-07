@@ -17,8 +17,9 @@
 # limitations under the License.
 #
 
-# Install benchmarks
+# Install benchmark code
 include_recipe "www-micro-cpu::install"
+include_recipe "www-micro-cpu-longterm::install"
 
 RUBY = "#{Chef::Config.embedded_dir}/bin/ruby"
 # Start
@@ -30,8 +31,10 @@ template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
   variables(
       ruby: RUBY,
       metric: node['cpu']['metric_definition_id'],
-      short_delay: node['cpu']['short_delay'],
-      long_delay: node['cpu']['long_delay'],
-      short_repetitions: node['cpu']['short_repetitions']
+      max_prime: node['cpu']['max_prime'],
+      repetitions: node['cpu']['repetitions'],
+      threads: node['cpu']['threads'],
+      run_every: node['cpu']['run_every'],
+      run_for: node['cpu']['run_for']
   )
 end

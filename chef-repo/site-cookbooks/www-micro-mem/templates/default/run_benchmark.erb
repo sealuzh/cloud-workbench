@@ -2,7 +2,6 @@
 
 require './benchmark_helper'
 require './membench'
-require 'securerandom'
 
 mbw = MBW.new
 
@@ -12,26 +11,14 @@ BenchmarkHelper.notify_postprocessing_completed
 
 # helper methods
 BEGIN {
-    def fail(message)
-        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
-        exit
-    end
 
     def execute(mbw, times, frame_size, bench_rep)
-        cpu = mbw.find_cpu_info
-        batch_id = SecureRandom.uuid
         times.times do |t|
             mem_result = mbw.run(frame_size, bench_rep)
-            if !mem_result
-                fail("Failed to run Memory benchmark!")
-            end
-
-            aggregated_result = "Results (#{mbw.now}):
-                Batch: #{batch_id}
-                CPU: #{cpu}
-                Mem Benchmark: #{mem_result}"
-
-            BenchmarkHelper.submit_metric(<%= @metric %>, t, aggregated_result)
+            cpu = mbw.find_cpu_info
+            cpu_metric, mem_metric = <%= @metric %>
+            BenchmarkHelper.submit_metric(cpu_metric, t, cpu)
+            BenchmarkHelper.submit_metric(mem_metric, t, mem_result)
         end
     end
 }

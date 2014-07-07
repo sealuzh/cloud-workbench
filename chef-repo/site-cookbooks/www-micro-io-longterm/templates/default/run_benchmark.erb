@@ -2,56 +2,37 @@
 
 require './benchmark_helper'
 require './sysbench-io'
-require 'securerandom'
+require 'rubygems'
+require 'rufus/scheduler'
 
 
-io = IOBench.new
+@counter = 0
+@io = IOBench.new
+@scheduler = Rufus::Scheduler.new
 
-success = io.prepare_benchmark "<%= @file_size %>"
-if !success
-    fail("Preparing IO benchmark failed!")
+@io.prepare_benchmark "<%= @file_size %>"
+
+@scheduler.every "<%= @run_every %>", :first => :now do
+    execute(<%= @repetitions %>, "<%= @file_size %>", <%= @max_time %>)
 end
 
-while(true) do
-    lastRun = Time.new
-    do_run(io)
-    currentTime = Time.new
-    if( (currentTime - <%= @long_delay %>).to_i < lastRun.to_i ) then
-        sleep 10000
-        currentTime = Time.new
-    end
+@scheduler.in "<%= @run_for %>" do
+    BenchmarkHelper.notify_postprocessing_completed
+    @scheduler.stop
 end
+
+@scheduler.join
 
 # helper methods
 BEGIN {
-    def fail(message)
-        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
-        exit
-    end
-
-    def do_run(io)
-        uuid = SecureRandom.uuid
-        <%= @short_repetitions %>.times do
-        do_single(uuid, io)
-            sleep <%= @short_delay %>
+    def execute(times, file_size, max_time)
+        times.times do
+            cpu_info = @io.find_cpu_info
+            io_result = @io.run_benchmark(file_size, max_time)
+            cpu_metric, bench_metric = <%= @metric %>
+            BenchmarkHelper.submit_metric(cpu_metric, @counter, cpu_info)
+            BenchmarkHelper.submit_metric(bench_metric, @counter, io_result)
+            @counter = @counter + 1
         end
-    end
-
-    def do_single(uuid, io)
-
-        cpu = io.find_cpu_info
-        ioResult = io.run_benchmark("<%= @file_size %>", <%= @max_time %>)
-        if !ioResult
-            fail("Failed to run IO benchmark!")
-        end
-
-        # aggregate and submit result
-        aggregatedResult = "Results (#{io.now}):
-        Batch ID: #{uuid}
-        CPU: #{cpu}
-        IO: #{ioResult}"
-
-        BenchmarkHelper.submit_metric(<%= @metric %>, 1, aggregatedResult)
-
     end
 }

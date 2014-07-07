@@ -1,0 +1,36 @@
+#!<%= @ruby %>
+
+require './benchmark_helper'
+require './membench'
+require 'rubygems'
+require 'rufus/scheduler'
+
+@counter = 0
+@mbw = MBW.new
+@scheduler = Rufus::Scheduler.new
+
+@scheduler.every "<%= @run_every %>", :first => :now do
+    execute(<%= @repetitions %>, <%= @frame_size %>, <%= @bench_rep %>)
+end
+
+@scheduler.in "<%= @run_for %>" do
+    BenchmarkHelper.notify_postprocessing_completed
+    @scheduler.stop
+end
+
+@scheduler.join
+
+# helper methods
+BEGIN {
+
+    def execute(times, frame_size, bench_rep)
+        times.times do
+            mem_result = @mbw.run(frame_size, bench_rep)
+            cpu = @mbw.find_cpu_info
+            cpu_metric, mem_metric = <%= @metric %>
+            BenchmarkHelper.submit_metric(cpu_metric, @counter, cpu)
+            BenchmarkHelper.submit_metric(mem_metric, @counter, mem_result)
+            @counter = @counter + 1
+        end
+    end
+}

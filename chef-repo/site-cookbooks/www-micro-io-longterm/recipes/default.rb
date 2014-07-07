@@ -19,6 +19,7 @@
 
 # Install benchmarks
 include_recipe "www-micro-io::install"
+include_recipe "www-micro-io-longterm::install"
 
 RUBY = "#{Chef::Config.embedded_dir}/bin/ruby"
 # Start
@@ -30,10 +31,10 @@ template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
   variables(
       ruby: RUBY,
       metric: node['io']['metric_definition_id'],
+      repetitions: node['io']['repetitions'],
       file_size: node['io']['file_size'],
       max_time: node['io']['max_time'],
-      short_delay: node['io']['short_delay'],
-      long_delay: node['io']['long_delay'],
-      short_repetitions: node['io']['short_repetitions']
+      run_every: node['io']['run_every'],
+      run_for: node['io']['run_for']
   )
 end

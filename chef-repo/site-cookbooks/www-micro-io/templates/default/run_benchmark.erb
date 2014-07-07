@@ -2,13 +2,13 @@
 
 require './benchmark_helper'
 require './sysbench-io'
-require 'securerandom'
 
 io = IOBench.new
 
 success = io.prepare_benchmark "<%= @file_size %>"
 if !success
-    fail("Preparing IO benchmark failed!")
+    puts("Preparing IO benchmark failed!")
+    exit
 end
 
 execute(io, <%= @repetitions %>, "<%= @file_size %>", <%= @max_time %>)
@@ -18,27 +18,19 @@ BenchmarkHelper.notify_postprocessing_completed
 
 # helper methods
 BEGIN {
-    def fail(message)
-        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
-        exit
-    end
-
     def execute(io, times, file_size, max_time)
-        cpu = io.find_cpu_info
-        batch_id = SecureRandom.uuid
         times.times do |t|
-            ioResult = io.run_benchmark(file_size, max_time)
-            if !ioResult
-                fail("Failed to run IO benchmark!")
+            io_result = io.run_benchmark(file_size, max_time)
+            cpu = io.find_cpu_info
+            if !io_result
+                puts("Failed to run IO benchmark!")
+                exit
             end
 
-            # aggregate and submit result
-            aggregatedResult = "Results (#{io.now}):
-            Batch: #{batch_id}
-            CPU: #{cpu}
-            IO Benchmark: #{ioResult}"
+			cpu_metric, bench_metric = <%= @metric %>
 
-            BenchmarkHelper.submit_metric(<%= @metric %>, t, aggregatedResult)
+            BenchmarkHelper.submit_metric(cpu_metric, t, cpu)
+            BenchmarkHelper.submit_metric(bench_metric, t, io_result)            
         end
     end
 }

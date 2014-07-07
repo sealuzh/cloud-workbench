@@ -2,7 +2,6 @@
 
 require './benchmark_helper'
 require './sysbench-cpu'
-require 'securerandom'
 
 cpu = CPUBenchmark.new
 
@@ -13,27 +12,18 @@ BenchmarkHelper.notify_postprocessing_completed
 
 # helper methods
 BEGIN {
-    def fail(message)
-        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
-        exit
-    end
-
     def execute(cpu, times, max_time)
-        cpu_info = cpu.find_cpu_info
-        batch_id = SecureRandom.uuid
         times.times do |t|
-            cpu_result = cpu.run_benchmark <%= @max_prime %>
+        	cpu_info = cpu.find_cpu_info
+            cpu_result = cpu.run_benchmark(<%= @max_prime %>, <%= @threads %>)
             if !cpu_result
-                fail("Failed to run CPU benchmark!")
+                puts("Failed to run CPU benchmark!")
+                exit
             end
+			cpu_metric, bench_metric = <%= @metric %>
 
-            # aggregate and submit result
-            aggregatedResult = "Results (#{cpu.now}):
-            Batch: #{batch_id}
-            CPU: #{cpu_info}
-            CPU Benchmark: #{cpu_result}"
-
-            BenchmarkHelper.submit_metric(<%= @metric %>, t, aggregatedResult)
+            BenchmarkHelper.submit_metric(cpu_metric, t, cpu_info)
+            BenchmarkHelper.submit_metric(bench_metric, t, cpu_result)            
         end
     end
 }

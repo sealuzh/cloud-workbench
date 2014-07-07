@@ -1,7 +1,7 @@
 class CPUBenchmark
 
-  def run_benchmark(max_prime)
-    cpu_result_as_string = `sysbench --test=cpu --cpu-max-prime=#{max_prime} run`
+  def run_benchmark(max_prime, threads)
+    cpu_result_as_string = `sysbench --test=cpu --num-threads=#{threads} --cpu-max-prime=#{max_prime} run`
     (find_cpu_result_in_string cpu_result_as_string)[1]
   end
 

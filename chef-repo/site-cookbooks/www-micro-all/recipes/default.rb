@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: www-micro-benchmarks
+# Cookbook Name:: www-micro-all
 # Recipe:: default
 #
 # Copyright 2014, seal uzh
@@ -17,8 +17,10 @@
 # limitations under the License.
 #
 
-# Install benchmarks
+# Install individual benchmarks
 include_recipe "www-micro-cpu::install"
+include_recipe "www-micro-io::install"
+include_recipe "www-micro-mem::install"
 
 RUBY = "#{Chef::Config.embedded_dir}/bin/ruby"
 # Start
@@ -29,9 +31,13 @@ template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
   mode "0755"
   variables(
       ruby: RUBY,
-      metric: node['cpu']['metric_definition_id'],
-      max_prime: node['cpu']['max_prime'],
-      repetitions: node['cpu']['repetitions'],
-      threads: node['cpu']['threads']
+      metric: node['all']['metric_definition_id'],
+      max_prime: node['all']['max_prime'],
+      repetitions: node['all']['repetitions'],
+      threads: node['all']['threads'],
+      file_size: node['all']['file_size'],
+      max_time: node['all']['max_time'],
+      frame_size: node['all']['frame_size'],
+      bench_rep: node['all']['bench_rep']
   )
 end

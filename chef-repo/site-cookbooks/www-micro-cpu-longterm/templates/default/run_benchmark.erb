@@ -1,60 +1,35 @@
 #!<%= @ruby %>
 
 require './benchmark_helper'
-require 'securerandom'
+require './sysbench-cpu'
+require 'rubygems'
+require 'rufus/scheduler'
 
-while(true) do
-    puts "Starting benchmark run"
-    do_run()
-    sleep <%= @long_delay %>
+@counter = 0
+@cpu = CPUBenchmark.new
+@scheduler = Rufus::Scheduler.new
+
+@scheduler.every "<%= @run_every %>", :first => :now do
+    execute(<%= @repetitions %>, <%= @max_prime %>, <%= @threads %>)
 end
+
+@scheduler.in "<%= @run_for %>" do
+    BenchmarkHelper.notify_postprocessing_completed
+    @scheduler.stop
+end
+
+@scheduler.join
 
 # helper methods
 BEGIN {
-    def fail(message)
-        BenchmarkHelper.submit_metric(<%= @metric %>, 1, message)
-        exit
-    end
-
-    def find_cpu_result_in_string(string)
-        /total time:\s*(.*)/.match string
-    end
-
-    def do_run()
-        uuid = SecureRandom.uuid
-        <%= @short_repetitions %>.times do
-            do_single(uuid)
-            sleep <%= @short_delay %>
+    def execute(times, max_prime, threads)
+        times.times do
+            cpu_info = @cpu.find_cpu_info
+            cpu_result = @cpu.run_benchmark(max_prime, threads)
+            cpu_metric, bench_metric = <%= @metric %>
+            BenchmarkHelper.submit_metric(cpu_metric, @counter, cpu_info)
+            BenchmarkHelper.submit_metric(bench_metric, @counter, cpu_result)
+            @counter = @counter + 1
         end
-    end
-
-    def do_single(uuid)
-        # find out date
-        date = `date`
-
-        # find out our CPU
-        cpu = `cat /proc/cpuinfo | grep 'model name' | cut -d ':' -f 2`
-
-        puts "Finished static part"
-
-        # run CPU benchmark
-        cpuResultAsString = `sysbench --test=cpu --cpu-max-prime=20000 run`
-        cpuResult = find_cpu_result_in_string cpuResultAsString
-        if !cpuResult
-        fail("Failed to run CPU benchmark!")
-        end
-
-        puts "Finished CPU benchmark"
-
-        # aggregate and submit result
-        aggregatedResult = "Results (#{date}):
-        Batch ID: #{uuid}
-        CPU: #{cpu}
-        CPU Benchmark: #{cpuResult[1]}"
-
-        BenchmarkHelper.submit_metric(<%= @metric %>, 1, aggregatedResult)
-
-        puts aggregatedResult
-puts "Uploaded results"
     end
 }
