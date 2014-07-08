@@ -1,0 +1,59 @@
+#!<%= @ruby %>
+
+require './benchmark_helper'
+require './sysbench-cpu'
+require './membench'
+require './sysbench-io'
+require 'rubygems'
+require 'rufus/scheduler'
+
+@counter = 0
+@cpu_name_metric, @cpu_metric, @mem_metric, @io_metric = <%= @metric %>
+
+@cpu = CPUBenchmark.new
+@mem = MBW.new
+@io = IOBench.new
+
+@scheduler = Rufus::Scheduler.new
+
+@scheduler.every "<%= @run_every %>", :first => :now do
+    execute(<%= @repetitions %>, <%= @max_prime %>, <%= @threads %>, "<%= @file_size %>", <%= @max_time%>, <%= @frame_size %>, <%= @bench_rep %>)
+end
+
+@scheduler.in "<%= @run_for %>" do
+    BenchmarkHelper.notify_postprocessing_completed
+    @scheduler.stop
+end
+
+@scheduler.join
+
+# helper methods
+BEGIN {
+
+    def execute(repetitions, max_prime, threads, file_size, max_time, frame_size, bench_rep)
+        @io.prepare_benchmark file_size
+        repetitions.times do
+            cpu_info = @cpu.find_cpu_info
+            cpu_val = execute_cpu(max_prime, threads)
+            mem_val = execute_mem(frame_size, bench_rep)
+            io_val = execute_io(file_size, max_time)
+            BenchmarkHelper.submit_metric(@cpu_name_metric, @counter, cpu_info)
+            BenchmarkHelper.submit_metric(@cpu_metric, @counter, cpu_val)
+            BenchmarkHelper.submit_metric(@mem_metric, @counter, mem_val)
+            BenchmarkHelper.submit_metric(@io_metric, @counter, io_val)
+            @counter = @counter + 1
+        end
+    end
+
+    def execute_cpu(max_prime, threads)
+        @cpu.run_benchmark(max_prime, threads)
+    end
+
+    def execute_mem(frame_size, bench_rep)
+        @mem.run(frame_size, bench_rep)
+    end
+
+    def execute_io(file_size, max_time)
+        @io.run_benchmark(file_size, max_time)
+    end
+}
