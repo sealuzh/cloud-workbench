@@ -43,3 +43,7 @@ doc/
 # Ignore private keys and secret files
 *.pem
 *.secret
+cloudcom/cloudcom14.aux
+cloudcom/cloudcom14.bbl
+cloudcom/cloudcom14.blg
+cloudcom/cloudcom14.log
