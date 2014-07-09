@@ -9,34 +9,34 @@
       <thead>
         <tr>
           <th>Type</th>
-          <th>Allowed Operations</th>
-          <th>Properties</th>
+          <th>Description</th>
+          <th>Allowed Operations and Statistics</th>
           <th>Example</th>
         </tr>
         <tr>
           <td><strong>Nominal scale</strong></td>
-          <td>= &ne;</td>
-          <td>Plain <strong>categorization</strong> of values<br>mode</td>
+          <td>Plain <strong>categorization</strong> of values</td>
+          <td>= &ne;<br>mode</td>
           <td><em>CPU model name:</em><br>Intel(R) Xeon(R) CPU E5645<br>Intel(R) Xeon(R) CPU E5-2650</td>
         </tr>
         <tr>
           <td><strong>Ordinal scale</strong></td>
-          <td>= &ne; < ></td>
-          <td><strong>Ordered and comparable</strong> scale values<br>mode, median</td>
+          <td><strong>Ordered and comparable</strong> scale values</td>
+          <td>= &ne; < ><br>mode, median</td>
           <td><em>CPU stepping codes (minor CPU revision number):</em><br>B3 (CPUID=06F7 stepping=7)<br>G0 (CPUID=06FB stepping=11)</td>
         </tr>
         <tr>
           <td><strong>Interval scale</strong></td>
-          <td>= &ne; < > distance</td>
-          <td>Ordered values with <strong>defined distances</strong><br>mode, median, arithmetic mean</td>
+          <td>Ordered values <strong>with defined distances</strong></td>
+          <td>= &ne; < > distance<br>mode, median, arithmetic mean</td>
           <!--TODO: Find appropriate cloud computing example-->
-          <td><em>Date, temperature in Celsius degrees, latitude:</em><br></td>
+          <td><em>Date, temperature in Celsius degrees</em><br></td>
         </tr>
         <tr>
-          <td><strong>Ratio scale</strong><br><span><%= fa_icon 'star-o' %>&nbsp;most common</span></td>
-          <td>= &ne; < > distance<br>* / % (+, -)</td>
-          <td>Ordered values, <strong>absolute zero point</strong>, usually additive<br>mode, median, arithmetic and geometric mean</td>
-          <td><em>I/O bandwidth:</em><br>694.0 mb/s, 1195.0 mb/s</td>
+          <td><strong>Ratio scale</strong></td>
+          <td>Ordered values <strong>with absolute zero point</strong>, usually additive</td>
+          <td>= &ne; < > distance * / % (+, -)<br>mode, median, arithmetic and geometric mean</td>
+          <td><em>I/O bandwidth:</em><br>694.0 MB/s, 1195.0 MB/s</td>
         </tr>
       </thead>
     </table>
