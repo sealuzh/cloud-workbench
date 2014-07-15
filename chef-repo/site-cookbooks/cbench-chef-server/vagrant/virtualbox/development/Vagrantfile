@@ -1,8 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure('2') do |config|
-  # Plugin-specific configurations
+VAGRANTFILE_API_VERSION = '2'
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  ### Plugin-specific configurations
   # Detects vagrant-cachier plugin
   if Vagrant.has_plugin?('vagrant-cachier')
     puts 'INFO:  Vagrant-cachier plugin detected. Optimizing caches.'
@@ -22,38 +23,38 @@ Vagrant.configure('2') do |config|
     exit
   end
 
+
   # Box
   config.vm.box = 'opscode-ubuntu-12.04'
   config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-12.04_chef-provisionerless.box'
   
   # VM
-  config.vm.hostname = 'chef-server-virtualbox-development'
+  config.vm.hostname = 'chef-server-development'
   config.ssh.forward_agent = true
   #config.ssh.pty = true
 
   # VirtualBox
   config.vm.network :private_network, :ip => '33.33.33.50'
-
   config.vm.provider :virtualbox do |vb|
     # Give enough horsepower to build without taking all day.
     vb.customize [
       'modifyvm', :id,
-      '--memory', '2024',
-      '--cpus', '2',
+      '--memory', '3000',
+      '--cpus', '3',
     ]
   end
 
   # Chef solo provisioning via berkshelf vendored cookbooks
   config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "../../../berks-cookbooks"
+    chef.cookbooks_path = '../../../berks-cookbooks'
     chef.run_list = [
       'recipe[cbench-chef-server]'
     ]
     chef.json = {
       'chef-server' => {
-        'version' => :latest
-        # Required in order to work properly! Try autodetection in wrapper cbench wrapper cookbook
-        # 'api_fqdn' => "ec2-54-216-50-158.eu-west-1.compute.amazonaws.com"
+          'version' => :latest
+          # Provide if cookbook service is not working correct. Autodetection tried via Ohai (see attributes)
+          # 'api_fqdn' => "ec2-54-216-50-158.eu-west-1.compute.amazonaws.com"
       }
     }
   end
