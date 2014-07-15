@@ -6,7 +6,7 @@ namespace :worker do
     task = "#{command}_all"
     desc "#{task} delayed_job workers 1-#{fetch(:delayed_job_workers).to_s}"
     task task do
-      on roles(:app), in: :sequence, wait: 5 do
+      on roles(:app), in: :sequence do
         all_workers(command)
       end
     end
@@ -16,7 +16,7 @@ namespace :worker do
   RUNIT_COMMANDS.each do |command|
     desc "#{command} worker[WORKER_NUMBER] (the first worker has the number 1)"
     task command, [:worker_number] do |task, args|
-      on roles(:app), in: :sequence, wait: 5 do
+      on roles(:app), in: :sequence do
         worker_number = args[:worker_number] || DEFAULT_WORKER_NUMBER
         worker(command, worker_number.to_i)
       end

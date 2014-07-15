@@ -1,4 +1,4 @@
-# Cloud WorkBench
+# Cloud WorkBench (CWB)
 
 ## Installation (automated)
 
@@ -52,7 +52,7 @@ Note Ubuntu 14.04 has some issues with the postgres cookbook and requirs some wo
 
 #### Configure WorkBench Server
 
-* Use the Cookbook attributes to configure the WorkBench server
+* Use the Cookbook attributes to configure the CWB-server
 
 ### Install Chef Server
 
@@ -96,7 +96,7 @@ NOTE: The manual installation is not recommendend and has not been tested. The r
 
 ## Reconfiguration on IP address change
 
-### WorkBench
+### CWB-Server
 
 * Data bag item in Chefserver
 	1. `https://$CHEF_SERVER_IP/databags/benchmark/databag_items/workbench_server`
@@ -106,7 +106,7 @@ NOTE: The manual installation is not recommendend and has not been tested. The r
     2. Enter the IP address of the WorkBench here
 
 
-### Chef Server
+### Chef-Server
 
 * WorkBench ~/.profile (automated)
     1. Enter the IP address of the Chef Server in the yaml config file at `chef-repo/secret/vagrant-aws-production` (Example for production environment)
@@ -135,8 +135,10 @@ Requires a Ruby on Rails development environment and checkout of the project. Ma
 Simply deploy new releases with `bundle exec cap production deploy`
 
 WARNING: This will restart the background job workers and should fail if there are currently running jobs.
-Worker restart can be avoided by passing the live attribute `bundle exec cap production deploy[live]`.
-This is especially useful for GUI updates
+Worker restart can be avoided by setting the live variable to true or passing it like `bundle exec cap production deploy live=true`.
+This is especially useful for GUI only updates
+
+NOTE: Active schedules will be temporarily disabled during deployment.
 
 
 ## Benchmarks
@@ -223,10 +225,6 @@ Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-co
 
 ## Limitations
 
-* Only AWS as provider supported due to the following dependencies
-	* Vagrant does not support multiple providers in the same Vagrantfile
 * No user authentication and authorization (also technical user)
 * Chef cookbooks must be uploaded to the Chef server
-
 * Log files from created VM instances are not accessible via web interface and get lost on VM shutdown
-* Most Benchmark definitions require a Chef cookbook yet.

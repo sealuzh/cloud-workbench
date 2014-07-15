@@ -1,10 +1,11 @@
+# NOTE: Make sure that you run these tasks as the right user!
 namespace :cron do
-  desc 'Clear the generated system cron benchmark schedules.'
+  desc 'Clear the generated Cron benchmark schedules (user dependent!).'
   task clean: :environment do
     BenchmarkSchedule.clear_system_crontab
   end
 
-  desc 'Update the generated system cron benchmark schedules.'
+  desc 'Update the generated Cron benchmark schedules (user dependent!).'
   task update: :environment do
     BenchmarkSchedule.update_system_crontab
   end

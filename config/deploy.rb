@@ -1,3 +1,4 @@
+require 'active_support/core_ext/string'
 # Capistrano 3 announcements: http://capistranorb.com/2013/06/01/release-announcement.html
 # Capistrano 3 docs: https://github.com/capistrano/capistrano
 # For path helpers see: 'Capistrano::DSL::Paths' in capistrano/lib/capistrano/dsl/paths.rb
@@ -16,6 +17,7 @@ set :application, 'cloud_benchmarking'
 # Also provides quick sanity checks when looking at filepaths.
 set :full_app_name, "#{fetch(:application)}_#{fetch(:stage)}"
 set :delayed_job_workers, 1
+set :live, false
 
 # Repository
 # ----------
@@ -86,34 +88,47 @@ set :tests, []
 
 # Deploy tasks
 # ============
+# Live deploy via: "cap production deploy live=true"
 namespace :deploy do
+  if ENV['live'].present?
+    set :live, ( ENV['live'].to_s == 'true' ? true : false )
+  end
   # Make sure we're deploying what we think we're deploying
   before :deploy, 'deploy:check_revision'
   # Only allow a deploy with passing tests to deployed
   # before :deploy, 'deploy:run_tests'
+  before 'deploy', 'cron:clean'
   # Compile assets locally then rsync. Enable if you want to burden assets compilation to the production server.
   # after 'deploy:symlink:shared', 'deploy:compile_assets_locally'
-  # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
   # Set file system permissions
   after 'deploy:publishing', 'deploy:set_permissions:acl'
-  after 'deploy:publishing', 'deploy:restart'
-  after :finishing, 'deploy:cleanup'
-
+  # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
+  after 'deploy:publishing', 'deploy:restart', 'live'
   after 'deploy:restart', :create_default_user do
-    rake_command('user:create_default')
+    remote_rake('user:create_default')
   end
+  after :finishing, 'deploy:cleanup'
+  after :deploy, 'cron:update'
 
   # Includes: Unicorn, delayed_job workers and system cron management (nginx and postgres are not considered here)
-  desc 'Restart application'
-  task :restart, :live do |task, args|
-    on roles(:app), in: :sequence, wait: 5 do
-      # rake_command('cron:clean') # The cron rake command does not work via Capistrano
+  desc 'Restart application and workers'
+  task :restart do |task, args|
+    on roles(:app), in: :sequence do
       invoke 'unicorn:restart'
       # TODO: Think about graceful restart for running jobs: e.g. schedule restart as job does not work with multiple workers
       # NOTE: Deployment or jobs may fail if there are workers that currently process some jobs.
-      invoke 'worker:restart_all' unless (args[:live].to_s == 'live')
-      # rake_command('cron:update')
+      invoke 'worker:restart_all' unless fetch(:live)
     end
+  end
+
+  desc 'Clean system crontab.'
+  task :clear_cron do
+    invoke 'cron:clean'
+  end
+
+  desc 'Reflect the Cron schedules from database in system cron.'
+  task :update_cron do
+    invoke 'cron:update'
   end
 
   desc 'Restart all delayed_job background workers'
@@ -121,25 +136,23 @@ namespace :deploy do
     invoke 'worker:restart_all'
   end
 
+  desc 'Start application, workers, and scheduler.'
   task :start do
-    # rake_command('cron:clean')
+    invoke 'cron:clean'
     invoke 'unicorn:up'
     invoke 'worker:up_all'
-    # rake_command('cron:update')
+    invoke 'cron:update'
   end
 
+  desc 'Stop scheduler, workers, and application.'
   task :stop do
-    # rake_command('cron:clean')
-    invoke 'unicorn:down'
+    invoke 'cron:clean'
     invoke 'worker:down_all'
+    invoke 'unicorn:down'
   end
 
   # Executes a rake task on the primary app within the correct path
-  # Alternative workaround (tested) for calling a rake task since invoking other capistrano tasks with arguments does not work.
-  # run_locally do
-  #   execute "bundle exec cap #{fetch(:stage)} rake[user:create_default]"
-  # end
-  def rake_command(task)
+  def remote_rake(task)
     on primary(:app) do
       within current_path do
         with :rails_env => fetch(:rails_env) do
