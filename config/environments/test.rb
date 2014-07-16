@@ -37,7 +37,11 @@ CloudBenchmarking::Application.configure do
   # Local file resources used for testing
   config.spec_files = "#{Rails.root}/spec/files"
 
-  # Override aws environment key to prevent tests from starting instances.
+  # Override environment variables to prevent tests from starting instances.
   ENV['AWS_ACCESS_KEY'] = 'dummy_aws_access_key_for_testing'
   ENV['AWS_SECRET_KEY'] = 'dummy_aws_secret_key_for_testing'
+  ENV['GOOGLE_PROJECT_ID'] = 'dummy_google_project_id_for_testing'
+  ENV['GOOGLE_CLIENT_EMAIL'] = 'dummy_google_client_email_for_testing'
+  ENV['GOOGLE_KEY_LOCATION'] = 'dummy_google_key_location_for_testing'
+  ENV['KNIFE_CHEF_SERVER_URL'] = 'dummy_knife_chef_url_for_testing'
 end
