@@ -33,6 +33,7 @@ end
 
 ### Delayed job workers
 # TODO: Refactor into own recipe later
+# TODO: Think about automation of graceful restart on configuration change
 num_workers = node['cloud-benchmarking-server']['delayed_job']['worker_processes'].to_i
 num_workers.times do |worker|
   service_name = "delayed_job#{worker + 1}"
