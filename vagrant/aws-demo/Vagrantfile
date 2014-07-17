@@ -1,0 +1,127 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+require 'pathname'
+
+# Change on demand
+APPLY_SECRET_CONFIG = true
+CONFIG_NAME = 'vagrant-aws-demo'
+SSH_USERNAME = 'ubuntu'
+
+# Paths
+REPO_ROOT = Pathname.new(__FILE__).parent.parent.parent.expand_path
+CONFIG_DIR = "#{REPO_ROOT}/chef-repo/secret/#{CONFIG_NAME}"
+SITE_COOKBOOKS = "#{REPO_ROOT}/chef-repo/site-cookbooks"
+CWB_CHEF_SERVER_ROOT = "#{SITE_COOKBOOKS}/cbench-chef-server"
+CWB_SERVER_ROOT = "#{SITE_COOKBOOKS}/cloud-benchmarking-server"
+
+# Default configuration
+require_relative "#{CWB_SERVER_ROOT}/vagrant/cwb_config"
+require_relative "#{CWB_SERVER_ROOT}/vagrant/hash"
+cwb_config = CwbConfig.new(config_dir: CONFIG_DIR,
+                           apply_secrets: APPLY_SECRET_CONFIG,
+                           ssh_username: SSH_USERNAME)
+CHEF_JSON = cwb_config.chef_config
+
+VAGRANTFILE_API_VERSION = '2'
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # Detects vagrant-omnibus plugin
+  if Vagrant.has_plugin?('vagrant-omnibus')
+    config.omnibus.chef_version = :latest
+  else
+    puts "FATAL: Vagrant-omnibus plugin not detected. Please install the plugin with\n
+                 'vagrant plugin install vagrant-omnibus' from any other directory\n
+                 before continuing."
+    exit
+  end
+
+  # Box
+  config.vm.box = 'aws'
+  config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
+
+  # AWS default configuration applied to both VMs
+  config.vm.provider :aws do |aws, override|
+    # Authentication
+    aws.access_key_id = ENV['AWS_ACCESS_KEY'].to_s
+    aws.secret_access_key = ENV['AWS_SECRET_KEY'].to_s
+
+    # Instance configuration
+    aws.region = 'eu-west-1'
+    # Official Ubuntu 12.04 image from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
+    # NOTE: Chef does not officially support higher versions than 12.10 and requires 64 bit
+    # NOTE: CWB-Server had some issues with the postgres cookbook when using 14.04
+    aws.ami = 'ami-51e91b26'
+    aws.keypair_name = ENV['EC2_KEYPAIR'].to_s
+    override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY'].to_s
+    override.ssh.username = SSH_USERNAME
+    aws.security_groups = ['cloud_benchmarking_web', 'aic13-cloud_benchmarking-web']
+    # aws.elastic_ip = true # Always creates a new elastic ip
+  end
+
+  ### Chef-Server
+  config.vm.define 'chef_server' do |chef_server|
+    # VM
+    chef_server.vm.hostname = 'chef-server-production' # MUST not contain spaces
+    chef_server.ssh.forward_agent = true
+
+    # AWS
+    chef_server.vm.provider :aws do |aws, override|
+      # NOTE: micro instances cannot satisfy the memory requirements of the chef-server
+      aws.instance_type = 'm1.small'
+      aws.tags = {
+          'Name' => 'CWB-ChefServer-Demo'
+      }
+    end
+
+    # Chef solo provisioning via Berkshelf-vendored cookbooks
+    chef_server.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = "#{CWB_CHEF_SERVER_ROOT}/berks-cookbooks"
+      chef.run_list = [
+          'recipe[cbench-chef-server]'
+      ]
+      chef.json = {
+          'chef-server' => {
+              # Current version as of 2014-07-16
+              # See: http://www.getchef.com/chef/install/
+              'version' => '11.1.3' # or 'latest'
+              # Provide if cookbook service is not working correct. Autodetection tried via Ohai (see attributes)
+              # 'api_fqdn' => "ec2-54-216-50-158.eu-west-1.compute.amazonaws.com"
+          }
+      }
+    end
+  end
+
+  ### CWB-Server
+  config.vm.define 'cwb_server', primary: true do |cwb_server|
+    # VM
+    cwb_server.vm.hostname = 'cwb-server'
+    cwb_server.ssh.forward_agent = true
+
+    # AWS
+    cwb_server.vm.provider :aws do |aws, override|
+      aws.instance_type = 'm1.small' # Consider using larger instance if having memory issues
+      aws.tags = {
+          'Name' => 'CWB-Server-Demo'
+      }
+    end
+
+    # Chef solo provisioning via berks-vendored cookbooks
+    cwb_server.vm.provision :chef_solo, id: 'chef_solo' do |chef|
+      chef.cookbooks_path = "#{CWB_SERVER_ROOT}/berks-cookbooks"
+      chef.provisioning_path = '/etc/chef'
+      chef.run_list = [
+          'recipe[cloud-benchmarking-server]'
+      ]
+      chef.json = CHEF_JSON.deep_merge(
+      {
+          'cloud-benchmarking-server' => {
+              'delayed_job' => {
+                  # Determines how many benchmarks can be prepared, started, or released in parallel.
+                  # Keep in mind that workers are memory-intensive since the currently load the entire Rails environment.
+                  'worker_processes' => '2'
+              },
+          },
+      }
+      )
+    end
+  end
+end
