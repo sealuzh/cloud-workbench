@@ -16,11 +16,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = 'google'
   config.vm.box_url = 'https://github.com/mitchellh/vagrant-google/raw/master/google.box'
 
-  # Google provider
+  # Google
   config.vm.provider :google do |google, override|
-    google.google_project_id = 'lucid-honor-419' # better use: ENV['GOOGLE_PROJECT_ID']
-    google.google_client_email = '410582981346@developer.gserviceaccount.com' # better use: ENV['GOOGLE_CLIENT_EMAIL']
-    google.google_key_location = 'TODO' # better use: ENV['GOOGLE_KEY_LOCATION']
+    google.google_project_id   = ENV['GOOGLE_PROJECT_ID'].to_s
+    google.google_client_email = ENV['GOOGLE_CLIENT_EMAIL'].to_s
+    google.google_key_location = ENV['GOOGLE_KEY_LOCATION'].to_s
     google.image = 'debian-7-wheezy-v20140619'
     google.machine_type = 'n1-standard-1'
     google.name = 'CWB-Server-Production'
@@ -34,9 +34,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe 'build-essential'
     chef.json = CHEF_JSON.deep_merge(
     {
-       'build-essential' => {
-           'compile_time' => true
-       },
        'cloud-benchmarking-server' => {
            'delayed_job' => {
                'worker_processes' => '8'

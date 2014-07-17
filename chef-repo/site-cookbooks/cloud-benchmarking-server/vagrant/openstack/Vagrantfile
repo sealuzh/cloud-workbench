@@ -40,9 +40,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.add_recipe 'build-essential'
     chef.json = CHEF_JSON.deep_merge(
     {
-      'build-essential' => {
-          'compile_time' => true
-      },
       'cloud-benchmarking-server' => {
           'delayed_job' => {
               'worker_processes' => '8'
