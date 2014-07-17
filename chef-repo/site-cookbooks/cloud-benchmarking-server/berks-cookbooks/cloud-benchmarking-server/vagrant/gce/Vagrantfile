@@ -1,0 +1,48 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Change on demand
+APPLY_SECRET_CONFIG = false
+SSH_USERNAME = 'root'
+CONFIG_NAME = 'vagrant-gce-production'
+
+require_relative '../Vagrantfile_base'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  # VM
+  config.vm.hostname = 'cwb-server-google'
+
+  # Box
+  config.vm.box = 'google'
+  config.vm.box_url = 'https://github.com/mitchellh/vagrant-google/raw/master/google.box'
+
+  # Google
+  config.vm.provider :google do |google, override|
+    google.google_project_id   = ENV['GOOGLE_PROJECT_ID'].to_s
+    google.google_client_email = ENV['GOOGLE_CLIENT_EMAIL'].to_s
+    google.google_key_location = ENV['GOOGLE_KEY_LOCATION'].to_s
+    google.image = 'debian-7-wheezy-v20140619'
+    google.machine_type = 'n1-standard-1'
+    google.name = 'CWB-Server-Production'
+
+    override.ssh.username = SSH_USERNAME
+    override.ssh.private_key_path = '~/.ssh/id_rsa'
+  end
+
+  # Chef solo
+  config.vm.provision :chef_solo, id: 'chef_solo' do |chef|
+    chef.add_recipe 'build-essential'
+    chef.json = CHEF_JSON.deep_merge(
+    {
+       'build-essential' => {
+           'compile_time' => true
+       },
+       'cloud-benchmarking-server' => {
+           'delayed_job' => {
+               'worker_processes' => '8'
+           },
+       },
+    }
+    )
+  end
+end

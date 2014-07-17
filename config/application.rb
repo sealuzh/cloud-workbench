@@ -38,7 +38,7 @@ module CloudBenchmarking
     ### CloudBenchmarking settings
     # Default authentication
     config.default_email = 'seal@uzh.ch'
-    config.default_password = 'seal-cloud'
+    config.default_password = 'demo'
 
     # Schedule failed threshold (after x consecutive unsuccessful executions)
     config.execution_failed_threshold = 3

@@ -1,9 +1,11 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.configure('2') do |config|
+require_relative '../Vagrantfile_base'
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # VM
-  config.vm.hostname = 'work-bench-aws'
+  config.vm.hostname = 'cwb-server-aws'
 
   # Box
   config.vm.box     = 'aws'
@@ -16,18 +18,16 @@ Vagrant.configure('2') do |config|
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
 
     # AWS instance configuration
-    aws.region = "eu-west-1"
-    aws.region_config "eu-west-1" do |region|
-      # Official Ubuntu 13.10 LTS amd64 ebp image from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
-      region.ami = "ami-b72ee8c0"
-      region.keypair_name = ENV['EC2_KEYPAIR']
-    end
+    aws.region = 'eu-west-1'
+    # Official Ubuntu 13.10 LTS amd64 EBS image from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
+    aws.ami = 'ami-b72ee8c0'
+    aws.keypair_name = ENV['EC2_KEYPAIR']
     override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
     override.ssh.username = SSH_USERNAME
-    aws.instance_type = "m1.small"
-    aws.security_groups = ["aic13-cloud_benchmarking-web"]
+    aws.instance_type = 'm1.small'
+    aws.security_groups = ['aic13-cloud_benchmarking-web']
     aws.tags = {
-        'Name' => 'WorkBench-Server'
+        'Name' => 'CWB-Server'
     }
   end
 end
