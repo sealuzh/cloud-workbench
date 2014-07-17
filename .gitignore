@@ -40,6 +40,9 @@ doc/
 .idea
 .secret
 
+# Ignore Vagrant machines
+*.vagrant
+
 # Ignore all private keys and secret files
 *.pem
 *.secret
