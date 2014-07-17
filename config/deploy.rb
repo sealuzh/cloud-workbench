@@ -94,7 +94,7 @@ namespace :deploy do
     set :live, ( ENV['live'].to_s == 'true' ? true : false )
   end
   # Make sure we're deploying what we think we're deploying
-  before :deploy, 'deploy:check_revision'
+  # before :deploy, 'deploy:check_revision'
   # Only allow a deploy with passing tests to deployed
   # before :deploy, 'deploy:run_tests'
   before 'deploy', 'cron:clean'
@@ -104,9 +104,6 @@ namespace :deploy do
   after 'deploy:publishing', 'deploy:set_permissions:acl'
   # As of Capistrano 3.1, the `deploy:restart` task is not called automatically.
   after 'deploy:publishing', 'deploy:restart', 'live'
-  after 'deploy:restart', :create_default_user do
-    remote_rake('user:create_default')
-  end
   after :finishing, 'deploy:cleanup'
   after :deploy, 'cron:update'
 
@@ -149,16 +146,5 @@ namespace :deploy do
     invoke 'cron:clean'
     invoke 'worker:down_all'
     invoke 'unicorn:down'
-  end
-
-  # Executes a rake task on the primary app within the correct path
-  def remote_rake(task)
-    on primary(:app) do
-      within current_path do
-        with :rails_env => fetch(:rails_env) do
-          rake task
-        end
-      end
-    end
   end
 end
