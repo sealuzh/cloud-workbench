@@ -1,18 +1,20 @@
 # Cloud WorkBench (CWB)
 
-## Installation (automated)
 
-### Requirements
+## Requirements
 * Git (1.9.2)
 * [Vagrant (1.5.4)](https://www.vagrantup.com/downloads)
     * [vagrant-omnibus (1.3.1)](https://github.com/schisamo/vagrant-omnibus)
-    * [[optional] vagrant-aws (0.4.1)](https://github.com/mitchellh/vagrant-aws)
-        * For AWS EC2 Cloud
+    * [vagrant-aws (0.4.1)](https://github.com/mitchellh/vagrant-aws)
+        * For deployment in the Amazon EC2 Cloud
     * [[optional] vagrant-berkshelf (2.0.1 or 2.0.0rc3)](https://github.com/berkshelf/vagrant-berkshelf)
         * For development with staging and development environment. Be aware that this plugin may cause unexpected installation issues.
     * [[optional] vagrant-cachier (0.7.0)](https://github.com/fgrehm/vagrant-cachier)
         * For optimized local development with VirtualBox
-
+* Ruby (2.1.1) for development and deployment
+    * [Installation](https://www.ruby-lang.org/en/downloads/)
+    * [Mac installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
+    * [Windows installer](http://rubyinstaller.org/)
 
 1. Vagrant can be easily installed with the installer for your system from [https://www.vagrantup.com/downloads](https://www.vagrantup.com/downloads)
 2. The Vagrant plugins can be installed with this one-liner:
@@ -21,9 +23,16 @@
 vagrant plugin install vagrant-omnibus; vagrant plugin install vagrant-aws
 ```
 
-### Initial Configuration
+## Initial Configuration
+
+### Ruby Project
+1. `cd $REPO_ROOT`
+2. `bundle install --without production` to install all Ruby on Rails dependencies which may take a while
+3. `knife help` should now be available
+
+### AWS
 1. Checkout the Git repository `https://bitbucket.org/sealuzh/cloud-benchmarking`
-2. Provide the following environment variables for the AWS EC2 Cloud configuration:
+2. Provide the following environment variables for the Amazon EC2 Cloud configuration (used to launch the CWB Server and Chef Server):
     * AWS_ACCESS_KEY => Your AWS access key
     * AWS_SECRET_KEY => Your AWS secret key
     * EC2_KEYPAIR => Name of the AWS private key for ssh access (usually the same as the file-name but without file-extension)
@@ -39,87 +48,52 @@ export EC2_PRIVATE_KEY=$HOME/.ssh/my-key-pair-ireland.pem
 ```
 Note: The provided values are examples from AWS and do NOT work.
 
-### Install WorkBench Server
-1. `cd $GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/cloud-benchmarking-server/vagrant-aws-production`
-2. `vagrant up --provider=aws`
+
+## Installation and Configuration
+
+1. `cd $REPO_ROOT/vagrant/aws-demo`
+2. `vagrant up --provider=aws` WARNING: This will acquire 2 VMs in the Amazon EC2 cloud: one for the Chef Server and one for the CWB Server.  Make sure you terminate the VMs after usage in order to avoid unnecessary expenses.
+3. Meanwhile, create an Amazon EC2 security groups called `cloud_benchmarking_web` that allows incomming and outgoing ssh (20), http (80), and https (433)
+4. Update the configuration at `REPO_ROOT/chef-repo/secret/vagrant-aws-demo/config.yml.secret`
+    1. Enter the AWS access and secret keys that CWB Server should use to acquire and release resources
+    2. Enter the CHEF_SERVER_IP (find out via Amazon web interface)
+    3. Choose db passwords
+    4. Provide ssh keys you want to use for deployment later
+5. Once the Chef Server completed provisioning (may take 5-10 minutes) with `INFO: Report handlers complete`, setup the Chef Server authentication:
+    1. Go to https://CHEF_SERVER_IP and accept the self-signed certificate
+    2. Login with the default username (`admin`) and password (`p@ssw0rd1`)
+    3. Go to https://CHEF_SERVER_IP/clients/new and create a new client with the name `CWB Server` and enabled admin flag.
+    4. Copy the private key and paste it into `REPO_ROOT/chef-repo/secret/vagrant-aws-demo/chef_client_key.pem`
+    5. Restrict file permissions with `chmod 600 chef_client_key.pem`
+    6. Go to https://CHEF_SERVER_IP/clients/chef-validator/edit, enable "Private Key", and "Save Client"
+    7. Copy this private key and past it into `REPO_ROOT/chef-repo/secret/vagrant-aws-demo/chef_validator.pem`
+6. Configure Chef knife tool
+    1. Move `REPO_ROOT/chef-repo/secret/vagrant-aws-demo/knife.rb` to `~/.chef/knife.rb`
+    2. Update CHEF_SERVER_IP and REPO_ROOT within this file
+    3. Check settings with a command like `knife node list` (returns empty list yet)
+7. Configure CWB Server IP on Chef Server (alternatively via web interface)
+    1. Create data bag with `knife data bag create benchmark`
+    2. `cd REPO_ROOT/chef-repo/data_bags/benchmark`
+    3. Update the `CWB_SERVER_IP` in `workbench_server.json`
+    4. Upload data bag item with `knife data bag from file benchmark workbench_server.json`
+8. Upload cookbooks to Chef Server (alternatively with knife cookbook upload)
+    1. `cd REPO_ROOT/chef-repo/site-cookbooks/fio-benchmark`
+    2. `berks install` resolves and downloads all dependencies
+    3. `berks upload` uploads all cookbooks to the Chef Server
+9. Once the CWB Server completed provisioning (may take 30-50 minutes depending on the chosen instance!), reprovision with `vagrant provision` (may take 2-10 minutes).
+10. Deploy Rails application (see below)
+
+
+#### CWB Server
 
 Supported systems:
 
 * Ubuntu 12.04
 * Ubuntu 13.10
 
-Note Ubuntu 14.04 has some issues with the postgres cookbook and requirs some work to fix this. Other systems have not been tested.
+Note Ubuntu 14.04 has some issues with the postgres cookbook and requires some work to fix this. Other systems have not been tested.
 
-#### Configure WorkBench Server
-
-* Use the Cookbook attributes to configure the CWB-server
-
-### Install Chef Server
-
-1. `cd $GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/cbench-chef-server/vagrant-aws-production`
-2. `vagrant up --provider=aws`
-
-
-## Installation (manual)
-
-NOTE: The manual installation is not recommendend and has not been tested. The requirements listed below are probably not complete.
-
-### Requirements
-
-* UNIX like system (only tested with Ubuntu)
-* Git (1.7.9.5)
-* Ruby 2.1.1 (rbenv version manager used in automated installation)
-* NGINX
-* Unicorn
-* Nodejs
-* PostgreSQL 9.1.13
-    * Default table name: `cloud_benchmarking_production`
-* Vagrant 1.5.3 with plugins
-    * vagrant-aws 0.4.1
-    * vagrant-omnibus 1.4.1
-* cron
-* runit (init scheme with service supervision)
-    * NGINX
-    * Unicorn
-    * delayed_job background worker
-* runit environment variable configuration depending on process
-    * `BUNDLE_GEMFILE` := path to the Gemfile of the current release
-    * `BUNDLE_PATH` := path to shared/vendor/bundle
-    * `EXECJS_RUNTIME=Node`
-    * `RAILS_ENV=production`
-    * `HOME=/home/apps`
-* svlogd [optional]
-* Deployment directory in /home/apps/cloud_benchmarking
-* User and group `apps`
-* User and group `deploy` with root privileges and ssh configuration for deployment
-
-
-## Reconfiguration on IP address change
-
-### CWB-Server
-
-* Data bag item in Chefserver
-	1. `https://$CHEF_SERVER_IP/databags/benchmark/databag_items/workbench_server`
-	2. Enter the IP address of the WorkBench here
-* Capistrano deployment config (only for deployment)
-    1. `vim $GIT_REPO_HOME/cloud_benchmarking/config/deploy/production.rb`
-    2. Enter the IP address of the WorkBench here
-
-
-### Chef-Server
-
-* WorkBench ~/.profile (automated)
-    1. Enter the IP address of the Chef Server in the yaml config file at `chef-repo/secret/vagrant-aws-production` (Example for production environment)
-    2. Set the `APPLY_SECRET_CONFIG` to true in the Vagrantfile. Make sure you also provide the chef_client_key.pem, chef_validator.pem and cloud-benchmarking.pem in the secret config
-    3. Run `vagrant provision` in order to apply the new configuration
-* WorkBench ~/.profile (manual)
-    1. `cd $GIT_REPO_HOME/cloud_benchmarking/chef-repo/site-cookbooks/cloud-benchmarking-server/vagrant-aws-production`
-    2. `vagrant ssh`
-    3. `sudo vim /home/apps/.profile`
-    4. Enter the IP address of the Chef Server here
-* Workstation knife.rb
-    1. `vim $HOME/.chef/knife.rb`
-    2. Enter the IP address of the Chef Server here
+* Use the Cookbook attributes to configure the CWB Server
 
 
 ## Deployment
@@ -128,20 +102,54 @@ Requires a Ruby on Rails development environment and checkout of the project. Ma
 
 ### Initial configuration
 1. Ensure you have added your private key to your ssh-agent. For more information see https://help.github.com/articles/using-ssh-agent-forwarding.
-2. Check your settings with `bundle exec cap production deploy:check`
+2. Ensure you have added the corresponding public key to the config in `REPO_ROOT/chef-repo/secret/vagrant-aws-demo/config.yml.secret`
+3. If you are not using `~/.ssh/id_rsa`, update "ssh_options" accordingly in `REPO_ROOT/config/deploy/demo.rb`
+4. Check your settings with `bundle exec cap demo deploy:check`
 
 ### Deploy
 
-Simply deploy new releases with `bundle exec cap production deploy`
+Simply deploy new releases with `bundle exec cap demo deploy`
 
 WARNING: This will restart the background job workers and should fail if there are currently running jobs.
-Worker restart can be avoided by setting the live variable to true or passing it like `bundle exec cap production deploy live=true`.
+Worker restart can be avoided by setting the live variable to true or passing it like `bundle exec cap demo deploy live=true`.
 This is especially useful for GUI only updates
 
 NOTE: Active schedules will be temporarily disabled during deployment.
 
 
-## Benchmarks
+## Reconfiguration on IP Address Change
+
+### Chef Server
+
+* CWB Server `~/.profile`
+    1. `vim REPO_ROOT/chef-repo/secret/vagrant-aws-demo/config.yml.secret`
+    2. Update the Chef Server IP
+    3. `cd REPO_ROOT/vagrant/aws-demo`
+    4. `vagrant provision cwb_server` to apply the changes (make sure you have set the `APPLY_SECRET_CONFIG` flag to true in the Vagrantfile)
+* Workstation knife.rb
+    1. `vim $HOME/.chef/knife.rb`
+    2. Update the IP address of the Chef Server here
+
+For more information about the Chef Server see:  http://docs.opscode.com/chef/manage_server_open_source.html
+
+### CWB Server
+
+* Data bag item on Chef Server
+    * Command line
+        1. `cd REPO_ROOT/vagrant/aws-demo`
+        2. `vagrant provision chef_server` in order to reconfigure IP address
+        3. `cd REPO_ROOT/chef-repo/data_bags/benchmark`
+        4. Update the `CWB_SERVER_IP` in `workbench_server.json`
+        5. Upload data bag item with `knife data bag from file benchmark workbench_server.json`
+    * Web interface (alternative)
+        1. `https://$CHEF_SERVER_IP/databags/benchmark/databag_items/workbench_server`
+        2. Enter the IP address of the CWB Server here
+* Capistrano deployment config (only for deployment)
+    1. `vim $REPO_ROOT/config/deploy/demo.rb`
+    2. Enter the IP address of the CWB Server here
+
+
+## Defining new Benchmarks
 
 ### Getting Started
 
@@ -152,7 +160,7 @@ NOTE: Active schedules will be temporarily disabled during deployment.
 3. Create a new Benchmark-Definition with the web interface of Cloud WorkBench under `BENCHMARK > Definitions > Create New Benchmark`
 4. Create a metric definition for the new benchmark
 5. Configure your Benchmark within the Vagranfile (e.g. region, vm image, instance type,) and add your Chef recipe via `chef.add_recipe "recipe[fio@0.1.0]"` (The @version is optional)
-6. Start or schedule the benchmark via the Cloud WorkBench web interface.
+6. Start or schedule the benchmark via the CWB web interface.
 
 
 ### Hooks
@@ -228,3 +236,38 @@ Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-co
 * No user authentication and authorization (also technical user)
 * Chef cookbooks must be uploaded to the Chef server
 * Log files from created VM instances are not accessible via web interface and get lost on VM shutdown
+
+
+## Manual Installation
+
+NOTE: The manual installation is not recommendend and has not been tested. The requirements listed below are probably not complete.
+
+
+### Requirements
+
+* UNIX like system (only tested with Ubuntu)
+* Git (1.7.9.5)
+* Ruby 2.1.1 (rbenv version manager used in automated installation)
+* NGINX
+* Unicorn
+* Nodejs
+* PostgreSQL 9.1.13
+    * Default table name: `cloud_benchmarking_production`
+* Vagrant 1.5.3 with plugins
+    * vagrant-aws 0.4.1
+    * vagrant-omnibus 1.4.1
+* cron
+* runit (init scheme with service supervision)
+    * NGINX
+    * Unicorn
+    * delayed_job background worker
+* runit environment variable configuration depending on process
+    * `BUNDLE_GEMFILE` := path to the Gemfile of the current release
+    * `BUNDLE_PATH` := path to shared/vendor/bundle
+    * `EXECJS_RUNTIME=Node`
+    * `RAILS_ENV=production`
+    * `HOME=/home/apps`
+* svlogd [optional]
+* Deployment directory in /home/apps/cloud_benchmarking
+* User and group `apps`
+* User and group `deploy` with root privileges and ssh configuration for deployment
