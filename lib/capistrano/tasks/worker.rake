@@ -4,7 +4,7 @@ namespace :worker do
   # Example: restart all workers with 'worker:restart_all'
   RUNIT_COMMANDS.each do |command|
     task = "#{command}_all"
-    desc "#{task} delayed_job workers 1-#{fetch(:delayed_job_workers).to_s}"
+    desc "#{task} delayed_job workers"
     task task do
       on roles(:app), in: :sequence do
         all_workers(command)

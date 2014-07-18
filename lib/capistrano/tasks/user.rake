@@ -1,6 +1,6 @@
 
 namespace :user do
-  desc "Change the password for the default user. Usage: 'cap demo user:change[new_password]'"
+  desc "Change the password for the default user: 'cap demo user:change[new_password]'"
   task :change, :password, :environment do |task, args|
     on primary(:app) do
       within current_path do
