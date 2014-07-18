@@ -1,7 +1,12 @@
 namespace :cron do
   desc 'Clean system crontab.'
   task :clean do
-    cron_task('clean')
+    # Workaround for failure on initial (i.e. first) deployment since no checkout is present yet.
+    begin
+      cron_task('clean')
+    rescue => e
+      puts "WARNING: Could not execute 'cron:clean'. Ignore this waring if this is the first deployment. #{e.message}"
+    end
   end
 
   desc 'Reflect the Cron schedules from database in system cron.'

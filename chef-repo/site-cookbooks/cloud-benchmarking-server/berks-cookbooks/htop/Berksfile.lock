@@ -1,0 +1,18 @@
+DEPENDENCIES
+  htop
+    path: .
+    metadata: true
+  minitest-handler
+
+GRAPH
+  chef_handler (1.1.6)
+  htop (1.2.0)
+    yum-repoforge (>= 0.0.0)
+  minitest-handler (1.2.0)
+    chef_handler (>= 0.0.0)
+  yum (3.2.2)
+  yum-epel (0.3.6)
+    yum (~> 3.0)
+  yum-repoforge (0.3.0)
+    yum (~> 3.0)
+    yum-epel (>= 0.0.0)

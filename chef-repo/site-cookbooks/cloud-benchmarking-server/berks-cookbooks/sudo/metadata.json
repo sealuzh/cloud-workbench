@@ -1,6 +1,6 @@
 {
   "name": "sudo",
-  "version": "2.5.2",
+  "version": "2.6.0",
   "description": "Installs sudo and configures /etc/sudoers",
   "long_description": "",
   "maintainer": "Opscode, Inc.",

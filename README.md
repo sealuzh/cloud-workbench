@@ -108,7 +108,7 @@ Requires a Ruby on Rails development environment and checkout of the project. Ma
 
 ### Deploy
 
-Simply deploy new releases with `bundle exec cap demo deploy`
+Simply deploy new releases with `bundle exec cap demo deploy` (may take 20 minutes for the first time)
 
 WARNING: This will restart the background job workers and should fail if there are currently running jobs.
 Worker restart can be avoided by setting the live variable to true or passing it like `bundle exec cap demo deploy live=true`.
@@ -121,7 +121,7 @@ NOTE: Active schedules will be temporarily disabled during deployment.
 
 ### Chef Server
 
-* CWB Server `~/.profile`
+* CWB Server configuration
     1. `vim REPO_ROOT/chef-repo/secret/vagrant-aws-demo/config.yml.secret`
     2. Update the Chef Server IP
     3. `cd REPO_ROOT/vagrant/aws-demo`
@@ -147,6 +147,41 @@ For more information about the Chef Server see:  http://docs.opscode.com/chef/ma
 * Capistrano deployment config (only for deployment)
     1. `vim $REPO_ROOT/config/deploy/demo.rb`
     2. Enter the IP address of the CWB Server here
+
+
+## Manage CWB Server
+
+Capistrano tasks can be used to easily conduct management tasks from the workstation on the CWB Server.
+
+### Configuration
+
+* Ensure you are in the root directory `cd REPO_ROOT`
+* Ensure that the IP address of the CWB Server is configured in `REPO_ROOT/config/deploy/demo.rb`
+
+### Tasks
+
+Print a list of all tasks including their description with `cap -T`
+
+Always include the environment e.g. `cap demo TASK_NAME`
+
+#### Custom
+
+* `cap demo user:change[password] Change the password for the default user: 'cap demo user:change[new_password]'
+* `cap demo rake[command]` Invoke a rake command on the remote app server: 'cap production rake[about]'
+* `cap demo cron:clean` Clean system crontab
+* `cap demo cron:update` Reflect the Cron schedules from database in system cron
+* `cap demo worker:status_all` status_all delayed_job workers
+* `cap demo worker:restart_all` restart_all delayed_job workers
+* `cap demo worker:down_all` down_all delayed_job workers
+* `cap demo worker:up_all` up_all delayed_job workers
+
+
+#### Default
+
+* `cap demo deploy` Deploy a new release
+* `cap demo deploy:check` Check required files and directories exist
+* `cap demo deploy:start` Start application, workers, and scheduler
+* `cap demo deploy:stop` Stop scheduler, workers, and application
 
 
 ## Defining new Benchmarks
@@ -233,7 +268,7 @@ Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-co
 
 ## Limitations
 
-* No user authentication and authorization (also technical user)
+* No technical user authentication and authorization (VMs can interact with CWB without authentication)
 * Chef cookbooks must be uploaded to the Chef server
 * Log files from created VM instances are not accessible via web interface and get lost on VM shutdown
 

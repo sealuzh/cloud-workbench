@@ -25,6 +25,7 @@ The following cookbooks provided by Opscode are required as noted:
 Attributes
 ----------
 * `node['windows']['allow_pending_reboots']` - used to configure the `WindowsRebootHandler` (via the `windows::reboot_handler` recipe) to act on pending reboots. default is true (ie act on pending reboots).  The value of this attribute only has an effect if the `windows::reboot_handler` is in a node's run list.
+* `node['windows']['allow_reboot_on_failure']` - used to register the `WindowsRebootHandler` (via the `windows::reboot_handler` recipe) as an exception handler too to act on reboots not only at the end of successful Chef runs, but even at the end of failed runs. default is false (ie reboot only after successful runs).  The value of this attribute only has an effect if the `windows::reboot_handler` is in a node's run list.
 
 
 Resource/Provider
@@ -109,10 +110,13 @@ servermanagercmd -query
 
 #### Attribute Parameters
 - feature_name: name of the feature/role to install.  The same feature may have different names depending on the provider used (ie DHCPServer vs DHCP; DNS-Server-Full-Role vs DNS).
+- all: Boolean. Optional. Default: false. DISM provider only. Forces all dependencies to be installed.
+- source: String. Optional. DISM provider only. Uses local repository for feature install.
 
 #### Providers
 - **Chef::Provider::WindowsFeature::DISM**: Uses Deployment Image Servicing and Management (DISM) to manage roles/features.
 - **Chef::Provider::WindowsFeature::ServerManagerCmd**: Uses Server Manager to manage roles/features.
+- **Chef::Provider::WindowsFeaturePowershell**: Uses Powershell to manage roles/features. (see [COOK-3714](https://tickets.opscode.com/browse/COOK-3714)
 
 #### Examples
 Enable the node as a DHCP Server
@@ -128,6 +132,17 @@ Enable TFTP
 ```ruby
 windows_feature 'TFTP' do
   action :install
+end
+```
+
+Enable .Net 3.5.1 on Server 2012 using repository files on DVD and
+install all dependencies
+
+```ruby
+windows_feature "NetFx3" do
+  action :install
+  all true
+  source "d:\sources\sxs"
 end
 ```
 
@@ -549,7 +564,7 @@ end
 Exception/Report Handlers
 -------------------------
 ### WindowsRebootHandler
-Required reboots are a necessary evil of configuring and managing Windows nodes.  This report handler (ie fires at the end of successful Chef runs) acts on requested (Chef initiated) or pending (as determined by the OS per configuration action we performed) reboots.  The `allow_pending_reboots` initialization argument should be set to false if you do not want the handler to automatically reboot a node if it has been determined a reboot is pending.  Reboots can still be requested explicitly via the `windows_reboot` LWRP.
+Required reboots are a necessary evil of configuring and managing Windows nodes.  This report handler (ie fires at the end of Chef runs) acts on requested (Chef initiated) or pending (as determined by the OS per configuration action we performed) reboots.  The `allow_pending_reboots` initialization argument should be set to false if you do not want the handler to automatically reboot a node if it has been determined a reboot is pending.  Reboots can still be requested explicitly via the `windows_reboot` LWRP.
 
 ### Initialization Arguments
 - `allow_pending_reboots`: indicator on whether the handler should act on a the Window's 'pending reboot' state. default is true
@@ -623,6 +638,8 @@ override_attributes(
 ```
 
 This will still allow a reboot to be explicitly requested via the `windows_reboot` LWRP.
+
+By default, the handler will only be registered as a report handler, meaning that it will only fire at the end of successful Chef runs. If the run fails, pending or requested reboots will be ignored. This can lead to a situation where some package was installed and notified a reboot request via the `windows_reboot` LWRP, and then the run fails for some unrelated reason, and the reboot request gets dropped because the resource that notified the reboot request will already be up-to-date at the next run and will not request a reboot again, and thus the requested reboot will never be performed. To change this behavior and register the handler as an exception handler that fires at the end of failed runs too, override `node['windows']['allow_reboot_on_failure']` and set the value to true.
 
 
 License & Authors

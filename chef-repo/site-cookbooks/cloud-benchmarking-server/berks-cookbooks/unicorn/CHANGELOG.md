@@ -1,3 +1,7 @@
+## v2.0.0:
+
+- #9 Removes transform to allow for using node attributes for params.
+
 ## v1.3.0:
 
 ### Improvement

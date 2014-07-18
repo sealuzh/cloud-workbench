@@ -3,4 +3,4 @@
 # Attributes:: default
 #
 
-default['htop']['version'] = nil
+default["htop"]["version"] = nil

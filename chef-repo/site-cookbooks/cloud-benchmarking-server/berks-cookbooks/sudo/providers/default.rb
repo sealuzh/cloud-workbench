@@ -88,6 +88,7 @@ def render_sudoer
                     :runas => new_resource.runas,
                     :nopasswd => new_resource.nopasswd,
                     :commands => new_resource.commands,
+                    :command_aliases => new_resource.command_aliases,
                     :defaults => new_resource.defaults
       action        :nothing
     end
@@ -104,8 +105,12 @@ end
 
 # Default action - install a single sudoer
 action :install do
-  sudoers_dir = directory "#{node['authorization']['sudo']['prefix']}/sudoers.d/"
-  sudoers_dir.run_action(:create)
+  target = "#{node['authorization']['sudo']['prefix']}/sudoers.d/"
+
+  unless ::File.exists?(target)
+    sudoers_dir = directory target
+    sudoers_dir.run_action(:create)
+  end
 
   new_resource.updated_by_last_action(true) if render_sudoer
 end
