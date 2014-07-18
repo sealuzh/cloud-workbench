@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Change on demand
-APPLY_SECRET_CONFIG = false
+APPLY_SECRET_CONFIG = true
 SSH_USERNAME = 'ubuntu'
 CONFIG_NAME = 'vagrant-os-production'
 
@@ -22,7 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Make sure the private key from the key pair is provided
   config.ssh.private_key_path = '/Users/philipp/Documents/Openstack/philipp.pem'
 
-  # Openstack provider
+  # Openstack
   config.vm.provider :openstack do |os|
     os.username     = ENV['OS_USERNAME'].to_s
     os.api_key      = ENV['OS_PASSWORD'].to_s
