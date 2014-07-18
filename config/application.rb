@@ -37,7 +37,7 @@ module CloudBenchmarking
 
     ### CloudBenchmarking settings
     # Default authentication
-    config.default_email = 'seal@uzh.ch'
+    config.default_email = 'seal@uzh.ch' # NOTE: MUST match with lib/capistrano/tasks/user.rake
     config.default_password = 'demo'
 
     # Schedule failed threshold (after x consecutive unsuccessful executions)

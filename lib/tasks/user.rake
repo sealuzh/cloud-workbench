@@ -10,8 +10,11 @@ namespace :user do
 
   desc 'Create or update (if password has changed) a user with custom email and password.'
   task :create, [:email, :password] => [:environment]  do |task, args|
-    new_password = args[:password]
-    user = User.find_or_create_by!(email: args[:email])
+    create_or_update_user(args[:email], args[:password])
+  end
+
+  def create_or_update_user(email, new_password)
+    user = User.find_or_create_by!(email: email)
     same_password = user.valid_password?(new_password)
     user.update!(password: new_password, password_confirmation: new_password) unless same_password
   end
