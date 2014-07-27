@@ -166,7 +166,7 @@ Always include the environment e.g. `cap demo TASK_NAME`
 
 #### Custom
 
-* `cap demo user:change[password] Change the password for the default user: 'cap demo user:change[new_password]'
+* `cap demo user:change[password]` Change the password for the default user: 'cap demo user:change[new_password]'
 * `cap demo rake[command]` Invoke a rake command on the remote app server: 'cap production rake[about]'
 * `cap demo cron:clean` Clean system crontab
 * `cap demo cron:update` Reflect the Cron schedules from database in system cron
@@ -236,7 +236,7 @@ The benchmark helper is the client-side utility to manage the execution of a ben
     * value: The value of the metric (e.g. 1142)
 * `submit_metrics(metric_definition_id, csv_file)`
     * Bulk submit multiple metrics for the same metric definition
-    * csv_file: path to a csv file with 2 columns without header. (1st: time) (2nd: value)
+    * csv_file: path to a csv file with 2 columns without header. Format: `[time],[value]` Example: `501,1373`
 
 ## Tests
 
