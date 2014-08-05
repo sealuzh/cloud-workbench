@@ -32,7 +32,6 @@
 !/config/deploy/cloud_benchmarking_*/*.example*
 
 # Ignore other unneeded files.
-database.yml
 doc/
 *.swp
 *~
