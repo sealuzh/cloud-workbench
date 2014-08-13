@@ -31,7 +31,7 @@ vagrant plugin install vagrant-omnibus; vagrant plugin install vagrant-aws
 3. `knife help` should now be available
 
 ### AWS
-1. Checkout the Git repository `https://bitbucket.org/sealuzh/cloud-benchmarking`
+1. Checkout the Git repository `https://github.com/sealuzh/cloud-workbench`
 2. Provide the following environment variables for the Amazon EC2 Cloud configuration (used to launch the CWB Server and Chef Server):
     * AWS_ACCESS_KEY => Your AWS access key
     * AWS_SECRET_KEY => Your AWS secret key

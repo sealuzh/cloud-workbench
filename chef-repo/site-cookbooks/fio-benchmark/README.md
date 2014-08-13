@@ -32,14 +32,14 @@ Attributes
   <tr>
     <td><tt>['fio']['version']</tt></td>
     <td>String</td>
-    <td>Version of FIO</td>
+    <td>Version of FIO. Only relevant for installation from source code.</td>
     <td><tt>2.1.10</tt></td>
   </tr>
   <tr>
-    <td><tt>['fio']['install_source']</tt></td>
+    <td><tt>['fio']['install_method']</tt></td>
     <td>String</td>
-    <td>Install from sources (true) or via apt (false)</td>
-    <td><tt>true</tt></td>
+    <td>Install either from source code (source) or via apt (apt).</td>
+    <td><tt>source</tt></td>
   </tr>
 </table>
 
@@ -65,7 +65,7 @@ config.vm.provision "chef_client" do |chef|
   }
 
   chef.run_list = [
-    'recipe[fio-benchmark::default]'
+    'recipe[fio-benchmark::default@0.3.0]'
   ]
   ...
 end
