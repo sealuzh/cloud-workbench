@@ -188,7 +188,7 @@ Always include the environment e.g. `cap demo TASK_NAME`
 
 ### Getting Started
 
-1. Create a Cookbook that installs your benchmarks or use a VM image wherein your benchmark is already installed.
+1. Create a Chef cookbook with [`knife cookbook create NAME`](http://docs.getchef.com/knife_cookbook.html#create) or [`berks cookbook NAME`](http://berkshelf.com/). Alternatively create a VM image wherein your benchmark is already installed.
     * See the README.md in chef-repo/site-cookbooks for more information about how to get started with creating a cookbook.
     * Chef resources docs: http://docs.opscode.com/chef/resources.html
 2. Upload the Cookbook with [`knife cookbook upload`](http://docs.opscode.com/knife_cookbook.html#upload) or [`berks upload`](http://berkshelf.com/) to the Chef-Server
