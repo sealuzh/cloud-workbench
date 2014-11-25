@@ -30,7 +30,9 @@ group :development do
   gem 'quiet_assets'
   gem 'rb-readline' # Fixes guard issues with interactive pry
   gem 'railroady'
+end
 
+group :deployment do
   # Deploy with Capistrano
   # None of the capistrano task should be loaded into the Rails environment by default
   # as they must be required explicitly in the Capfile
