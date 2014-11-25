@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # Change on demand
-APPLY_SECRET_CONFIG = false
+APPLY_SECRET_CONFIG = true
 SSH_USERNAME = 'ubuntu'
 CONFIG_NAME = 'vagrant-aws-retired'
 

@@ -89,11 +89,12 @@ db_type = 'mixed'
 if (node['postgresql'].attribute?('config_pgtune') && node['postgresql']['config_pgtune'].attribute?('db_type'))
   db_type = node['postgresql']['config_pgtune']['db_type']
   if (!(["dw","oltp","web","mixed","desktop"].include?(db_type)))
-    Chef::Application.fatal!([
+    Chef::Log.fatal([
         "Bad value (#{db_type})",
         "for node['postgresql']['config_pgtune']['db_type'] attribute.",
         "Valid values are one of dw, oltp, web, mixed, desktop."
       ].join(' '))
+    raise
   end
 end
 
@@ -107,15 +108,16 @@ con =
 }.fetch(db_type)
 
 if (node['postgresql'].attribute?('config_pgtune') && node['postgresql']['config_pgtune'].attribute?('max_connections'))
-  max_connections = node['postgresql']['config_pgtune']['max_connections']
-  if (max_connections.match(/\A[1-9]\d*\Z/) == nil)
-    Chef::Application.fatal!([
+  max_connections = node['postgresql']['config_pgtune']['max_connections'].to_i
+  if max_connections <= 0
+    Chef::Log.fatal([
         "Bad value (#{max_connections})",
         "for node['postgresql']['config_pgtune']['max_connections'] attribute.",
         "Valid values are non-zero integers only."
       ].join(' '))
+    raise
   end
-  con = max_connections.to_i
+  con = max_connections
 end
 
 # Parse out total_memory option, or use value detected by Ohai.
@@ -194,13 +196,15 @@ if (mem >= 256)
 
   # (4) work_mem
   #     Sets the maximum memory to be used for query workspaces.
+  mem_con_v = (mem.to_f / con).ceil
+
   work_mem =
-  { "web" => mem / con,
-    "oltp" => mem / con,
-    "dw" => mem / con / 2,
-    "mixed" => mem / con / 2,
-    "desktop" => mem / con / 6
-  }.fetch(db_type)
+    { "web" => mem_con_v,
+      "oltp" => mem_con_v,
+      "dw" => mem_con_v / 2,
+      "mixed" => mem_con_v / 2,
+      "desktop" => mem_con_v / 6
+    }.fetch(db_type)
 
   node.default['postgresql']['config']['work_mem'] = binaryround(work_mem*1024*1024)
 
