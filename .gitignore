@@ -45,3 +45,6 @@ doc/
 # Ignore all private keys and secret files
 *.pem
 *.secret
+
+# Ignore secret install folder
+/install/*
