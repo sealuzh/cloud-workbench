@@ -21,7 +21,7 @@ set :live, false
 
 # Repository
 # ----------
-set :repo_url, 'git@bitbucket.org:sealuzh/cloud-benchmarking.git'
+set :repo_url, 'git@github.com:sealuzh/cloud-workbench.git'
 set :branch, 'master'
 
 # SSH connection
