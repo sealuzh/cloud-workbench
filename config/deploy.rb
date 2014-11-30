@@ -21,7 +21,7 @@ set :live, false
 
 # Repository
 # ----------
-set :repo_url, 'git@github.com:sealuzh/cloud-workbench.git'
+set :repo_url, 'https://github.com/sealuzh/cloud-workbench.git'
 set :branch, 'master'
 
 # SSH connection
@@ -66,7 +66,7 @@ set :file_permissions_users, ["#{fetch(:apps_user)}"]
 # You may need to configure the BUNDLE_PATH environment variable or web server specific settings.
 set :bundle_path, -> { shared_path.join('vendor/bundle') }
 set :bundle_flags, '--deployment --binstubs'
-set :bundle_without, %w{development test chef}.join(' ')
+set :bundle_without, %w{development test chef deployment}.join(' ')
 
 # Rbenv
 # -----
@@ -146,5 +146,16 @@ namespace :deploy do
     invoke 'cron:clean'
     invoke 'worker:down_all'
     invoke 'unicorn:down'
+  end
+end
+
+# Executes a rake task on the primary app within the correct path within the full Rails environment
+def remote_rake(task)
+  on primary(:app) do
+    within current_path do
+      with :rails_env => fetch(:rails_env) do
+        rake task
+      end
+    end
   end
 end
