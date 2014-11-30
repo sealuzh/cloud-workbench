@@ -25,25 +25,31 @@ vagrant plugin install vagrant-openstack-plugin
 
 ## Initial Installation and Configuration
 1. Checkout repository and install Ruby dependencies for administration tasks.
-```bash
-git clone https://github.com/sealuzh/cloud-workbench; cd cloud-workbench; bundle install --gemfile=Gemfile_Admin;
-# Check knife installation
-knife help
-```
+
+    ```bash
+    git clone https://github.com/sealuzh/cloud-workbench; cd cloud-workbench; bundle install --gemfile=Gemfile_Admin;
+    # Check knife installation
+    knife help
+    ```
+
 2. Navigate into the appropriate install directory.
-```bash
-cd install/aws          # Amazon EC2 Cloud
-cd install/openstack    # Openstack Cloud
-cd install/virtualbox   # Virtualbox (only for development/testing because public IP configuration is not supported yet)
-```
+
+    ```bash
+    cd install/aws          # Amazon EC2 Cloud
+    cd install/openstack    # Openstack Cloud
+    cd install/virtualbox   # Virtualbox (only for development/testing because public IP configuration is not supported yet)
+    ```
+
 3. Complete the configurations in `Vagrantfile` and `config.yml.secret`.
 4. Start automated installation and configuration.
 WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server and one for the CWB Server. Make sure you terminate the VMs after usage in order to avoid unnecessary expenses.
-```bash
-vagrant up --provider=aws          # Amazon EC2 Cloud
-vagrant up --provider=openstack    # Openstack Cloud
-vagrant up`                        # Virtualbox (default provider)
-```
+
+    ```bash
+    vagrant up --provider=aws          # Amazon EC2 Cloud
+    vagrant up --provider=openstack    # Openstack Cloud
+    vagrant up`                        # Virtualbox (default provider)
+    ```
+
 5. Update the CHEF_SERVER_IP in `config.yml.secret` by filling in the public IP address of your cloud provider (e.g. find out via the Amazon web interface).
 6. Once the Chef Server completed provisioning (may take 5-10 minutes) with `INFO: Report handlers complete`, setup the Chef Server authentication:
     1. Go to `https://CHEF_SERVER_IP` and accept the self-signed certificate
@@ -51,33 +57,43 @@ vagrant up`                        # Virtualbox (default provider)
     3. Go to `https://CHEF_SERVER_IP/clients/new` and create a new client with the name `cwb-server` and enabled admin flag.
     4. Copy the generated private key and paste it into `chef_client_key.pem`
     5. Restrict file permissions with:
-```bash
-chmod 600 chef_client_key.pem
-```
+
+        ```bash
+        chmod 600 chef_client_key.pem
+        ```
+
     6. Go to `https://CHEF_SERVER_IP/clients/chef-validator/edit`, enable "Private Key", and click "Save Client"
     7. Copy this private key and paste it into `chef_validator.pem`
 6. Configure Chef `knife` and Berkshelf `berks` tools
     1. Move `knife.rb` to `~/.chef/knife.rb` and `config.json` to `~/.berkshelf/config.json`
-```bash
-mkdir ~/.berkshelf; mkdir ~/.chef; mv config.json ~/.berkshelf/config.json; mv knife.rb ~/.chef/knife.rb;
-```
+
+        ```bash
+        mkdir ~/.berkshelf; mkdir ~/.chef; mv config.json ~/.berkshelf/config.json; mv knife.rb ~/.chef/knife.rb;
+        ```
+
     2. Update `CHEF_SERVER_IP` and `REPO_ROOT` within this file
     3. The following command should work now:
-```bash
-knife node list
-```
+
+        ```bash
+        knife node list
+        ```
+
 7. Configure the IP address of the CWB Server on the Chef Server (alternatively via the Chef server web interface)
-```bash
-knife data bag create benchmark
-cd ../chef-repo/data_bags/benchmark
-# Update the `CWB_SERVER_IP` in `workbench_server.json`
-# Upload data bag item with:
-knife data bag from file benchmark workbench_server.json
-```
+
+    ```bash
+    knife data bag create benchmark
+    cd ../chef-repo/data_bags/benchmark
+    # Update the `CWB_SERVER_IP` in `workbench_server.json`
+    # Upload data bag item with:
+    knife data bag from file benchmark workbench_server.json
+    ```
+
 8. Upload cookbooks to the Chef Server (alternatively with knife cookbook upload)
-```bash
-cd ../../site-cookbooks/fio-benchmark; berks install; berks upload;
-```
+
+    ```bash
+    cd ../../site-cookbooks/fio-benchmark; berks install; berks upload;
+    ```
+
 9. Once the CWB Server completed provisioning (may take 30-50 minutes depending on the chosen instance!), reprovision with `vagrant provision` (may take 2-10 minutes).
 10. Deploy Rails application (see below)
 
@@ -98,6 +114,7 @@ Requires a Ruby on Rails development environment and checkout of the project. Ma
 ### Deploy
 
 Simply deploy new releases with: (may take 20 minutes for the first time)
+
 ```bash
 bundle exec cap production deploy
 ```
@@ -113,6 +130,7 @@ NOTE: Active schedules will be temporarily (for a very short time) disabled duri
 Further documentation of the Vagrant CLI: https://docs.vagrantup.com/v2/cli/index.html
 
 Bring up VMs: Starts or acquires 2 VMs and installs `cwb_server` and `chef_server`. Alternative providers are `openstack` or `virtualbox` (default).
+
 ```bash
 vagrant up --provider=aws
 vagrant up cwb_server --provider=aws
@@ -120,12 +138,14 @@ vagrant up chef_server --provider=aws
 ```
 
 SSH into a VM (default: cwb_server)
+
 ```bash
 vagrant ssh
 vagrant ssh chef_server
 ```
 
 Provision VMs (default: both)
+
 ```bash
 vagrant provision
 vagrant provision cwb_server
@@ -133,13 +153,16 @@ vagrant provision chef_server
 ```
 
 Halt VMs (default: both)
+
 ```bash
 vagrant halt
 vagrant halt cwb_server
 vagrant halt chef_server
+
 ```
 
 Destroy VMs (default: both)
+
 ```bash
 vagrant destroy
 vagrant destroy cwb_server
@@ -290,6 +313,7 @@ Automatic page reload on file change is supported for Safari, Chrome and Firefox
 Test tagged as slow are excluded from being run by default. Explicitly run them via `rspec --tag slow spec/`
 
 Tests can be tagged as slow by passing the :slow symbol
+
 ```ruby
 describe 'a tagged test', :slow do
   it 'does some complex calculations' do
@@ -297,6 +321,7 @@ describe 'a tagged test', :slow do
   end
 end
 ```
+
 Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-control-with-rspecs-tag-filters/
 
 
@@ -305,6 +330,7 @@ Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-co
 For development and testing purpose, CWB can be locally installed into 2 Virtualbox VMs in an automated manner (see $REPO_ROOT/virtualbox directory). However, due to missing public IP configurations, CWB does not work properly (i.e. results cannot be submitted). Make sure you have installed [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
 
 The Vagrant plugin [vagrant-cachier (1.1.0)](https://github.com/fgrehm/vagrant-cachier) can speed up development by serving as a cache for chef, apt, gem, etc.
+
 ```bash
 vagrant plugin install vagrant-cachier
 ```
