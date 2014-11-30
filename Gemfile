@@ -32,18 +32,6 @@ group :development do
   gem 'railroady'
 end
 
-group :deployment do
-  # Deploy with Capistrano
-  # None of the capistrano task should be loaded into the Rails environment by default
-  # as they must be required explicitly in the Capfile
-  gem 'capistrano', '~> 3.2.1', require: false
-  gem 'capistrano-rails', '~> 1.1', require: false
-  gem 'capistrano-bundler', '~> 1.1.2', require: false
-  gem 'capistrano-rbenv', '~> 2.0', require: false
-  # gem 'rvm1-capistrano3', require: false # Use if deploying into RVM environments
-  gem 'capistrano-file-permissions', require: false
-end
-
 group :development, :test do
   gem 'sqlite3'
   gem 'faker'
@@ -75,7 +63,8 @@ group :test do
   # gem 'wdm', '0.1.0'
 end
 
-# Uncomment and run bundle install for installation.
+# Uncomment and run bundle install for installation
+# or install with 'gem install metric_fu'.
 # Docs at https://github.com/metricfu/metric_fu/
 #gem 'metric_fu', group: :metrics, require: false
 
@@ -101,16 +90,6 @@ gem 'will_paginate', '~> 3.0.5'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
 gem 'simple_form', '~> 3.0.2'
 gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
-
-
-group :chef do
-  # Chef: Use the Chef gem since the omnibus installer with Chef-client version <=11.12.2
-  # is not yet compatible (planned for 11.14.0) with ruby version managers such as RVM or rbenv.
-  # See issue: https://tickets.opscode.com/browse/CHEF-3581
-  gem 'chef', '~> 11.12.2', require: false
-  gem 'berkshelf', '~> 3.1.1', require: false
-  gem 'foodcritic', '~> 3.0.3', require: false
-end
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
