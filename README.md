@@ -5,7 +5,7 @@
 * [Git](http://git-scm.com/)
 * [Vagrant (1.6.5)](https://www.vagrantup.com/downloads)
     * [vagrant-omnibus (1.4.1)](https://github.com/schisamo/vagrant-omnibus)
-    * [vagrant-aws (0.5.0)](https://github.com/mitchellh/vagrant-aws) [for deployment in the Amazon EC2 Cloud]
+    * [vagrant-aws (0.5.0)](https://github.com/mitchellh/vagrant-aws) for deployment in the Amazon EC2 Cloud
 * Ruby (2.1.1) for development and deployment
     * [Installation](https://www.ruby-lang.org/en/downloads/)
     * [Mac installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
@@ -24,70 +24,61 @@ vagrant plugin install vagrant-openstack-plugin
 
 
 ## Initial Installation and Configuration
-1. Checkout repository and install Ruby dependencies for administration tasks. Check if `knife help` is available.
+1. Checkout repository and install Ruby dependencies for administration tasks.
 ```bash
 git clone https://github.com/sealuzh/cloud-workbench; cd cloud-workbench; bundle install --gemfile=Gemfile_Admin;
+# Check knife installation
+knife help
 ```
-
 2. Navigate into the appropriate install directory.
 ```bash
 cd install/aws          # Amazon EC2 Cloud
 cd install/openstack    # Openstack Cloud
 cd install/virtualbox   # Virtualbox (only for development/testing because public IP configuration is not supported yet)
 ```
-
-3. Complete the configuration of the `Vagrantfile` and `config.yml.secret`.
-
-4. Start automated installation and configuration. WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server and one for the CWB Server. Make sure you terminate the VMs after usage in order to avoid unnecessary expenses.
+3. Complete the configurations in `Vagrantfile` and `config.yml.secret`.
+4. Start automated installation and configuration.
+WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server and one for the CWB Server. Make sure you terminate the VMs after usage in order to avoid unnecessary expenses.
 ```bash
-`vagrant up --provider=aws`         # Amazon EC2 Cloud
-`vagrant up --provider=openstack`   # Openstack Cloud
-`vagrant up`                        # Virtualbox (default provider)
+vagrant up --provider=aws          # Amazon EC2 Cloud
+vagrant up --provider=openstack    # Openstack Cloud
+vagrant up`                        # Virtualbox (default provider)
 ```
-
-5. Update the CHEF_SERVER_IP in `config.yml.secret`. Fill in the public IP address of your cloud provider (e.g. find out via the Amazon web interface).
-
+5. Update the CHEF_SERVER_IP in `config.yml.secret` by filling in the public IP address of your cloud provider (e.g. find out via the Amazon web interface).
 6. Once the Chef Server completed provisioning (may take 5-10 minutes) with `INFO: Report handlers complete`, setup the Chef Server authentication:
     1. Go to `https://CHEF_SERVER_IP` and accept the self-signed certificate
-    2. Login with the default username (`admin`) and password (`p@ssw0rd1`) => change your password
+    2. Login with the default username (`admin`) and password (`p@ssw0rd1`). You might want to change the default password immediately.
     3. Go to `https://CHEF_SERVER_IP/clients/new` and create a new client with the name `cwb-server` and enabled admin flag.
     4. Copy the generated private key and paste it into `chef_client_key.pem`
     5. Restrict file permissions with:
 ```bash
 chmod 600 chef_client_key.pem
 ```
-
     6. Go to `https://CHEF_SERVER_IP/clients/chef-validator/edit`, enable "Private Key", and click "Save Client"
     7. Copy this private key and paste it into `chef_validator.pem`
-6. Configure Chef knife and Bershelf tool
+6. Configure Chef `knife` and Berkshelf `berks` tools
     1. Move `knife.rb` to `~/.chef/knife.rb` and `config.json` to `~/.berkshelf/config.json`
 ```bash
 mkdir ~/.berkshelf; mkdir ~/.chef; mv config.json ~/.berkshelf/config.json; mv knife.rb ~/.chef/knife.rb;
 ```
-
     2. Update `CHEF_SERVER_IP` and `REPO_ROOT` within this file
     3. The following command should work now:
 ```bash
 knife node list
 ```
-
 7. Configure the IP address of the CWB Server on the Chef Server (alternatively via the Chef server web interface)
 ```bash
 knife data bag create benchmark
 cd ../chef-repo/data_bags/benchmark
 # Update the `CWB_SERVER_IP` in `workbench_server.json`
 # Upload data bag item with:
-
 knife data bag from file benchmark workbench_server.json
 ```
-
-8. Upload cookbooks to Chef Server (alternatively with knife cookbook upload)
+8. Upload cookbooks to the Chef Server (alternatively with knife cookbook upload)
 ```bash
 cd ../../site-cookbooks/fio-benchmark; berks install; berks upload;
 ```
-
 9. Once the CWB Server completed provisioning (may take 30-50 minutes depending on the chosen instance!), reprovision with `vagrant provision` (may take 2-10 minutes).
-
 10. Deploy Rails application (see below)
 
 
@@ -111,12 +102,11 @@ Simply deploy new releases with: (may take 20 minutes for the first time)
 bundle exec cap production deploy
 ```
 
-WARNING: This will restart the background job workers and should fail if there are currently running jobs.
+NOTE: This will restart the background job workers and should fail if there are currently running jobs.
 Worker restarts can be avoided by setting a variable in the deploy config `set(:live, true) ` or passing it with `bundle exec cap production deploy live=true`.
 This is especially useful for GUI only updates
 
-NOTE: Active schedules will be temporarily disabled during deployment.
-
+NOTE: Active schedules will be temporarily (for a very short time) disabled during deployment.
 
 
 ## Manage VMs
