@@ -2,6 +2,11 @@ source 'https://rubygems.org'
 ruby '2.1.1'
 #ruby-gemset=cloud_benchmarking
 
+# Import admin Gemfile (handling chef and deployment)
+Dir.glob(File.join(File.dirname(__FILE__), 'Gemfile_Admin')) do |gemfile|
+    eval(IO.read(gemfile), binding)
+end
+
 gem 'rails', '4.1.1'
 
 # NOTE: This gem is not thread-safe and SHOULD NOT be used with
