@@ -1,6 +1,6 @@
 # Cloud WorkBench (CWB)
 
-Read our paper [Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmarking](http://arxiv.org/abs/1408.4565) (preprint: to appear in CloudCom14) for further details.
+Read the pre-print of our paper (to appear in CloudCom14) [Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmarking](http://arxiv.org/abs/1408.4565) for further details.
 
 
 ## Requirements
@@ -8,12 +8,12 @@ Read our paper [Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmark
 * [Vagrant (1.6.5)](https://www.vagrantup.com/downloads)
     * [vagrant-omnibus (1.4.1)](https://github.com/schisamo/vagrant-omnibus)
     * [vagrant-aws (0.5.0)](https://github.com/mitchellh/vagrant-aws) for deployment in the Amazon EC2 Cloud
-* Ruby (2.1.1) for development and deployment
+* Ruby (2.1.1) for development and deployment with Bundler
     * [Installation](https://www.ruby-lang.org/en/downloads/)
     * [Mac installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
     * [Windows installer](http://rubyinstaller.org/)
 * Amazon EC2 or Openstack cloud account. CWB can be automatically installed on two VMs that must have a public IP address.
-    * Ensure that incoming and outgoing traffic is allowed for ssh (20), http (80), and https (433). In Amazon EC2, you can create a [security group](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) `cwb_web`.
+    * Ensure that incoming and outgoing traffic is allowed for ssh (20), http (80), and https (433). In Amazon EC2, you can create a [security group](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) `cwb-web`.
 
 
 1. Vagrant can be easily installed with the installer for your system from [https://www.vagrantup.com/downloads](https://www.vagrantup.com/downloads)
@@ -21,13 +21,13 @@ Read our paper [Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmark
 
 ```bash
 vagrant plugin install vagrant-omnibus; vagrant plugin install vagrant-aws;
-# Only for Openstack Cloud Deployment
+# Only for Deployment in the Openstack Cloud
 vagrant plugin install vagrant-openstack-plugin
 ```
 
 
 ## Initial Installation and Configuration
-1. Checkout repository and install Ruby dependencies for administration tasks.
+1. Checkout repository and install Ruby dependencies for administration tasks (may take ~10-20 minutes).
 
     ```bash
     git clone https://github.com/sealuzh/cloud-workbench; cd cloud-workbench; bundle install --gemfile=Gemfile_Admin;
@@ -112,7 +112,7 @@ WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server 
 10. Once the CWB Server completed provisioning (may take 30-50 minutes depending on the chosen instance!), reprovision once to successfully complete the configuration (may take 2-10 minutes).
 
     ```bash
-    cd ../../../install/production
+    d ../../../install/aws/
     vagrant provision cwb_server
     ```
 
@@ -125,7 +125,7 @@ Requires a Ruby on Rails development environment and checkout of the project. Ma
 
 
 ### Initial configuration
-1. Update the IP address of the cwb-server in `production.rb`
+1. Update the IP address of the cwb-server in `production.rb` (sets default password `demo`)
 
     ```bash
     vim ~/git/cloud-workbench/config/deploy/production.rb
@@ -134,12 +134,14 @@ Requires a Ruby on Rails development environment and checkout of the project. Ma
 2. Check your settings with:
 
     ```bash
+    cd ~/git/cloud-workbench            # Navigate to $REPO_ROOT
     bundle exec cap production deploy:check
     ```
 
 ### Deploy
 
-Simply deploy new releases with: (may take 20 minutes for the first time)
+Simply deploy new releases with: (may take 20 minutes for the first time).
+You have to be in the $REPO_ROOT directory.
 
 ```bash
 bundle exec cap production deploy
