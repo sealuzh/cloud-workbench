@@ -13,6 +13,7 @@
 * Amazon EC2 or Openstack cloud account. CWB can be automatically installed on two VMs that must have a public IP address.
     * Ensure that incoming and outgoing traffic is allowed for ssh (20), http (80), and https (433). In Amazon EC2, you can create a [security group](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) `cwb_web`.
 
+
 1. Vagrant can be easily installed with the installer for your system from [https://www.vagrantup.com/downloads](https://www.vagrantup.com/downloads)
 2. The Vagrant plugins can be installed with this one-liner:
 
@@ -41,16 +42,27 @@ vagrant plugin install vagrant-openstack-plugin
     ```
 
 3. Complete the configurations in `Vagrantfile` and `config.yml.secret`.
+
+    ```bash
+    vim Vagrantfile
+    vim config.yml.secret
+    ```
+
 4. Start automated installation and configuration.
 WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server and one for the CWB Server. Make sure you terminate the VMs after usage in order to avoid unnecessary expenses.
 
     ```bash
     vagrant up --provider=aws          # Amazon EC2 Cloud
     vagrant up --provider=openstack    # Openstack Cloud
-    vagrant up`                        # Virtualbox (default provider)
+    vagrant up                         # Virtualbox (default provider)
     ```
 
-5. Update the CHEF_SERVER_IP in `config.yml.secret` by filling in the public IP address of your cloud provider (e.g. find out via the Amazon web interface).
+5. Update the CHEF_SERVER_IP in `config.yml.secret` by filling in the public IP address assigned by your cloud provider (e.g. find out via the Amazon web interface).
+
+    ```bash
+    vim config.yml.secret
+    ```
+
 6. Once the Chef Server completed provisioning (may take 5-10 minutes) with `INFO: Report handlers complete`, setup the Chef Server authentication:
     1. Go to `https://CHEF_SERVER_IP` and accept the self-signed certificate
     2. Login with the default username (`admin`) and password (`p@ssw0rd1`). You might want to change the default password immediately.
