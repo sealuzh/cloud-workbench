@@ -30,7 +30,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "chef_client", id: "chef_client" do |chef|
     # NOTE: Make sure to include the 'recipe[benchmark]'
     #       if you use chef.run_list = [...] which is NOT RECOMMENDED
-    chef.add_recipe "recipe[fio-benchmark@0.3.0]"
+    # Version number is optional
+    chef.add_recipe "fio-benchmark"
     # NOTE: Do NOT use the ["benchmark"] attribute namespace for your own attributes
     #       It is highly recommended to use the name of the cookbook as the attribute namespace.
     chef.json =

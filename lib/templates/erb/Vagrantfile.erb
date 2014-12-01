@@ -92,9 +92,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # MUST be unique in scope of all benchmarks
     chef.node_name = chef_node_name
 
-    chef.run_list = [
-      "recipe[benchmark]"
-    ]
+    chef.add_recipe "benchmark"
   end
 end
 
