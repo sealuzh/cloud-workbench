@@ -1,4 +1,4 @@
-# This may also be provided via data bag. But since a parameter passing mechanism
+# This may also be provided via data bag. But because a parameter passing mechanism
 # between the cloud-benchmarking-server and Vagrant is required on per benchmark
 # basis anyway this should be solved the same way.
 # default["benchmark"]["server-ip"] = nil # No useful default value possible
@@ -37,8 +37,14 @@ default["benchmark"]["provider_instance_id"] = ""
 
 
 ### Supported providers
+# Timeout for metadata query requests
+default["benchmark"]["timeout"] = "2"
+
+# Amazon EC2 Cloud (aws)
 default["benchmark"]["providers"]["aws"]["name"] = "aws"
 # Instance id used by Vagrant to identify a VM. Example: 'i-6dd73b2d'
-default["benchmark"]["providers"]["aws"]["instance_id_request"] = "wget -q -O - http://169.254.169.254/latest/meta-data/instance-id"
+default["benchmark"]["providers"]["aws"]["instance_id_request"] = "wget -q -T #{node["benchmark"]["timeout"]} -O - http://169.254.169.254/latest/meta-data/instance-id"
+
+# Google Compute Engine (google)
 default["benchmark"]["providers"]["google"]["name"] = "google"
-default["benchmark"]["providers"]["google"]["instance_id_request"] = "curl 'http://metadata.google.internal/computeMetadata/v1/instance/attributes/vagrant_id' -H 'Metadata-Flavor: Google'"
+default["benchmark"]["providers"]["google"]["instance_id_request"] = "curl 'http://metadata.google.internal/computeMetadata/v1/instance/attributes/vagrant_id' -H 'Metadata-Flavor: Google' --max-time=#{node["benchmark"]["timeout"]}"
