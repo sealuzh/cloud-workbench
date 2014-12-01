@@ -1,7 +1,7 @@
 #!<%= @ruby %>
 
-require './benchmark_helper'
-require './fio_log_parser'
+require_relative 'benchmark_helper'
+require_relative 'fio_log_parser'
 
 RESULT_FILE = 'fio_results.csv'
 FIO_LOG_FILE = '<%= @fio_log %>'

@@ -1,68 +1,61 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
+# This Vagrantfile is an example to be used with CWB. It does not work standalone.
+#
+# The following variables are available
+# benchmark_name: Name of the benchmark definition from the web interface
+# benchmark_name_sanitized: benchmark_name where all non-word-characters are replaced with an underscore '_'
+# benchmark_id: The unique benchmark definition identifier
+# execution_id: The unique benchmark execution identifier
+# chef_node_name: The default node name used for Chef client provisioning
+# tag_name: The default tag name set as aws name tag
 
-require 'securerandom'
-require 'chef'
+# NOTE: The automatically generated content inserted before influences the line numbers
+#       that are displayed in the log files. Just calculate -100 to get your actual line number.
 
-Chef::Config.from_file(File.join(ENV['HOME'], '.chef', 'knife.rb'))
-
-VAGRANTFILE_API_VERSION = "2"
-
+# VAGRANTFILE_API_VERSION = "2"  # Already initialized before
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "aws"
-  config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
-  config.vm.hostname = "fio-benchmark"
-
   # AWS EC2 provider
   config.vm.provider :aws do |aws, override|
-    # AWS authentication
-    aws.access_key_id = ENV['AWS_ACCESS_KEY']
-    aws.secret_access_key = ENV['AWS_SECRET_KEY']
-    
     # AWS instance configuration
     aws.region = "eu-west-1"
-    aws.region_config "eu-west-1" do |region|
-      region.ami = "ami-51e91b26" # Official Ubuntu 12.04 image from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
-      region.keypair_name = ENV['EC2_KEYPAIR']
-    end
-    override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
+    # Official Ubuntu 14.04 LTS image for eu-west-1 from Canonical:
+    #  https://cloud-images.ubuntu.com/locator/ec2/
+    aws.ami = "ami-896c96fe"
     override.ssh.username = "ubuntu"
     aws.instance_type = "t1.micro"
-    aws.security_groups = ["default"]
-    aws.tags = {
-      'Name' => 'CloudBenchmarking-FIO'
-     }
+    # Add other security groups separated by spaces.
+    # Example: %w(default my_own_group)
+    aws.security_groups = %w(default)
+    # A default tag name is set that you may override.
+    # aws.tags = {
+    #   'Name' => tag_name
+    # }
+    aws.block_device_mapping = [
+      {
+          'DeviceName' => "/dev/sda1",
+          'VirtualName' => "root",
+          'Ebs.VolumeSize' => 20,
+          'Ebs.DeleteOnTermination' => true
+      }
+    ]
   end
 
-  #vagrant omnibus plugin that installs Chef with a bundled Ruby: https://github.com/schisamo/vagrant-omnibus
-  # Exploit Ruby include to move infrastructure stuff to out. Use plugin detection.
-  config.omnibus.chef_version = :latest
-
-  # Chef provisioning
-  config.vm.provision "chef_client" do |chef|
-    chef.log_level = :info
-    # Put the client.rb in /etc/chef such that the chef-client can be run via "sudo chef-client" without specifying the path
-    chef.provisioning_path = "/etc/chef"
-    chef.chef_server_url = Chef::Config[:chef_server_url]
-    chef.validation_key_path = Chef::Config[:validation_key]
-    
-    # May use 6-digit random string to generate unique node names since Chef nodes MUST have unique names with: SecureRandom.hex(3)
-    # MUST be unique in scope of all benchmarks!
-    chef.node_name = "#{config.vm.hostname}-#{SecureRandom.hex(3)}"
-    
-    chef.run_list = [
-      "recipe[benchmark]",
-      "recipe[fio-benchmark@0.2.0]"
-    ]
-
-    chef.json = {
+  # Chef client provisioning
+  config.vm.provision "chef_client", id: "chef_client" do |chef|
+    # NOTE: Make sure to include the 'recipe[benchmark]'
+    #       if you use chef.run_list = [...] which is NOT RECOMMENDED
+    # Optional version number possible: "fio-benchmark@0.3.1"
+    chef.add_recipe "fio-benchmark"
+    # NOTE: Do NOT use the ["benchmark"] attribute namespace for your own attributes
+    #       It is highly recommended to use the name of the cookbook as the attribute namespace.
+    chef.json =
+    {
       "fio" => {
-        "metric_definition_id" => 1
+        "metric_definition_id" => "seq. write",
+        "config" => {
+          "size" => "1g",
+          "refill_buffers" => "1"
+        }
       }
     }
-    
-    # Cleanup when vm gets destroyed: Does not work due to bug https://github.com/mitchellh/vagrant/issues/2476
-    # chef.delete_node = true
-    # chef.delete_client = true
   end
 end

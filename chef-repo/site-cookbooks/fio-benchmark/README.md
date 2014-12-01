@@ -60,13 +60,16 @@ config.vm.provision "chef_client" do |chef|
   ...
   chef.json = {
     'fio' => {
-      'version' => '1.99.5'
+      'version' => '1.99.5',
+      'config' => {
+        'size' => '100m'
+      }
     }
   }
 
-  chef.run_list = [
-    'recipe[fio-benchmark::default@0.3.0]'
-  ]
+  # Version number is optional
+  # Make sure the dependency to the 'benchmark' cookbook is fulfilled (automatically handled by CWB)
+  chef.add_recipe 'fio-benchmark@0.3.0'
   ...
 end
 ```

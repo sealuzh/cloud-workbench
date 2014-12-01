@@ -1,5 +1,13 @@
 # fio-benchmark CHANGELOG
 
+
+## 0.3.1
+
+[Joel Scheuner] - 2014-12-01
+
+* Add sample Vagrantfiles for aws (for use with CWB) and virtualbox (standalone)
+* Improve README
+
 ##0.3.0
 
 [Joel Scheuner] - 2014-06-19

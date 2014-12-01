@@ -1,7 +1,3 @@
-#
-# Cookbook Name:: fio-benchmark
-# Recipe:: default
-#
 RUBY = "#{Chef::Config.embedded_dir}/bin/ruby"
 
 include_recipe "fio-benchmark::install_#{node['fio']['install_method']}"
