@@ -1,5 +1,7 @@
 # Cloud WorkBench (CWB)
 
+Read our paper [Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmarking](http://arxiv.org/abs/1408.4565) (preprint: to appear in CloudCom14) for further details.
+
 
 ## Requirements
 * [Git](http://git-scm.com/)
@@ -76,52 +78,64 @@ WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server 
 
     6. Go to `https://CHEF_SERVER_IP/clients/chef-validator/edit`, enable "Private Key", and click "Save Client"
     7. Copy this private key and paste it into `chef_validator.pem`
-6. Configure Chef `knife` and Berkshelf `berks` tools
-    1. Move `knife.rb` to `~/.chef/knife.rb` and `config.json` to `~/.berkshelf/config.json`
+7. Configure Chef `knife` and Berkshelf `berks` tools
+    1. Update `CHEF_SERVER` and `REPO_ROOT` within `knife.rb`
 
         ```bash
-        mkdir ~/.berkshelf; mkdir ~/.chef; mv config.json ~/.berkshelf/config.json; mv knife.rb ~/.chef/knife.rb;
+        vim knife.rb
         ```
-
-    2. Update `CHEF_SERVER_IP` and `REPO_ROOT` within this file
-    3. The following command should work now:
+    
+    2. Move `knife.rb` to `~/.chef/knife.rb` and `config.json` to `~/.berkshelf/config.json`
 
         ```bash
-        knife node list
+        mkdir ~/.chef; mv knife.rb ~/.chef/knife.rb;
+        mkdir ~/.berkshelf; mv config.json ~/.berkshelf/config.json;
         ```
 
-7. Configure the IP address of the CWB Server on the Chef Server (alternatively via the Chef server web interface)
+8. Configure the IP address of the CWB Server on the Chef Server (alternatively via the Chef server web interface)
 
     ```bash
     knife data bag create benchmark
-    cd ../chef-repo/data_bags/benchmark
+    cd ../../chef-repo/data_bags/benchmark
     # Update the `CWB_SERVER_IP` in `workbench_server.json`
+    vim workbench_server.json
     # Upload data bag item with:
     knife data bag from file benchmark workbench_server.json
     ```
 
-8. Upload cookbooks to the Chef Server (alternatively with knife cookbook upload)
+9. Upload cookbooks to the Chef Server (alternatively with knife cookbook upload)
 
     ```bash
     cd ../../site-cookbooks/fio-benchmark; berks install; berks upload;
     ```
 
-9. Once the CWB Server completed provisioning (may take 30-50 minutes depending on the chosen instance!), reprovision with `vagrant provision` (may take 2-10 minutes).
-10. Deploy Rails application (see below)
+10. Once the CWB Server completed provisioning (may take 30-50 minutes depending on the chosen instance!), reprovision once to successfully complete the configuration (may take 2-10 minutes).
+
+    ```bash
+    cd ../../../install/production
+    vagrant provision cwb_server
+    ```
+
+11. Deploy Rails application (see below)
 
 
 ## Deployment
 
-Requires a Ruby on Rails development environment and checkout of the project. Make sure you completed step 1 of the `Initial Installation and Configuration` section.
+Requires a Ruby on Rails development environment and checkout of the project. Make sure you completed step 1 of the section `Initial Installation and Configuration`.
 
-### Initial configuration (for private repositories only)
-1. Ensure you have added your private key to your ssh-agent for secure remote git checkout. For more information see https://help.github.com/articles/using-ssh-agent-forwarding.
-    1. Allow agent forwarding in `~/.ssh/config`
-    2. Make sure you have added your ssh key to the agent with `ssh-add path/to/your/private-ssh-key`
-    3. Check whether your key is added with `ssh-add -L`
-2. Ensure you have added the corresponding public key to the config in `install/${YOUR_PROVIDER}/config.yml.secret`
-3. If you are not using `~/.ssh/id_rsa`, update "ssh_options" accordingly in `${REPO_ROOT}/config/deploy/demo.rb`
-4. Check your settings with `bundle exec cap production deploy:check`
+
+### Initial configuration
+1. Update the IP address of the cwb-server in `production.rb`
+
+    ```bash
+    vim ~/git/cloud-workbench/config/deploy/production.rb
+    ```
+
+2. Check your settings with:
+
+    ```bash
+    bundle exec cap production deploy:check
+    ```
 
 ### Deploy
 
@@ -341,11 +355,20 @@ Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-co
 
 For development and testing purpose, CWB can be locally installed into 2 Virtualbox VMs in an automated manner (see $REPO_ROOT/virtualbox directory). However, due to missing public IP configurations, CWB does not work properly (i.e. results cannot be submitted). Make sure you have installed [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
 
-The Vagrant plugin [vagrant-cachier (1.1.0)](https://github.com/fgrehm/vagrant-cachier) can speed up development by serving as a cache for chef, apt, gem, etc.
+The Vagrant plugin [vagrant-cachier](https://github.com/fgrehm/vagrant-cachier) can speed up development by serving as a cache for chef, apt, gem, etc.
 
 ```bash
 vagrant plugin install vagrant-cachier
 ```
+
+### Configure Deployment for Private Repositories
+1. Ensure you have added your private key to your ssh-agent for secure remote git checkout. For more information see https://help.github.com/articles/using-ssh-agent-forwarding.
+    1. Allow agent forwarding in `~/.ssh/config`
+    2. Make sure you have added your ssh key to the agent with `ssh-add path/to/your/private-ssh-key`
+    3. Check whether your deploy key is added with `ssh-add -L`
+2. Ensure you have added the corresponding public key to the config in `install/${YOUR_PROVIDER}/config.yml.secret`
+3. If you are not using `~/.ssh/id_rsa`, update "ssh_options" accordingly in `${REPO_ROOT}/config/deploy/production.rb`
+4. Check your settings with `bundle exec cap production deploy:check`
 
 ## Limitations
 
