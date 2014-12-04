@@ -1,0 +1,38 @@
+#!<%= @ruby %>
+
+require_relative 'benchmark_helper'
+
+CLI_OPTIONS = <%= @cli_options %>
+METRIC_DEFINITION_ID = '<%= @metric_definition_id %>'
+CPU = '<%= @cpu %>'
+REPETITIONS = <%= @repetitions %>
+THREADS = <%= @threads %>
+TOTAL_TIME_REGEX = /total time:\s*(\d*.\d*s)/
+
+def flatten_cli_options(options)
+  cli_options = ''
+  options.each do |key, value|
+    cli_options << "--#{key}"
+    cli_options << "=#{value}" unless value.to_s.empty?
+    cli_options << ' ';
+  end
+  cli_options
+end
+
+def extract_time(result)
+  TOTAL_TIME_REGEX.match(result)[1]
+end
+
+begin
+  BenchmarkHelper.submit_metric('cpu', '0', CPU)
+  REPETITIONS.times do |t|
+    command = "sysbench #{flatten_cli_options(CLI_OPTIONS)} --num-threads=#{THREADS} run"
+    result = `#{command}`
+    time = extract_time(result)
+    BenchmarkHelper.submit_metric(METRIC_DEFINITION_ID, t, time)
+  end
+    BenchmarkHelper.notify_postprocessing_completed
+rescue => error
+  puts "FAILED_ON_RUNNING: #{error.message}"
+  BenchmarkHelper.notify_benchmark_completed(false, error.message)
+end
