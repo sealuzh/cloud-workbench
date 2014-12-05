@@ -2,8 +2,9 @@ source 'https://rubygems.org'
 ruby '2.1.1'
 #ruby-gemset=cloud_benchmarking
 
-# Import admin Gemfile (handling chef and deployment)
-Dir.glob(File.join(File.dirname(__FILE__), 'Gemfile_Admin')) do |gemfile|
+# Import Gemfile that handles tooling (i.e. Chef and deployment)
+GEMFILE = File.join(File.dirname(__FILE__), 'Gemfile.tools')
+Dir.glob(GEMFILE) do |gemfile|
     eval(IO.read(gemfile), binding)
 end
 
