@@ -2,7 +2,7 @@
 # Cookbook Name:: rsyslog
 # Recipe:: server
 #
-# Copyright 2009-2013, Opscode, Inc.
+# Copyright 2009-2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,5 +40,5 @@ end
 file "#{node['rsyslog']['config_prefix']}/rsyslog.d/remote.conf" do
   action   :delete
   notifies :reload, "service[#{node['rsyslog']['service_name']}]"
-  only_if  { ::File.exists?("#{node['rsyslog']['config_prefix']}/rsyslog.d/remote.conf") }
+  only_if  { ::File.exist?("#{node['rsyslog']['config_prefix']}/rsyslog.d/remote.conf") }
 end

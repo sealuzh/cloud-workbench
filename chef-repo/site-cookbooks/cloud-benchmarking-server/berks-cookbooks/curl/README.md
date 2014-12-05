@@ -1,60 +1,32 @@
-[![Build Status](https://travis-ci.org/retr0h/cookbook-curl.png?branch=master)](https://travis-ci.org/retr0h/cookbook-curl)
-[![Dependency Status](https://gemnasium.com/retr0h/cookbook-curl.png)](https://gemnasium.com/retr0h/cookbook-curl)
-
-Description
-============
+# Description
 
 Installs/Configures curl
 
-Requirements
-============
+# Requirements
 
-* Chef 11
+## Platform:
 
-Attributes
-==========
+* Centos
+* Debian
+* Fedora
+* Redhat
+* Ubuntu
 
-* `default['curl']['libcurl_packages']` - A list of libcurl packages to install.
+## Cookbooks:
 
-Usage
-=====
+*No dependencies defined*
 
-```json
-"run_list": [
-    "recipe[curl]"
-]
-```
+# Attributes
 
-default
--------
+* `node['curl']['libcurl_packages']` -  Defaults to `%w(curl-devel)`.
 
-Installs/Configures curl
+# Recipes
 
-libcurl
--------
+* curl::default - Installs/Configures curl
+* curl::libcurl - Install/Configure libcurl packages
 
-Install/Configure libcurl packages
+# License and Maintainer
 
-Testing
-=======
+Maintainer:: John Dewey (<john@dewey.ws>)
 
-    $ rake
-
-License and Author
-==================
-
-Author:: John Dewey (<john@dewey.ws>)
-
-Copyright 2012-2014, John Dewey
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+License:: Apache 2.0

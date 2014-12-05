@@ -1,11 +1,11 @@
-Cross Platform Cookbook
+Mysql chef gem Cookbook
 =======================
 
-Making custom Chef resource cross platform.
+Making custom Chef resource mysql chef gem.
 
 Scope
 -----
-This cookbook is concerned with cross platform things.
+This cookbook is concerned with mysql chef gem.
 This cookbook does not do everything.
 
 Requirements
@@ -15,57 +15,56 @@ Requirements
 
 Resources / Providers
 ---------------------
-### crossplat_thing
+### mysql_chef_gem
 
-The `crossplat_thing` resource configures things.
+The `mysql_chef_gem` resource configures things.
 
 ### Example
 
-    crossplat_thing 'default' do
-      action :create
+    mysql_chef_gem 'default' do
+      action :install
     end
 
 Recipes
 -------
-### crossplat::default
+### mysql_chef_gem::default
 
-This recipe calls a `crossplat_thing` resource, passing parameters
+This recipe calls a `mysql_chef_gem` resource, passing parameters
 from node attributes.
 
 Usage
 -----
-The `crossplat::server` recipe and `crossplat_thing` resources are
-designed to do things.
+The  `crossplat_thing` resource is designed to do things.
 
 ### run_list
 
-Include `'recipe[crossplat::default]'`
+Include `'recipe[mysql_chef_gem::default]'`
 
 ### Wrapper cookbook
 
-    node.default['crossplat']['an_attribute'] = 'Chef'
+    node.default['mysql_chef_gem']['an_attribute'] = 'Chef'
 
-    include_recipe 'crossplat::default'
+    include_recipe 'mysql_chef_gem::default'
 
     ruby_block 'wat' do
-      notifies :restart, crossplat_thing[wat]'
+      notifies :restart, mysql_chef_gem[wat]'
     end
 
 ### Used directly in a recipe
 
-    crossplat_thing 'wat' do
+    mysql_chef_gem 'wat' do
       action :create
     end
 
     ruby_block 'wat' do
-      notifies :restart, crossplat_thing[wat]'
+      notifies :restart, mysql_chef_gem[wat]'
     end
 
 Attributes
 ----------
 
-    default['crossplat']['resource_name'] = 'default'
-    default['crossplat']['an_attribute'] = 'chef'
+    default['mysql_chef_gem']['resource_name'] = 'default'
+    default['mysql_chef_gem']['an_attribute'] = 'chef'
 
 License & Authors
 -----------------

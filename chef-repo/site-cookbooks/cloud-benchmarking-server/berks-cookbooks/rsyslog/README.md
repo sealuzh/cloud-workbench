@@ -9,9 +9,9 @@ Requirements
 ------------
 ### Platforms
 Tested on:
-- Ubuntu 9.10
-- Ubuntu 10.04
-- RedHat 6.3
+- Ubuntu 10.04+
+- RedHat 5+
+- Fedora 19+
 - OmniOS r151006c
 
 ### Other
@@ -23,6 +23,7 @@ Attributes
 See `attributes/default.rb` for default values.
 
 * `node['rsyslog']['log_dir']` - If the node is an rsyslog server, this specifies the directory where the logs should be stored.
+* `node['rsyslog']['working_dir']` - The temporary working directory where messages are buffered
 * `node['rsyslog']['server']` - Determined automaticaly and set to true on the server.
 * `node['rsyslog']['server_ip']` - If not defined then search will be used to determine rsyslog server. Default is `nil`.  This can be a string or an array.
 * `node['rsyslog']['server_search']` - Specify the criteria for the server search operation. Default is `role:loghost`.
@@ -42,16 +43,17 @@ See `attributes/default.rb` for default values.
 * `node['rsyslog']['logs_to_forward']` -  Specifies what logs should be sent to the remote rsyslog server. Default is all ( \*.\* ).
 * `node['rsyslog']['default_log_dir']` - log directory used in `50-default.conf` template, defaults to `/var/log`
 * `node['rsyslog']['default_facility_logs']` - Hash containing log facilities and destinations used in `50-default.conf` template.
-* `node['rsyslog']['default_facility_logs']` - Hash containing log facilities and destinations used in 50-default.conf template.
 * `node['rsyslog']['default_file_template']` - The name of a pre-defined log format template (ie - RSYSLOG_FileFormat), used for local log files.
 * `node['rsyslog']['rate_limit_interval']` - Value of the $SystemLogRateLimitInterval configuration directive in `/etc/rsyslog.conf`. Default is nil, leaving it to the platform default.
 * `node['rsyslog']['rate_limit_burst']` - Value of the $SystemLogRateLimitBurst configuration directive in `/etc/rsyslog.conf`. Default is nil, leaving it to the platform default.
+* `node['rsyslog']['action_queue_max_disk_space']` - Max amount of disk space the disk-assisted queue is allowed to use ([more info](http://www.rsyslog.com/doc/queues.html)).
 * `node['rsyslog']['enable_tls']` - Whether or not to enable TLS encryption.  When enabled, forces protocol to `tcp`. Default is `false`.
 * `node['rsyslog']['tls_ca_file']` - Path to TLS CA file. Required for both server and clients.
 * `node['rsyslog']['tls_certificate_file']` - Path to TLS certificate file. Required for server, optional for clients.
 * `node['rsyslog']['tls_key_file']` - Path to TLS key file. Required for server, optional for clients.
 * `node['rsyslog']['tls_auth_mode']` - Value for `$InputTCPServerStreamDriverAuthMode`/`$ActionSendStreamDriverAuthMode`, determines whether client certs are validated. Defaults to `anon` (no validation).
 * `node['rsyslog']['use_local_ipv4']` - Whether or not to make use the remote local IPv4 address on cloud systems when searching for servers (where available).  Default is 'false'.
+* `node['rsyslog']['additional_directives']` - Hash of additional directives and their values to place in the main rsyslog config file
 
 Recipes
 -------
@@ -194,12 +196,12 @@ This section details "quick development" steps. For a detailed explanation, see 
 
 License & Authors
 -----------------
-- Author:: Joshua Timberman (<joshua@opscode.com>)
+- Author:: Joshua Timberman (<joshua@getchef.com>)
 - Author:: Denis Barishev (<denz@twiket.com>)
-- Author:: Tim Smith (<tsmith@limelight.com>)
+- Author:: Tim Smith (<tsmith84@gmail.com>)
 
 ```text
-Copyright:: 2009-2013, Opscode, Inc
+Copyright:: 2009-2014, Chef Software, Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

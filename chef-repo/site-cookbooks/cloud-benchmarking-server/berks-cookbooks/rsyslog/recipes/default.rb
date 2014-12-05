@@ -2,7 +2,7 @@
 # Cookbook Name:: rsyslog
 # Recipe:: default
 #
-# Copyright 2009-2013, Opscode, Inc.
+# Copyright 2009-2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,10 +31,10 @@ directory "#{node['rsyslog']['config_prefix']}/rsyslog.d" do
   mode  '0755'
 end
 
-directory '/var/spool/rsyslog' do
+directory node['rsyslog']['working_dir']  do
   owner 'root'
   group 'root'
-  mode  '0755'
+  mode  '0700'
 end
 
 # Our main stub which then does its own rsyslog-specific

@@ -1,6 +1,6 @@
 {
   "name": "mysql-chef_gem",
-  "version": "0.0.2",
+  "version": "0.0.5",
   "description": "Provides the mysql_chef_gem resource",
   "long_description": "",
   "maintainer": "Chef Software, Inc.",

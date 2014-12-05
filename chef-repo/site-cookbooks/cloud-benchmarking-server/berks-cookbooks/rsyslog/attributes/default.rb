@@ -2,7 +2,7 @@
 # Cookbook Name:: rsyslog
 # Attributes:: default
 #
-# Copyright 2009-2013, Opscode, Inc.
+# Copyright 2009-2014, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,9 @@
 # limitations under the License.
 #
 
+default['rsyslog']['default_log_dir']           = '/var/log'
 default['rsyslog']['log_dir']                   = '/srv/rsyslog'
+default['rsyslog']['working_dir']               = '/var/spool/rsyslog'
 default['rsyslog']['server']                    = false
 default['rsyslog']['use_relp']                  = false
 default['rsyslog']['relp_port']                 = 20_514
@@ -39,11 +41,13 @@ default['rsyslog']['default_remote_template']   = nil
 default['rsyslog']['rate_limit_interval']       = nil
 default['rsyslog']['rate_limit_burst']          = nil
 default['rsyslog']['enable_tls']                = false
+default['rsyslog']['action_queue_max_disk_space'] = '1G'
 default['rsyslog']['tls_ca_file']               = nil
 default['rsyslog']['tls_certificate_file']      = nil
 default['rsyslog']['tls_key_file']              = nil
 default['rsyslog']['tls_auth_mode']             = 'anon'
 default['rsyslog']['use_local_ipv4']            = false
+default['rsyslog']['additional_directives'] = {}
 
 # The most likely platform-specific attributes
 default['rsyslog']['service_name']              = 'rsyslog'
@@ -52,31 +56,10 @@ default['rsyslog']['group']                     = 'adm'
 default['rsyslog']['priv_seperation']           = false
 default['rsyslog']['modules']                   = %w(imuxsock imklog)
 
-case node['platform']
-when 'ubuntu'
-  # syslog user introduced with natty package
-  if node['platform_version'].to_f < 10.10
-    default['rsyslog']['user'] = 'syslog'
-    default['rsyslog']['group'] = 'adm'
-    default['rsyslog']['priv_seperation'] = true
-  end
-when 'arch'
-  default['rsyslog']['service_name'] = 'rsyslogd'
-when 'smartos'
-  default['rsyslog']['config_prefix'] = '/opt/local/etc'
-  default['rsyslog']['modules'] = %w(immark imsolaris imtcp imudp)
-  default['rsyslog']['group'] = 'root'
-when 'omnios'
-  default['rsyslog']['service_name'] = 'system/rsyslogd'
-  default['rsyslog']['modules'] = %w(immark imsolaris imtcp imudp)
-  default['rsyslog']['group'] = 'root'
-end
-
-# 50-default template attributes
-
-default['rsyslog']['default_log_dir'] = '/var/log'
+# platform family specific attributes
 case node['platform_family']
-when 'rhel'
+when 'rhel', 'fedora'
+  default['rsyslog']['working_dir'] = '/var/lib/rsyslog'
   # format { facility => destination }
   default['rsyslog']['default_facility_logs'] = {
     '*.info;mail.none;authpriv.none;cron.none' => "#{node['rsyslog']['default_log_dir']}/messages",
@@ -87,6 +70,11 @@ when 'rhel'
     'uucp,news.crit' => "#{node['rsyslog']['default_log_dir']}/spooler",
     'local7.*' => "#{node['rsyslog']['default_log_dir']}/boot.log"
   }
+  # RHEL >= 7 and Fedora >= 19 use journald in systemd
+  if node['platform_version'].to_i == 7 || node['platform_version'].to_i >= 19
+    default['rsyslog']['modules'] = %w(imuxsock imjournal)
+    default['rsyslog']['additional_directives'] = { 'OmitLocalLogging' => 'on', 'IMJournalStateFile' => 'imjournal.state' }
+  end
 else
   # format { facility => destination }
   default['rsyslog']['default_facility_logs'] = {
@@ -107,4 +95,27 @@ else
     '*.emerg' => '*',
     'daemon.*;mail.*;news.err;*.=debug;*.=info;*.=notice;*.=warn' => '|/dev/xconsole'
   }
+end
+
+# platform specific attributes
+case node['platform']
+when 'ubuntu'
+  # syslog user introduced with natty package
+  if node['platform_version'].to_f >= 11.04
+    default['rsyslog']['user'] = 'syslog'
+    default['rsyslog']['group'] = 'adm'
+    default['rsyslog']['priv_seperation'] = true
+  end
+when 'arch'
+  default['rsyslog']['service_name'] = 'rsyslogd'
+when 'smartos'
+  default['rsyslog']['config_prefix'] = '/opt/local/etc'
+  default['rsyslog']['modules'] = %w(immark imsolaris imtcp imudp)
+  default['rsyslog']['group'] = 'root'
+when 'omnios'
+  default['rsyslog']['service_name'] = 'system/rsyslogd'
+  default['rsyslog']['modules'] = %w(immark imsolaris imtcp imudp)
+  default['rsyslog']['group'] = 'root'
+when 'suse'
+  default['rsyslog']['service_name'] = 'syslog'
 end

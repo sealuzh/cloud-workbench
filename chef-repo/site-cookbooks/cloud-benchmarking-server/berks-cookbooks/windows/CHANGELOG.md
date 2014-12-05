@@ -2,6 +2,22 @@ windows Cookbook CHANGELOG
 =======================
 This file is used to list changes made in each version of the windows cookbook.
 
+v1.34.8 (2014-10-31)
+--------------------
+- [Issue 137] (https://github.com/opscode-cookbooks/windows/issues/137) - windows_path resource breaks with ruby 2.x
+
+v1.34.6 (2014-09-22)
+--------------------
+- [Chef-2009] (https://github.com/opscode/chef/issues/2009) - Patch to work around a regression in [Chef](https://github.com/opscode/chef)
+
+v1.34.2 (2014-08-12)
+--------------------
+- [Issue 99](https://github.com/opscode-cookbooks/windows/issues/99) - Remove rubygems / Internet wmi-lite dependency (PR #108)
+
+v1.34.0 (2014-08-04)
+--------------------
+- [Issue 99](https://github.com/opscode-cookbooks/windows/issues/99) - Use wmi-lite to fix Chef 11.14.2 break in rdp-ruby-wmi dependency
+
 v1.32.1 (2014-07-15)
 --------------------
 - Fixes broken cookbook release
