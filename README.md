@@ -27,10 +27,10 @@ vagrant plugin install vagrant-openstack-plugin
 
 
 ## Initial Installation and Configuration
-1. Checkout repository and install Ruby dependencies for administration tasks (may take ~10-20 minutes).
+1. Checkout repository and install the toolchain dependencies for administration tasks (may take ~10-20 minutes).
 
     ```bash
-    git clone https://github.com/sealuzh/cloud-workbench; cd cloud-workbench; bundle install --gemfile=Gemfile_Admin;
+    git clone https://github.com/sealuzh/cloud-workbench; cd cloud-workbench; bundle install --gemfile=Gemfile.tools --binstubs;
     # Check knife installation
     knife help
     ```
@@ -66,7 +66,7 @@ WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server 
     ```
 
 6. Once the Chef Server completed provisioning (may take 5-10 minutes) with `INFO: Report handlers complete`, setup the Chef Server authentication:
-    1. Go to `https://CHEF_SERVER_IP` and accept the self-signed certificate
+    1. Go to `https://CHEF_SERVER_IP` and accept the self-signed certificate [(or configure the Chef server appropriately)](https://docs.getchef.com/server_security.html)
     2. Login with the default username (`admin`) and password (`p@ssw0rd1`). You might want to change the default password immediately.
     3. Go to `https://CHEF_SERVER_IP/clients/new` and create a new client with the name `cwb-server` and enabled admin flag.
     4. Copy the generated private key and paste it into `chef_client_key.pem`
@@ -106,7 +106,7 @@ WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server 
 9. Upload cookbooks to the Chef Server (alternatively with knife cookbook upload)
 
     ```bash
-    cd ../../site-cookbooks/fio-benchmark; berks install; berks upload;
+    cd ../../site-cookbooks/sysbench; berks install; berks upload;
     ```
 
 10. Once the CWB Server completed provisioning (may take 30-50 minutes depending on the chosen instance!), reprovision once to successfully complete the configuration (may take 2-10 minutes).
@@ -135,7 +135,7 @@ Requires a Ruby on Rails development environment and checkout of the project. Ma
 
     ```bash
     cd ~/git/cloud-workbench            # Navigate to $REPO_ROOT
-    bundle exec cap production deploy:check
+    bin/cap production deploy:check
     ```
 
 ### Deploy
@@ -144,11 +144,11 @@ Simply deploy new releases with: (may take 20 minutes for the first time).
 You have to be in the $REPO_ROOT directory.
 
 ```bash
-bundle exec cap production deploy
+bin/cap production deploy
 ```
 
 NOTE: This will restart the background job workers and should fail if there are currently running jobs.
-Worker restarts can be avoided by setting a variable in the deploy config `set(:live, true) ` or passing it with `bundle exec cap production deploy live=true`.
+Worker restarts can be avoided by setting a variable in the deploy config `set(:live, true)` or passing it with `bin/cap production deploy live=true`.
 This is especially useful for GUI only updates
 
 NOTE: Active schedules will be temporarily (for a very short time) disabled during deployment.
@@ -202,7 +202,7 @@ vagrant destroy chef_server
 ### Chef Server
 
 * CWB Server configuration
-    1. `cd ${REPO_ROOT}/${YOUR_PROVIDER}`
+    1. `cd ${REPO_ROOT}/install/${YOUR_PROVIDER}`
     2. `vim config.yml.secret`
     3. Update the Chef Server IP
     4. `vagrant provision cwb_server` to apply the changes (make sure you have set the `APPLY_SECRET_CONFIG` flag to true in the Vagrantfile)
@@ -242,7 +242,7 @@ Capistrano tasks can be used to easily conduct management tasks from the worksta
 
 Print a list of all tasks including their description with `cap -T`
 
-Always include the environment e.g. `cap production TASK_NAME`
+Always use the `bin/` prefix and include the environment e.g. `bin/cap production TASK_NAME`
 
 #### Custom
 
@@ -355,7 +355,7 @@ Example from http://engineering.sharethrough.com/blog/2013/08/10/greater-test-co
 
 ### Development Environment
 
-For development and testing purpose, CWB can be locally installed into 2 Virtualbox VMs in an automated manner (see $REPO_ROOT/virtualbox directory). However, due to missing public IP configurations, CWB does not work properly (i.e. results cannot be submitted). Make sure you have installed [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
+For development and testing purpose, CWB can be locally installed into 2 Virtualbox VMs in an automated manner (see `$REPO_ROOT/install/virtualbox`). However, due to missing public IP configurations, CWB does not work properly (i.e. results cannot be submitted). Make sure you have installed [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
 
 The Vagrant plugin [vagrant-cachier](https://github.com/fgrehm/vagrant-cachier) can speed up development by serving as a cache for chef, apt, gem, etc.
 
@@ -370,7 +370,7 @@ vagrant plugin install vagrant-cachier
     3. Check whether your deploy key is added with `ssh-add -L`
 2. Ensure you have added the corresponding public key to the config in `install/${YOUR_PROVIDER}/config.yml.secret`
 3. If you are not using `~/.ssh/id_rsa`, update "ssh_options" accordingly in `${REPO_ROOT}/config/deploy/production.rb`
-4. Check your settings with `bundle exec cap production deploy:check`
+4. Check your settings with `bin/cap production deploy:check`
 
 ## Limitations
 
