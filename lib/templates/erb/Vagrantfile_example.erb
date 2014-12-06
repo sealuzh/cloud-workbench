@@ -16,7 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #  https://cloud-images.ubuntu.com/locator/ec2/
     aws.ami = "ami-896c96fe"
     override.ssh.username = "ubuntu"
-    aws.instance_type = "t2.micro"
+    aws.instance_type = "t1.micro"
     # Add other security groups separated by spaces.
     # Example: %w(default my_own_group)
     # aws.security_groups = %w(default)
