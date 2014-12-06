@@ -17,5 +17,6 @@
 # limitations under the License.
 #
 
+include_recipe 'benchmark::install'
 include_recipe 'benchmark::providers'
 include_recipe 'benchmark::core'

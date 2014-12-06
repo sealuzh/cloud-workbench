@@ -1,10 +1,17 @@
+# 0.3.1 (2014-12-06)
+
+* Fix implicit Chef gem dependencies (csv, rest_client) via explicit gem_package resources
+
+
 # 0.3.1 (2014-12-01)
 
 * Add timeout for metadata requests
 
+
 # 0.3.0 (2014-06)
 
 * Add Google Compute Engine support
+
 
 # 0.2.0 (2014-05)
 
