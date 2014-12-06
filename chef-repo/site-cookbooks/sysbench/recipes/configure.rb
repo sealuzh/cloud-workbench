@@ -13,6 +13,6 @@ template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
       cli_options: node['sysbench']['cli_options'],
       repetitions: node['sysbench']['repetitions'],
       threads: node['cpu']['total'] || node['sysbench']['default_threads'],
-      cpu_model: node['cpu']['model_name'],
+      cpu_model: node['cpu']['0']['model_name'],
   )
 end
