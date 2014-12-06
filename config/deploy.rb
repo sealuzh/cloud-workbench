@@ -1,4 +1,3 @@
-require 'active_support/core_ext/string'
 # Capistrano 3 announcements: http://capistranorb.com/2013/06/01/release-announcement.html
 # Capistrano 3 docs: https://github.com/capistrano/capistrano
 # For path helpers see: 'Capistrano::DSL::Paths' in capistrano/lib/capistrano/dsl/paths.rb
@@ -90,7 +89,7 @@ set :tests, []
 # ============
 # Live deploy via: "cap production deploy live=true"
 namespace :deploy do
-  if ENV['live'].present?
+  unless ENV['live'].to_s.empty?
     set :live, ( ENV['live'].to_s == 'true' ? true : false )
   end
   # Make sure we're deploying what we think we're deploying
