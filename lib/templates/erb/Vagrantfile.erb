@@ -82,7 +82,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   <% end %>
 
   # Chef client provisioner
-  config.omnibus.chef_version = :latest
+  # :latest would install Chef client version 12 that breaks some cookbooks
+  # (e.g. postgresql: https://github.com/hw-cookbooks/postgresql/issues/212 )
+  config.omnibus.chef_version = '11.16.4'
   config.vm.provision "chef_client", id: "chef_client" do |chef|
     chef.log_level = :info
     chef.provisioning_path = "/etc/chef"
