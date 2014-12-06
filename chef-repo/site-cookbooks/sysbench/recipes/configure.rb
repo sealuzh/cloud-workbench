@@ -9,8 +9,10 @@ template "#{node['benchmark']['dir']}/#{node['benchmark']['start']}" do
   mode "0755"
   variables(
       ruby: RUBY,
+      metric_definition_id: node['sysbench']['metric_definition_id'],
       cli_options: node['sysbench']['cli_options'],
       repetitions: node['sysbench']['repetitions'],
-      threads: node['cpu']['total'] || node['sysbench']['default_threads']
+      threads: node['cpu']['total'] || node['sysbench']['default_threads'],
+      cpu_model: node['cpu']['model_name'],
   )
 end

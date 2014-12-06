@@ -4,7 +4,7 @@ require_relative 'benchmark_helper'
 
 CLI_OPTIONS = <%= @cli_options %>
 METRIC_DEFINITION_ID = '<%= @metric_definition_id %>'
-CPU = '<%= @cpu %>'
+CPU_MODEL = '<%= @cpu_model %>'
 REPETITIONS = <%= @repetitions %>
 THREADS = <%= @threads %>
 TOTAL_TIME_REGEX = /total time:\s*(\d*.\d*s)/
@@ -24,7 +24,7 @@ def extract_time(result)
 end
 
 begin
-  BenchmarkHelper.submit_metric('cpu', '0', CPU)
+  BenchmarkHelper.submit_metric('cpu', '0', CPU_MODEL)
   REPETITIONS.times do |t|
     command = "sysbench #{flatten_cli_options(CLI_OPTIONS)} --num-threads=#{THREADS} run"
     result = `#{command}`
