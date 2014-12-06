@@ -1,2 +1,1 @@
-gem_package "csv"
-gem_package "rest_client"
+gem_package "rest-client"
