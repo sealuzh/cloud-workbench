@@ -16,6 +16,5 @@ def local_cookbook(name)
 end
 
 local_cookbook 'cbench-databox'
-local_cookbook 'cbench-nodejs'
 local_cookbook 'cbench-rackbox'
 local_cookbook 'vagrant'
