@@ -14,10 +14,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.json =
         {
             "sysbench" => {
+                "repetitions" => "2",
                 "cli_options" => {
                     "test" => "cpu",
-                    "repetitions" => "2",
-                    "cpu-max-prime" => "10000",
+                    "cpu-max-prime" => "200",
                 }
             }
         } # END json
