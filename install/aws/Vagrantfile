@@ -31,7 +31,9 @@ VAGRANTFILE_API_VERSION = '2'
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Detects vagrant-omnibus plugin
   if Vagrant.has_plugin?('vagrant-omnibus')
-    config.omnibus.chef_version = :latest
+    # :latest caused an issue (2014-12-06) with the postgresql cookbook:
+    # https://github.com/hw-cookbooks/postgresql/issues/212
+    config.omnibus.chef_version = '11.16.4'
   else
     puts "FATAL: Vagrant-omnibus plugin not detected. Please install the plugin with\n
                  'vagrant plugin install vagrant-omnibus' from any other directory\n
@@ -70,7 +72,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       config.vm.provider :aws do |aws, override|
         aws.tags = {
-            'Name' => 'CWB-chef-server'
+            'Name' => 'CWB-Chef-Server-Production'
         }
       end
 
@@ -97,7 +99,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.provider :aws do |aws, override|
       aws.tags = {
-          'Name' => 'CWB-server'
+          'Name' => 'CWB-Server-Production'
       }
     end
     
