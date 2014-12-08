@@ -1,0 +1,54 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+def ubuntu_box(config, version)
+  config.vm.box = "opscode-ubuntu-#{version}" 
+  config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-#{version}_chef-provisionerless.box"
+end
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  ubuntu_box(config, '12.04')
+
+  # Configurate the virtual machine to use 3GB of RAM
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "3072"]
+  end
+
+  # Setup private network
+  config.vm.network :private_network, ip: '33.33.33.50'
+  # Forward the Rails server default port to the host (alternative)
+  #config.vm.network :forwarded_port, guest: 3000, host: 3000
+
+  # Use Chef Solo to provision our virtual machine
+  config.vm.provision :chef_solo do |chef|
+    # Automatically serve cookbooks via vagrant-berkshelf
+    # vagrant plugin install vagrant-berkshelf
+
+    chef.add_recipe "apt"
+    chef.add_recipe "nodejs"
+    chef.add_recipe "ruby_build"
+    chef.add_recipe "rbenv::user"
+    chef.add_recipe "rbenv::vagrant"
+    chef.add_recipe "vim"
+
+    # Install Ruby 2.1.1 and Bundler
+    chef.json =
+    {
+      
+      rbenv: {
+        user_installs: [{
+          user: 'vagrant',
+          rubies: ["2.1.1"],
+          global: "2.1.1",
+          gems: {
+            "2.1.1" => [
+              { name: "bundler" }
+            ]
+          }
+        }]
+      },
+      
+    }
+  end
+end

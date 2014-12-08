@@ -1,0 +1,24 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+def ubuntu_box(config, version)
+  config.vm.box = "opscode-ubuntu-#{version}" 
+  config.vm.box_url = "http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-#{version}_chef-provisionerless.box"
+end
+
+VAGRANTFILE_API_VERSION = "2"
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  ubuntu_box(config, '14.04')
+
+  # Configurate the virtual machine to use 3GB of RAM
+  config.vm.provider :virtualbox do |vb|
+    #vb.customize ["modifyvm", :id, "--memory", "3072"]
+    vb.memory = 4096
+    vb.cpus = 2
+  end
+
+  # Setup private network
+  config.vm.network :private_network, ip: '33.33.33.60'
+  # Forward the Rails server default port to the host (alternative)
+  #config.vm.network :forwarded_port, guest: 3000, host: 3000
+end
