@@ -3,6 +3,13 @@
 Read the pre-print of our paper (to appear in CloudCom14) [Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmarking](http://arxiv.org/abs/1408.4565) for further details.
 
 
+## Screenshots
+
+![Benchmark Definition](/docs/img/cwb-edit-benchmark.png?raw=true "Edit Benchmark Definition")
+
+![Benchmark Execution](/docs/img/cwb-show-execution.png?raw=true "Show Benchmark Execution")
+
+
 ## Requirements
 * [Git](http://git-scm.com/)
 * [Vagrant (1.6.5)](https://www.vagrantup.com/downloads)
@@ -12,17 +19,16 @@ Read the pre-print of our paper (to appear in CloudCom14) [Cloud WorkBench – I
     * [Installation](https://www.ruby-lang.org/en/downloads/)
     * [Mac installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
     * [Windows installer](http://rubyinstaller.org/)
-* Amazon EC2 or Openstack cloud account. CWB can be automatically installed on two VMs that must have a public IP address.
+* [Amazon EC2](http://aws.amazon.com/en/ec2/) or Openstack cloud account. CWB can be automatically installed on two VMs that must have a public IP address.
+    * Make sure you have created a private SSH key to log into cloud VM instances and uploaded the corresponding public key to the provider.
     * Ensure that incoming and outgoing traffic is allowed for ssh (20), http (80), and https (433). In Amazon EC2, you can create a [security group](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) `cwb-web`.
 
 
 1. Vagrant can be easily installed with the installer for your system from [https://www.vagrantup.com/downloads](https://www.vagrantup.com/downloads)
-2. The Vagrant plugins can be installed with this one-liner:
+2. The Vagrant plugins can be installed with this one-liner (for Openstack, use ``vagrant plugin install vagrant-openstack-plugin`` instead):
 
 ```bash
 vagrant plugin install vagrant-omnibus; vagrant plugin install vagrant-aws;
-# Only for Deployment in the Openstack Cloud
-vagrant plugin install vagrant-openstack-plugin
 ```
 
 
@@ -210,7 +216,7 @@ vagrant destroy chef_server
     1. `vim $HOME/.chef/knife.rb`
     2. Update the IP address of the Chef Server here
 
-For more information about the Chef Server see:  http://docs.opscode.com/chef/manage_server_open_source.html
+For more information about the Chef Server see:  https://docs.chef.io/chef/manage_server_open_source.html
 
 ### CWB Server
 
@@ -268,13 +274,24 @@ Always use the `bin/` prefix and include the environment e.g. `bin/cap productio
 
 ### Getting Started
 
-1. Create a Chef cookbook with [`knife cookbook create NAME`](http://docs.getchef.com/knife_cookbook.html#create) or [`berks cookbook NAME`](http://berkshelf.com/). Alternatively create a VM image wherein your benchmark is already installed.
-    * See the README.md in chef-repo/site-cookbooks for more information about how to get started with creating a cookbook.
-    * Chef resources docs: http://docs.opscode.com/chef/resources.html
-2. Upload the Cookbook with [`knife cookbook upload`](http://docs.opscode.com/knife_cookbook.html#upload) or [`berks upload`](http://berkshelf.com/) to the Chef-Server
+1. Create a Chef cookbook with one of the commands below. Instead, you can also create a VM image wherein your benchmark is already installed.
+    * Chef resources docs: https://docs.chef.io/chef/resources.html
+    
+    ```bash
+    [`berks cookbook NAME`](http://berkshelf.com/)  # or alternatively:
+    [`knife cookbook create NAME`](http://docs.getchef.com/knife_cookbook.html#create)
+    ```
+    
+2. Upload the Cookbook to the Chef server with:
+
+    ```bash
+    [`berks upload`](http://berkshelf.com/)
+    [`knife cookbook upload`](https://docs.chef.io/knife_cookbook.html#upload)
+    ```
+
 3. Create a new Benchmark-Definition with the web interface of Cloud WorkBench under `BENCHMARK > Definitions > Create New Benchmark`
 4. Create a metric definition for the new benchmark
-5. Configure your Benchmark within the Vagranfile (e.g. region, vm image, instance type,) and add your Chef recipe via `chef.add_recipe 'fio@0.1.0'` (The @version is optional)
+5. Configure your Benchmark within the Vagranfile (e.g. region, vm image, instance type,) and add your Chef recipe via `chef.add_recipe 'sysbench@0.1.0'` (The @version is optional)
 6. Start or schedule the benchmark via the CWB web interface.
 
 
@@ -372,11 +389,6 @@ vagrant plugin install vagrant-cachier
 3. If you are not using `~/.ssh/id_rsa`, update "ssh_options" accordingly in `${REPO_ROOT}/config/deploy/production.rb`
 4. Check your settings with `bin/cap production deploy:check`
 
-## Limitations
-
-* No technical user authentication and authorization (VMs can interact with CWB without authentication)
-* Chef cookbooks must be uploaded to the Chef server
-* Log files from created VM instances are not accessible via web interface and get lost on VM shutdown
 
 
 ## Manual Installation
