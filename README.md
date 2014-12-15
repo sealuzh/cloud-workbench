@@ -20,7 +20,7 @@ Read the pre-print of our paper (to appear in CloudCom14) [Cloud WorkBench – I
     * [Mac installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
     * [Windows installer](http://rubyinstaller.org/)
 * [Amazon EC2](http://aws.amazon.com/en/ec2/) or Openstack cloud account. CWB can be automatically installed on two VMs that must have a public IP address.
-    * Make sure you have created a private SSH key to log into cloud VM instances and uploaded the corresponding public key to the provider.
+    * Make sure you have created a private SSH key to log into cloud VM instances and uploaded the corresponding public key to the cloud provider.
     * Ensure that incoming and outgoing traffic is allowed for ssh (20), http (80), and https (433). In Amazon EC2, you can create a [security group](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html) `cwb-web`.
 
 
@@ -275,18 +275,21 @@ Always use the `bin/` prefix and include the environment e.g. `bin/cap productio
 ### Getting Started
 
 1. Create a Chef cookbook with one of the commands below. Instead, you can also create a VM image wherein your benchmark is already installed.
+    * Have a look at the ``sysbench`` example under ``$REPO_ROOT/chef-repo/site-cookbooks/sysbench``
     * Chef resources docs: https://docs.chef.io/chef/resources.html
+    * [berks](http://berkshelf.com/)
+    * [knife](http://docs.getchef.com/knife_cookbook.html#create)
     
     ```bash
-    [`berks cookbook NAME`](http://berkshelf.com/)  # or alternatively:
-    [`knife cookbook create NAME`](http://docs.getchef.com/knife_cookbook.html#create)
+    berks cookbook NAME
+    knife cookbook create NAME  # alternatively
     ```
     
 2. Upload the Cookbook to the Chef server with:
 
     ```bash
-    [`berks upload`](http://berkshelf.com/)
-    [`knife cookbook upload`](https://docs.chef.io/knife_cookbook.html#upload)
+    berks upload
+    knife cookbook upload  # alternatively
     ```
 
 3. Create a new Benchmark-Definition with the web interface of Cloud WorkBench under `BENCHMARK > Definitions > Create New Benchmark`
