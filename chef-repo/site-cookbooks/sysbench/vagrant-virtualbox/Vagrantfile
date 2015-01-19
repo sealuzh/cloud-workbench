@@ -54,12 +54,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         "group" => "vagrant"
       },
       "sysbench" => {
-        "repetitions" => "2",
         "cli_options" => {
           "test" => "cpu",
-          "cpu-max-prime" => "200",
+          "cpu-max-prime" => "10000",
         }
       }
-    } # END json
+    }
   end
 end

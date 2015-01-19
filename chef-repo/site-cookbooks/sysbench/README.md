@@ -1,6 +1,7 @@
 # sysbench-cookbook
 
 Installs the sysbench benchmark and provides utilities to integrate with Cloud WorkBench.
+Currently, only the CPU test mode is supported.
 
 ## Supported Platforms
 

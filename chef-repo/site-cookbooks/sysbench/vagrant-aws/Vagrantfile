@@ -1,11 +1,9 @@
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  # AWS EC2 provider
   config.vm.provider :aws do |aws, override|
     aws.region = "eu-west-1"
     # Official Ubuntu 14.04 LTS image for eu-west-1 from Canonical:
     #  https://cloud-images.ubuntu.com/locator/ec2/
     aws.ami = "ami-896c96fe"
-    override.ssh.username = "ubuntu"
     aws.instance_type = "t1.micro"
   end
 
@@ -14,12 +12,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.json =
         {
             "sysbench" => {
-                "repetitions" => "2",
                 "cli_options" => {
                     "test" => "cpu",
-                    "cpu-max-prime" => "200",
+                    "cpu-max-prime" => "10000",
                 }
             }
-        } # END json
+        }
   end
 end
