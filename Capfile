@@ -2,7 +2,7 @@
 require 'capistrano/setup'
 
 # See sv man pages for more commands: http://smarden.org/runit/sv.8.html
-RUNIT_COMMANDS = %w(status up down once exit restart)
+RUNIT_COMMANDS = %w(status up down once exit restart force-shutdown force-restart)
 
 # Includes default deployment tasks
 require 'capistrano/deploy'
