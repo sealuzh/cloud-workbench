@@ -29,7 +29,7 @@ class VirtualMachineInstance < ActiveRecord::Base
 
   private
 
-    def create_event!(type)
-      benchmark_execution.events.create_with_name!(type)
+    def create_event!(name)
+      benchmark_execution.events.create_with_name!(name)
     end
 end

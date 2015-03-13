@@ -73,7 +73,7 @@ class BenchmarkSchedule < ActiveRecord::Base
     end
 
     def check_and_update_system_crontab_after_update
-      if active_changed? || active && cron_expression_changed?
+      if active_changed? || (active && cron_expression_changed?)
         BenchmarkSchedule.update_system_crontab
       end
     end
