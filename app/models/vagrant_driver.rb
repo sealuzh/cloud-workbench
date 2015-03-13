@@ -17,12 +17,21 @@ class VagrantDriver
   def detect_vm_instances
     virtual_machines = []
     Pathname(machines_dir).each_child do |machine|
-      base = machine.basename.to_s
-      if machine.directory? && base != CURRENT_DIR && base != PARENT_DIR
-        virtual_machines.concat(detect_vms_with_role(base))
+      if machine.directory? && !meta_directory?(role(machine))
+        virtual_machines.concat(detect_vms_with_role(role(machine)))
       end
     end
     virtual_machines
+  end
+  
+  # The meta directories "." and ".." shouln't be detected as roles
+  def meta_directory?(role)
+    role == CURRENT_DIR ||
+    role == PARENT_DIR
+  end
+
+  def role(machine)
+    machine.basename.to_s
   end
 
   def detect_vms_with_role(role)
