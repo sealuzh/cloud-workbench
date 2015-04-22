@@ -30,6 +30,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # VM
   config.vm.hostname = "benchmark"
 
+  # Butcher plugin that removes Chef nodes and clients
+  if Vagrant.has_plugin?("vagrant-butcher")
+    config.butcher.verify_ssl = false
+  end
+
   <% if provider_name == 'aws' %>
   # AWS box
   config.vm.box = "aws"
@@ -94,7 +99,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # MUST be unique in scope of all benchmarks
     chef.node_name = chef_node_name
 
-    chef.add_recipe "benchmark"
+    chef.add_recipe "cwb"
+    # TODO: Externalize hack this into cwb-server cookbook (use Ohai attribute) => generating too much load might result in 24h ip blocking!!!
+    chef.json = {
+      'cwb' => {
+        'server' => '<%= `curl http://ipecho.net/plain` %>'
+      }
+    }
   end
 end
 
