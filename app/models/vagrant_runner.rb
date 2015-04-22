@@ -15,8 +15,8 @@ class VagrantRunner
 
   def ssh_command(executable)
     %x( cd "#{@vagrant_dir}" &&
-        vagrant ssh -- "cd #{Rails.application.config.vm_benchmark_dir};
-                        nohup ./#{executable} > /dev/null 2>&1 &" )
+        vagrant ssh -- "cd '#{Rails.application.config.vm_benchmark_dir}' &&
+                        nohup './#{executable}' > /dev/null 2>> '#{Rails.application.config.vm_error_log_file}' < /dev/null &" )
     $?.success?
   end
 end

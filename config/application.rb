@@ -51,6 +51,7 @@ module CloudBenchmarking
     config.vm_benchmark_dir = '/usr/local/cloud-benchmark'
     config.vm_start_runner = 'start_runner.sh'
     config.vm_start_postprocessing = 'stop_and_postprocess_runner.sh'
+    config.vm_error_log_file = 'cwb_runner_stderr.log' # Only covers the cwb runner scripts.
 
     # String of supported providers that Vagrant uses as directory name (should be the same as used with vagrant up)
     config.supported_providers = %w(aws google)
