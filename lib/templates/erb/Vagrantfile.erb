@@ -99,7 +99,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # MUST be unique in scope of all benchmarks
     chef.node_name = chef_node_name
 
-    chef.add_recipe "cwb"
+    chef.run_list %w(cwb)
     # TODO: Externalize hack this into cwb-server cookbook (use Ohai attribute) => generating too much load might result in 24h ip blocking!!!
     chef.json = {
       'cwb' => {
