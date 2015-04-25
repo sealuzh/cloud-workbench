@@ -71,7 +71,6 @@ class BenchmarkExecution < ActiveRecord::Base
     vagrantfile = @file_system.evaluate_vagrantfile
     @file_system.create_vagrantfile(vagrantfile)
     reprovision_with(@driver)
-    Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
   rescue => e
     shutdown_after_failure_timeout
   end

@@ -31,7 +31,8 @@ module BenchmarkExecutionsHelper
   end
 
   def confirm_reprovision_msg
-    { confirm: "This action will reprovision the virtual machines again and continue with starting the benchmark." }
+    { confirm: "This action will reprovision the virtual machines again.
+                Notice that you have to manually start the benchmark if desired." }
   end
 
   def confirm_enable_keep_alive_execution_msg
