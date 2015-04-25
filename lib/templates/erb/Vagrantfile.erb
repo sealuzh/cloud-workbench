@@ -1,19 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-### Utilities
-class ::Hash
-  def deep_merge!(second)
-    result = deep_merge(second)
-    self.replace(result)
-  end
-
-  def deep_merge(second)
-    merger = proc { |key, v1, v2| Hash === v1 && Hash === v2 ? v1.merge(v2, &merger) : v2 }
-    self.merge(second, &merger)
-  end
-end
-
 ### Variables
 benchmark_name = '<%= benchmark_name %>'
 benchmark_name_sanitized = '<%= benchmark_name_sanitized %>'
@@ -27,7 +14,6 @@ vagrant_id = "cwb-#{benchmark_id}-#{execution_id}"
 ### Default configuration
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  # VM
   config.vm.hostname = "benchmark"
 
   # Butcher plugin that removes Chef nodes and clients
@@ -49,8 +35,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
     override.ssh.username = "ubuntu"
 
-    # Official Ubuntu 13.10 image from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = "ami-b72ee8c0"
+    # Official Ubuntu 14.04 LTS AMI (pv:ebs)
+    # from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
+    aws.ami = "ami-3196f646"
 
     # AWS default instance configuration
     aws.instance_ready_timeout = 240 # Default is 120
@@ -89,7 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Chef client provisioner
   # :latest would install Chef client version 12 that breaks some cookbooks
   # (e.g. postgresql: https://github.com/hw-cookbooks/postgresql/issues/212 )
-  config.omnibus.chef_version = :latest
+  config.omnibus.chef_version = '12.2.1-1'
   config.vm.provision "chef_client", id: "chef_client" do |chef|
     chef.log_level = :info
     chef.provisioning_path = "/etc/chef"
@@ -108,8 +95,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
   end
 end
-
-
 
 ###### BEGIN custom Vagrantfile ######
 <%= vagrantfile %>
