@@ -1,14 +1,11 @@
 #!/usr/bin/env bash
 
-# Make sure you have berks installed. Run `bundle exec install --without production development test` to install the chef group from the project Gemfile.
-
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR
+BASEDIR=$(dirname $0)
+cd $BASEDIR
 
 BERKS_BIN=`which berks`
 if [ $? -ne 0 ]; then
-    echo 'You must install berkshelf:'
-    echo 'Run `bundle exec install --without production development test` within the project directory.'
+    echo 'You must install berkshelf. Checkout the ChefDK with integrated Berkshelf: https://downloads.chef.io/chef-dk/'
 else
     echo "Berkshelf installation detected:"
     echo "Using $BERKS_BIN"
