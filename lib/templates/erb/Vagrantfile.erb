@@ -90,7 +90,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # TODO: Externalize hack this into cwb-server cookbook (use Ohai attribute) => generating too much load might result in 24h ip blocking!!!
     chef.json = {
       'cwb' => {
-        'server' => '<%= `curl http://ipecho.net/plain` %>'
+        'server' => ENV['CWB_SERVER_IP']
       }
     }
   end
