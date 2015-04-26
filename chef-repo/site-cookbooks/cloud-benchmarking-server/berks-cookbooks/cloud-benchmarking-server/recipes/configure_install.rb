@@ -31,11 +31,3 @@ node.default['vagrant']['plugins'] = [
   ]
 node.default['vagrant']['plugins_user'] = 'apps'
 node.default['vagrant']['plugins_group'] = 'apps'
-
-include_recipe 'timezone-ii'
-include_recipe 'ntp'
-
-# Disable the default nginx site
-nginx_site 'default' do
-  enable false
-end

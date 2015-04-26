@@ -1,13 +1,15 @@
-app_user_home = node["appbox"]["apps_dir"]
-app_user = node["appbox"]["apps_user"]
-
 def detect_public_ip
-  `curl http://ipecho.net/plain`
+  cmd = Mixlib::ShellOut.new('curl http://ipecho.net/plain')
+  cmd.run_command
+  cmd.stdout
 rescue
   default_ip = node['ipaddress'] || 'localhost'
   Chef::Log.warn("Could not detect public ip. Using: #{default_ip}.")
   default_ip
 end
+
+app_user_home = node["appbox"]["apps_dir"]
+app_user = node["appbox"]["apps_user"]
 
 # .profile
 cwb_server_ip = detect_public_ip
@@ -17,10 +19,10 @@ template "#{app_user_home}/.profile" do
   owner app_user
   group app_user
   mode 0600
-  variables chef:   node["cloud-benchmarking-server"]["chef"],
+  variables(chef:   node["cloud-benchmarking-server"]["chef"],
             aws:    node["cloud-benchmarking-server"]["aws"],
             google: node["cloud-benchmarking-server"]["google"],
-            cwb_server_ip: cwb_server_ip,
+            cwb_server_ip: cwb_server_ip)
 end
 
 # Chef server config
