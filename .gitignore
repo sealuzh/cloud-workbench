@@ -48,3 +48,7 @@ doc/
 
 # Ignore secret install folder
 /install/*
+
+### Deployment
+config/deploy/production.rb
+config/deploy/staging.rb

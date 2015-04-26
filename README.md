@@ -47,7 +47,7 @@ vagrant plugin install vagrant-omnibus; vagrant plugin install vagrant-aws;
 
 
 ## Initial Installation and Configuration
-1. Checkout repository and install the toolchain dependencies for administration tasks (may take ~10-20 minutes).
+1. Checkout repository and install the toolchain dependencies for administration tasks (may take approximately 10-20 minutes).
 
     ```bash
     git clone https://github.com/sealuzh/cloud-workbench; cd cloud-workbench; bundle install --gemfile=Gemfile.tools --binstubs;
@@ -105,11 +105,11 @@ WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server 
         vim knife.rb
         ```
     
-    2. Move `knife.rb` to `~/.chef/knife.rb` and `config.json` to `~/.berkshelf/config.json`
+    2. Move `knife.rb` to `$HOME/.chef/knife.rb` and `config.json` to `$HOME/.berkshelf/config.json`
 
         ```bash
-        mkdir ~/.chef; mv knife.rb ~/.chef/knife.rb;
-        mkdir ~/.berkshelf; mv config.json ~/.berkshelf/config.json;
+        mkdir $HOME/.chef; mv knife.rb $HOME/.chef/knife.rb;
+        mkdir $HOME/.berkshelf; mv config.json $HOME/.berkshelf/config.json;
         ```
 
 8. Upload cookbooks to the Chef Server (alternatively with knife cookbook upload)
@@ -133,16 +133,17 @@ WARNING: This will acquire 2 VMs your configured cloud: one for the Chef Server 
 Requires a Ruby on Rails development environment and checkout of the project. Make sure you completed step 1 of the section `Initial Installation and Configuration`.
 
 ### Initial configuration
-1. Update the IP address of the cwb-server in `production.rb` (sets default password `demo`)
+1. Update the IP address of the cwb-server in `production.rb` (automatically configures the default password `demo`)
 
     ```bash
-    vim ~/git/cloud-workbench/config/deploy/production.rb
+    cd $HOME/git/cloud-workbench            # Navigate to $REPO_ROOT
+    cp config/deploy/production.example.rb config/deploy/production.rb
+    vim config/deploy/production.rb
     ```
 
 2. Check your settings with:
 
     ```bash
-    cd ~/git/cloud-workbench            # Navigate to $REPO_ROOT
     bin/cap production deploy:check
     ```
 
@@ -304,11 +305,11 @@ vagrant plugin install vagrant-cachier
 
 ### Configure Deployment for Private Repositories
 1. Ensure you have added your private key to your ssh-agent for secure remote git checkout. For more information see https://help.github.com/articles/using-ssh-agent-forwarding.
-    1. Allow agent forwarding in `~/.ssh/config`
+    1. Allow agent forwarding in `$HOME/.ssh/config`
     2. Make sure you have added your ssh key to the agent with `ssh-add path/to/your/private-ssh-key`
     3. Check whether your deploy key is added with `ssh-add -L`
 2. Ensure you have added the corresponding public key to the config in `install/${YOUR_PROVIDER}/config.yml.secret`
-3. If you are not using `~/.ssh/id_rsa`, update "ssh_options" accordingly in `${REPO_ROOT}/config/deploy/production.rb`
+3. If you are not using `$HOME/.ssh/id_rsa`, update "ssh_options" accordingly in `${REPO_ROOT}/config/deploy/production.rb`
 4. Check your settings with `bin/cap production deploy:check`
 
 
