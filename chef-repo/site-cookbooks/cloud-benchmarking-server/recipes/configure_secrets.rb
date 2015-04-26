@@ -1,7 +1,16 @@
 app_user_home = node["appbox"]["apps_dir"]
 app_user = node["appbox"]["apps_user"]
 
+def detect_public_ip
+  `curl http://ipecho.net/plain`
+rescue
+  default_ip = node['ipaddress'] || 'localhost'
+  Chef::Log.warn("Could not detect public ip. Using: #{default_ip}.")
+  default_ip
+end
+
 # .profile
+cwb_server_ip = detect_public_ip
 template "#{app_user_home}/.profile" do
   source "dot_profile.erb"
   backup false
@@ -10,7 +19,8 @@ template "#{app_user_home}/.profile" do
   mode 0600
   variables chef:   node["cloud-benchmarking-server"]["chef"],
             aws:    node["cloud-benchmarking-server"]["aws"],
-            google: node["cloud-benchmarking-server"]["google"]
+            google: node["cloud-benchmarking-server"]["google"],
+            cwb_server_ip: cwb_server_ip,
 end
 
 # Chef server config
