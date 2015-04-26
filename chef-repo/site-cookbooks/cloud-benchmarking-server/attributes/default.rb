@@ -51,6 +51,7 @@ default['vagrant']['url'] = 'https://dl.bintray.com/mitchellh/vagrant/vagrant_1.
 default['vagrant']['checksum'] = '0fc3259cf08b693e3383636256734513ee93bf258f8328efb64e1dde447aadbe'
 default['vagrant']['plugins'] = [
     { 'name' => 'vagrant-aws', 	   'version' =>  '0.5.0' },
+    { 'name' => 'vagrant-google',  'version' =>  '0.1.4' },
     { 'name' => 'vagrant-omnibus', 'version' =>  '1.4.1' },
     { 'name' => 'vagrant-butcher', 'version' =>  '2.2.0' },
   ]
