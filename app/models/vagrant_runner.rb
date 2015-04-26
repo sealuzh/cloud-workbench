@@ -14,8 +14,9 @@ class VagrantRunner
   end
 
   def ssh_command(executable)
+    # NOTE: We cannot use && between cd and nohup because this doesn't work together with non-blocking commands
     %x( cd "#{@vagrant_dir}" &&
-        vagrant ssh -- "cd '#{Rails.application.config.vm_benchmark_dir}' &&
+        vagrant ssh -- "cd '#{Rails.application.config.vm_benchmark_dir}';
                         nohup './#{executable}' >/dev/null 2>>'#{Rails.application.config.vm_error_log_file}' </dev/null &" )
     $?.success?
   end
