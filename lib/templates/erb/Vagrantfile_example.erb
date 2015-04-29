@@ -15,11 +15,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.ami = 'ami-3196f646'
     override.ssh.username = SSH_USERNAME
     aws.instance_type = 't1.micro'
-    # aws.security_groups = %w(default my_own_group)
   end
 
   config.vm.provision 'chef_client', id: 'chef_client' do |chef|
-    chef.add_recipe 'cli-benchmark@1.0.0'  # Version is optional
+    chef.add_recipe 'cli-benchmark@1.0.1'  # Version is optional
     chef.json =
     {
       'benchmark' =>  {
@@ -27,13 +26,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       },
       'cli-benchmark' => {
           'packages' => %w(sysbench),
-        # 'install' => 'echo "SUCCESS" > install.txt',
+          # Strive for idempotency here (i.e., multiple executions shouldn't fail)
+        # 'install' => [
+        #   'cd /usr/local',
+        #   'echo "This runs during installation." > install.txt',
+        # ],
         # 'pre_run' => 'echo "SUCCESS" > pre_run.txt',
           'run' => 'sysbench --test=cpu --cpu-max-prime=4000 run',
-          'regex' => 'total time:\s*(\d+\.\d+)s',
-          'metric' => 'time',
-      }
-    } # END json
+          'metrics' => {
+            # [name of the metric] => [regex to extract result from stdout],
+            'execution_time' => 'total time:\s*(\d+\.\d+)s',
+          },
+      },
+    }
   end
 end
 
