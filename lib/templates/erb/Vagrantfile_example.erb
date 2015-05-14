@@ -27,11 +27,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       'cli-benchmark' => {
           'packages' => %w(sysbench),
           # Strive for idempotency here (i.e., multiple executions shouldn't fail)
-        # 'install' => [
-        #   'cd /usr/local',
-        #   'echo "This runs during installation." > install.txt',
-        # ],
-        # 'pre_run' => 'echo "SUCCESS" > pre_run.txt',
+        # 'install' => 'cd /usr/local && echo "This runs during installation." > install.txt',
+        # 'pre_run' => 'echo "This runs immediately before execution" > pre_run.txt',
           'run' => 'sysbench --test=cpu --cpu-max-prime=4000 run',
           'metrics' => {
             # [name of the metric] => [regex to extract result from stdout],
