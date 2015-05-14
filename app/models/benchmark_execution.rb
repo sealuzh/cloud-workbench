@@ -8,6 +8,7 @@ class BenchmarkExecution < ActiveRecord::Base
     include EventsAsTraceableExtension
   end
   include EventStatusHelper
+  default_scope { order('created_at DESC') }
 
   def self.actives
     select { |execution| execution.active? }

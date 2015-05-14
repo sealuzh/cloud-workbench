@@ -3,6 +3,7 @@ class VirtualMachineInstance < ActiveRecord::Base
   validates :benchmark_execution, presence: true
   has_many :nominal_metric_observations, dependent: :destroy
   has_many :ordered_metric_observations, dependent: :destroy
+  default_scope { order('created_at DESC') }
 
   def complete_benchmark(continue, success = true)
     if success

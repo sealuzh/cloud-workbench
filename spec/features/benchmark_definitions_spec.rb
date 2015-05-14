@@ -1,12 +1,29 @@
 require 'spec_helper'
 
-feature "Benchmark definition management" do
+feature 'Benchmark definition management' do
   given(:user) { create(:user) }
   before { sign_in(user) }
 
-  scenario "Listing benchmark definitions" do
-    visit benchmark_definitions_path
-    page.should have_link('Create New Benchmark', href: new_benchmark_definition_path)
+  feature 'Listing benchmark definitions' do
+    scenario 'Should show a link to create a new benchmark' do
+      visit benchmark_definitions_path
+      page.should have_link('Create New Benchmark', href: new_benchmark_definition_path)
+    end
+
+    scenario 'Should list the definitions in reverse chronological order' do
+      first =  create(:benchmark_definition)
+      second = create(:benchmark_definition)
+      third = create(:benchmark_definition)
+      visit benchmark_definitions_path
+
+      within(:xpath, '//table/tbody/tr[1]/td[2]/a') do
+        page.should have_content(third.name)
+      end
+
+      within(:xpath, '//table/tbody/tr[3]/td[2]/a') do
+        page.should have_content(first.name)
+      end
+    end
   end
 
   feature "Creating a benchmark definition" do

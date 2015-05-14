@@ -35,6 +35,7 @@ class BenchmarkDefinition < ActiveRecord::Base
   # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
   validates :vagrantfile, presence: true
   before_save :ensure_name_integrity
+  default_scope { order('created_at DESC') }
 
   def virtual_machine_instances
     VirtualMachineInstance.where(benchmark_execution_id:
