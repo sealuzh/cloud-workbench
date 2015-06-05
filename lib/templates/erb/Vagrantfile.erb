@@ -77,7 +77,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = 'azure'
   config.vm.box_url = 'https://github.com/msopentech/vagrant-azure/raw/master/dummy.box'
 
-  config.vm.provider :azure do |azure, override|
+  azure_common = Proc.new do |azure, override|
     # Authentication
     azure.mgmt_endpoint = 'https://management.core.windows.net'
     azure.mgmt_certificate = ENV['AZURE_MGMT_CERTIFICATE']

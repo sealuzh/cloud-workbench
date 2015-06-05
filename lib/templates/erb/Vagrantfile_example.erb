@@ -46,7 +46,8 @@ end
 #   google.zone = 'europe-west1-a'
 # end
 
-# config.vm.provider :azure do |azure|
+# config.vm.provider :azure do |azure, override|
+#   azure_common.call(azure, override)
 #   azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04-LTS-amd64-server-20140414-en-us-30GB'
 #   azure.vm_user = SSH_USERNAME
 #   azure.vm_size = 'ExtraSmall'
