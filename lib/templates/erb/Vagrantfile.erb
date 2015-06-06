@@ -80,6 +80,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = 'azure'
   config.vm.box_url = 'https://github.com/msopentech/vagrant-azure/raw/master/dummy.box'
 
+  # Eager initialized variables (outside the lazy evaluated Proc)
+  vm_name = "cwb-#{execution_id}"
+  service_name = "#{vm_name}-service"
+  azure_id = "#{vm_name}@#{service_name}"
+
   azure_common = Proc.new do |azure, override|
     # Authentication
     azure.mgmt_endpoint = 'https://management.core.windows.net'
@@ -89,9 +94,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     azure.certificate_file = ENV['AZURE_CERTIFICATE_FILE']
 
     # Defaults
-    vm_name = "cwb-#{execution_id}"
-    service_name = "#{vm_name}-service"
-    azure_id = "#{vm_name}@#{service_name}"
     azure.vm_name = vm_name
     azure.cloud_service_name = service_name
     azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04-LTS-amd64-server-20140414-en-us-30GB'
