@@ -12,6 +12,7 @@ tag_name = "cwb-#{benchmark_name_sanitized}"
 # Private variables
 vagrant_id = "cwb-#{benchmark_id}-#{execution_id}"
 azure_common = nil # Make variable visible in global scope
+azure_id = nil
 
 ### Default configuration
 VAGRANTFILE_API_VERSION = "2"
@@ -88,7 +89,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     azure.certificate_file = ENV['AZURE_CERTIFICATE_FILE']
 
     # Defaults
-    azure.vm_name = "cwb-#{execution_id}"
+    vm_name = "cwb-#{execution_id}"
+    service_name = "#{vm_name}-service"
+    azure_id = "#{vm_name}@#{service_name}"
+    azure.vm_name = vm_name
+    azure.cloud_service_name = service_name
     azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04-LTS-amd64-server-20140414-en-us-30GB'
     azure.vm_user = 'ubuntu'
     azure.vm_size = 'ExtraSmall'
@@ -112,7 +117,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.run_list = %w(cwb)
     chef.json = {
       'cwb' => {
-        'server' => ENV['CWB_SERVER_IP']
+        'server' => ENV['CWB_SERVER_IP'],
+        'azure_id' => azure_id,
       }
     }
   end
