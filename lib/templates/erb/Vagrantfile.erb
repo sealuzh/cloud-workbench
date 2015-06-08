@@ -12,8 +12,10 @@ tag_name = "cwb-#{benchmark_name_sanitized}"
 # Private variables
 vagrant_id = "cwb-#{benchmark_id}-#{execution_id}"
 hostname = "cwb-#{execution_id}"
-azure_common = nil # Make variable visible in global scope
+# Make variables visible in global scope
+azure_common = nil
 azure_id = nil
+softlayer_id = nil
 
 ### Default configuration
 VAGRANTFILE_API_VERSION = "2"
@@ -103,6 +105,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     azure.vm_location = 'North Europe'
   end
   <% elsif provider_name == 'softlayer' %>
+  softlayer_id = "cwb-#{execution_id}"
+
   # Softlayer box
   config.vm.box = 'softlayer'
   config.vm.box_url = 'https://github.com/audiolize/vagrant-softlayer/raw/master/dummy.box'
@@ -137,7 +141,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.json = {
       'cwb' => {
         'server' => ENV['CWB_SERVER_IP'],
+        'provider_name' => '<%= provider_name %>',
         'azure_id' => azure_id,
+        'softlayer_id' => softlayer_id,
       }
     }
   end

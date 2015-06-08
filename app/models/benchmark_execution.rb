@@ -44,6 +44,17 @@ class BenchmarkExecution < ActiveRecord::Base
   def detect_and_create_vm_instances_with(driver)
     vm_instances = driver.detect_vm_instances
     vm_instances.each do |vm|
+      # HACK: Quick fix to experimentally support the softlayer provider
+      # Problem: CWB currently assumes that there is a way to detect the
+      # (Vagrant provider) id from within a VM
+      # Workaround: This quick fix uses a self-created id to identify the instance.
+      # Implication: Multi-VM benchmarks will show up the same instance id for each VM
+      # Future improvement: Must think about a generic VM identification solution in future as
+      # one cannot expect that the id used by the Vagrant provider (e.g., instance id for aws)
+      # is available within the VM itself (e.g., via metadata query API).
+      if vm[:provider_name] == 'softlayer'
+        vm[:provider_instance_id] = "cwb-#{self.id}"
+      end
       self.virtual_machine_instances.create(provider_name: vm[:provider_name],
                                             provider_instance_id: vm[:provider_instance_id],
                                             role: vm[:role])
