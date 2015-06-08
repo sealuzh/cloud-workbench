@@ -11,13 +11,14 @@ tag_name = "cwb-#{benchmark_name_sanitized}"
 
 # Private variables
 vagrant_id = "cwb-#{benchmark_id}-#{execution_id}"
+hostname = "cwb-#{execution_id}"
 azure_common = nil # Make variable visible in global scope
 azure_id = nil
 
 ### Default configuration
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.hostname = "benchmark"
+  config.vm.hostname = hostname
 
   config.ssh.username = 'ubuntu'
   config.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
