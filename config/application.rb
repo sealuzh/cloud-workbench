@@ -54,7 +54,7 @@ module CloudBenchmarking
     config.vm_error_log_file = 'cwb_runner_stderr.log' # Only covers the cwb runner scripts.
 
     # String of supported providers that Vagrant uses as directory name (should be the same as used with vagrant up)
-    config.supported_providers = %w(aws google azure)
+    config.supported_providers = %w(aws google azure softlayer)
 
     # Main paths
     config.storage = File.join(Rails.root, 'storage', Rails.env)
