@@ -107,6 +107,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = 'softlayer'
   config.vm.box_url = 'https://github.com/audiolize/vagrant-softlayer/raw/master/dummy.box'
 
+  config.ssh.username = 'root'
+
   config.vm.provider :softlayer do |sl|
     sl.username = ENV['SL_API_USERNAME']
     sl.api_key  = ENV['SL_API_KEY']
