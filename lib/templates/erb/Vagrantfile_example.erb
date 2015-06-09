@@ -8,12 +8,13 @@
 
 SSH_USERNAME = 'ubuntu'
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.ssh.username = SSH_USERNAME
+
   config.vm.provider :aws do |aws, override|
     aws.region = 'eu-west-1'
     # Official Ubuntu 14.04 LTS (pv:ebs) image for eu-west-1 from Canonical:
     #  https://cloud-images.ubuntu.com/locator/ec2/
     aws.ami = 'ami-3196f646'
-    override.ssh.username = SSH_USERNAME
     aws.instance_type = 't1.micro'
   end
 
@@ -41,7 +42,6 @@ end
 
 # config.vm.provider :google do |google, override|
 #   google.image = 'debian-7-wheezy-v20140619'
-#   override.ssh.username = SSH_USERNAME
 #   google.machine_type = 'n1-standard-1'
 #   google.zone = 'europe-west1-a'
 # end
