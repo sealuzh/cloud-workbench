@@ -40,10 +40,10 @@ end
 group :development, :test do
   gem 'sqlite3'
   gem 'faker'
-  gem 'rspec-rails', '~> 2.14.2'
+  gem 'rspec-rails', '~> 2.99'
   gem 'fuubar' # RSpec progress bar formatter
   gem 'guard' # NOTE: this is necessary in newer versions
-  gem 'guard-rspec', '~> 4.2.8'
+  gem 'guard-rspec', '~> 4.6.4'
   gem 'simplecov', require: false
 
   gem 'spork-rails', '~> 4.0.0'
