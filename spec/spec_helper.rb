@@ -28,6 +28,7 @@ Spork.prefork do
   ActiveRecord::Migration.maintain_test_schema!
 
   RSpec.configure do |config|
+    config.infer_spec_type_from_file_location!
     config.treat_symbols_as_metadata_keys_with_true_values = true
 
     # ## Mock Framework
