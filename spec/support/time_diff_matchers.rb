@@ -26,6 +26,10 @@ module TimeDiff
       def description
         "check whether the result of two consecutive calls remains the same over time"
       end
+
+      def supports_block_expectations?
+        true
+      end
     end
 
     class IncreaseOverTime
@@ -45,6 +49,10 @@ module TimeDiff
 
       def description
         "check whether the result of two consecutive calls increases over time"
+      end
+
+      def supports_block_expectations?
+        true
       end
     end
 
