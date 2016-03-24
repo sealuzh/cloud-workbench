@@ -1,6 +1,6 @@
-# More info at https://github.com/guard/guard#readme
 require 'active_support/inflector'
 
+# Guard docs: https://github.com/guard/guard
 guard 'livereload' do
   watch(%r{app/views/.+\.(erb|haml|slim)$})
   watch(%r{app/helpers/.+\.rb})
@@ -10,24 +10,9 @@ guard 'livereload' do
   watch(%r{(app|vendor)(/assets/\w+/(.+\.(css|js|html|png|jpg|less))).*}) { |m| "/assets/#{m[3]}" }
 end
 
-guard 'spork', :cucumber_env => { 'RAILS_ENV' => 'test' },
-               :rspec_env    => { 'RAILS_ENV' => 'test' } do
-  watch('config/application.rb')
-  watch('config/environment.rb')
-  watch('config/environments/test.rb')
-  watch(%r{^config/initializers/.+\.rb$})
-  watch('Gemfile.lock')
-  watch('spec/spec_helper.rb') { :rspec }
-  watch('spec/factories.rb')   { :rspec }
-  watch(%r{^spec/factories/.+$}) { :rspec }
-  watch(%r{^spec/support/(.+)\.rb$}) { :rspec }
-  watch('test/test_helper.rb') { :test_unit }
-  watch(%r{features/support/}) { :cucumber }
-end
-
 guard :rspec, all_after_pass: false,
               all_on_start: true,
-              cmd: 'rspec --drb --format Fuubar' do
+              cmd: 'rspec' do
   watch(%r{^spec/.+_spec\.rb$})
   watch(%r{^lib/(.+)\.rb$})     { |m| "spec/lib/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')  { "spec" }
