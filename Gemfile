@@ -55,7 +55,7 @@ group :test do
   gem 'capybara', '~> 2.6.2'
   gem 'selenium-webdriver', '~> 2.41.0'
   gem 'database_cleaner', '~> 1.5.0'
-  gem 'factory_girl_rails', '~> 4.4.1'
+  gem 'factory_girl_rails', '~> 4.6'
 
   ## For Guard notifications:
   # Uncomment this line on OS X.

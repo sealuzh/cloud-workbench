@@ -35,6 +35,7 @@ FactoryGirl.define do
     association :benchmark_execution, factory: :benchmark_execution
     benchmark_definition { benchmark_execution.benchmark_definition }
 
+    skip_create
     initialize_with { new(benchmark_definition, benchmark_execution) }
   end
 
@@ -42,6 +43,7 @@ FactoryGirl.define do
     vagrantfile_path "#{Rails.application.config.spec_files}/vagrant_driver/single_aws_instance/Vagrantfile"
     log_dir nil
 
+    skip_create
     initialize_with { new(vagrantfile_path, log_dir) }
   end
 
