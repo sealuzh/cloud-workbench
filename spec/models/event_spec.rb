@@ -6,8 +6,8 @@ describe Event do
 
   subject { event }
 
-  it { should be_valid }
-  its(:failed?) { should be_false }
+  it { is_expected.to be_valid }
+  its(:failed?) { should be_falsey }
   its(:status) { should eq('WAITING FOR START PREPARING') }
 
 end

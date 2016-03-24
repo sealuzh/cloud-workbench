@@ -6,22 +6,22 @@ describe BenchmarkExecution do
 
   subject { benchmark_execution }
 
-  it { should respond_to(:events) }
-  it { should respond_to(:benchmark_definition) }
-  it { should respond_to(:virtual_machine_instances) }
+  it { is_expected.to respond_to(:events) }
+  it { is_expected.to respond_to(:benchmark_definition) }
+  it { is_expected.to respond_to(:virtual_machine_instances) }
 
-  it { should be_valid }
+  it { is_expected.to be_valid }
   its(:events) { should contain_event :created }
-  its(:failed?) { should be_false }
+  its(:failed?) { should be_falsey }
   it "should have no failed events" do
     expect(benchmark_execution.events.first_failed).to be_nil
   end
-  its(:active?) { should be_true }
+  its(:active?) { should be_truthy }
 
   describe "when benchmark definition is not present" do
     let(:non_existent_id) { 77 }
     before { benchmark_execution.benchmark_definition_id = non_existent_id }
-    it { should_not be_valid }
+    it { is_expected.not_to be_valid }
   end
 
   describe "successful prepare" do
@@ -40,7 +40,7 @@ describe BenchmarkExecution do
     end
     its(:events) { should contain_event :failed_on_preparing }
     its(:status) { should eq('FAILED ON PREPARING') }
-    its(:failed?) { should be_true }
+    its(:failed?) { should be_truthy }
     it "should have a failed event with the correct name" do
       expect(benchmark_execution.events.first_failed.name).to eq(:failed_on_preparing.to_s)
     end
@@ -91,7 +91,7 @@ describe BenchmarkExecution do
     its(:events) { should contain_event :started_releasing_resources }
     its(:events) { should contain_event :finished_releasing_resources }
     its(:status) { should eq('FINISHED') }
-    its(:active?) { should be_false }
+    its(:active?) { should be_falsey }
   end
 
   describe "failed release resources" do
@@ -102,7 +102,7 @@ describe BenchmarkExecution do
     its(:events) { should contain_event :started_releasing_resources }
     its(:events) { should contain_event :failed_on_releasing_resources }
     its(:status) { should eq('FAILED ON RELEASING RESOURCES') }
-    its(:active?) { should be_false }
+    its(:active?) { should be_falsey }
   end
 
   describe "detection and creation of vm instances" do
