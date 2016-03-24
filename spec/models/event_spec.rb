@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Event do
   let(:benchmark_execution) { create(:benchmark_execution) }

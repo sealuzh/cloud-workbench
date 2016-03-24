@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe VagrantFileSystem do
   let(:benchmark_definition) { build(:benchmark_definition, id: 7, name: 'bm-with_symbol%and\\no.dot') }

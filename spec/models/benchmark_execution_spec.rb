@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe BenchmarkExecution do
   let(:benchmark_definition) { create(:benchmark_definition) }

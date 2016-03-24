@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe VagrantDriver do
   let(:vagrant_driver) { build(:vagrant_driver) }

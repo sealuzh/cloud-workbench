@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature 'Benchmark definition management' do
   given(:user) { create(:user) }
