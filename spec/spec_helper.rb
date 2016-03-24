@@ -18,6 +18,8 @@ Spork.prefork do
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
   require 'rspec/autorun'
+  # Support for deprecated `its` in RSpec 3 discussed in: https://gist.github.com/myronmarston/4503509
+  require 'rspec/its'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and spec/features/support and its subdirectories.

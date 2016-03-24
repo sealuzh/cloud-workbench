@@ -41,6 +41,7 @@ group :development, :test do
   gem 'sqlite3'
   gem 'faker'
   gem 'rspec-rails', '~> 2.99'
+  gem 'rspec-its' # Support for deprecated `its` syntax in RSpec 3
   gem 'fuubar' # RSpec progress bar formatter
   gem 'guard' # NOTE: this is necessary in newer versions
   gem 'guard-rspec', '~> 4.6.4'
