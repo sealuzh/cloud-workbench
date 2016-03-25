@@ -52,8 +52,16 @@ RSpec.configure do |config|
 
   # Database cleaner
   config.before(:suite) do
-    DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:deletion)
+  end
+
+  config.before(:each) do
+    DatabaseCleaner.strategy = :transaction
+  end
+
+  # Transaction cannot be used with JS tests running in a separate thread
+  config.before(:each, js: true) do
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each) do
@@ -70,7 +78,7 @@ RSpec.configure do |config|
       DatabaseCleaner.start
       FactoryGirl.lint
     ensure
-      DatabaseCleaner.clean
+      DatabaseCleaner.clean_with(:deletion)
     end
   end
 
