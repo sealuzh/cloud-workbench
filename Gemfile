@@ -1,5 +1,10 @@
 source 'https://rubygems.org'
-ruby File.read('.ruby-version').strip
+def ruby_version(file = '.ruby-version')
+  # Ensure that symlinks are correctly handled
+  path = File.join(File.dirname(__FILE__), file)
+  File.read(path).chomp!
+end
+ruby ruby_version
 
 # Import Gemfile that handles tooling (i.e. Chef and deployment)
 # GEMFILE = File.join(File.dirname(__FILE__), 'Gemfile.tools')
