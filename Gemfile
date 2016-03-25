@@ -24,6 +24,7 @@ gem 'pry'
 gem 'pry-rails' # Use pry as Rails console
 
 group :development do
+  gem 'spring'
   gem 'thin'
   gem 'pry-byebug' # Use pry as debugger with step, next, finish, continue
   gem 'launchy'
@@ -43,8 +44,9 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.4.2'
   gem 'rspec-its' # Support for deprecated `its` syntax in RSpec 3
   gem 'fuubar' # RSpec progress bar formatter
+  gem 'spring-commands-rspec'
   gem 'guard' # NOTE: this is necessary in newer versions
-  gem 'guard-rspec', '~> 4.6.4'
+  gem 'guard-rspec'
   gem 'simplecov', require: false
 
   gem 'spork-rails', '~> 4.0.0'

@@ -1,8 +1,5 @@
 --require spec_helper
 
-# Connect to existing process which has already loaded the Rails environment
---drb
-
 # Run the tests with console colored output
 --color
 --format Fuubar
