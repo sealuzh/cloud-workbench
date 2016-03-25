@@ -48,10 +48,6 @@ group :development, :test do
   gem 'guard' # NOTE: this is necessary in newer versions
   gem 'guard-rspec'
   gem 'simplecov', require: false
-
-  gem 'spork-rails', '~> 4.0.0'
-  gem 'guard-spork', '~> 2.1'
-  gem 'childprocess', '~> 0.5.3'
 end
 
 group :test do
