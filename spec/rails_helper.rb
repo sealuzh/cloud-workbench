@@ -42,16 +42,17 @@ RSpec.configure do |config|
   config.include Capybara::DSL
   config.include AuthenticationHelpers, type: :feature
 
-  # Must be false for Selenium support
+  # Must be false for JS tests
   config.use_transactional_fixtures = false
 
-  # Authentication helper
-  config.after(:each) do
-    Warden.test_reset!
-  end
-
-  # Database cleaner
   config.before(:suite) do
+    # Lint factories
+    begin
+      DatabaseCleaner.start
+      FactoryGirl.lint
+    ensure
+      DatabaseCleaner.clean_with(:deletion)
+    end
     DatabaseCleaner.clean_with(:deletion)
   end
 
@@ -61,7 +62,7 @@ RSpec.configure do |config|
 
   # Transaction cannot be used with JS tests running in a separate thread
   config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :truncation
+    DatabaseCleaner.strategy = :truncation # :deletion
   end
 
   config.before(:each) do
@@ -69,17 +70,8 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
+    Warden.test_reset! # Authentication helper
     DatabaseCleaner.clean
-  end
-
-  # FactoryGirl
-  config.before(:suite) do
-    begin
-      DatabaseCleaner.start
-      FactoryGirl.lint
-    ensure
-      DatabaseCleaner.clean_with(:deletion)
-    end
   end
 
   # Clean file system
