@@ -209,7 +209,6 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    railroady (1.4.2)
     rails (4.2.6)
       actionmailer (= 4.2.6)
       actionpack (= 4.2.6)
@@ -338,7 +337,7 @@ DEPENDENCIES
   database_cleaner (~> 1.5.0)
   deep_cloneable (~> 2.2.0)
   delayed_job_active_record (~> 4.1)
-  devise (~> 3.5, >= 3.5.6)
+  devise (~> 3.5)
   enumerize (~> 1.1.1)
   execjs
   factory_girl_rails (~> 4.6)
@@ -348,11 +347,11 @@ DEPENDENCIES
   guard
   guard-livereload
   guard-rspec
-  jbuilder (~> 2.4, >= 2.4.1)
+  jbuilder (~> 2.4)
   jquery-rails
   jquery-turbolinks
   launchy
-  less-rails (~> 2.7, >= 2.7.1)
+  less-rails (~> 2.7)
   meta_request
   pg
   pry
@@ -360,7 +359,6 @@ DEPENDENCIES
   pry-rails
   quiet_assets
   rack-livereload
-  railroady
   rails (= 4.2.6)
   rb-readline
   rspec-its
