@@ -5,6 +5,18 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 # Support for deprecated `its` in RSpec 3 discussed in: https://gist.github.com/myronmarston/4503509
 require 'rspec/its'
+require 'capybara/rspec'
+require 'capybara/rails'
+
+# JS testing
+Capybara.javascript_driver = :selenium # :poltergeist
+# Side-load assets from concurrently running app server
+# when using `save_and_open_page`
+Capybara.asset_host = 'http://localhost:3000'
+
+def reload_page page
+  page.evaluate_script('window.location.reload()')
+end
 
 # Recursively require supporting files (e.g., custom matchers)
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
