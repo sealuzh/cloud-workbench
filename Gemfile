@@ -99,6 +99,7 @@ group :test do
 end
 
 group :doc do
-  # `bundle exec rake doc:rails` generates the API under doc/api.
-  gem 'sdoc', require: false
+  # Generate docs with `yard doc`
+  # Docs at http://www.rubydoc.info/gems/yard/
+  gem 'yard', '~> 0.8.7.6', require: false
 end

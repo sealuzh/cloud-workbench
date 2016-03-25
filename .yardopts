@@ -1,0 +1,4 @@
+app/**/*.rb
+-
+README.md
+LICENSE.txt

@@ -31,8 +31,13 @@
 /config/deploy/cloud_benchmarking_*/*
 !/config/deploy/cloud_benchmarking_*/*.example*
 
+# Documentation cache and generated files
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
+
 # Ignore other unneeded files.
-doc/
 *.swp
 *~
 .project
