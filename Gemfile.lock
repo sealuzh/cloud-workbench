@@ -113,6 +113,8 @@ GEM
     ffi (1.9.10)
     font-awesome-rails (4.5.0.1)
       railties (>= 3.2, < 5.1)
+    foreman (0.78.0)
+      thor (~> 0.19.1)
     formatador (0.2.5)
     fuubar (2.0.0)
       rspec (~> 3.0)
@@ -339,6 +341,7 @@ DEPENDENCIES
   factory_girl_rails (~> 4.6)
   faker
   font-awesome-rails (~> 4.5.0.1)
+  foreman (~> 0.78.0)
   fuubar
   guard
   guard-livereload

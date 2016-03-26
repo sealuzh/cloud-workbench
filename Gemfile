@@ -47,6 +47,10 @@ gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
 gem 'pry'
 gem 'pry-rails' # Use pry as Rails console
 
+# `Procfile`-based process manager: http://ddollar.github.io/foreman/
+# Used in production to export into other formats (e.g., Upstart)
+gem 'foreman', '~> 0.78.0'
+
 group :production do
   gem 'unicorn'
   gem 'pg'
