@@ -27,6 +27,12 @@ gem 'deep_cloneable', '~> 2.2.0'
 gem 'devise', '~> 3.5' # Authentication
 
 # Assets
+# Required by `less-rails` for Bootstrap assets:
+# https://github.com/seyhunak/twitter-bootstrap-rails/issues/336#issuecomment-9946957
+# `therubyracer` is repeatedly reported to use a lot of memory (~25MB + potential leaks):
+# https://devcenter.heroku.com/articles/rails-asset-pipeline#therubyracer
+# https://samsaffron.com/archive/2015/03/31/debugging-memory-leaks-in-ruby
+# Migration from LESS to SASS is required to drop this dependency
 gem 'therubyracer', '~> 0.12.2', platforms: :ruby
 gem 'less-rails', '~> 2.7'
 gem 'uglifier', '>= 1.3.0'
@@ -54,7 +60,6 @@ gem 'foreman', '~> 0.78.0'
 group :production do
   gem 'unicorn'
   gem 'pg'
-  gem 'execjs'
 end
 
 group :development do
