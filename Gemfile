@@ -6,12 +6,6 @@ def ruby_version(file = '.ruby-version')
 end
 ruby ruby_version
 
-# Import Gemfile that handles tooling (i.e. Chef and deployment)
-# GEMFILE = File.join(File.dirname(__FILE__), 'Gemfile.tools')
-# Dir.glob(GEMFILE) do |gemfile|
-#     eval(IO.read(gemfile), binding)
-# end
-
 gem 'rails', '4.2.6'
 
 # General
@@ -76,6 +70,21 @@ group :development do
   gem 'binding_of_caller'
   gem 'meta_request'
   gem 'quiet_assets'
+end
+
+DEPLOYMENT=false
+if DEPLOYMENT
+  # Deployment with Capistrano: http://capistranorb.com/
+  group :deployment do
+    # None of the capistrano task should be loaded into the Rails environment by default
+    # as they must be required explicitly in the Capfile
+    gem 'capistrano', require: false
+    gem 'capistrano-rails', require: false
+    gem 'capistrano-bundler', require: false
+    gem 'capistrano-rbenv', require: false
+    # gem 'rvm1-capistrano3', require: false # Use if deploying into RVM environments
+    gem 'capistrano-file-permissions', require: false
+  end
 end
 
 OPTIONAL=false
