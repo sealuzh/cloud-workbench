@@ -34,6 +34,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # AWS EC2 provider
   config.vm.provider :aws do |aws, override|
+    # Fix for error in `vagrant-aws` plugin
+    # https://github.com/mitchellh/vagrant/issues/5401#issuecomment-115240904
+    override.nfs.functional = false
+
     # AWS authentication
     aws.access_key_id = ENV['AWS_ACCESS_KEY']
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
