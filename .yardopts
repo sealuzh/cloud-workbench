@@ -1,4 +1,5 @@
 app/**/*.rb
 -
 README.md
+DEVELOPMENT.md
 LICENSE.txt
