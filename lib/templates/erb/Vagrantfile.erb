@@ -122,7 +122,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Chef client provisioner
   config.omnibus.chef_version = ENV['CHEF_OMNIBUS_CHEF_VERSION']
-  config.vm.provision 'chef_client' do |chef|
+  config.vm.provision 'cwb', type: 'chef_client' do |chef|
     chef.log_level = :info
     chef.provisioning_path = ENV['CHEF_PROVISIONING_PATH']
     chef.chef_server_url = ENV['CHEF_SERVER_HOST']
