@@ -126,7 +126,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.log_level = :info
     chef.provisioning_path = ENV['CHEF_PROVISIONING_PATH']
     chef.chef_server_url = ENV['CHEF_SERVER_HOST']
-    chef.validation_key_path = ENV['VALIDATION_KEY_PATH']
+    chef.validation_key_path = ENV['CHEF_VALIDATION_KEY_PATH']
 
     # MUST be unique in scope of all benchmarks
     chef.node_name = chef_node_name
