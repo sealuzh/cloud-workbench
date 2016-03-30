@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature 'Benchmark definition management' do
   given(:user) { create(:user) }
@@ -7,7 +7,7 @@ feature 'Benchmark definition management' do
   feature 'Listing benchmark definitions' do
     scenario 'Should show a link to create a new benchmark' do
       visit benchmark_definitions_path
-      page.should have_link('Create New Benchmark', href: new_benchmark_definition_path)
+      expect(page).to have_link('Create New Benchmark', href: new_benchmark_definition_path)
     end
 
     scenario 'Should list the definitions in reverse chronological order' do
@@ -17,11 +17,11 @@ feature 'Benchmark definition management' do
       visit benchmark_definitions_path
 
       within(:xpath, '//table/tbody/tr[1]/td[2]/a') do
-        page.should have_content(third.name)
+        expect(page).to have_content(third.name)
       end
 
       within(:xpath, '//table/tbody/tr[3]/td[2]/a') do
-        page.should have_content(first.name)
+        expect(page).to have_content(first.name)
       end
     end
   end
@@ -38,11 +38,11 @@ feature 'Benchmark definition management' do
       fill_in_create_form(valid_benchmark_definition)
 
       click_button 'Create New Benchmark'
-      page.should have_content 'was successfully created'
-      page.should have_field('Name', with: valid_benchmark_definition.name)
-      page.should have_field('Vagrantfile', with: valid_benchmark_definition.vagrantfile)
+      expect(page).to have_content 'was successfully created'
+      expect(page).to have_field('Name', with: valid_benchmark_definition.name)
+      expect(page).to have_field('Vagrantfile', with: valid_benchmark_definition.vagrantfile)
       bm_definition = BenchmarkDefinition.find_by_name(valid_benchmark_definition.name)
-      bm_definition.vagrantfile .should eq valid_benchmark_definition.vagrantfile
+      expect(bm_definition.vagrantfile) .to eq valid_benchmark_definition.vagrantfile
     end
 
     given(:existing_definition) { create(:benchmark_definition) }
@@ -54,7 +54,7 @@ feature 'Benchmark definition management' do
       expect do
         click_button 'Create New Benchmark'
       end.to change(BenchmarkDefinition, :count).by(0)
-      page.should have_content 'has already been taken'
+      expect(page).to have_content 'has already been taken'
     end
 
     def fill_in_create_form(benchmark_definition)
@@ -71,7 +71,7 @@ feature 'Benchmark definition management' do
   given(:existing_definition) { create(:benchmark_definition) }
   scenario "Show a benchmark definition" do
     visit benchmark_definition_path(existing_definition)
-    page.should have_content existing_definition.name
+    expect(page).to have_content existing_definition.name
   end
 
   feature "Editing a benchmark definition" do
@@ -80,7 +80,7 @@ feature 'Benchmark definition management' do
 
     context "Without existing benchmark executions" do
       scenario "Name field should be editable" do
-        page.should_not have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
+        expect(page).not_to have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
       end
     end
 
@@ -91,7 +91,7 @@ feature 'Benchmark definition management' do
       end
 
       scenario "Name field should be readonly" do
-        page.should have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
+        expect(page).to have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
       end
     end
 

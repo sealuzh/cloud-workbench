@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MetricDefinitionsController do
   let(:vm) { create(:virtual_machine_instance) }

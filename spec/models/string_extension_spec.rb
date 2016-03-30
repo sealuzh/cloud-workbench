@@ -8,7 +8,7 @@ describe "String extension" do
       true_values = %w(true True t 1)
       true_values.each do |true_value|
         it "should recognize the true value '#{true_value}'" do
-          expect(true_value.to_bool).to be_true
+          expect(true_value.to_bool).to be_truthy
         end
       end
     end
@@ -17,7 +17,7 @@ describe "String extension" do
       false_values = %w(false False f 0)
       false_values.each do |false_value|
         it "should recognize the false value '#{false_value}'" do
-          expect(false_value.to_bool).to be_false
+          expect(false_value.to_bool).to be_falsey
         end
       end
     end
