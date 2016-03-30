@@ -1,6 +1,3 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
 ### Variables
 benchmark_name = '<%= benchmark_name %>'
 benchmark_name_sanitized = '<%= benchmark_name_sanitized %>'
@@ -23,34 +20,38 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = hostname
 
   config.ssh.username = 'ubuntu'
-  config.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
+  config.ssh.private_key_path = ENV['SSH_KEY_PATH']
 
   # Butcher plugin that removes Chef nodes and clients
-  if Vagrant.has_plugin?("vagrant-butcher")
+  if Vagrant.has_plugin?('vagrant-butcher')
     config.butcher.verify_ssl = false
   end
 
   <% if provider_name == 'aws' %>
   # AWS box
-  config.vm.box = "aws"
+  config.vm.box = 'aws'
   config.vm.box_url = 'https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box'
 
   # AWS EC2 provider
   config.vm.provider :aws do |aws, override|
+    # Fix for error in `vagrant-aws` plugin
+    # https://github.com/mitchellh/vagrant/issues/5401#issuecomment-115240904
+    override.nfs.functional = false
+
     # AWS authentication
     aws.access_key_id = ENV['AWS_ACCESS_KEY']
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
-    aws.keypair_name = ENV['EC2_KEYPAIR']
+    aws.keypair_name = ENV['SSH_KEY_NAME']
 
     # Official Ubuntu 14.04 LTS AMI (pv:ebs)
     # from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = "ami-3196f646"
+    aws.ami = 'ami-b7c379c4'
 
     # AWS default instance configuration
     aws.instance_ready_timeout = 240 # Default is 120
-    aws.region = "eu-west-1" # Europe/Ireland as default configuration
-    aws.instance_type = "t1.micro"
-    aws.security_groups = ["default"]
+    aws.region = 'eu-west-1' # Europe/Ireland as default configuration
+    aws.instance_type = 't1.micro'
+    aws.security_groups = ['default']
     aws.tags = {
       'Name' => tag_name
     }
@@ -64,19 +65,19 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :google do |google, override|
     google.google_project_id = ENV['GOOGLE_PROJECT_ID']
     google.google_client_email = ENV['GOOGLE_CLIENT_EMAIL']
-    google.google_key_location = ENV['GOOGLE_KEY_LOCATION']
+    google.google_key_location = ENV['GOOGLE_API_KEY_PATH']
 
     override.ssh.username = 'root'
-    override.ssh.private_key_path = ENV['EC2_PRIVATE_KEY']
+    override.ssh.private_key_path = ENV['SSH_KEY_PATH']
 
     # Used to uniquely identify the VM
     google.name = vagrant_id
     google.metadata = {'vagrant_id' => vagrant_id}
 
     # Override provider defaults
-    google.image = "debian-7-wheezy-v20140619"
-    google.machine_type = "n1-standard-1"
-    google.zone = "europe-west1-a"
+    google.image = 'debian-7-wheezy-v20140619'
+    google.machine_type = 'n1-standard-1'
+    google.zone = 'europe-west1-a'
   end
   <% elsif provider_name == 'azure' %>
   # Azure box
@@ -91,10 +92,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   azure_common = Proc.new do |azure, override|
     # Authentication
     azure.mgmt_endpoint = 'https://management.core.windows.net'
-    azure.mgmt_certificate = ENV['AZURE_MGMT_CERTIFICATE']
+    azure.mgmt_certificate = ENV['AZURE_MGMT_CERTIFICATE_PATH']
     azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
-    azure.private_key_file = ENV['EC2_PRIVATE_KEY']
-    azure.certificate_file = ENV['AZURE_CERTIFICATE_FILE']
+    azure.private_key_file = ENV['SSH_KEY_PATH']
 
     # Defaults
     azure.vm_name = vm_name
@@ -114,9 +114,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.username = 'root'
 
   config.vm.provider :softlayer do |sl|
-    sl.username = ENV['SL_API_USERNAME']
-    sl.api_key  = ENV['SL_API_KEY']
-    sl.ssh_key  = 'cloud-benchmarking'
+    sl.username = ENV['SOFTLAYER_API_USERNAME']
+    sl.api_key  = ENV['SOFTLAYER_API_KEY']
+    sl.ssh_key  = ENV['SSH_KEY_NAME']
 
     sl.domain = 'cloud-workbench.io'
     sl.datacenter = 'mel01'
@@ -125,14 +125,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   <% end %>
 
   # Chef client provisioner
-  # :latest would install Chef client version 12 that breaks some cookbooks
-  # (e.g. postgresql: https://github.com/hw-cookbooks/postgresql/issues/212 )
-  config.omnibus.chef_version = '12.2.1'
-  config.vm.provision "chef_client", id: "chef_client" do |chef|
+  config.omnibus.chef_version = ENV['CHEF_OMNIBUS_CHEF_VERSION']
+  config.vm.provision 'cwb', type: 'chef_client' do |chef|
     chef.log_level = :info
-    chef.provisioning_path = "/etc/chef"
-    chef.chef_server_url = ENV['KNIFE_CHEF_SERVER_URL']
-    chef.validation_key_path = ENV['KNIFE_VALIDATION_KEY']
+    chef.provisioning_path = ENV['CHEF_PROVISIONING_PATH']
+    chef.chef_server_url = ENV['CHEF_SERVER_URL']
+    chef.validation_key_path = ENV['CHEF_VALIDATION_KEY_PATH']
 
     # MUST be unique in scope of all benchmarks
     chef.node_name = chef_node_name
@@ -140,7 +138,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     chef.run_list = %w(cwb)
     chef.json = {
       'cwb' => {
-        'server' => ENV['CWB_SERVER_IP'],
+        'server' => ENV['CWB_SERVER_HOST'],
         'provider_name' => '<%= provider_name %>',
         'azure_id' => azure_id,
         'softlayer_id' => softlayer_id,
