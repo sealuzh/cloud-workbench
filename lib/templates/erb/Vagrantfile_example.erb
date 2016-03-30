@@ -16,6 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #  https://cloud-images.ubuntu.com/locator/ec2/
     aws.ami = 'ami-b7c379c4'
     aws.instance_type = 't1.micro'
+    # aws.security_groups = ['cwb-web']
   end
 
   config.vm.provision 'cwb', type: 'chef_client' do |chef|
