@@ -129,7 +129,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision 'cwb', type: 'chef_client' do |chef|
     chef.log_level = :info
     chef.provisioning_path = ENV['CHEF_PROVISIONING_PATH']
-    chef.chef_server_url = ENV['CHEF_SERVER_HOST']
+    chef.chef_server_url = ENV['CHEF_SERVER_URL']
     chef.validation_key_path = ENV['CHEF_VALIDATION_KEY_PATH']
 
     # MUST be unique in scope of all benchmarks
