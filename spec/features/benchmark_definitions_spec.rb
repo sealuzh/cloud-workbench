@@ -26,15 +26,15 @@ feature 'Benchmark definition management' do
     end
   end
 
-  feature "Creating a benchmark definition" do
+  feature 'Creating a benchmark definition' do
     background { visit new_benchmark_definition_path }
 
-    scenario "Should provide a sample Vagrantfile" do
+    scenario 'Should provide a sample Vagrantfile' do
       expect(find_field('Vagrantfile').value).to match(/.*Vagrant.configure.*/)
     end
 
     given(:valid_benchmark_definition) { build(:benchmark_definition) }
-    scenario "With valid information" do
+    scenario 'With valid information' do
       fill_in_create_form(valid_benchmark_definition)
 
       click_button 'Create New Benchmark'
@@ -46,7 +46,7 @@ feature 'Benchmark definition management' do
     end
 
     given(:existing_definition) { create(:benchmark_definition) }
-    scenario "With invalid information" do
+    scenario 'With invalid information' do
       same_name_definition = build(:benchmark_definition, name: existing_definition.name)
       visit new_benchmark_definition_path
       fill_in_create_form(same_name_definition)
@@ -58,7 +58,7 @@ feature 'Benchmark definition management' do
     end
 
     def fill_in_create_form(benchmark_definition)
-      within("#new_benchmark_definition") do
+      within('#new_benchmark_definition') do
         fill_in 'Name', with: benchmark_definition.name
         # The select option automatically capitalizes the first letter
         select benchmark_definition.provider_name.humanize, from: 'Provider name'
@@ -69,48 +69,48 @@ feature 'Benchmark definition management' do
   end
 
   given(:existing_definition) { create(:benchmark_definition) }
-  scenario "Show a benchmark definition" do
+  scenario 'Show a benchmark definition' do
     visit benchmark_definition_path(existing_definition)
     expect(page).to have_content existing_definition.name
   end
 
-  feature "Editing a benchmark definition" do
+  feature 'Editing a benchmark definition' do
     given(:benchmark_definition) { create(:benchmark_definition) }
     background { visit edit_benchmark_definition_path(benchmark_definition) }
 
-    context "Without existing benchmark executions" do
-      scenario "Name field should be editable" do
+    context 'Without existing benchmark executions' do
+      scenario 'Name field should be editable' do
         expect(page).not_to have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
       end
     end
 
-    context "With existing benchmark executions" do
+    context 'With existing benchmark executions' do
       background do
         benchmark_definition.start_execution_async
         visit edit_benchmark_definition_path(benchmark_definition)
       end
 
-      scenario "Name field should be readonly" do
+      scenario 'Name field should be readonly' do
         expect(page).to have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
       end
     end
 
   end
 
-  feature "Starting a benchmark execution" do
+  feature 'Starting a benchmark execution' do
     given(:benchmark_definition) { create(:benchmark_definition) }
     given(:start_execution) { -> { click_button 'Start Execution'} }
     background { visit benchmark_definition_path(benchmark_definition) }
 
-    scenario "Should create a new benchmark execution" do
+    scenario 'Should create a new benchmark execution' do
       expect(start_execution).to change(BenchmarkExecution, :count).by(1)
     end
 
-    scenario "Should schedule a job" do
+    scenario 'Should schedule a job' do
       expect(start_execution).to change(Delayed::Job, :count).by(1)
     end
 
-    scenario "Should redirect to the newly created benchmark execution " do
+    scenario 'Should redirect to the newly created benchmark execution ' do
       start_execution.call
       execution = BenchmarkExecution.find_by_benchmark_definition_id(benchmark_definition.id)
       expect(current_path).to eq benchmark_execution_path(execution)
