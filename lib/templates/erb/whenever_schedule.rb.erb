@@ -7,6 +7,8 @@
 set :environment, '<%= Rails.env %>'
 set :output, '<%= Rails.application.config.benchmark_schedule_log %>'
 
+env :PATH, '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games'
+
 production_env = 'BUNDLE_GEMFILE=<%= File.join(Rails.root, 'Gemfile') %>'
 job_type :runner,  "cd :path && #{production_env if @environment == 'production'} :runner_command -e :environment ':task' :output"
 
