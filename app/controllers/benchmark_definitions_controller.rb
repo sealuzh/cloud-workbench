@@ -50,7 +50,8 @@ class BenchmarkDefinitionsController < ApplicationController
       redirect_to edit_benchmark_definition_path(@benchmark_definition)
     end
   rescue => e
-      render action: 'edit'
+    flash[:error] = e.message
+    render action: 'edit'
   end
 
   def destroy
