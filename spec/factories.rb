@@ -15,6 +15,12 @@ FactoryGirl.define do
     end
   end
 
+  factory :benchmark_schedule do
+    association :benchmark_definition, factory: :benchmark_definition
+    cron_expression '30 * * * *'
+    active true
+  end
+
   factory :benchmark_execution do
     association :benchmark_definition, factory: :benchmark_definition
   end
