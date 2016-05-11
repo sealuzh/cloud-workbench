@@ -72,7 +72,7 @@ class BenchmarkDefinition < ActiveRecord::Base
 
   def clone
     # The block will be called for original and each included association
-    benchmark_definition = self.dup include: [ :metric_definitions, :benchmark_schedule ] do |original, clone|
+    benchmark_definition = self.deep_clone include: [ :metric_definitions, :benchmark_schedule ] do |original, clone|
       case clone.class.name
         when 'BenchmarkDefinition'
           # Avoid name collision if copying a benchmark multiple times

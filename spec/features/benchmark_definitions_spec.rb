@@ -68,6 +68,29 @@ feature 'Benchmark definition management' do
     end
   end
 
+  feature 'Cloning a benchmark definition' do
+    scenario 'Should create a clone of the same definition' do
+      benchmark =  create(:benchmark_definition)
+      metric = create(:ratio_metric_definition, benchmark_definition: benchmark)
+      schedule = create(:benchmark_schedule, benchmark_definition: benchmark)
+
+      visit benchmark_definitions_path
+      find('.clone').click
+
+      benchmark_clone_name_prefix = benchmark.name + ' copy'
+      benchmark_clone = BenchmarkDefinition.where('name LIKE ?', "%#{benchmark_clone_name_prefix}%")
+      expect(benchmark_clone).to exist
+      # Same definition
+      expect(page).to have_content(benchmark_clone_name_prefix)
+      expect(page).to have_content(benchmark.vagrantfile)
+      # Cloned metric
+      expect(page).to have_content(metric.name)
+      # Cloned schedule
+      expect(page).to have_content(schedule.cron_expression)
+      expect(page).to have_content('Activate Schedule')
+    end
+  end
+
   given(:existing_definition) { create(:benchmark_definition) }
   scenario 'Show a benchmark definition' do
     visit benchmark_definition_path(existing_definition)
