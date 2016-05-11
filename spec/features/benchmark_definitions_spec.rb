@@ -97,6 +97,19 @@ feature 'Benchmark definition management' do
 
   end
 
+  feature 'Editing a metric definition' do
+    given(:ratio_metric) { create(:ratio_metric_definition, unit: 'wrong unit') }
+    background { visit  edit_metric_definition_path(ratio_metric) }
+
+    scenario 'Should change unit name' do
+      fill_in 'Unit', with: 'MB/s'
+      click_button 'Update Metric Definition'
+      expect(page).to have_content('successfully updated')
+      ratio_metric.reload
+      expect(ratio_metric.unit).to eq('MB/s')
+    end
+  end
+
   feature 'Starting a benchmark execution' do
     given(:benchmark_definition) { create(:benchmark_definition) }
     given(:start_execution) { -> { click_button 'Start Execution'} }

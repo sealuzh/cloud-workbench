@@ -3,7 +3,7 @@
 <% content_header("Edit Metric Definition", "#{@metric_definition.name} of #{link_to(benchmark_definition.name, benchmark_definition)}") %>
 
 <div class="col-md-4">
-  <%= render 'form', submit_value: 'Update Metric Definition', url: edit_metric_definition_path(@metric_definition) %>
+  <%= render 'form', submit_value: 'Update Metric Definition', url: metric_definition_path(@metric_definition) %>
 </div>
 
 <div class="col-md-8">
