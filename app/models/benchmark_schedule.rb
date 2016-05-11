@@ -41,7 +41,7 @@ class BenchmarkSchedule < ActiveRecord::Base
   def self.update_system_crontab
     schedule = generate_schedule_from_template(DEFAULT_TEMPLATE_PATH)
     write_content_to_file(schedule, DEFAULT_SCHEDULE_PATH)
-    apply_schedule_to_system_crontab(DEFAULT_SCHEDULE_PATH)
+    apply_schedule_to_system_crontab(DEFAULT_SCHEDULE_PATH) unless ENV['UPDATE_SYSTEM_CRONTAB'] == 'false'
   end
 
   def self.generate_schedule_from_template(template_path = DEFAULT_TEMPLATE_PATH)

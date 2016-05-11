@@ -14,7 +14,7 @@ CloudBenchmarking::Application.configure do
 
   # Configure serving files from the public folder with Cache-Control for performance.
   config.serve_static_files  = true
-  config.static_cache_control = "public, max-age=3600"
+  config.static_cache_control = 'public, max-age=3600'
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
@@ -36,6 +36,9 @@ CloudBenchmarking::Application.configure do
 
   # Local file resources used for testing
   config.spec_files = "#{Rails.root}/spec/files"
+
+  # Do not manipulate system crontab via tests
+  ENV['UPDATE_SYSTEM_CRONTAB'] = 'false'
 
   # Override environment variables to prevent tests from starting instances.
   ENV['AWS_ACCESS_KEY'] = 'dummy_aws_access_key_for_testing'

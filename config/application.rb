@@ -36,6 +36,8 @@ module CloudBenchmarking
     config.quiet_assets = true
 
     ### CloudBenchmarking settings
+    ENV['UPDATE_SYSTEM_CRONTAB'] ||= 'true'
+
     # Default authentication
     config.default_email = 'seal@uzh.ch' # NOTE: MUST match with lib/capistrano/tasks/user.rake
     config.default_password = 'demo'
