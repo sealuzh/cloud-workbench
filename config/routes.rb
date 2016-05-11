@@ -31,7 +31,7 @@ CloudBenchmarking::Application.routes.draw do
       post :abort
     end
   end
-  resources :metric_definitions, only: [:show, :edit, :destroy]
+  resources :metric_definitions, only: [:show, :edit, :destroy, :update]
 
   resources :metric_observations, only: [:create, :index] do
     collection { post :import }

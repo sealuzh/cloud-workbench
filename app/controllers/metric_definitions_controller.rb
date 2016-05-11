@@ -56,6 +56,6 @@ class MetricDefinitionsController < ApplicationController
 
     def success_flash(action)
       flash[:success] = "Metric definition #{view_context.link_to @metric_definition.name, edit_metric_definition_path(@metric_definition), class: 'alert-link' }
-                         was successfully created.".html_safe
+                         was successfully #{action}.".html_safe
     end
 end
