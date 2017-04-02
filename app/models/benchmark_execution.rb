@@ -139,7 +139,7 @@ class BenchmarkExecution < ActiveRecord::Base
 
   def release_resources
     set_driver_and_fs
-    events.create_with_name!(:failed_on_running, 'Running timeout elapsed.') unless benchmark_finished?
+    check_and_log_running_timeout
     if active? && !keep_alive?
       release_resources_with(@driver)
       update_consecutive_failure_count(benchmark_definition.benchmark_schedule)
@@ -150,6 +150,16 @@ class BenchmarkExecution < ActiveRecord::Base
     schedule = benchmark_definition.benchmark_schedule
     if schedule.present? && failed? && failed_threshold_reached?(schedule)
       schedule.deactivate!
+    end
+  end
+
+  # This is a heurestic to detect whether the `release_resources` was triggered
+  # by an elapsed running time. It avoids duplicating failed on running events.
+  # The release resources job would need to store metadata about the reason to
+  # release resources (e.g., running timeout) in order to clearly identify this.
+  def check_and_log_running_timeout
+    if benchmark_active? && !events.last.failed?
+      events.create_with_name!(:failed_on_running, 'Running timeout elapsed.')
     end
   end
 
