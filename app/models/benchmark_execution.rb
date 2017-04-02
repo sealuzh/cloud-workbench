@@ -28,7 +28,7 @@ class BenchmarkExecution < ActiveRecord::Base
     # Schedule StartBenchmarkExecutionJobs with higher priority than PrepareBenchmarkExecutionJobs.
     # Also consider using multiple queues since long running prepare tasks should not block short running start commands.
     # Usually the start execution job can be executed immediately here!
-    Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), PRIORITY_HIGH)
+    Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), priority: PRIORITY_HIGH)
   rescue => e
     # TODO: Handle exception appropriately
     puts e.message
@@ -37,8 +37,11 @@ class BenchmarkExecution < ActiveRecord::Base
   end
 
   def shutdown_after_failure_timeout
-    timeout = Rails.application.config.failure_timeout
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.from_now) if Rails.env.production?
+    shutdown_after(Rails.application.config.failure_timeout)
+  end
+
+  def shutdown_after(timeout)
+    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), priority: PRIORITY_HIGH, run_at: timeout.from_now)
   end
 
   def detect_and_create_vm_instances_with(driver)
@@ -101,8 +104,8 @@ class BenchmarkExecution < ActiveRecord::Base
   def start_benchmark
     set_benchmark_runner_and_fs
     start_benchmark_with(@benchmark_runner)
-    timeout = benchmark_definition.running_timeout || Rails.application.config.default_running_timeout
-    Delayed::Job.enqueue(ReleaseResourcesJob.new(id), PRIORITY_HIGH, timeout.hours.from_now) if Rails.env.production?
+    timeout_hours = benchmark_definition.running_timeout || Rails.application.config.default_running_timeout
+    shutdown_after(timeout_hours.hours.from_now)
   rescue => e
     shutdown_after_failure_timeout
   end
