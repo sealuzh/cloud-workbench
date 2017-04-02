@@ -105,7 +105,7 @@ class BenchmarkExecution < ActiveRecord::Base
     set_benchmark_runner_and_fs
     start_benchmark_with(@benchmark_runner)
     timeout_hours = benchmark_definition.running_timeout || Rails.application.config.default_running_timeout
-    shutdown_after(timeout_hours.hours.from_now)
+    shutdown_after(timeout_hours.hours)
   rescue => e
     shutdown_after_failure_timeout
   end
