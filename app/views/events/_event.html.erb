@@ -11,6 +11,7 @@
     <%= render('live_log_controls', id: live_log_id(event), path: live_log_path(event)) if has_log(event) %>
     <h3 class="timeline-header <%= 'no-border' unless has_log(event) %>"><%= event.name.humanize %></h3>
     <%= render('live_log', event: event) if has_log(event) %>
+    <%= render('message', event: event) if (event.failed? && event.message.present? ) %>
   </div>
 </li>
 
