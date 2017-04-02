@@ -13,7 +13,8 @@ class VirtualMachineInstancesController < ApplicationController
     if @virtual_machine_instance.present?
       cont = boolean_value(:continue, false)
       success  = boolean_value(:success, true)
-      @virtual_machine_instance.complete_benchmark(cont, success)
+      message = (params[:message] rescue '')
+      @virtual_machine_instance.complete_benchmark(cont, success, message)
       head 200 # ok
     else
       head 422 # unprocessable_entity
@@ -23,7 +24,8 @@ class VirtualMachineInstancesController < ApplicationController
   def complete_postprocessing
     if @virtual_machine_instance.present?
       success = boolean_value(:success, true)
-      @virtual_machine_instance.complete_postprocessing(success)
+      message = (params[:message] rescue '')
+      @virtual_machine_instance.complete_postprocessing(success, message)
       head 200 # ok
     else
       head 422 # unprocessable_entity
