@@ -41,7 +41,7 @@ gem 'font-awesome-rails', '~> 4.5.0.1'
 gem 'will_paginate', '~> 3.1.0'
 gem 'bootstrap-will_paginate', '~> 0.0.10'
 gem 'simple_form', '~> 3.2.1'
-gem 'data-confirm-modal', github: 'ifad/data-confirm-modal'
+gem 'data-confirm-modal', '~> 1.3'
 
 # Admin
 gem 'pry'
