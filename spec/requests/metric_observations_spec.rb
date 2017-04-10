@@ -6,6 +6,27 @@ describe MetricDefinitionsController do
 
   describe "single observation creation" do
 
+    describe "automatic default metric generation" do
+      let(:metric) { build(:nominal_metric_definition) }
+      let(:value) { '1111' }
+
+      before do
+        post_create(metric, vm, '11', value)
+      end
+
+      it "should return the status code 201 for created" do
+        expect(response.status).to eq(201) # created
+      end
+
+      it "should create a new default metric (nominal scale)" do
+        expect(MetricDefinition.find_by_name(metric.name)).not_to be_nil
+      end
+
+      it "should create a new observation" do
+        expect(NominalMetricObservation.find_by_value(value)).not_to be_nil
+      end
+    end
+
     describe "of ratio scale metric" do
       let(:ratio_metric) { create(:ratio_metric_definition, benchmark_definition: benchmark) }
       let(:time) { '500' }
