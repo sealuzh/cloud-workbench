@@ -7,7 +7,7 @@ module BenchmarkDefinitionsHelper
     observation_link_params = benchmark_execution.present? ? { benchmark_execution_id: benchmark_execution.id } : {}
     render 'shared/schedule_metric_sidebar', benchmark_definition: @benchmark_definition,
                                              benchmark_schedule:   @benchmark_definition.benchmark_schedule,
-                                             metric_definitions:   @benchmark_definition.metric_definitions,
+                                             metric_definitions:   @benchmark_definition.metric_definitions.sort_by(&:name),
                                              observation_link_params: observation_link_params
   end
 
