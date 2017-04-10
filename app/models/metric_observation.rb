@@ -24,6 +24,7 @@ class MetricObservation
   def self.create!(params)
     vm_instance = identify_vm_instance(params)
     metric_definition = identify_metric_definition(params, vm_instance)
+    metric_definition ||= create_default_metric_definition(params[:metric_definition_id], vm_instance.benchmark_execution.benchmark_definition)
     metric_definition.create_observation!(params[:time], params[:value], vm_instance.id)
   end
 
@@ -54,6 +55,10 @@ class MetricObservation
   def self.first_definition_by_name(name, vm_instance)
     benchmark = vm_instance.benchmark_execution.benchmark_definition
     MetricDefinition.where(benchmark_definition_id: benchmark.id, name: name).first
+  end
+
+  def self.create_default_metric_definition(name, benchmark_definition)
+    MetricDefinition.create(benchmark_definition: benchmark_definition, name: name, unit: '', scale_type: :nominal)
   end
 
   # You MUST provide a metric_definition_id as argument
