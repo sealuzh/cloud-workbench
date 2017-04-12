@@ -11,7 +11,7 @@ feature 'Benchmark definition management' do
     end
 
     scenario 'Should list the definitions in reverse chronological order' do
-      first =  create(:benchmark_definition)
+      first = create(:benchmark_definition)
       second = create(:benchmark_definition)
       third = create(:benchmark_definition)
       visit benchmark_definitions_path
