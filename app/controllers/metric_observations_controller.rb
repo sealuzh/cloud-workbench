@@ -8,7 +8,7 @@ class MetricObservationsController < ApplicationController
 
   # Currently only supports displaying the metric observation of a given metric definition
   def index
-    @metric_observations = MetricObservation.with_query_params(query_params)
+    @metric_observations = MetricObservation.with_query_params(query_params).order(:time)
     @metric_definition = MetricDefinition.find(params[:metric_definition_id])
     @execution = BenchmarkExecution.find(params[:benchmark_execution_id]) if params[:benchmark_execution_id].present?
     respond_to do |format|
