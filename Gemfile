@@ -26,18 +26,18 @@ gem 'devise', '~> 3.5' # Authentication
 # Migration from LESS to SASS is required to drop this dependency
 gem 'therubyracer', '~> 0.12.3', platforms: :ruby
 gem 'less-rails', '~> 2.8'
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '~> 3.2'
 gem 'jquery-rails'
-gem 'coffee-rails', '~> 4.1.1'
+gem 'coffee-rails', '~> 4.2', '>= 4.2.2'
 gem 'turbolinks'
 gem 'jquery-turbolinks'
-gem 'jbuilder', '~> 2.4'
+gem 'jbuilder', '~> 2.7'
 
 ## UI
-gem 'font-awesome-rails', '~> 4.5.0.1'
-gem 'will_paginate', '~> 3.1.0'
-gem 'bootstrap-will_paginate', '~> 0.0.10'
-gem 'simple_form', '~> 3.2.1'
+gem 'font-awesome-rails', '~> 4.7', '>= 4.7.0.2'
+gem 'will_paginate', '~> 3.1', '>= 3.1.6'
+gem 'bootstrap-will_paginate', '~> 1.0'
+gem 'simple_form', '~> 3.5'
 gem 'data-confirm-modal', '~> 1.3'
 
 # Admin
