@@ -66,14 +66,7 @@ function resetLiveRefreshButton(id) {
     stop.hide();
 }
 
-$(document).on('ready page:load', function () {
+$(document).ready(function () {
     initLiveRefresh('prepareLog', 'prepare_log');
     initLiveRefresh('releaseResourcesLog', 'release_resources_log');
-});
-
-// Reset timeout when leaving the page via Rails turbolinks.
-$(document).on('page:before-change', function() {
-    resetLiveRefreshButton('prepareLog');
-    resetLiveRefreshButton('releaseResourcesLog');
-    resetAllLogRefreshTimeouts();
 });

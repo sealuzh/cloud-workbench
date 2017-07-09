@@ -12,7 +12,6 @@
 
 //= require jquery
 //= require jquery_ujs
-//= require jquery.turbolinks
 //= require bootstrap/bootstrap
 //= require bootstrap-slider/bootstrap-slider
 
@@ -43,8 +42,3 @@
 //= require tooltips
 //= require sign_in
 //= require slider
-
-
-
-// Require as last resource according to jquery turbolinks docs: https://github.com/kossnocorp/jquery.turbolinks
-//= require turbolinks

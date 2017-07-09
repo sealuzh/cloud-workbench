@@ -29,8 +29,6 @@ gem 'less-rails', '~> 2.8'
 gem 'uglifier', '~> 3.2'
 gem 'jquery-rails'
 gem 'coffee-rails', '~> 4.2', '>= 4.2.2'
-gem 'turbolinks'
-gem 'jquery-turbolinks'
 gem 'jbuilder', '~> 2.7'
 
 ## UI

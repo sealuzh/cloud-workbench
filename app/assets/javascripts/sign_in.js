@@ -35,7 +35,7 @@ jQuery.fn.center_sign_in = function() {
     return this;
 }
 
-$(document).on('ready page:load', function () {
+$(document).ready(function () {
     startTime();
     $(".center").center_sign_in();
     $(window).resize(function() {
