@@ -4,13 +4,14 @@ development:
   pool: 5
   timeout: 5000
 
-#development:
-#  adapter: postgresql
-#  pool: 5
-#  database: cloud_benchmarking_development
-#  username: cloud
-#  password:
-#  host: localhost
+# Using PostgreSQL in development:
+# development:
+#   adapter: postgresql
+#   pool: 5
+#   database: cloud_workbench_development
+#   username: cloud
+#   password:
+#   host: localhost
 
 
 
@@ -23,13 +24,14 @@ test:
   pool: 5
   timeout: 5000
 
+# Using PostgreSQL in test:
 # test:
 #   adapter: postgresql
 #   pool: 5
-#   database: cloud_benchmarking_test
+#   database: cloud_workbench_test
 #   username: cloud
 #   password:
-#host: localhost
+#   host: localhost
 
 
 
@@ -39,7 +41,7 @@ test:
 production:
   adapter: postgresql
   pool: 20
-  database: cloud_benchmarking_production
+  database: cloud_workbench_production
   username: cloud
   password: cloud
   host: localhost
