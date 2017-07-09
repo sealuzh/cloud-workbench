@@ -9,15 +9,12 @@ ruby ruby_version
 gem 'rails', '4.2.9'
 
 # General
-# NOTE: This gem is not thread-safe and SHOULD NOT be used with
-#       threaded web servers such as puma. It is used to suppress
-#       the logs of polling javascript
-gem 'silencer', '~> 0.6.0'
-gem 'whenever', '~> 0.9.2'
-gem 'cron2english', '~> 0.1.3'
-gem 'delayed_job_active_record', '~> 4.1'
-gem 'enumerize', '~> 1.1.1'
-gem 'deep_cloneable', '~> 2.2.0'
+gem 'silencer', '~> 1.0', '>= 1.0.1'
+gem 'whenever', '~> 0.9.7'
+gem 'cron2english', '~> 0.1.6'
+gem 'delayed_job_active_record', '~> 4.1', '>= 4.1.2'
+gem 'enumerize', '~> 2.1', '>= 2.1.2'
+gem 'deep_cloneable', '~> 2.3'
 gem 'devise', '~> 3.5' # Authentication
 
 # Assets
@@ -49,7 +46,7 @@ gem 'pry-rails' # Use pry as Rails console
 
 # `Procfile`-based process manager: http://ddollar.github.io/foreman/
 # Used in production to export into other formats (e.g., Upstart)
-gem 'foreman', '~> 0.78.0'
+gem 'foreman', '~> 0.84.0'
 
 group :production do
   gem 'unicorn'
@@ -106,7 +103,7 @@ end
 group :development, :test do
   gem 'sqlite3'
   gem 'faker'
-  gem 'rspec-rails', '~> 3.4.2'
+  gem 'rspec-rails', '~> 3.6'
   gem 'rspec-its' # Support for deprecated `its` syntax in RSpec 3
   gem 'fuubar' # RSpec progress bar formatter
   gem 'spring-commands-rspec'
@@ -116,13 +113,13 @@ group :development, :test do
 end
 
 group :test do
-  gem 'capybara', '~> 2.6.2'
-  gem 'database_cleaner', '~> 1.5.0'
-  gem 'factory_girl_rails', '~> 4.6'
+  gem 'capybara', '~> 2.14', '>= 2.14.4'
+  gem 'database_cleaner', '~> 1.6', '>= 1.6.1'
+  gem 'factory_girl_rails', '~> 4.8'
 end
 
 group :doc do
   # Generate docs with `yard doc`
   # Docs at http://www.rubydoc.info/gems/yard/
-  gem 'yard', '~> 0.8.7.6', require: false
+  gem 'yard', require: false
 end
