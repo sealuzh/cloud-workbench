@@ -2,7 +2,7 @@
 
 ## Requirements
 
-* [Ruby (2.2.4)](https://www.ruby-lang.org/en/downloads/) for development and deployment with Bundler
+* [Ruby (2.4.1)](https://www.ruby-lang.org/en/downloads/) for development and deployment with Bundler
     * [Mac installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
     * [Windows installer](http://rubyinstaller.org/)
 

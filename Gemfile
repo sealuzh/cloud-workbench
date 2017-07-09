@@ -6,7 +6,7 @@ def ruby_version(file = '.ruby-version')
 end
 ruby ruby_version
 
-gem 'rails', '4.2.6'
+gem 'rails', '4.2.9'
 
 # General
 # NOTE: This gem is not thread-safe and SHOULD NOT be used with
@@ -27,7 +27,7 @@ gem 'devise', '~> 3.5' # Authentication
 # https://devcenter.heroku.com/articles/rails-asset-pipeline#therubyracer
 # https://samsaffron.com/archive/2015/03/31/debugging-memory-leaks-in-ruby
 # Migration from LESS to SASS is required to drop this dependency
-gem 'therubyracer', '~> 0.12.2', platforms: :ruby
+gem 'therubyracer', '~> 0.12.3', platforms: :ruby
 gem 'less-rails', '~> 2.7'
 gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
