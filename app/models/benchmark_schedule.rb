@@ -1,7 +1,7 @@
 require 'pathname'
 require 'fileutils'
 require 'erb'
-class BenchmarkSchedule < ActiveRecord::Base
+class BenchmarkSchedule < ApplicationRecord
   scope :actives, -> { where(active: true) }
   DEFAULT_TEMPLATE_PATH = Rails.application.config.benchmark_schedule_template
   DEFAULT_SCHEDULE_PATH = Rails.application.config.benchmark_schedule

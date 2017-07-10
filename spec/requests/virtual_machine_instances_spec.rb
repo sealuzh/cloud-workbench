@@ -101,7 +101,7 @@ describe VirtualMachineInstancesController do
   end
 
   def post_notify(vm, path, message = '', opts = {})
-    post(path,
+    post(path, params:
         {
             provider_name: vm.provider_name,
             provider_instance_id: vm.provider_instance_id,

@@ -1,4 +1,4 @@
-class BenchmarkExecution < ActiveRecord::Base
+class BenchmarkExecution < ApplicationRecord
   DEFAULT_PROVIDER = Rails.application.config.supported_providers.first
   PRIORITY_HIGH = 1
   belongs_to :benchmark_definition

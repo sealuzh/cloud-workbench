@@ -25,10 +25,12 @@ FactoryGirl.define do
     association :benchmark_definition, factory: :benchmark_definition
   end
 
-  factory :event do
-    name :created
-    happened_at Time.zone.parse('14-05-2014 8:00:00')
-  end
+  # Currently not needed
+  # factory :event do
+  #   name :created
+  #   association :traceable, factory: :benchmark_execution
+  #   happened_at Time.zone.parse('14-05-2014 8:00:00')
+  # end
 
   factory :virtual_machine_instance do
     association :benchmark_execution, factory: :benchmark_execution

@@ -5,6 +5,7 @@ class MetricObservationsController < ApplicationController
   API_METHODS = [:index, :create, :import]
   before_action :authenticate_user!, except: API_METHODS
   protect_from_forgery except: API_METHODS
+  helper_method :query_params
 
   # Currently only supports displaying the metric observation of a given metric definition
   def index
@@ -50,13 +51,13 @@ class MetricObservationsController < ApplicationController
     end
   end
 
+  def query_params
+    params.permit(:metric_definition_id, :benchmark_execution_id).to_h
+  end
+
   private
 
     def metric_observation_params
-      params.require(:metric_observation).permit(:metric_definition_id, :provider_name, :provider_instance_id, :time, :value, :file)
-    end
-
-    def query_params
-      params.permit(:metric_definition_id, :benchmark_execution_id)
+      params.require(:metric_observation).permit(:metric_definition_id, :provider_name, :provider_instance_id, :time, :value, :file).to_h
     end
 end

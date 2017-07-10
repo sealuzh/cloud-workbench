@@ -47,7 +47,7 @@ class VirtualMachineInstancesController < ApplicationController
     end
 
     def virtual_machine_instance_params
-      params.require(:virtual_machine_instance).permit(:benchmark_execution_id, :status, :provider_name, :provider_instance_id)
+      params.require(:virtual_machine_instance).permit(:benchmark_execution_id, :status, :provider_name, :provider_instance_id).to_h
     end
 
     def boolean_value(param, default)

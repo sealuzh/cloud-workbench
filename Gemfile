@@ -6,7 +6,7 @@ def ruby_version(file = '.ruby-version')
 end
 ruby ruby_version
 
-gem 'rails', '4.2.9'
+gem 'rails', '5.1.2'
 
 # General
 gem 'silencer', '~> 1.0', '>= 1.0.1'
@@ -15,7 +15,9 @@ gem 'cron2english', '~> 0.1.6'
 gem 'delayed_job_active_record', '~> 4.1', '>= 4.1.2'
 gem 'enumerize', '~> 2.1', '>= 2.1.2'
 gem 'deep_cloneable', '~> 2.3'
-gem 'devise', '~> 3.5' # Authentication
+
+# Authentication
+gem 'devise', '~> 4.3'
 
 # Assets
 # Required by `less-rails` for Bootstrap assets:
@@ -64,7 +66,6 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
-  gem 'quiet_assets'
 end
 
 DEPLOYMENT=false

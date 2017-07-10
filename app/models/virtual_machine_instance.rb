@@ -1,4 +1,4 @@
-class VirtualMachineInstance < ActiveRecord::Base
+class VirtualMachineInstance < ApplicationRecord
   belongs_to :benchmark_execution
   validates :benchmark_execution, presence: true
   has_many :nominal_metric_observations, dependent: :destroy
