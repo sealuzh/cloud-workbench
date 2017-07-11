@@ -14,8 +14,8 @@ ActiveRecord::Schema.define(version: 20140627112533) do
 
   create_table "benchmark_definitions", force: :cascade do |t|
     t.string "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.text "vagrantfile"
     t.integer "running_timeout"
     t.string "provider_name"
@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(version: 20140627112533) do
   end
 
   create_table "benchmark_executions", force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "benchmark_definition_id"
     t.boolean "keep_alive", default: false
     t.index ["benchmark_definition_id"], name: "index_benchmark_executions_on_benchmark_definition_id"
@@ -34,8 +34,8 @@ ActiveRecord::Schema.define(version: 20140627112533) do
     t.string "cron_expression"
     t.boolean "active", default: true
     t.integer "benchmark_definition_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "consecutive_failure_count", default: 0
     t.index ["benchmark_definition_id"], name: "index_benchmark_schedules_on_benchmark_definition_id"
   end
@@ -50,26 +50,27 @@ ActiveRecord::Schema.define(version: 20140627112533) do
     t.datetime "failed_at"
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "events", force: :cascade do |t|
     t.integer "name"
     t.datetime "happened_at"
-    t.integer "traceable_id"
     t.string "traceable_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.integer "traceable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.text "message"
+    t.index ["traceable_type", "traceable_id"], name: "index_events_on_traceable_type_and_traceable_id"
   end
 
   create_table "metric_definitions", force: :cascade do |t|
     t.string "name"
     t.string "unit"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "benchmark_definition_id"
     t.string "scale_type"
     t.index ["name", "benchmark_definition_id"], name: "index_metric_definitions_on_name_and_benchmark_definition_id", unique: true
@@ -77,8 +78,8 @@ ActiveRecord::Schema.define(version: 20140627112533) do
 
   create_table "nominal_metric_observations", force: :cascade do |t|
     t.string "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "time", limit: 8
     t.integer "virtual_machine_instance_id"
     t.integer "metric_definition_id"
@@ -91,8 +92,8 @@ ActiveRecord::Schema.define(version: 20140627112533) do
     t.integer "virtual_machine_instance_id"
     t.integer "time", limit: 8
     t.float "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["metric_definition_id"], name: "index_ordered_metric_observations_on_metric_definition_id"
     t.index ["virtual_machine_instance_id"], name: "index_ordered_metric_observations_on_vm_instance_id"
   end
@@ -106,14 +107,14 @@ ActiveRecord::Schema.define(version: 20140627112533) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   create_table "virtual_machine_instances", force: :cascade do |t|
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.integer "benchmark_execution_id"
     t.string "provider_name"
     t.string "provider_instance_id"

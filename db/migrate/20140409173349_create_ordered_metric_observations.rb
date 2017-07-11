@@ -1,4 +1,4 @@
-class CreateOrderedMetricObservations < ActiveRecord::Migration
+class CreateOrderedMetricObservations < ActiveRecord::Migration[5.0]
   def change
     create_table :ordered_metric_observations do |t|
       t.references :metric_definition, index: true

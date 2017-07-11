@@ -1,4 +1,4 @@
-class AddRunningTimeoutToBenchmarkDefinition < ActiveRecord::Migration
+class AddRunningTimeoutToBenchmarkDefinition < ActiveRecord::Migration[5.0]
   def change
     add_column :benchmark_definitions, :running_timeout, :integer
   end
