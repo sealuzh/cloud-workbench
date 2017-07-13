@@ -48,13 +48,13 @@ class BenchmarkExecutionsController < ApplicationController
 
   def prepare_log
     respond_to do |format|
-      format.text { render(text: @benchmark_execution.prepare_log) }
+      format.text { render(plain: @benchmark_execution.prepare_log) }
     end
   end
 
   def release_resources_log
     respond_to do |format|
-      format.text { render(text: @benchmark_execution.release_resources_log) }
+      format.text { render(plain: @benchmark_execution.release_resources_log) }
     end
   end
 
