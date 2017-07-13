@@ -45,22 +45,16 @@ class VagrantDriver
   end
 
   def up(provider)
-    %x( cd "#{@vagrant_dir_path}" &&
-        vagrant up --provider=#{provider} >> #{up_log_file} 2>&1 )
-    $?.success?
+    shell("vagrant up --provider=#{provider}", dir: @vagrant_dir_path, log: up_log_file)
   end
 
   def reprovision
     # NOTE: Use Vagrant up log file that gets displayed as workaround
-    %x( cd "#{@vagrant_dir_path}" &&
-        vagrant provision >> #{up_log_file} 2>&1 )
-    $?.success?
+    shell('vagrant provision', dir: @vagrant_dir_path, log: up_log_file)
   end
 
   def destroy
-    %x( cd "#{@vagrant_dir_path}" &&
-        vagrant destroy --force >>#{destroy_log_file} 2>&1 )
-    $?.success?
+    shell('vagrant destroy --force', dir: @vagrant_dir_path, log: destroy_log_file)
   end
 
   def up_log
@@ -91,5 +85,19 @@ class VagrantDriver
 
     def machines_dir
       File.join(@vagrant_dir_path, '.vagrant', 'machines')
+    end
+
+    # Encapsulates a shell command
+    def shell(cmd, opts)
+      full_cmd = ''
+      full_cmd << "cd #{opts[:dir]} && " if opts[:dir]
+      full_cmd << cmd
+      full_cmd << shell_log(opts[:log]) if opts[:log]
+      system(full_cmd)
+      $?.success?
+    end
+
+    def shell_log(file)
+      " >>#{file} 2>&1"
     end
 end
