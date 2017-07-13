@@ -10,7 +10,7 @@ namespace :factory_girl do
         DatabaseCleaner.clean
       end
     else
-      system("bundle exec rake factory_girl:lint RAILS_ENV='test'")
+      system("bin/rake factory_girl:lint RAILS_ENV='test'")
     end
   end
 end
