@@ -2,6 +2,7 @@ require 'pathname'
 # Vagrant commands can be further refactored into its own method and
 # generic access can be provided to commands ands its corresponding logs.
 class VagrantDriver
+  include ShellRunner
   attr_reader :vagrantfile_path, :vagrant_dir_path
   CURRENT_DIR = '.'
   PARENT_DIR = '..'
@@ -85,27 +86,5 @@ class VagrantDriver
 
     def machines_dir
       File.join(@vagrant_dir_path, '.vagrant', 'machines')
-    end
-
-    # Encapsulates a shell command
-    def shell(cmd, opts)
-      full_cmd = ''
-      full_cmd << "cd #{opts[:dir]} && " if opts[:dir]
-      full_cmd << reset_env
-      full_cmd << cmd
-      full_cmd << shell_log(opts[:log]) if opts[:log]
-      system(full_cmd)
-      $?.success?
-    end
-
-    # Within the production environment, it could be the case the environment variables pollute
-    # the process and cause vagrant commands to fail
-    # Other variables are: `GEM_HOME='' BUNDLE_GEMFILE='' RUBYLIB='' BUNDLER_VERSION='' BUNDLE_BIN_PATH=''`
-    def reset_env
-      "RUBYLIB='' "
-    end
-
-    def shell_log(file)
-      " >>#{file} 2>&1"
     end
 end
