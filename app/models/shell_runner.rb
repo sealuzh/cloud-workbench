@@ -19,6 +19,7 @@ module ShellRunner
   # Within the production environment, it could be the case the environment variables pollute
   # the process and cause vagrant commands to fail
   # Other variables are: `GEM_HOME='' BUNDLE_GEMFILE='' RUBYLIB='' BUNDLER_VERSION='' BUNDLE_BIN_PATH=''`
+  # See https://github.com/mitchellh/vagrant/issues/6158
   def reset_env
     "RUBYLIB='' "
   end
