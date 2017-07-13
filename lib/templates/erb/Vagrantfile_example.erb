@@ -12,10 +12,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :aws do |aws, override|
     aws.region = 'eu-west-1'
-    # Official Ubuntu 14.04 LTS (pv:ebs) image for eu-west-1 from Canonical:
+    # Official Ubuntu 16.04 LTS (hvm:ebs-ssd) image for eu-west-1 from Canonical:
     #  https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = 'ami-b7c379c4'
-    aws.instance_type = 't1.micro'
+    aws.ami = 'ami-6d48500b'
+    aws.instance_type = 't2.micro'
     # aws.security_groups = ['cwb-web']
   end
 
@@ -42,18 +42,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 end
 
 # config.vm.provider :google do |google, override|
-#   google.image = 'debian-7-wheezy-v20140619'
+#   # https://console.cloud.google.com/compute/images
+#   google.image = 'ubuntu-1604-xenial-v20170619a'
+#   # https://cloud.google.com/compute/docs/machine-types
 #   google.machine_type = 'n1-standard-1'
+#   # https://cloud.google.com/compute/docs/regions-zones/regions-zones
 #   google.zone = 'europe-west1-a'
 # end
 
 # config.vm.provider :azure do |azure, override|
 #   azure_common.call(azure, override)
-#   azure.vm_image_urn = 'Canonical:UbuntuServer:14.04.5-LTS:14.04.201701040'
+#   # `az vm image list --offer UbuntuServer -o table --all`
+#   azure.vm_image_urn = 'Canonical:UbuntuServer:16.04.0-LTS:16.04.201611150'
+#   # https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes
 #   azure.vm_size = 'Standard_DS1'
-# end
-
-# config.vm.provider :softlayer do |softlayer, override|
-#   softlayer.datacenter = 'mel01'
-#   softlayer.operating_system = 'UBUNTU_14_64'
 # end
