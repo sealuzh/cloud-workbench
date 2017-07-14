@@ -71,7 +71,7 @@ class BenchmarkExecutionsController < ApplicationController
   rescue => e
     flash[:error] = "Benchmark execution couldn't be started asynchronously.<br>
                      #{fa_icon 'times'}. Error: #{e.message}".html_safe
-    redirect_to :back
+    redirect_back(fallback_location: benchmark_executions_path)
   end
 
   def destroy

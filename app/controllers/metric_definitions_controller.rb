@@ -31,7 +31,7 @@ class MetricDefinitionsController < ApplicationController
 
   def destroy
     @metric_definition.destroy
-    redirect_to :back
+    redirect_back(fallback_location: root_path)
   end
 
   private
