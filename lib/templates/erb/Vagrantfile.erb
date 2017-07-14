@@ -86,7 +86,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Eager initialized variables (outside the lazy evaluated Proc)
   vm_name = "cwb-#{execution_id}"
   location = 'westeurope'
-  resource_group = "cwb-#{location}" # MUST be unique across regions
+  resource_group = vm_name # MUST be unique
   # Composition: https://github.com/Azure/vagrant-azure/blob/v2.0/lib/vagrant-azure/util/machine_id_helper.rb
   azure_id = [resource_group, vm_name, location].join(':')
 
