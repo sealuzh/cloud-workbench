@@ -11,7 +11,7 @@
 ## Literature
 
 * J. Scheuner, P. Leitner, J. Cito, and H. Gall, [**Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmarking,**](http://arxiv.org/pdf/1408.4565v1.pdf) in Proceedings of the 6th IEEE International Conference on Cloud Computing Technology and Science (CloudCom’14), 2014.
-* J. Scheuner, J. Cito, P. Leitner, and H. Gall, [**Cloud WorkBench: Benchmarking IaaS Providers based on Infrastructure-as-Code,**](http://wp.ifi.uzh.ch/preprints/demo10-scheunerATS.pdf) in Proceedings of the 24th International World Wide Web Conference (WWW’15) – Demo Track, 2015.
+* J. Scheuner, J. Cito, P. Leitner, and H. Gall, [**Cloud WorkBench: Benchmarking IaaS Providers based on Infrastructure-as-Code,**](http://www.www2015.it/documents/proceedings/companion/p239.pdf) in Proceedings of the 24th International World Wide Web Conference (WWW’15) – Demo Track, 2015.
   * Screencast (previous version): https://youtu.be/0yGFGvHvobk?t=3m40s
 
 ## Studies that Used CWB
