@@ -35,7 +35,7 @@
 ## Installation
 
 > Interested in your own Cloud WorkBench installation?<br>
-> Feel free to contact us: leitner[AT]ifi.uzh.ch or joel.scheuner[AT]uzh.ch
+> Feel free to contact us: philipp.leitner[AT]chalmers.se or scheuner[AT]chalmers.se
 
 Most parts are automated and configurable via [Chef](https://www.chef.io/),
 some manual steps are required to setup credentials and Chef server configuration.
