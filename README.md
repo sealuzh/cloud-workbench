@@ -16,6 +16,10 @@
 
 ## Studies that Used CWB
 
+* Christoph Laaber, Joel Scheuner, Philipp Leitner (preprint, not peer reviewed). [**Performance testing in the cloud. How bad is it really?**](https://peerj.com/preprints/3507/)
+
+* Joel Scheuner, Philipp Leitner (2018). **A Cloud Benchmark Suite Combining Micro and Applications Benchmarks,** to appear in Proceedings of the 4th International Workshop on Quality-Aware DevOps (QUDOS'17)
+
 * Christian Davatz, Christian Inzinger, Joel Scheuner, and Philipp Leitner (2017). [**An Approach and Case Study of Cloud Instance Type Selection for Multi-Tier Web Applications.**](https://pdfs.semanticscholar.org/82c8/3bc10bc34ae0e67bae2996c6055f27433826.pdf) In Proceedings of the 17th IEEE/ACM International Symposium on Cluster, Cloud and Grid Computing (CCGrid '17). IEEE Press, Piscataway, NJ, USA, 534-543. DOI: https://doi.org/10.1109/CCGRID.2017.12
 
 * Philipp Leitner, Jürgen Cito (2016). [**Patterns in the Chaos - A Study of Performance Variation and Predictability in Public IaaS Clouds**](https://arxiv.org/pdf/1411.2429v2.pdf). ACM Transactions on Internet Technology, 16(3), pp. 15:1–15:23. New York, NY, USA. DOI: https://doi.org/10.1145/2885497
