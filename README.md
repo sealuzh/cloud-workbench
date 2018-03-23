@@ -10,21 +10,21 @@
 
 ## Literature
 
-* J. Scheuner, P. Leitner, J. Cito, and H. Gall, [**Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmarking,**](http://arxiv.org/pdf/1408.4565v1.pdf) in Proceedings of the 6th IEEE International Conference on Cloud Computing Technology and Science (CloudCom’14), 2014.
-* J. Scheuner, J. Cito, P. Leitner, and H. Gall, [**Cloud WorkBench: Benchmarking IaaS Providers based on Infrastructure-as-Code,**](http://www.www2015.it/documents/proceedings/companion/p239.pdf) in Proceedings of the 24th International World Wide Web Conference (WWW’15) – Demo Track, 2015.
+* Joel Scheuner, Philipp Leitner, Jürgen Cito, and Harald Gall (2014), [**Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmarking,**](http://arxiv.org/pdf/1408.4565v1.pdf) in Proceedings of the 6th IEEE International Conference on Cloud Computing Technology and Science (CloudCom’14), 2014. DOI: https://doi.org/10.1109/CloudCom.2014.98
+* Joel Scheuner, Jürgen Cito, Philipp Leitner, and Harald Gall (2015), [**Cloud WorkBench: Benchmarking IaaS Providers based on Infrastructure-as-Code,**](http://www.www2015.it/documents/proceedings/companion/p239.pdf) in Proceedings of the 24th International World Wide Web Conference (WWW’15) – Demo Track, 2015. DOI: https://doi.org/10.1145/2740908.2742833
   * Screencast (previous version): https://youtu.be/0yGFGvHvobk?t=3m40s
 
 ## Studies that Used CWB
 
-* Christian Davatz, Christian Inzinger, Joel Scheuner, and Philipp Leitner. 2017. An Approach and Case Study of Cloud Instance Type Selection for Multi-Tier Web Applications. In Proceedings of the 17th IEEE/ACM International Symposium on Cluster, Cloud and Grid Computing (CCGrid '17). IEEE Press, Piscataway, NJ, USA, 534-543. DOI: https://doi.org/10.1109/CCGRID.2017.12
+* Christian Davatz, Christian Inzinger, Joel Scheuner, and Philipp Leitner (2017). [**An Approach and Case Study of Cloud Instance Type Selection for Multi-Tier Web Applications.**](https://pdfs.semanticscholar.org/82c8/3bc10bc34ae0e67bae2996c6055f27433826.pdf) In Proceedings of the 17th IEEE/ACM International Symposium on Cluster, Cloud and Grid Computing (CCGrid '17). IEEE Press, Piscataway, NJ, USA, 534-543. DOI: https://doi.org/10.1109/CCGRID.2017.12
 
-* Philipp Leitner, Jürgen Cito (2016). Patterns in the Chaos - A Study of Performance Variation and Predictability in Public IaaS Clouds. ACM Transactions on Internet Technology, 16(3), pp. 15:1–15:23. New York, NY, USA.
+* Philipp Leitner, Jürgen Cito (2016). [**Patterns in the Chaos - A Study of Performance Variation and Predictability in Public IaaS Clouds**](https://arxiv.org/pdf/1411.2429v2.pdf). ACM Transactions on Internet Technology, 16(3), pp. 15:1–15:23. New York, NY, USA. DOI: https://doi.org/10.1145/2885497
 
-* Joel Scheuner, Jürgen Cito, Philipp Leitner, Harald C. Gall (2015). Cloud WorkBench: Benchmarking IaaS Providers Based on Infrastructure-as-Code. In Proceedings of the 24th International Conference on World Wide Web, pp. 239–242, New York, NY, USA.
+* Joel Scheuner, Jürgen Cito, Philipp Leitner, and Harald Gall (2015), [**Cloud WorkBench: Benchmarking IaaS Providers based on Infrastructure-as-Code,**](http://www.www2015.it/documents/proceedings/companion/p239.pdf) in Proceedings of the 24th International World Wide Web Conference (WWW’15) – Demo Track, 2015. DOI: https://doi.org/10.1145/2740908.2742833
 
-* Philipp Leitner, Joel Scheuner (2015). Bursting With Possibilities – an Empirical Study of Credit-Based Bursting Cloud Instance Types. In Proceedings of the 8th IEEE/ACM International Conference on Utility and Cloud Computing (UCC)
+* Philipp Leitner, Joel Scheuner (2015). [**Bursting With Possibilities – an Empirical Study of Credit-Based Bursting Cloud Instance Types.**](http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7431414) In Proceedings of the 8th IEEE/ACM International Conference on Utility and Cloud Computing (UCC). DOI: https://doi.org/10.1109/UCC.2015.39
 
-* Joel Scheuner, Philipp Leitner, Jürgen Cito, Harald Gall (2014). Cloud WorkBench - Infrastructure-as-Code Based Cloud Benchmarking. In Proceedings of the 6th IEEE International Conference on Cloud Computing Technology and Science (CloudCom'14)
+* Joel Scheuner, Philipp Leitner, Jürgen Cito, and Harald Gall (2014), [**Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmarking,**](http://arxiv.org/pdf/1408.4565v1.pdf) in Proceedings of the 6th IEEE International Conference on Cloud Computing Technology and Science (CloudCom’14), 2014. DOI: https://doi.org/10.1109/CloudCom.2014.98
 
 ## Screenshots
 
