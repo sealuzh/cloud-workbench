@@ -20,7 +20,7 @@
 
 * Christoph Laaber, Joel Scheuner, Philipp Leitner (preprint, not peer reviewed). [**Performance testing in the cloud. How bad is it really?**](https://peerj.com/preprints/3507/)
 
-* Joel Scheuner, Philipp Leitner (2018). [**A Cloud Benchmark Suite Combining Micro and Applications Benchmarks](https://dl.acm.org/citation.cfm?id=3186286)**, in Proceedings of the 4th International Workshop on Quality-Aware DevOps (QUDOS'17). DOI: https://doi.org/10.1145/3185768.3186286
+* Joel Scheuner, Philipp Leitner (2018). [**A Cloud Benchmark Suite Combining Micro and Applications Benchmarks**](https://dl.acm.org/citation.cfm?id=3186286), in Proceedings of the 4th International Workshop on Quality-Aware DevOps (QUDOS'17). DOI: https://doi.org/10.1145/3185768.3186286
 
 * Christian Davatz, Christian Inzinger, Joel Scheuner, and Philipp Leitner (2017). [**An Approach and Case Study of Cloud Instance Type Selection for Multi-Tier Web Applications.**](https://pdfs.semanticscholar.org/82c8/3bc10bc34ae0e67bae2996c6055f27433826.pdf) in Proceedings of the 17th IEEE/ACM International Symposium on Cluster, Cloud and Grid Computing (CCGrid'17). IEEE Press, Piscataway, NJ, USA, 534-543. DOI: https://doi.org/10.1109/CCGRID.2017.12
 
