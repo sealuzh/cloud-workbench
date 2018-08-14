@@ -27,7 +27,7 @@ gem 'devise', '~> 4.3'
 # https://samsaffron.com/archive/2015/03/31/debugging-memory-leaks-in-ruby
 # Migration from LESS to SASS is required to drop this dependency
 gem 'therubyracer', '~> 0.12.3', platforms: :ruby
-gem 'less-rails', '~> 2.8'
+gem 'less-rails', '~> 3.0'
 gem 'uglifier', '~> 3.2'
 gem 'jquery-rails'
 gem 'coffee-rails', '~> 4.2', '>= 4.2.2'
