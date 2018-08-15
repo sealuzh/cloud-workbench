@@ -56,6 +56,13 @@ bin/guard
 
 Automatically reloads a page on asset modification via the following browser plugin:
 
+## Run Locally in Production Mode
+
+```bash
+RAILS_ENV=production bin/rake assets:precompile
+RAILS_ENV=production bin/rails s
+```
+
 ## Tips & Tricks
 
 * The Rails application preloader [Spring](https://github.com/rails/spring)
