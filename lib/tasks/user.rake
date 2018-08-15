@@ -8,14 +8,18 @@ namespace :user do
     # Rake.application.invoke_task("user:create[#{default_email}, #{default_password}]")
   end
 
-  desc 'Create or update (if password has changed) a user with custom email and password.'
+  desc 'Create or update (if password has changed) a user with optional email and password args. Example: `rake \'user:create[myemail,mypw]\'`'
   task :create, [:email, :password] => [:environment]  do |task, args|
-    create_or_update_user(args[:email], args[:password])
+    email = args[:email] || Rails.application.config.default_email
+    password = args[:password] || Rails.application.config.default_password
+    create_or_update_user(email, password)
   end
 
-  def create_or_update_user(email, new_password)
-    user = User.find_or_create_by!(email: email)
-    same_password = user.valid_password?(new_password)
-    user.update!(password: new_password, password_confirmation: new_password) unless same_password
-  end
+  private
+
+    def create_or_update_user(email, new_password)
+      user = User.find_or_create_by!(email: email)
+      same_password = user.valid_password?(new_password)
+      user.update!(password: new_password, password_confirmation: new_password) unless same_password
+    end
 end
