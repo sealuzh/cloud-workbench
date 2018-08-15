@@ -1,7 +1,8 @@
 class ErrorsController < ApplicationController
+  skip_before_action :authenticate_user!, raise: false
 
   def show
-    render status_code.to_s, :status => status_code
+    render status: status, template: "errors/#{status_code}"
   end
 
   protected
@@ -9,5 +10,4 @@ class ErrorsController < ApplicationController
   def status_code
     params[:code] || :internal_server_error # 500
   end
-
 end
