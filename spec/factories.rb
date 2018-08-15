@@ -1,7 +1,7 @@
 require 'erb'
 require 'ostruct'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :benchmark_definition do
     provider_name 'aws'
     sequence(:name) { |n| "fio-benchmark #{n}" }

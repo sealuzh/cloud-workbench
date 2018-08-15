@@ -50,7 +50,7 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.include Capybara::DSL
   config.include AuthenticationHelpers, type: :feature
 
@@ -61,7 +61,7 @@ RSpec.configure do |config|
     # Lint factories
     begin
       DatabaseCleaner.start
-      FactoryGirl.lint
+      FactoryBot.lint
     ensure
       DatabaseCleaner.clean_with(:deletion)
     end

@@ -117,7 +117,7 @@ end
 group :test do
   gem 'capybara', '~> 3.6'
   gem 'database_cleaner', '~> 1.7'
-  gem 'factory_girl_rails', '~> 4.9'
+  gem 'factory_bot_rails', '~> 4.10'
 end
 
 group :doc do
