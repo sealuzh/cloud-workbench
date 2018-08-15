@@ -46,4 +46,7 @@ Rails.application.routes.draw do
       post :complete_postprocessing
     end
   end
+
+  # Redirect to 404 for any non-matching path
+  match '*path', to: 'errors#show', code: 404, via: :all
 end
