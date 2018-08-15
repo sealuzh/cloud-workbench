@@ -1,7 +1,10 @@
-.PHONY: install run migrate setup stop_spring test guard drop_db prod_setup prod_run
+.PHONY: install outdated run migrate setup stop_spring test guard drop_db prod_setup prod_run
 
 install:
 	bin/bundle install
+
+outdated:
+	bin/bundle outdated
 
 migrate:
 	bin/rake db:migrate
