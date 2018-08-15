@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140627112533) do
+ActiveRecord::Schema.define(version: 2014_06_27_112533) do
 
   create_table "benchmark_definitions", force: :cascade do |t|
     t.string "name"
