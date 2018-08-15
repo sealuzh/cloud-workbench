@@ -19,21 +19,15 @@ namespace :db do
       drop_db_user(username)
     end
 
-    desc 'Create the PostgreSQL database'
-    task create_db: :environment do
-        db_config = Rails.application.config.database_configuration[Rails.env]
-        create_db(db_config['database'])
-    end
-
     private
 
         def create_or_update_db_user(username, password)
           con = PG.connect(dbname: 'postgres')
           res = con.exec("SELECT usename FROM pg_catalog.pg_user WHERE pg_user.usename='#{username}';")
           if (res.one?) # or res.num_tuples
-            con.exec("ALTER USER #{username} WITH CREATEDB PASSWORD '#{password}';")
+            con.exec("ALTER ROLE #{username} WITH CREATEDB PASSWORD '#{password}';")
           else
-            con.exec("CREATE USER #{username} WITH CREATEDB PASSWORD '#{password}';")
+            con.exec("CREATE ROLE #{username} WITH CREATEDB PASSWORD '#{password}';")
           end
         rescue => e
           STDERR.puts e
@@ -43,16 +37,7 @@ namespace :db do
 
         def drop_db_user(username)
           con = PG.connect(dbname: 'postgres')
-          con.exec("DROP USER #{username};")
-        rescue => e
-          STDERR.puts e
-        ensure
-          con.close if con
-        end
-
-        def create_db(db_name)
-          con = PG.connect(dbname: 'postgres')
-          con.exec("CREATE DATABASE #{db_name};")
+          con.exec("DROP ROLE #{username};")
         rescue => e
           STDERR.puts e
         ensure
