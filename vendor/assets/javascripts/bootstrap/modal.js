@@ -28,6 +28,8 @@
     }
   }
 
+  Modal.VERSION  = '3.1.1'
+
   Modal.DEFAULTS = {
     backdrop: true,
     keyboard: true,
