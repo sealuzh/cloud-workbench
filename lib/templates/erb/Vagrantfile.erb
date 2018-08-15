@@ -22,6 +22,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.username = 'ubuntu'
   config.ssh.private_key_path = ENV['SSH_KEY_PATH']
 
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+  # Fix SMB username promt: https://github.com/mitchellh/vagrant-aws/issues/365
+  config.vm.allowed_synced_folder_types = :rsync
+
   # Butcher plugin that removes Chef nodes and clients
   if Vagrant.has_plugin?('vagrant-butcher')
     config.butcher.verify_ssl = false
@@ -43,13 +47,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
     aws.keypair_name = ENV['SSH_KEY_NAME']
 
-    # Official Ubuntu 16.04 LTS (hvm:ebs-ssd) image for eu-west-1 from Canonical:
+    # Official Ubuntu 18.04 LTS (hvm:ebs-ssd) image for eu-central-1 from Canonical:
     #  https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = 'ami-6d48500b'
+    aws.ami = 'ami-0d9634d5c860a3200'
 
     # AWS default instance configuration
     aws.instance_ready_timeout = 300 # seconds (default=120)
-    aws.region = 'eu-west-1' # Europe/Ireland as default configuration
+    aws.region = 'eu-central-1' # Europe/Frankfurt as default configuration
     aws.instance_type = 't2.micro'
     aws.security_groups = ['default']
     aws.tags = {

@@ -11,10 +11,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.username = SSH_USERNAME
 
   config.vm.provider :aws do |aws, override|
-    aws.region = 'eu-west-1'
-    # Official Ubuntu 16.04 LTS (hvm:ebs-ssd) image for eu-west-1 from Canonical:
+    aws.region = 'eu-central-1' # Europe/Frankfurt
+    # Official Ubuntu 18.04 LTS (hvm:ebs-ssd) image for eu-central-1 from Canonical:
     #  https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = 'ami-6d48500b'
+    aws.ami = 'ami-0d9634d5c860a3200'
+    # Instance types: https://www.ec2instances.info/
     aws.instance_type = 't2.micro'
     # aws.security_groups = ['cwb-web']
   end
