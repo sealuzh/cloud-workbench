@@ -6,7 +6,7 @@ def ruby_version(file = '.ruby-version')
 end
 ruby ruby_version
 
-gem 'rails', '5.1.2'
+gem 'rails', '~> 5.2', '>= 5.2.1'
 
 # General
 gem 'silencer', '~> 1.0', '>= 1.0.1'
@@ -47,6 +47,9 @@ gem 'pry-rails' # Use pry as Rails console
 # `Procfile`-based process manager: http://ddollar.github.io/foreman/
 # Used in production to export into other formats (e.g., Upstart)
 gem 'foreman', '~> 0.85.0'
+
+# Boot large apps faster
+gem 'bootsnap', '~> 1.3', '>= 1.3.1'
 
 group :production do
   gem 'unicorn', '~> 5.4', '>= 5.4.1'

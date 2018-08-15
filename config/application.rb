@@ -22,9 +22,6 @@ module CloudBenchmarking
     # Handle exceptions (e.g. 404 not found) in routes.rb
     config.exceptions_app = self.routes
 
-    # DEVELOPMENT: Show custom exceptions instead of debug exception
-    # config.consider_all_requests_local = false
-
     # Add fonts in vendor directory to assets pipeline
     config.assets.paths << "#{Rails.root}/vendor/assets/fonts"
     # config.assets.precompile += %w( *.ttf *.eot *.svg *.woff *.png *.gif *.jpg )
