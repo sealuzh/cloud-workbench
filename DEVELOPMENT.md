@@ -32,6 +32,18 @@ open http://localhost:3000
 # Login with password `demo`
 ```
 
+## Start Worker
+
+```bash
+bin/rake jobs:work
+```
+
+## Start Server and Worker
+
+```bash
+bin/foreman start
+```
+
 ## Run Tests
 
 Run all tests:

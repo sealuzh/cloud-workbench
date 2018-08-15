@@ -7,6 +7,7 @@ outdated:
 	bin/bundle outdated
 
 migrate:
+	bin/rake db:create
 	bin/rake db:migrate
 
 setup: migrate
@@ -14,6 +15,12 @@ setup: migrate
 
 run:
 	bin/rails server
+
+worker:
+	bin/rake jobs:work
+
+foreman:
+	bin/foreman start
 
 stop_spring:
 	bin/spring stop
