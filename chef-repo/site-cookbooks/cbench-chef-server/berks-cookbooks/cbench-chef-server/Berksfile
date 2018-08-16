@@ -1,6 +1,0 @@
-source "https://api.berkshelf.com"
-
-metadata
-
-# Fix for deprecated Omnitruck URL: https://github.com/opscode-cookbooks/chef-server/pull/56
-cookbook 'chef-server', git: 'https://github.com/sczizzo/chef-server.git', ref: 'b4af94687e5871e08f9b4ad1b139df9d280fd2da'

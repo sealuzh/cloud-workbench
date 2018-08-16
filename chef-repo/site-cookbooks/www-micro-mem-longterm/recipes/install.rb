@@ -1,1 +1,0 @@
-gem_package 'rufus-scheduler'
