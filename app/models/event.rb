@@ -1,4 +1,4 @@
-class Event < ActiveRecord::Base
+class Event < ApplicationRecord
   default_scope { order(happened_at: :asc) }
   scope :happened_before, lambda { |time| where("happened_at < ?", time).reorder(happened_at: :desc) }
   scope :happened_after,  lambda { |time| where("happened_at > ?", time).reorder(happened_at: :asc) }

@@ -1,4 +1,4 @@
-class AddCloudProviderRefToVirtualMachineDefinition < ActiveRecord::Migration
+class AddCloudProviderRefToVirtualMachineDefinition < ActiveRecord::Migration[5.0]
   def change
     add_reference :virtual_machine_definitions, :cloud_provider, index: true
   end

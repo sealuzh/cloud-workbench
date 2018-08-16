@@ -1,4 +1,4 @@
-class CreateVirtualMachineDefinitions < ActiveRecord::Migration
+class CreateVirtualMachineDefinitions < ActiveRecord::Migration[5.0]
   def change
     create_table :virtual_machine_definitions do |t|
       t.string :role

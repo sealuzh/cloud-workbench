@@ -1,4 +1,4 @@
-class AddIndexOnNameToMetricDefinitions < ActiveRecord::Migration
+class AddIndexOnNameToMetricDefinitions < ActiveRecord::Migration[5.0]
   def change
     # Ensure scoped uniqueness constraint of metrics_definitions:
     # The name of a metric definition MUST be unique within the scope of a benchmark definition

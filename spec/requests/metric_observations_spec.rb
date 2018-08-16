@@ -64,13 +64,16 @@ describe MetricDefinitionsController do
     end
 
     def post_create(metric, vm, time, value)
-      post '/metric_observations', :metric_observation => {
-          metric_definition_id: metric.name, # metric.id should also be valid
-          provider_name: vm.provider_name,
-          provider_instance_id: vm.provider_instance_id,
-          time: time,
-          value: value
-      }
+      post '/metric_observations', params:
+          { metric_observation:
+            {
+              metric_definition_id: metric.name, # metric.id should also be valid
+              provider_name: vm.provider_name,
+              provider_instance_id: vm.provider_instance_id,
+              time: time,
+              value: value
+            }
+          }
     end
   end
 
@@ -122,7 +125,7 @@ describe MetricDefinitionsController do
   end
 
   def post_import(metric, vm, file, file_type = 'text/csv')
-    post import_metric_observations_path,
+    post import_metric_observations_path, params:
      {  metric_observation: {
           metric_definition_id: metric.id,
           provider_name: vm.provider_name,

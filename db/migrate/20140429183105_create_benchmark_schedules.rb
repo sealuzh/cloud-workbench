@@ -1,4 +1,4 @@
-class CreateBenchmarkSchedules < ActiveRecord::Migration
+class CreateBenchmarkSchedules < ActiveRecord::Migration[5.0]
   def change
     create_table :benchmark_schedules do |t|
       t.string :cron_expression

@@ -1,4 +1,4 @@
-class MetricDefinition < ActiveRecord::Base
+class MetricDefinition < ApplicationRecord
   extend Enumerize
 
   belongs_to :benchmark_definition

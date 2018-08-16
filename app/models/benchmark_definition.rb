@@ -1,5 +1,5 @@
 require 'securerandom'
-class BenchmarkDefinition < ActiveRecord::Base
+class BenchmarkDefinition < ApplicationRecord
   extend Enumerize
   PROVIDERS = Rails.application.config.supported_providers
   enumerize :provider_name, in: PROVIDERS, default: PROVIDERS.first
@@ -99,7 +99,7 @@ class BenchmarkDefinition < ActiveRecord::Base
     def ensure_name_integrity
       if self.name_changed? && self.benchmark_executions.any?
         errors.add(:base, 'The name of a benchmark definition cannot be changed if any benchmark executions are present.')
-        false
+        throw(:abort)
       else
         true
       end

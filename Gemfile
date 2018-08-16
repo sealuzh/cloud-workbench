@@ -6,19 +6,18 @@ def ruby_version(file = '.ruby-version')
 end
 ruby ruby_version
 
-gem 'rails', '4.2.6'
+gem 'rails', '5.1.2'
 
 # General
-# NOTE: This gem is not thread-safe and SHOULD NOT be used with
-#       threaded web servers such as puma. It is used to suppress
-#       the logs of polling javascript
-gem 'silencer', '~> 0.6.0'
-gem 'whenever', '~> 0.9.2'
-gem 'cron2english', '~> 0.1.3'
-gem 'delayed_job_active_record', '~> 4.1'
-gem 'enumerize', '~> 1.1.1'
-gem 'deep_cloneable', '~> 2.2.0'
-gem 'devise', '~> 3.5' # Authentication
+gem 'silencer', '~> 1.0', '>= 1.0.1'
+gem 'whenever', '~> 0.9.7'
+gem 'cron2english', '~> 0.1.6'
+gem 'delayed_job_active_record', '~> 4.1', '>= 4.1.2'
+gem 'enumerize', '~> 2.1', '>= 2.1.2'
+gem 'deep_cloneable', '~> 2.3'
+
+# Authentication
+gem 'devise', '~> 4.3'
 
 # Assets
 # Required by `less-rails` for Bootstrap assets:
@@ -27,20 +26,18 @@ gem 'devise', '~> 3.5' # Authentication
 # https://devcenter.heroku.com/articles/rails-asset-pipeline#therubyracer
 # https://samsaffron.com/archive/2015/03/31/debugging-memory-leaks-in-ruby
 # Migration from LESS to SASS is required to drop this dependency
-gem 'therubyracer', '~> 0.12.2', platforms: :ruby
-gem 'less-rails', '~> 2.7'
-gem 'uglifier', '>= 1.3.0'
+gem 'therubyracer', '~> 0.12.3', platforms: :ruby
+gem 'less-rails', '~> 2.8'
+gem 'uglifier', '~> 3.2'
 gem 'jquery-rails'
-gem 'coffee-rails', '~> 4.1.1'
-gem 'turbolinks'
-gem 'jquery-turbolinks'
-gem 'jbuilder', '~> 2.4'
+gem 'coffee-rails', '~> 4.2', '>= 4.2.2'
+gem 'jbuilder', '~> 2.7'
 
 ## UI
-gem 'font-awesome-rails', '~> 4.5.0.1'
-gem 'will_paginate', '~> 3.1.0'
-gem 'bootstrap-will_paginate', '~> 0.0.10'
-gem 'simple_form', '~> 3.2.1'
+gem 'font-awesome-rails', '~> 4.7', '>= 4.7.0.2'
+gem 'will_paginate', '~> 3.1', '>= 3.1.6'
+gem 'bootstrap-will_paginate', '~> 1.0'
+gem 'simple_form', '~> 3.5'
 gem 'data-confirm-modal', '~> 1.3'
 
 # Admin
@@ -49,7 +46,7 @@ gem 'pry-rails' # Use pry as Rails console
 
 # `Procfile`-based process manager: http://ddollar.github.io/foreman/
 # Used in production to export into other formats (e.g., Upstart)
-gem 'foreman', '~> 0.78.0'
+gem 'foreman', '~> 0.84.0'
 
 group :production do
   gem 'unicorn'
@@ -69,7 +66,6 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'meta_request'
-  gem 'quiet_assets'
 end
 
 DEPLOYMENT=false
@@ -106,7 +102,7 @@ end
 group :development, :test do
   gem 'sqlite3'
   gem 'faker'
-  gem 'rspec-rails', '~> 3.4.2'
+  gem 'rspec-rails', '~> 3.6'
   gem 'rspec-its' # Support for deprecated `its` syntax in RSpec 3
   gem 'fuubar' # RSpec progress bar formatter
   gem 'spring-commands-rspec'
@@ -116,13 +112,13 @@ group :development, :test do
 end
 
 group :test do
-  gem 'capybara', '~> 2.6.2'
-  gem 'database_cleaner', '~> 1.5.0'
-  gem 'factory_girl_rails', '~> 4.6'
+  gem 'capybara', '~> 2.14', '>= 2.14.4'
+  gem 'database_cleaner', '~> 1.6', '>= 1.6.1'
+  gem 'factory_girl_rails', '~> 4.8'
 end
 
 group :doc do
   # Generate docs with `yard doc`
   # Docs at http://www.rubydoc.info/gems/yard/
-  gem 'yard', '~> 0.8.7.6', require: false
+  gem 'yard', require: false
 end

@@ -64,7 +64,7 @@ var configure_ace = function() {
     }
 };
 
-$(document).on('ready page:load', function () {
+$(document).ready(function () {
     configure_ace();
     $('#ace_expand').click(function() {
         resize_ace_editor();

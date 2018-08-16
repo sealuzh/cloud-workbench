@@ -1,4 +1,4 @@
-class CreateBenchmarkExecutions < ActiveRecord::Migration
+class CreateBenchmarkExecutions < ActiveRecord::Migration[5.0]
   def change
     create_table :benchmark_executions do |t|
       t.string :status
