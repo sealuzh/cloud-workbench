@@ -1,5 +1,5 @@
 <div class="transparant-well">
-  <% if @benchmark_execution.active? %>
+  <% if @benchmark_execution.active? || @benchmark_execution.failed? %>
   <%= toggle_keep_alive_execution_btn(@benchmark_execution) %>
   <%= link_to "#{fa_icon 'wrench'}&nbsp;Reprovision".html_safe, reprovision_benchmark_execution_path(@benchmark_execution),
               method: :post, class: 'btn btn-default btn-block', data: confirm_reprovision_msg %>

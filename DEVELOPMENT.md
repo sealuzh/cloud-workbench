@@ -2,18 +2,57 @@
 
 ## Requirements
 
-* [Ruby (2.4.1)](https://www.ruby-lang.org/en/downloads/) for development and deployment with Bundler
-    * [Mac installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
-    * [Windows installer](http://rubyinstaller.org/)
+* [Ruby (2.5.1)](https://www.ruby-lang.org/en/downloads/) for development and deployment with Bundler
+    * [Mac Ruby installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
+    * [Windows Ruby installer](http://rubyinstaller.org/)
+    * Install bundler:
 
-## Tests
+  ```bash
+  gem install bundler
+  ```
+
+## Install Dependencies
+
+```bash
+bin/bundle install
+```
+
+## Run Migrations
+
+```bash
+bin/rake db:migrate
+bin/rake user:create_default
+```
+
+## Start Server
+
+```bash
+bin/rails s
+open http://localhost:3000
+# Login with password `demo`
+```
+
+## Start Worker
+
+```bash
+bin/rake jobs:work
+```
+
+## Start Server and Worker
+
+```bash
+bin/foreman start
+```
+
+## Run Tests
 
 Run all tests:
+
 ```bash
 bin/rspec
 ```
 
-## Guard
+## Continuously Run Tests
 
 [Guard](https://github.com/guard/guard) automatically
 runs your tests whenever a file is modified:
@@ -28,6 +67,13 @@ bin/guard
   browser extension to automatically reload the browser page.
 
 Automatically reloads a page on asset modification via the following browser plugin:
+
+## Run Locally in Production Mode
+
+```bash
+RAILS_ENV=production bin/rake assets:precompile
+RAILS_ENV=production bin/rails s
+```
 
 ## Tips & Tricks
 

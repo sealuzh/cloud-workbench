@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   # Exceptions
   %w( 404 422 500 ).each do |code|
-    get code, :to => 'errors#show', :code => code
+    match code, :to => 'errors#show', code: code, via: :all
   end
 
   # Resources
@@ -46,4 +46,7 @@ Rails.application.routes.draw do
       post :complete_postprocessing
     end
   end
+
+  # Redirect to 404 for any non-matching path
+  match '*path', to: 'errors#show', code: 404, via: :all
 end

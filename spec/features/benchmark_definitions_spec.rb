@@ -39,6 +39,7 @@ feature 'Benchmark definition management' do
 
       click_button 'Create New Benchmark'
       expect(page).to have_content 'was successfully created'
+      expect(page).not_to have_content '<strong>', 'Do not render HTML markup'
       expect(page).to have_field('Name', with: valid_benchmark_definition.name)
       expect(page).to have_field('Vagrantfile', with: valid_benchmark_definition.vagrantfile)
       bm_definition = BenchmarkDefinition.find_by_name(valid_benchmark_definition.name)

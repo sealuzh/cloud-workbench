@@ -27,6 +27,10 @@
     </div>
   </div>
   <br>
+  <%= link_to 'https://github.com/mitchellh/vagrant-aws#configuration', target: '_blank' do %>
+    vagrant-aws&nbsp;<%= fa_icon('github') %>
+  <% end %>
+  <br>
   <% if vagrantfile_error?(@benchmark_definition) %>
     <%= f.label :vagrantfile, class: 'vagrantfile_error', error: true %>
   <% else %>
