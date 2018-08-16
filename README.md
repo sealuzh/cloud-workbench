@@ -1,5 +1,7 @@
 # Cloud WorkBench (CWB)
 
+[![Build Status](https://travis-ci.org/sealuzh/cloud-workbench.svg?branch=master)](https://travis-ci.org/sealuzh/cloud-workbench)
+
 ## Quicklinks
 
 * Write your own benchmarks with Cloud WorkBench: https://github.com/sealuzh/cwb-benchmarks
