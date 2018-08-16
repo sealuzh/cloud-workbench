@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision 'cwb', type: 'chef_client' do |chef|
-    chef.add_recipe 'cli-benchmark@1.0.1'  # Version is optional
+    chef.add_recipe 'cli-benchmark@1.0.2'  # Version is optional
     chef.json =
     {
       'benchmark' =>  {
@@ -41,20 +41,3 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
   end
 end
-
-# config.vm.provider :google do |google, override|
-#   # https://console.cloud.google.com/compute/images
-#   google.image = 'ubuntu-1604-xenial-v20170619a'
-#   # https://cloud.google.com/compute/docs/machine-types
-#   google.machine_type = 'n1-standard-1'
-#   # https://cloud.google.com/compute/docs/regions-zones/regions-zones
-#   google.zone = 'europe-west1-b'
-# end
-
-# config.vm.provider :azure do |azure, override|
-#   azure_common.call(azure, override)
-#   # `az vm image list --offer UbuntuServer -o table --all`
-#   azure.vm_image_urn = 'Canonical:UbuntuServer:16.04.0-LTS:16.04.201611150'
-#   # https://docs.microsoft.com/en-us/azure/virtual-machines/windows/sizes
-#   azure.vm_size = 'Standard_DS1'
-# end
