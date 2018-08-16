@@ -48,13 +48,13 @@ class BenchmarkExecutionsController < ApplicationController
 
   def prepare_log
     respond_to do |format|
-      format.text { render(text: @benchmark_execution.prepare_log) }
+      format.text { render(plain: @benchmark_execution.prepare_log) }
     end
   end
 
   def release_resources_log
     respond_to do |format|
-      format.text { render(text: @benchmark_execution.release_resources_log) }
+      format.text { render(plain: @benchmark_execution.release_resources_log) }
     end
   end
 
@@ -71,7 +71,7 @@ class BenchmarkExecutionsController < ApplicationController
   rescue => e
     flash[:error] = "Benchmark execution couldn't be started asynchronously.<br>
                      #{fa_icon 'times'}. Error: #{e.message}".html_safe
-    redirect_to :back
+    redirect_back(fallback_location: benchmark_executions_path)
   end
 
   def destroy

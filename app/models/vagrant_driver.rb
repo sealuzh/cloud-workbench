@@ -2,6 +2,7 @@ require 'pathname'
 # Vagrant commands can be further refactored into its own method and
 # generic access can be provided to commands ands its corresponding logs.
 class VagrantDriver
+  include ShellRunner
   attr_reader :vagrantfile_path, :vagrant_dir_path
   CURRENT_DIR = '.'
   PARENT_DIR = '..'
@@ -45,22 +46,16 @@ class VagrantDriver
   end
 
   def up(provider)
-    %x( cd "#{@vagrant_dir_path}" &&
-        vagrant up --provider=#{provider} >> #{up_log_file} 2>&1 )
-    $?.success?
+    shell("vagrant up --provider=#{provider}", dir: @vagrant_dir_path, log: up_log_file)
   end
 
   def reprovision
     # NOTE: Use Vagrant up log file that gets displayed as workaround
-    %x( cd "#{@vagrant_dir_path}" &&
-        vagrant provision >> #{up_log_file} 2>&1 )
-    $?.success?
+    shell('vagrant provision', dir: @vagrant_dir_path, log: up_log_file)
   end
 
   def destroy
-    %x( cd "#{@vagrant_dir_path}" &&
-        vagrant destroy --force >>#{destroy_log_file} 2>&1 )
-    $?.success?
+    shell('vagrant destroy --force', dir: @vagrant_dir_path, log: destroy_log_file)
   end
 
   def up_log

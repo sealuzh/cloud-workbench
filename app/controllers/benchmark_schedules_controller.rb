@@ -41,7 +41,7 @@ class BenchmarkSchedulesController < ApplicationController
   rescue => e
     error_flash_for('activated', e.message)
   ensure
-    redirect_to :back
+    redirect_back(fallback_location: benchmark_definitions_path)
   end
 
   def deactivate
@@ -51,7 +51,7 @@ class BenchmarkSchedulesController < ApplicationController
   rescue => e
     error_flash_for('deactivated', e.message)
   ensure
-    redirect_to :back
+    redirect_back(fallback_location: benchmark_definitions_path)
   end
 
   private

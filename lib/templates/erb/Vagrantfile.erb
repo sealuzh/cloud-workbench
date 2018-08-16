@@ -43,10 +43,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
     aws.keypair_name = ENV['SSH_KEY_NAME']
 
-    # Official Ubuntu 14.04 LTS AMI (hvm:ebs-ssd)
-    # from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
-    # trusty  server  release 20170405  ebs-ssd amd64 eu-west-1 ami-09447c6f      hvm
-    aws.ami = 'ami-09447c6f'
+    # Official Ubuntu 16.04 LTS (hvm:ebs-ssd) image for eu-west-1 from Canonical:
+    #  https://cloud-images.ubuntu.com/locator/ec2/
+    aws.ami = 'ami-6d48500b'
 
     # AWS default instance configuration
     aws.instance_ready_timeout = 300 # seconds (default=120)
@@ -68,7 +67,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     google.google_client_email = ENV['GOOGLE_CLIENT_EMAIL']
     google.google_json_key_location = ENV['GOOGLE_JSON_KEY_PATH']
 
-    override.ssh.username = 'root'
     override.ssh.private_key_path = ENV['SSH_KEY_PATH']
 
     # Used to uniquely identify the VM
@@ -76,9 +74,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     google.metadata = {'vagrant_id' => vagrant_id}
 
     # Override provider defaults
-    google.image = 'debian-7-wheezy-v20140619'
+    google.image = 'ubuntu-1604-xenial-v20170619a'
     google.machine_type = 'n1-standard-1'
-    google.zone = 'europe-west1-a'
+    google.zone = 'europe-west1-b'
   end
   <% elsif provider_name == 'azure' %>
   # Azure box
@@ -88,7 +86,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Eager initialized variables (outside the lazy evaluated Proc)
   vm_name = "cwb-#{execution_id}"
   location = 'westeurope'
-  resource_group = "cwb-#{location}" # MUST be unique across regions
+  resource_group = vm_name # MUST be unique
   # Composition: https://github.com/Azure/vagrant-azure/blob/v2.0/lib/vagrant-azure/util/machine_id_helper.rb
   azure_id = [resource_group, vm_name, location].join(':')
 
@@ -103,8 +101,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     azure.resource_group_name = resource_group
     azure.vm_name = vm_name
     azure.location = location
-    # UbuntuServer  Canonical    14.04.5-LTS        Canonical:UbuntuServer:14.04.5-LTS:14.04.201701040        14.04.201701040
-    azure.vm_image_urn = 'Canonical:UbuntuServer:14.04.5-LTS:14.04.201701040'
+    azure.vm_image_urn = 'Canonical:UbuntuServer:16.04.0-LTS:16.04.201611150'
     azure.vm_size = 'Standard_DS1'
     azure.instance_ready_timeout = 300 # seconds (default=120)
   end

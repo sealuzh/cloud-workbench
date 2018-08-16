@@ -34,7 +34,7 @@ class VirtualMachineInstancesController < ApplicationController
 
   def destroy
     @virtual_machine_instance.destroy
-    redirect_to :back
+    redirect_back(fallback_location: virtual_machine_instances_path)
   end
 
   private

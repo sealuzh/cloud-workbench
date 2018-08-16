@@ -20,7 +20,7 @@ class BenchmarkDefinitionsController < ApplicationController
   rescue => e
     link_to_original = view_context.link_to benchmark_definition_original.name, benchmark_definition_original, class: 'alert-link'
     flash[:error] = "Benchmark definition #{link_to_original} couldn't be cloned. #{e.message}".html_safe
-    redirect_to :back
+    redirect_back(fallback_location: benchmark_definition_path(benchmark_definition_original))
   end
 
   def new
