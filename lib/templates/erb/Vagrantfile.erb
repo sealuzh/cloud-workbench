@@ -55,7 +55,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.instance_ready_timeout = 300 # seconds (default=120)
     aws.region = 'eu-central-1' # Europe/Frankfurt as default configuration
     aws.instance_type = 't2.micro'
-    aws.security_groups = ['default']
+    aws.security_groups = ['cwb-web']
     aws.tags = {
       'Name' => tag_name
     }

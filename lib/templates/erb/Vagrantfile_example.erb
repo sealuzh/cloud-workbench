@@ -17,7 +17,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.ami = 'ami-0d9634d5c860a3200'
     # Instance types: https://www.ec2instances.info/
     aws.instance_type = 't2.micro'
-    # aws.security_groups = ['cwb-web']
+    aws.security_groups = ['cwb-web']
   end
 
   config.vm.provision 'cwb', type: 'chef_client' do |chef|
