@@ -43,14 +43,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
     aws.keypair_name = ENV['SSH_KEY_NAME']
 
-    # Official Ubuntu 14.04 LTS AMI (pv:ebs)
+    # Official Ubuntu 14.04 LTS AMI (hvm:ebs-ssd)
     # from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = 'ami-b7c379c4'
+    # trusty  server  release 20170405  ebs-ssd amd64 eu-west-1 ami-09447c6f      hvm
+    aws.ami = 'ami-09447c6f'
 
     # AWS default instance configuration
-    aws.instance_ready_timeout = 240 # Default is 120
+    aws.instance_ready_timeout = 300 # seconds (default=120)
     aws.region = 'eu-west-1' # Europe/Ireland as default configuration
-    aws.instance_type = 't1.micro'
+    aws.instance_type = 't2.micro'
     aws.security_groups = ['default']
     aws.tags = {
       'Name' => tag_name
@@ -82,27 +83,30 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   <% elsif provider_name == 'azure' %>
   # Azure box
   config.vm.box = 'azure'
-  config.vm.box_url = 'https://github.com/msopentech/vagrant-azure/raw/master/dummy.box'
+  config.vm.box_url = 'https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box'
 
   # Eager initialized variables (outside the lazy evaluated Proc)
   vm_name = "cwb-#{execution_id}"
-  service_name = "#{vm_name}-service"
-  azure_id = "#{vm_name}@#{service_name}"
+  location = 'westeurope'
+  resource_group = "cwb-#{location}" # MUST be unique across regions
+  # Composition: https://github.com/Azure/vagrant-azure/blob/v2.0/lib/vagrant-azure/util/machine_id_helper.rb
+  azure_id = [resource_group, vm_name, location].join(':')
 
   azure_common = Proc.new do |azure, override|
     # Authentication
-    azure.mgmt_endpoint = 'https://management.core.windows.net'
-    azure.mgmt_certificate = ENV['AZURE_MGMT_CERTIFICATE_PATH']
+    azure.tenant_id = ENV['AZURE_TENANT_ID']
+    azure.client_id = ENV['AZURE_CLIENT_ID']
+    azure.client_secret = ENV['AZURE_CLIENT_SECRET']
     azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
-    azure.private_key_file = ENV['SSH_KEY_PATH']
 
     # Defaults
+    azure.resource_group_name = resource_group
     azure.vm_name = vm_name
-    azure.cloud_service_name = service_name
-    azure.vm_image = 'b39f27a8b8c64d52b05eac6a62ebad85__Ubuntu-14_04-LTS-amd64-server-20140414-en-us-30GB'
-    azure.vm_user = 'ubuntu'
-    azure.vm_size = 'ExtraSmall'
-    azure.vm_location = 'North Europe'
+    azure.location = location
+    # UbuntuServer  Canonical    14.04.5-LTS        Canonical:UbuntuServer:14.04.5-LTS:14.04.201701040        14.04.201701040
+    azure.vm_image_urn = 'Canonical:UbuntuServer:14.04.5-LTS:14.04.201701040'
+    azure.vm_size = 'Standard_DS1'
+    azure.instance_ready_timeout = 300 # seconds (default=120)
   end
   <% elsif provider_name == 'softlayer' %>
   softlayer_id = "cwb-#{execution_id}"
