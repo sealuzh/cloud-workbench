@@ -66,7 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provider :google do |google, override|
     google.google_project_id = ENV['GOOGLE_PROJECT_ID']
     google.google_client_email = ENV['GOOGLE_CLIENT_EMAIL']
-    google.google_key_location = ENV['GOOGLE_API_KEY_PATH']
+    google.google_json_key_location = ENV['GOOGLE_JSON_KEY_PATH']
 
     override.ssh.username = 'root'
     override.ssh.private_key_path = ENV['SSH_KEY_PATH']
