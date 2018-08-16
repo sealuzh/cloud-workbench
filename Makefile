@@ -50,6 +50,7 @@ prod_run:
 prod_run: RAILS_ENV=production
 prod_run: RAILS_SERVE_STATIC_FILES=true
 prod_run: RAILS_LOG_TO_STDOUT=true
+prod_run: PORT=3000
 prod_run:
 	bin/rake assets:precompile
-	bin/rails server
+	bin/foreman start -f Procfile_production
