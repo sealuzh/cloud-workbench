@@ -2,6 +2,10 @@
 
 [![Build Status](https://travis-ci.org/sealuzh/cloud-workbench.svg?branch=master)](https://travis-ci.org/sealuzh/cloud-workbench)
 
+[![Coverage Status](https://coveralls.io/repos/github/sealuzh/cloud-workbench/badge.svg?branch=master)](https://coveralls.io/github/sealuzh/cloud-workbench?branch=master)
+
+[![Maintainability](https://api.codeclimate.com/v1/badges/fd2aa0193647f862d92e/maintainability)](https://codeclimate.com/github/sealuzh/cloud-workbench/maintainability)
+
 ## Quicklinks
 
 * Write your own benchmarks with Cloud WorkBench: https://github.com/sealuzh/cwb-benchmarks

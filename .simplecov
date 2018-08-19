@@ -6,7 +6,7 @@ SimpleCov.start do
   coverage_dir 'coverage'
   command_name 'MiniTest'
   merge_timeout 3600 # 1 hour
-  track_files "{app,lib}/**/*.rb"
+  track_files "{app}/**/*.rb"
 
   # Groups
   add_group 'Controllers', 'app/controllers'
@@ -14,7 +14,7 @@ SimpleCov.start do
   # add_group 'Mailers', 'app/mailers'
   add_group 'Helpers', 'app/helpers'
   add_group 'Jobs', %w(app/jobs app/workers)
-  add_group 'Libraries', 'lib'
+  # add_group 'Libraries', 'lib'
 
   add_group 'Long files' do |src_file|
     src_file.lines.count > 100
