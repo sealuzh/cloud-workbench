@@ -29,7 +29,7 @@ namespace :db do
 
     desc "Show the existing database backups"
     task :list => :environment do
-        # puts "#{backup_dir}"
+        puts "#{backup_dir}"
         Dir["#{backup_dir}/*[#{suffixes.join('|')}]"].each { |x| puts File.basename(x) }
     end
 

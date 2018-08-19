@@ -7,8 +7,8 @@ namespace :data do
 
   desc 'List database and file storage backups'
   task list: :environment do
-    Rake::Task["db:list"].invoke
-    Rake::Task["fs:list"].invoke
+    puts backup_dir
+    Dir["#{backup_dir}/**"].sort.each { |x| puts File.basename(x) }
   end
 
   desc 'Restore database and file storage'
@@ -16,4 +16,10 @@ namespace :data do
     Rake::Task['db:restore'].invoke(args.pat)
     Rake::Task['fs:restore'].invoke(args.pat)
   end
+
+  private
+
+      def backup_dir
+        "#{Rails.root}/db/backups"
+      end
 end
