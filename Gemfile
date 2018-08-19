@@ -112,6 +112,8 @@ group :development, :test do
   gem 'guard' # NOTE: this is necessary in newer versions
   gem 'guard-rspec'
   gem 'simplecov', require: false
+  gem 'simplecov-console', require: false
+  gem 'coveralls', require: false
 end
 
 group :test do
