@@ -37,20 +37,20 @@ drop_db:
 # Production commands for development
 # NOTICE: This custom rake task (`lib/tasks/db.rake`) uses
 # 				the `postgres` user to create another PostgreSQL role/user
-prod_create_db_user: RAILS_ENV=production
+prod_create_db_user: export RAILS_ENV=production
 prod_create_db_user:
 	bin/rake db:create_user
 
-prod_setup: RAILS_ENV=production
+prod_setup: export RAILS_ENV=production
 prod_setup:
 	bin/rake db:setup
 	bin/rake user:create
 
 prod_run:
-prod_run: RAILS_ENV=production
-prod_run: RAILS_SERVE_STATIC_FILES=true
-prod_run: RAILS_LOG_TO_STDOUT=true
-prod_run: PORT=3000
+prod_run: export RAILS_ENV=production
+prod_run: export RAILS_SERVE_STATIC_FILES=true
+prod_run: export RAILS_LOG_TO_STDOUT=true
+prod_run: export PORT=3000
 prod_run:
 	bin/rake assets:precompile
 	bin/foreman start -f Procfile_production

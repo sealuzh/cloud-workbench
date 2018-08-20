@@ -68,11 +68,34 @@ bin/guard
 
 Automatically reloads a page on asset modification via the following browser plugin:
 
-## Run Locally in Production Mode
+## Setup Production Model Locally
+
+* Requirement: Setup local PostgreSQL
 
 ```bash
-RAILS_ENV=production bin/rake assets:precompile
-RAILS_ENV=production bin/rails s
+# Via Make
+# NOTICE: `prod_create_db_user` uses the `postgres` DB to create a new CWB PostgreSQL user (called cloud)
+make prod_create_db_user prod_setup
+
+# Manually
+export RAILS_ENV=production
+bin/rake db:setup
+bin/rake user:create
+```
+
+## Run in Production Mode Locally
+
+```bash
+# Via Make
+make prod_run
+
+# Manually
+export RAILS_ENV=production
+export RAILS_SERVE_STATIC_FILES=true
+export RAILS_LOG_TO_STDOUT=true
+export PORT=3000
+bin/rake assets:precompile
+bin/foreman start -f Procfile_production
 ```
 
 ## Tips & Tricks
