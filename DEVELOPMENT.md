@@ -3,9 +3,9 @@
 ## Requirements
 
 * [Ruby (2.5.1)](https://www.ruby-lang.org/en/downloads/) for development and deployment with Bundler
-    * [Mac Ruby installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
-    * [Windows Ruby installer](http://rubyinstaller.org/)
-    * Install bundler:
+  * [Mac Ruby installation tutorial](http://www.moncefbelyamani.com/how-to-install-xcode-homebrew-git-rvm-ruby-on-mac/)
+  * [Windows Ruby installer](http://rubyinstaller.org/)
+  * Install bundler:
 
   ```bash
   gem install bundler
@@ -96,6 +96,12 @@ export RAILS_LOG_TO_STDOUT=true
 export PORT=3000
 bin/rake assets:precompile
 bin/foreman start -f Procfile_production
+```
+
+## Run Linter
+
+```bash
+make lint
 ```
 
 ## Tips & Tricks

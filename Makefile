@@ -25,6 +25,9 @@ foreman:
 stop_spring:
 	bin/spring stop
 
+lint:
+	bin/rubocop
+
 test:
 	bin/rspec
 
