@@ -16,9 +16,9 @@ namespace :db do
     end
 
     # Backup and restore based on: https://gist.github.com/hopsoft/56ba6f55fe48ad7f8b90#gistcomment-1646663
-    desc "Dump the database to backups"
-    task :dump => :environment do
-      dump_fmt = 'c'      # or 'p', 't', 'd'
+    desc "Dump the database to backups using the format: c (custom), p (sql), t (tar), d (directory)"
+    task :dump, [:format] => :environment do |task, args|
+      dump_fmt = args[:format] || 'c'      # or 'p', 't', 'd'
       dump_sfx = suffix_for_format dump_fmt
       ensure_exists(backup_dir)
       file_name = Time.now.strftime("%Y%m%d%H%M%S") + "_" + db_config['database'] + '.' + dump_sfx
@@ -37,7 +37,7 @@ namespace :db do
     task :restore, [:pat] => :environment do |task, args|
       if args.pat.present?
         cmd = nil
-        files = Dir.glob("#{backup_dir}/*#{args.pat}*")
+        files = Dir.glob("#{backup_dir}/*#{args.pat}*[#{suffixes.join('|')}]")
         case files.size
           when 0
             puts "No backups found for the pattern '#{args.pat}'"
@@ -46,6 +46,8 @@ namespace :db do
             fmt = format_for_file file
             if fmt.nil?
               puts "No recognized dump file suffix: #{file}"
+            elsif (fmt == 'p')
+              cmd = "PGPASSWORD=#{db_config['password']} psql --username=#{db_config['username']} --dbname=#{db_config['database']} --file=#{file}"
             else
               cmd = "pg_restore -F #{fmt} -v -c -C #{file}"
             end
@@ -93,7 +95,7 @@ namespace :db do
         def suffix_for_format suffix
           case suffix
             when 'c' then 'dump'
-            when 'p' then 'sql'
+            when 'p' then 'sql' # TODO: Fix import because pg_restore does NOT support SQL alike-> sudo -u postgres psql -U postgres -d cloud_workbench_production -f dump.sql
             when 't' then 'tar'
             when 'd' then 'dir'
             else nil

@@ -26,7 +26,7 @@ namespace :fs do
   task :restore, [:pat] => :environment do |task, args|
     if args.pat.present?
       cmd = nil
-      files = Dir.glob("#{backup_dir}/*#{args.pat}")
+      files = Dir.glob("#{backup_dir}/*#{args.pat}*#{file_extension}")
       case files.size
         when 0
           puts "No backups found for the pattern '#{args.pat}'"

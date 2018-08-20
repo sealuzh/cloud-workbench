@@ -8,7 +8,8 @@ namespace :user do
     # Rake.application.invoke_task("user:create[#{default_email}, #{default_password}]")
   end
 
-  desc 'Create or update (if password has changed) a user with optional email and password args. Example: `rake \'user:create[myemail,mypw]\'`'
+  # NOTICE: ZSH users might need to escape [ and ] (i.e, '\[' and '\]') or enclose with single quotes (i.e., `'rake user:create[myemail,mypw]'`)
+  desc 'Create or update (if password has changed) a user with optional email and password args. Example: `rake user:create[myemail,mypw]`'
   task :create, [:email, :password] => [:environment]  do |task, args|
     email = args[:email] || Rails.application.config.default_email
     password = args[:password] || Rails.application.config.default_password
