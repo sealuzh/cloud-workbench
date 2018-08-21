@@ -22,7 +22,7 @@ namespace :db do
       dump_sfx = suffix_for_format dump_fmt
       ensure_exists(backup_dir)
       file_name = Time.now.strftime("%Y%m%d%H%M%S") + "_" + db_config['database'] + '.' + dump_sfx
-      cmd = "#{pw_env} pg_dump #{username_arg} #{host_arg} #{dbname_arg} #{format_arg(dump_fmt)} --verbose --file=#{backup_dir}/#{file_name}"
+      cmd = "#{pw_env} pg_dump #{username_arg} #{host_arg} #{dbname_arg} #{format_arg(dump_fmt)} --file=#{backup_dir}/#{file_name}"
       puts cmd
       system cmd
     end
@@ -49,7 +49,7 @@ namespace :db do
             elsif (fmt == 'p')
               cmd = "#{pw_env} psql #{username_arg} #{host_arg} #{dbname_arg} --file=#{file}"
             else
-              cmd = "#{pw_env} pg_restore #{username_arg} #{host_arg} #{format_arg(fmt)} --jobs=8 --verbose --clean --create #{file}"
+              cmd = "#{pw_env} pg_restore #{username_arg} #{host_arg} #{dbname_arg} --jobs=8 #{file}"
             end
           else
             puts "Too many files match the pattern '#{args.pat}':"
@@ -62,6 +62,8 @@ namespace :db do
           Rake::Task["db:create"].invoke
           puts cmd
           system cmd
+          Rake::Task["db:migrate"].invoke
+          Rake::Task["user:create_default"].invoke
         end
       else
         puts 'Please pass a pattern to the task'
