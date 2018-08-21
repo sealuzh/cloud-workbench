@@ -8,7 +8,7 @@ namespace :data do
   desc 'List database and file storage backups'
   task list: :environment do
     puts backup_dir
-    Dir["#{backup_dir}/**"].sort.each { |x| puts File.basename(x) }
+    Dir["#{backup_dir}/**"].sort.reverse.each { |x| puts File.basename(x) }
   end
 
   desc 'Restore database and file storage'

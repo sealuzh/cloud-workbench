@@ -22,7 +22,7 @@ namespace :db do
       dump_sfx = suffix_for_format dump_fmt
       ensure_exists(backup_dir)
       file_name = Time.now.strftime("%Y%m%d%H%M%S") + "_" + db_config['database'] + '.' + dump_sfx
-      cmd = "pg_dump -F #{dump_fmt} -v -h #{db_config['host']} -d #{db_config['database']} -f #{backup_dir}/#{file_name}"
+      cmd = "#{pw_env} pg_dump #{username_arg} #{host_arg} #{dbname_arg} #{format_arg(dump_fmt)} --verbose --file=#{backup_dir}/#{file_name}"
       puts cmd
       system cmd
     end
@@ -30,26 +30,26 @@ namespace :db do
     desc "Show the existing database backups"
     task :list => :environment do
         puts "#{backup_dir}"
-        Dir["#{backup_dir}/*[#{suffixes.join('|')}]"].each { |x| puts File.basename(x) }
+        Dir["#{backup_dir}/*[#{suffixes.join('|')}]"].sort.reverse.each { |x| puts File.basename(x) }
     end
 
     desc "Restores the database from a backup using PATTERN"
     task :restore, [:pat] => :environment do |task, args|
       if args.pat.present?
         cmd = nil
-        files = Dir.glob("#{backup_dir}/*#{args.pat}*[#{suffixes.join('|')}]")
+        files = only_allowed_db_files(Dir.glob("#{backup_dir}/*#{args.pat}*"))
         case files.size
           when 0
             puts "No backups found for the pattern '#{args.pat}'"
           when 1
             file = files.first
-            fmt = format_for_file file
+            fmt = format_for_file(file)
             if fmt.nil?
               puts "No recognized dump file suffix: #{file}"
             elsif (fmt == 'p')
-              cmd = "PGPASSWORD=#{db_config['password']} psql --username=#{db_config['username']} --dbname=#{db_config['database']} --file=#{file}"
+              cmd = "#{pw_env} psql #{username_arg} #{host_arg} #{dbname_arg} --file=#{file}"
             else
-              cmd = "pg_restore -F #{fmt} -v -c -C #{file}"
+              cmd = "#{pw_env} pg_restore #{username_arg} #{host_arg} #{format_arg(fmt)} --jobs=8 --verbose --clean --create #{file}"
             end
           else
             puts "Too many files match the pattern '#{args.pat}':"
@@ -57,6 +57,7 @@ namespace :db do
             puts "Try a more specific pattern"
         end
         unless cmd.nil?
+          ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK']='1'
           Rake::Task["db:drop"].invoke
           Rake::Task["db:create"].invoke
           puts cmd
@@ -68,6 +69,26 @@ namespace :db do
     end
 
     private
+
+        def pw_env
+          "PGPASSWORD=#{db_config['password']}"
+        end
+
+        def username_arg
+          "--username=#{db_config['username']}"
+        end
+
+        def dbname_arg
+          "--dbname=#{db_config['database']}"
+        end
+
+        def host_arg
+          "--host=#{db_config['host']}"
+        end
+
+        def format_arg(format)
+          "--format=#{format}"
+        end
 
         def create_or_update_db_user(username, password)
           con = PG.connect(dbname: 'postgres')
@@ -110,6 +131,16 @@ namespace :db do
             when /\.tar$/  then 't'
             else nil
           end
+        end
+
+        def only_allowed_db_files(file_list)
+          file_list.select do |file|
+            end_with_any?(file, suffixes)
+          end
+        end
+
+        def end_with_any?(string, suffixes)
+          suffixes.map { |suffix| string.end_with?(suffix) }.include?(true)
         end
 
         def suffixes

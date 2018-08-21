@@ -19,20 +19,20 @@ namespace :fs do
   desc "Show the existing file system backups"
   task :list => :environment do
       puts "#{backup_dir}"
-      Dir["#{backup_dir}/*#{file_extension}"].each { |x| puts File.basename(x) }
+      Dir["#{backup_dir}/*#{file_extension}"].sort.reverse.each { |x| puts File.basename(x) }
   end
 
   desc 'Restore the file system by uncompressing the compressed generated files'
   task :restore, [:pat] => :environment do |task, args|
     if args.pat.present?
       cmd = nil
-      files = Dir.glob("#{backup_dir}/*#{args.pat}*#{file_extension}")
+      files = only_allowed_fs_files(Dir.glob("#{backup_dir}/*#{args.pat}*"))
       case files.size
         when 0
           puts "No backups found for the pattern '#{args.pat}'"
         when 1
           file = files.first
-          if file.ends_with?(file_extension)
+          if file.end_with?(file_extension)
             cmd = "tar xf #{file} -C #{File.dirname(storage_dir)}"
           else
             puts "No recognized dump file suffix: #{file}"
@@ -88,5 +88,11 @@ namespace :fs do
 
       def db_config
         Rails.configuration.database_configuration[Rails.env]
+      end
+
+      def only_allowed_fs_files(file_list)
+        file_list.select do |file|
+          file.end_with?(file_extension)
+        end
       end
 end
