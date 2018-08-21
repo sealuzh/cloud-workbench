@@ -2,10 +2,10 @@
   <div class="box-header">
     <h3 class="box-title">Vagrantfile (<%= @benchmark_definition.provider_name %>)<small><%= " Timeout: #{@benchmark_definition.running_timeout} h" if @benchmark_definition.running_timeout.present? %></small></h3>
     <div class="box-tools pull-right">
-      <button id="ace_expand" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Expand"><%= fa_icon 'plus' %></button>
+      <button id="ace_expand" class="btn btn-default btn-sm" data-widget="collapse" data-toggle="tooltip" title="" data-original-title="Collapse"><%= fa_icon 'minus' %></button>
     </div>
   </div>
-  <div class="box-body" style="display: block; display: none;">
+  <div class="box-body" style="display: block;">
    <div id="benchmark_definition_vagrantfile"><%= @benchmark_definition.vagrantfile %></div>
   </div>
 </div>
