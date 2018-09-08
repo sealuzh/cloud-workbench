@@ -41,6 +41,8 @@ Cloud WorkBench (CWB) [![Build Status](https://travis-ci.org/sealuzh/cloud-workb
 
 ![Benchmark Execution](/docs/img/cwb-show-execution.png?raw=true "Show Benchmark Execution")
 
+Find more screenshots under [/docs/img](/docs/img)
+
 ## Installation
 
 > Interested in your own Cloud WorkBench installation?<br>
