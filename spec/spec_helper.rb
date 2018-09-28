@@ -3,7 +3,8 @@ require 'simplecov-console'
 require 'coveralls'
 
 SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-  SimpleCov::Formatter::Console,
+  # Uncomment for coverage report in console (clutters test output)
+  # SimpleCov::Formatter::Console,
   # Coveralls formatter for reporting test coverage to Coveralls
   Coveralls::SimpleCov::Formatter,
   # Export code coverage website to `coverage/index.html`
