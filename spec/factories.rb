@@ -72,6 +72,20 @@ FactoryBot.define do
     end
   end
 
+  factory :ordered_metric_observation do
+    association :virtual_machine_instance, factory: :virtual_machine_instance
+    # NOTE: metric might be associated with other benchmark_definition than created via virtual_machine_instance dependent factories
+    association :metric_definition, factory: :ratio_metric_definition #, benchmark_definition: virtual_machine_instance.benchmark_execution.benchmark_definition
+    value 5.1
+  end
+
+  factory :nominal_metric_observation do
+    association :virtual_machine_instance, factory: :virtual_machine_instance
+    # NOTE: metric might be associated with other benchmark_definition than created via virtual_machine_instance dependent factories
+    association :metric_definition, factory: :nominal_metric_definition #, benchmark_definition: virtual_machine_instance.benchmark_execution.benchmark_definition
+    value 'Intel(R) Xeon(R) CPU E5-2673 v4 @ 2.30GHz'
+  end
+
   factory :user do
     email Rails.application.config.default_email
     password Rails.application.config.default_password

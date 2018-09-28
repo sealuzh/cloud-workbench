@@ -14,14 +14,13 @@ class MetricObservationsController < ApplicationController
     @execution = BenchmarkExecution.find(params[:benchmark_execution_id]) if params[:benchmark_execution_id].present?
     respond_to do |format|
       format.html { @metric_observations = @metric_observations.paginate(page: params[:page], per_page: 30); render action: 'index'}
-      format.csv  { render text: MetricObservation.to_csv(@metric_observations) }
+      format.csv  { send_data MetricObservation.to_csv(@metric_observations) }
     end
   rescue => error
     flash[:error] = error.message.html_safe
     redirect_to benchmark_definitions_path
   end
 
-  # This action is NOT idempotent as a RESTful resource should be. It would be too costly to search the entire metrics for identical entries
   def create
     @metric_observation = MetricObservation.create!(metric_observation_params)
     success_status = 201 # created

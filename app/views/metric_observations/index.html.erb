@@ -8,7 +8,7 @@
                    and having <em>#{@metric_definition.scale_type}</em> scale") %>
 
 <%= link_to "#{download_icon}&nbsp;Download all as CSV".html_safe,
-            query_params.merge(format: :csv), class: 'btn btn-primary pull-right' %>
+            metric_observations_path(query_params.merge(format: :csv)), class: 'btn btn-primary pull-right' %>
 
 <%= will_paginate @metric_observations %>
 <div class="box-body table-condensed">

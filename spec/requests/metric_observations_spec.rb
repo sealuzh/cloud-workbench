@@ -4,6 +4,22 @@ describe MetricDefinitionsController do
   let(:vm) { create(:virtual_machine_instance) }
   let(:benchmark) { vm.benchmark_execution.benchmark_definition }
 
+  describe "download metric observations as CSV" do
+    let(:ordered_observation) { create(:ordered_metric_observation) }
+
+    before do
+      get metric_observations_path(params: { metric_definition_id: ordered_observation.metric_definition_id }, format: :csv)
+    end
+
+    it "should return the status code 200 for ok" do
+      expect(response.status).to eq(200)
+    end
+
+    it "should return a CSV file containing the metric observation" do
+      expect(response.body).to eq(MetricObservation.to_csv([ordered_observation]))
+    end
+  end
+
   describe "single observation creation" do
 
     describe "automatic default metric generation" do
