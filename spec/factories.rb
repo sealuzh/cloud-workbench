@@ -36,7 +36,7 @@ FactoryBot.define do
     association :benchmark_execution, factory: :benchmark_execution
     role 'default'
     provider_name 'aws'
-    provider_instance_id 'i-3ba0b07b'
+    provider_instance_id 'i-0a1daccdf9784de6a'
   end
 
   factory :vagrant_file_system do
