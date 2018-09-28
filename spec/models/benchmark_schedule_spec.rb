@@ -4,7 +4,7 @@ describe BenchmarkSchedule do
   let(:schedule_file) { Rails.application.config.benchmark_schedule }
   context 'when schedule is inactive' do
     let(:schedule) { create(:benchmark_schedule, active: false) }
-    before { File.delete(schedule_file) }
+    before { FileUtils.rm_f(schedule_file) }
     describe 'activate schedule' do
       before do
         schedule.active = true
