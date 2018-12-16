@@ -51,8 +51,25 @@ function configure_ace_editor(editor) {
     });
 }
 
+function get_text_area() {
+    var anchors = [
+        '#benchmark_definition_vagrantfile',
+        '#vagrant_config_base_file',
+    ];
+    var textarea = null;
+    for (var i = 0; i < anchors.length; i++) {
+        textarea = $(anchors[i]);
+        if (textarea.exists()) {
+            console.log('FOUND')
+            return textarea;
+        }
+    }
+    console.log('NOT FOUND')
+    return textarea;
+}
+
 var configure_ace = function() {
-    var textarea = $('#benchmark_definition_vagrantfile');
+    var textarea = get_text_area();
     if (textarea.exists()) {
         // Replace textarea with ace editor
         textarea.acedInitTA({ theme: ace_theme,

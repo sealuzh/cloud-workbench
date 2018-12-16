@@ -28,4 +28,16 @@
       <%= vm_icon %>&nbsp;<span class="link-title">Virtual Machines</span>
     <% end %>
   </li>
+  <li class="sidebar-divider"></li>
+  <li class="sidebar-header">Configuration</li>
+  <li>
+    <%= link_to edit_vagrant_config_path do %>
+      <%= config_icon %>&nbsp;<span class="link-title">Vagrant</span>
+    <% end %>
+  </li>
+  <li>
+    <%= link_to '#' do %>
+      <%= provider_icon %>&nbsp;<span class="link-title">Providers</span>
+    <% end %>
+  </li>
 </ul>

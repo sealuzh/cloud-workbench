@@ -1,0 +1,39 @@
+<% provide(:title, 'Vagrant Configuration') %>
+<% content_header('Vagrant Configuration') %>
+
+<div class="row">
+<div class="col-md-9">
+
+<%= simple_form_for(@vagrant_config) do |f| %>
+  <%= link_to 'https://www.vagrantup.com/docs/vagrantfile/', target: '_blank' do %>
+    Vagrantfile Documentation
+  <% end %>
+  <br/>
+  <%= link_to 'https://github.com/mitchellh/vagrant-aws#configuration', target: '_blank' do %>
+    vagrant-aws&nbsp;<%= fa_icon('github') %>
+  <% end %>
+  <br>
+  <br>
+  <br>
+  <% if base_file_error?(@vagrant_config) %>
+    <%= f.label :base_file, class: 'base_file_error', error: true %>
+  <% else %>
+    <%= f.label :base_file %><br/>
+    This base Vagrantfile is used as a template for all benchmark definitions.
+  <% end %>
+  <br>
+  <%= f.error :base_file, class: 'base_file_error' %>
+  <br>
+  <%= f.text_area :base_file %>
+  <br>
+  <%= f.button :submit, class: 'btn btn-primary btn-lg', value: 'Update Vagrant Configuration' %>
+<% end %>
+
+<br>
+<br>
+<br>
+<br>
+<%= button_to 'Reset Defaults', reset_defaults_vagrant_config_path, method: :post, class: 'btn btn-warning btn-lg' %>
+
+</div>
+</div>

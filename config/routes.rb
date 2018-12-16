@@ -9,6 +9,12 @@ Rails.application.routes.draw do
   end
 
   # Resources
+  resource :vagrant_config, only: [:edit, :update] do
+    member do
+      post :reset_defaults
+    end
+  end
+
   resources :benchmark_definitions do
     resources :benchmark_executions, only: [:index, :new, :create], context: :benchmark_definition
     resources :metric_definitions, only: [:new, :create], context: :benchmark_definition

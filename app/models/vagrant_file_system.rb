@@ -21,7 +21,7 @@ class VagrantFileSystem
   end
 
   def evaluate_vagrantfile
-    template = ERB.new File.read(Rails.application.config.vagrantfile)
+    template = ERB.new VagrantConfig.instance.base_file
     vagrantfile_binding = VagrantfileBinding.new(benchmark: @benchmark_definition,
                                                  execution: @benchmark_execution,
                                                  benchmark_name_sanitized: benchmark_name_sanitized)

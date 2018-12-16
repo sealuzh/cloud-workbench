@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2014_06_27_112533) do
+ActiveRecord::Schema.define(version: 2018_12_16_145840) do
 
   create_table "benchmark_definitions", force: :cascade do |t|
     t.string "name"
@@ -110,6 +110,12 @@ ActiveRecord::Schema.define(version: 2014_06_27_112533) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
+  end
+
+  create_table "vagrant_configs", force: :cascade do |t|
+    t.integer "singleton_guard"
+    t.string "base_file"
+    t.index ["singleton_guard"], name: "index_vagrant_configs_on_singleton_guard", unique: true
   end
 
   create_table "virtual_machine_instances", force: :cascade do |t|
