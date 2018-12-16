@@ -51,34 +51,23 @@ function configure_ace_editor(editor) {
     });
 }
 
-function get_text_area() {
+var configure_ace = function() {
     var anchors = [
         '#benchmark_definition_vagrantfile',
-        '#vagrant_config_base_file',
+        '#vagrant_config_base_file'
     ];
-    var textarea = null;
-    for (var i = 0; i < anchors.length; i++) {
-        textarea = $(anchors[i]);
+    anchors.forEach(function(anchor) {
+        var textarea = $(anchor);
         if (textarea.exists()) {
-            console.log('FOUND')
-            return textarea;
+            // Replace textarea with ace editor
+            textarea.acedInitTA({ theme: ace_theme,
+                                  mode: ace_mode
+            });
+            resize_ace_editor();
+            var editor = textarea.data('ace-div').aced();
+            configure_ace_editor(editor);
         }
-    }
-    console.log('NOT FOUND')
-    return textarea;
-}
-
-var configure_ace = function() {
-    var textarea = get_text_area();
-    if (textarea.exists()) {
-        // Replace textarea with ace editor
-        textarea.acedInitTA({ theme: ace_theme,
-                              mode: ace_mode
-        });
-        resize_ace_editor();
-        var editor = textarea.data('ace-div').aced();
-        configure_ace_editor(editor);
-    }
+    });
 };
 
 $(document).ready(function () {
