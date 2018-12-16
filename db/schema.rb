@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_16_145840) do
+ActiveRecord::Schema.define(version: 2018_12_16_201726) do
 
   create_table "benchmark_definitions", force: :cascade do |t|
     t.string "name"
@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(version: 2018_12_16_145840) do
 
   create_table "vagrant_configs", force: :cascade do |t|
     t.integer "singleton_guard"
-    t.string "base_file"
+    t.text "base_file"
     t.index ["singleton_guard"], name: "index_vagrant_configs_on_singleton_guard", unique: true
   end
 
