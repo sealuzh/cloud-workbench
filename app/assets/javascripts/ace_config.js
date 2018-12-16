@@ -52,16 +52,22 @@ function configure_ace_editor(editor) {
 }
 
 var configure_ace = function() {
-    var textarea = $('#benchmark_definition_vagrantfile');
-    if (textarea.exists()) {
-        // Replace textarea with ace editor
-        textarea.acedInitTA({ theme: ace_theme,
-                              mode: ace_mode
-        });
-        resize_ace_editor();
-        var editor = textarea.data('ace-div').aced();
-        configure_ace_editor(editor);
-    }
+    var anchors = [
+        '#benchmark_definition_vagrantfile',
+        '#vagrant_config_base_file'
+    ];
+    anchors.forEach(function(anchor) {
+        var textarea = $(anchor);
+        if (textarea.exists()) {
+            // Replace textarea with ace editor
+            textarea.acedInitTA({ theme: ace_theme,
+                                  mode: ace_mode
+            });
+            resize_ace_editor();
+            var editor = textarea.data('ace-div').aced();
+            configure_ace_editor(editor);
+        }
+    });
 };
 
 $(document).ready(function () {

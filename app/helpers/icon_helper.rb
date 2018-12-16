@@ -24,6 +24,8 @@ module IconHelper
     show: 'eye',
     start: 'play-circle-o',
     vm: 'desktop',
+    config: 'cog',
+    provider: 'cogs',
   }
   # Creates a method called *_icon for each icon mapping using font awsome icons
   # Example:
