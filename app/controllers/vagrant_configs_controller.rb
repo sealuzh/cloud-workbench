@@ -10,7 +10,7 @@ class VagrantConfigsController < ApplicationController
     redirect_to edit_vagrant_config_path
   rescue => e
     flash[:error] = e.message
-    render action: 'edit'
+    redirect_to edit_vagrant_config_path
   end
 
   def reset_defaults
