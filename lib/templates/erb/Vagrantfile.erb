@@ -20,6 +20,17 @@ def pub_key
   File.read(pub_key_path).strip
 end
 
+def azure_resource_group(execution_id)
+  "cwb-#{execution_id}" # MUST be unique
+end
+
+# Example: get_azure_id(execution_id, 'westeurope')
+def get_azure_id(execution_id, location, vm_name = 'default')
+  resource_group = azure_resource_group(execution_id)
+  # Composition: https://github.com/Azure/vagrant-azure/blob/v2.0/lib/vagrant-azure/util/machine_id_helper.rb
+  azure_id = [resource_group, vm_name, location].join(':')
+end
+
 ### Default configuration
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -103,12 +114,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_url = 'https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box'
 
   # Variables
-  vm_name = "cwb-#{execution_id}"
+  vm_name = 'default'
   # az account list-locations
   location = 'westeurope'
-  resource_group = vm_name # MUST be unique
-  # Composition: https://github.com/Azure/vagrant-azure/blob/v2.0/lib/vagrant-azure/util/machine_id_helper.rb
-  azure_id = [resource_group, vm_name, location].join(':')
+  azure_id = get_azure_id(execution_id, location, vm_name)
 
   config.vm.provider :azure do |azure, override|
     # Authentication
@@ -118,7 +127,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
 
     # Instance defaults
-    azure.resource_group_name = resource_group
+    azure.resource_group_name = azure_resource_group(execution_id)
     azure.vm_name = vm_name
     azure.location = location
     # az vm image list --output table
