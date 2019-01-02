@@ -11,11 +11,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.username = SSH_USERNAME
 
   config.vm.provider :aws do |aws, override|
-    aws.region = 'eu-central-1' # Europe/Frankfurt
-    # Official Ubuntu 18.04 LTS (hvm:ebs-ssd) image for eu-central-1 from Canonical:
-    #  https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = 'ami-0d9634d5c860a3200'
-    # Instance types: https://www.ec2instances.info/
+    aws.region = 'eu-central-1'
+    # Official Ubuntu from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
+    # 18.04 LTS hvm:ebs-ssd amd64 eu-central-1
+    aws.ami = 'ami-080d06f90eb293a27'
+    # https://www.ec2instances.info/
     aws.instance_type = 't2.micro'
     aws.security_groups = ['cwb-web']
   end
@@ -41,3 +41,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     }
   end
 end
+
+  # config.vm.provider :google do |google, override|
+  #   # https://cloud.google.com/compute/docs/images
+  #   google.image = 'ubuntu-1604-xenial-v20181204'
+  #   # https://cloud.google.com/compute/docs/machine-types
+  #   google.machine_type = 'f1-micro' # Default: 'n1-standard-1'
+  #   # https://cloud.google.com/compute/docs/regions-zones/
+  #   google.zone = 'europe-west3-b'
+  # end
+
+  # config.vm.provider :azure do |azure, override|
+  #   # az vm image list --output table
+  #   # az vm image list --output table --publisher Canonical --all
+  #   azure.vm_image_urn = 'Canonical:UbuntuServer:16.04-LTS:latest'
+  #   # az account list-locations
+  #   azure.location = 'westeurope'
+  #   # az vm list-sizes --location westeurope
+  #   # https://azureprice.net/?region=westeurope
+  #   azure.vm_size = 'Standard_B1s'
+  # end
