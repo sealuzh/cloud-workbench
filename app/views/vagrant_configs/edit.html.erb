@@ -6,7 +6,6 @@
 
 <%= simple_form_for(@vagrant_config) do |f| %>
   <%= render 'shared/vagrantfile_help' %>
-  <br>
   <% if base_file_error?(@vagrant_config) %>
     <%= f.label :base_file, class: 'base_file_error', error: true %>
   <% else %>
