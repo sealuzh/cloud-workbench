@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision 'cwb', type: 'chef_client' do |chef|
-    chef.add_recipe 'cli-benchmark@1.0.2'  # Version is optional
+    chef.add_recipe 'cli-benchmark' # @1.1.0 version is optional
     chef.json =
     {
       'benchmark' =>  {
@@ -29,10 +29,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       },
       'cli-benchmark' => {
           'packages' => %w(sysbench),
-          # Strive for idempotency here (i.e., multiple executions shouldn't fail)
-        # 'install' => 'cd /usr/local && echo "This runs during installation." > install.txt',
-        # 'pre_run' => 'echo "This runs immediately before execution" > pre_run.txt',
+          # 'install' => 'cd /usr/local && echo "This runs during installation." >> install.txt',
+          # 'pre_run' => 'echo "This runs immediately before execution" >> log.txt',
           'run' => 'sysbench --test=cpu --cpu-max-prime=4000 run',
+          'repetitions' => 3,
           'metrics' => {
             # [name of the metric] => [regex to extract result from stdout],
             'execution_time' => 'total time:\s*(\d+\.\d+)s',
