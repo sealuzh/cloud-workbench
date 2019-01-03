@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3">
+      <%= render 'shared/vagrantfile_help' %>
+    </div>
+    <div class="col-sm-3">
+      <%= doc_link('CWB Docs + Benchmarks Collection', 'https://github.com/sealuzh/cwb-benchmarks') %>
+
+      <ul>
+        <li>
+          <%= doc_link('cli-benchmark', 'https://github.com/sealuzh/cwb-benchmarks/tree/master/cli-benchmark') %><br/>
+          <%= fa_icon('wrench') %>&nbsp;<%= link_to 'regexr (Regex Tool)', 'https://regexr.com/', target: '_blank' %>
+        </li>
+        <li>
+          <%= doc_link('sysbench', 'https://github.com/sealuzh/cwb-benchmarks/tree/master/sysbench') %>
+        </li>
+        <li>
+          <%= doc_link('iperf', 'https://github.com/sealuzh/cwb-benchmarks/tree/master/iperf') %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
