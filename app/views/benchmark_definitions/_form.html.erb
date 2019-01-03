@@ -27,7 +27,7 @@
     </div>
   </div>
   <br>
-  <%= render 'shared/vagrantfile_help' %>
+  <%= render 'helper_docs' %>
   <% if vagrantfile_error?(@benchmark_definition) %>
     <%= f.label :vagrantfile, class: 'vagrantfile_error', error: true %>
   <% else %>

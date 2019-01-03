@@ -3,7 +3,7 @@ module VagrantConfigsHelper
     vagrant_config.errors[:base_file].any?
   end
 
-  def provider_docs(name, link, icon = 'github')
-    link_to "vagrant-#{name}&nbsp;#{fa_icon(icon)}".html_safe, link, target: '_blank'
+  def doc_link(name, link, icon = 'github')
+    link_to "#{name}&nbsp;#{fa_icon(icon)}".html_safe, link, target: '_blank'
   end
 end
