@@ -9,17 +9,41 @@ tag_name = "cwb-#{benchmark_name_sanitized}"
 # Private variables
 vagrant_id = "cwb-#{benchmark_id}-#{execution_id}"
 hostname = "cwb-#{execution_id}"
+username = 'ubuntu'
+instance_ready_timeout = 300 # seconds
 # Make variables visible in global scope
-azure_common = nil
 azure_id = nil
 softlayer_id = nil
+
+def pub_key
+  pub_key_path = ENV['SSH_KEY_PATH'] + '.pub'
+  File.read(pub_key_path).strip
+end
+
+def azure_resource_group(execution_id)
+  # MUST be unique within your account
+  "cwb-#{execution_id}"
+end
+
+def azure_vm_name(execution_id)
+  # MUST be unique within the Azure region (used as DNS label prefix)
+  # Example failure: "DNS record default.westeurope.cloudapp.azure.com is already used by another public IP"
+  "cwb-vm-#{execution_id}"
+end
+
+# Example: get_azure_id(execution_id, 'westeurope')
+def get_azure_id(execution_id, location, vm_name = azure_vm_name(execution_id))
+  resource_group = azure_resource_group(execution_id)
+  # Composition: https://github.com/Azure/vagrant-azure/blob/v2.0/lib/vagrant-azure/util/machine_id_helper.rb
+  azure_id = [resource_group, vm_name, location].join(':')
+end
 
 ### Default configuration
 VAGRANTFILE_API_VERSION = "2"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = hostname
 
-  config.ssh.username = 'ubuntu'
+  config.ssh.username = username
   config.ssh.private_key_path = ENV['SSH_KEY_PATH']
 
   config.vm.synced_folder '.', '/vagrant', disabled: true
@@ -42,20 +66,23 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # https://github.com/mitchellh/vagrant/issues/5401#issuecomment-115240904
     override.nfs.functional = false
 
-    # AWS authentication
+    # Authentication
     aws.access_key_id = ENV['AWS_ACCESS_KEY']
     aws.secret_access_key = ENV['AWS_SECRET_KEY']
-    aws.keypair_name = ENV['SSH_KEY_NAME']
+    # Alternatively via pre-uploaded SSH key
+    # aws.keypair_name = ENV['SSH_KEY_NAME']
 
-    # Official Caninical Ubuntu image: 18.04 LTS hvm:ebs-ssd eu-central-1
+    # SSH config
+    aws.user_data = "#cloud-config\nssh_authorized_keys:\n  - " + pub_key
+
+    # Instance defaults
+    # Official Caninical Ubuntu image: 18.04 LTS hvm:ebs-ssd amd64 eu-central-1
     #  https://cloud-images.ubuntu.com/locator/ec2/
     aws.ami = 'ami-080d06f90eb293a27'
-
-    # AWS default instance configuration
-    aws.instance_ready_timeout = 300 # seconds (default=120)
     aws.region = 'eu-central-1' # Europe/Frankfurt as default configuration
     aws.instance_type = 't2.micro'
     aws.security_groups = ['cwb-web']
+    aws.instance_ready_timeout = instance_ready_timeout # default 120s
     aws.tags = {
       'Name' => tag_name
     }
@@ -67,32 +94,37 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Google Compute Engine provider
   config.vm.provider :google do |google, override|
+    # Authentication
     google.google_project_id = ENV['GOOGLE_PROJECT_ID']
     google.google_client_email = ENV['GOOGLE_CLIENT_EMAIL']
     google.google_json_key_location = ENV['GOOGLE_JSON_KEY_PATH']
 
-    override.ssh.private_key_path = ENV['SSH_KEY_PATH']
-
     # Used to uniquely identify the VM
     google.name = vagrant_id
-    google.metadata = {'vagrant_id' => vagrant_id}
 
-    # Override provider defaults
+    # SSH config
+    google.metadata = {
+      'vagrant_id' => vagrant_id,
+      'ssh-keys' => "#{username}:#{pub_key}"
+    }
+
+    # Instance defaults
     google.image = 'ubuntu-1604-xenial-v20181204'
     google.machine_type = 'n1-standard-1'
     google.zone = 'europe-west3-b' # Frankfurt
+    google.instance_ready_timeout = instance_ready_timeout # default 20s
+    google.tags = [tag_name]
   end
   <% elsif provider_name == 'azure' %>
   # Azure box
   config.vm.box = 'azure'
   config.vm.box_url = 'https://github.com/azure/vagrant-azure/raw/v2.0/dummy.box'
 
-  # Eager initialized variables (outside the lazy evaluated Proc)
-  vm_name = "cwb-#{execution_id}"
+  # Variables
+  vm_name = azure_vm_name(execution_id)
+  # az account list-locations
   location = 'westeurope'
-  resource_group = vm_name # MUST be unique
-  # Composition: https://github.com/Azure/vagrant-azure/blob/v2.0/lib/vagrant-azure/util/machine_id_helper.rb
-  azure_id = [resource_group, vm_name, location].join(':')
+  azure_id = get_azure_id(execution_id, location, vm_name)
 
   config.vm.provider :azure do |azure, override|
     # Authentication
@@ -101,13 +133,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     azure.client_secret = ENV['AZURE_CLIENT_SECRET']
     azure.subscription_id = ENV['AZURE_SUBSCRIPTION_ID']
 
-    # Defaults
-    azure.resource_group_name = resource_group
+    # Instance defaults
+    azure.resource_group_name = azure_resource_group(execution_id)
     azure.vm_name = vm_name
     azure.location = location
+    # az vm image list --output table
+    # az vm image list --output table --publisher Canonical --all
     azure.vm_image_urn = 'Canonical:UbuntuServer:16.04.0-LTS:16.04.201611150'
+    # az vm list-sizes --location westeurope
+    # https://azureprice.net/?region=westeurope
     azure.vm_size = 'Standard_DS1'
-    azure.instance_ready_timeout = 300 # seconds (default=120)
+    azure.instance_ready_timeout = instance_ready_timeout # default 120s
   end
   <% elsif provider_name == 'softlayer' %>
   softlayer_id = "cwb-#{execution_id}"
@@ -119,10 +155,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.username = 'root'
 
   config.vm.provider :softlayer do |sl|
+    # Authentication
     sl.username = ENV['SOFTLAYER_API_USERNAME']
     sl.api_key  = ENV['SOFTLAYER_API_KEY']
     sl.ssh_key  = ENV['SSH_KEY_NAME']
 
+    # Instance defaults
     sl.domain = 'cloud-workbench.io'
     sl.datacenter = 'mel01'
     sl.operating_system = 'UBUNTU_14_64'

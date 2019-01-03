@@ -5,16 +5,7 @@
 <div class="col-md-9">
 
 <%= simple_form_for(@vagrant_config) do |f| %>
-  <%= link_to 'https://www.vagrantup.com/docs/vagrantfile/', target: '_blank' do %>
-    Vagrantfile Documentation
-  <% end %>
-  <br/>
-  <%= link_to 'https://github.com/mitchellh/vagrant-aws#configuration', target: '_blank' do %>
-    vagrant-aws&nbsp;<%= fa_icon('github') %>
-  <% end %>
-  <br>
-  <br>
-  <br>
+  <%= render 'shared/vagrantfile_help' %>
   <% if base_file_error?(@vagrant_config) %>
     <%= f.label :base_file, class: 'base_file_error', error: true %>
   <% else %>
