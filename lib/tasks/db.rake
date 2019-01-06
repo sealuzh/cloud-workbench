@@ -21,7 +21,7 @@ namespace :db do
       dump_fmt = args[:format] || 'c'      # or 'p', 't', 'd'
       dump_sfx = suffix_for_format dump_fmt
       ensure_exists(backup_dir)
-      file_name = Time.now.strftime("%Y%m%d%H%M%S") + "_" + db_config['database'] + '.' + dump_sfx
+      file_name = formatted_timestamp + "_" + db_config['database'] + '.' + dump_sfx
       cmd = "#{pw_env} pg_dump #{username_arg} #{host_arg} #{dbname_arg} #{format_arg(dump_fmt)} --file=#{backup_dir}/#{file_name}"
       puts cmd
       system cmd
@@ -87,6 +87,11 @@ namespace :db do
     end
 
     private
+
+        # See: fs.rake
+        def formatted_timestamp(time = Time.now)
+          time.strftime("%Y-%m-%d-%H%M%S")
+        end
 
         def pw_env
           "PGPASSWORD=#{db_config['password']}"

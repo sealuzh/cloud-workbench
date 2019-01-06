@@ -68,7 +68,12 @@ namespace :fs do
       end
 
       def file_name(time)
-        time.strftime("%Y%m%d%H%M%S") + '_' + db_config['database'] + file_extension
+        formatted_timestamp(time) + '_' + db_config['database'] + file_extension
+      end
+
+      # See: db.rake
+      def formatted_timestamp(time = Time.now)
+        time.strftime("%Y-%m-%d-%H%M%S")
       end
 
       def file_extension
