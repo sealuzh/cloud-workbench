@@ -11,4 +11,11 @@ class ApplicationController < ActionController::Base
       'application'
     end
   end
+
+  # See "Gracefully handling InvalidAuthenticityToken exceptions"
+  # Phase 1 (2nd variation): https://stackoverflow.com/a/36533724/6875981
+  def handle_unverified_request
+    flash[:error] = 'Unverified request. Please retry or clear your cookie!'
+    redirect_to :back
+  end
 end
