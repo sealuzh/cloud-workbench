@@ -86,6 +86,7 @@ FactoryBot.define do
     value { 'Intel(R) Xeon(R) CPU E5-2673 v4 @ 2.30GHz' }
   end
 
+  # NOTE: invoke `user.save!` before the user is written to the database
   factory :user do
     email { Rails.application.config.default_email }
     password { Rails.application.config.default_password }

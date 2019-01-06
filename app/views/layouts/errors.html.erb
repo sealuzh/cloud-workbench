@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%= render 'layouts/head' %>
+</head>
+<!-- Overwrite all stylesheets min-heights to ensure that dropdowns work properly -->
+<body class="skin-blue pace-done" style="min-height: 2114px;">
+
+<%= render 'layouts/top_header' %>
+<!--Consider using a error content layout if the sidebar requires DB access (i.e., is not anymore failsafe)-->
+<%#= render 'layouts/error_content' %>
+<%= render 'layouts/main_content' %>
+<%= render 'layouts/footer' %>
+
+<% if Rails.env.development? %>
+  <div class="well">
+    <h4>Debugging</h4>
+    <%= debug(params) %>
+  </div>
+<% end %>
+
+</body>
+</html>
