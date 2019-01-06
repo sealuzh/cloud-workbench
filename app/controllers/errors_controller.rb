@@ -1,5 +1,8 @@
 class ErrorsController < ApplicationController
   skip_before_action :authenticate_user!, raise: false
+  skip_before_action :verify_authenticity_token
+  # NOTE: Consider using a failsafe errors layout
+  # layout 'errors'
 
   def show
     render status: status, template: "errors/#{status_code}", formats: [:html]
