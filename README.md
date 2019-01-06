@@ -19,9 +19,9 @@ Cloud WorkBench (CWB) [![Build Status](https://travis-ci.org/sealuzh/cloud-workb
 
 ## Studies that Used CWB
 
-* Joel Scheuner, Philipp Leitner (2018). [**Estimating Cloud Application Performance Based on Micro-Benchmark Profiling**](https://research.chalmers.se/publication/504868/file/504868_Fulltext.pdf) in Proceedings of the 11th  IEEE International Conference on Cloud Computing (CLOUD'18). DOI: https://doi.org/10.1109/CLOUD.2018.00019
+* Christoph Laaber, Joel Scheuner, Philipp Leitner (2019), [**Performance testing in the cloud. How bad is it really?**](#) Empirical Software Engineering Journal (EMSE’19), 2019. DOI: TBD (to appear) [preprint](https://peerj.com/preprints/3507/)
 
-* Christoph Laaber, Joel Scheuner, Philipp Leitner (preprint, not peer reviewed). [**Performance testing in the cloud. How bad is it really?**](https://peerj.com/preprints/3507/)
+* Joel Scheuner, Philipp Leitner (2018). [**Estimating Cloud Application Performance Based on Micro-Benchmark Profiling**](https://research.chalmers.se/publication/504868/file/504868_Fulltext.pdf) in Proceedings of the 11th  IEEE International Conference on Cloud Computing (CLOUD'18). DOI: https://doi.org/10.1109/CLOUD.2018.00019
 
 * Joel Scheuner, Philipp Leitner (2018). [**A Cloud Benchmark Suite Combining Micro and Applications Benchmarks**](https://research.chalmers.se/publication/502659/file/502659_Fulltext.pdf), in Proceedings of the 4th International Workshop on Quality-Aware DevOps (QUDOS'18@ICPE). DOI: https://doi.org/10.1145/3185768.3186286
 
