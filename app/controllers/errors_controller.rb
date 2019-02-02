@@ -5,7 +5,7 @@ class ErrorsController < ApplicationController
   # layout 'errors'
 
   def show
-    render status: status, template: "errors/#{status_code}", formats: [:html]
+    render status: status_code, template: "errors/#{status_code}", formats: [:html]
   end
 
   protected
