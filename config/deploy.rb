@@ -154,7 +154,7 @@ end
 def remote_rake(task)
   on primary(:app) do
     within current_path do
-      with :rails_env => fetch(:rails_env) do
+      with rails_env: fetch(:rails_env) do
         rake task
       end
     end

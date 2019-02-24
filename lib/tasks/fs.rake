@@ -19,7 +19,7 @@ namespace :fs do
   end
 
   desc 'Show the existing file system backups'
-  task :list => :environment do
+  task list: :environment do
     puts "#{backup_dir}"
       Dir["#{backup_dir}/*#{file_extension}"].sort.reverse.each { |x| puts File.basename(x) }
   end

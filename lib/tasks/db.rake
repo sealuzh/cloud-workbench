@@ -30,7 +30,7 @@ namespace :db do
     end
 
     desc 'Show the existing database backups'
-    task :list => :environment do
+    task list: :environment do
       puts "#{backup_dir}"
         Dir["#{backup_dir}/*[#{suffixes.join('|')}]"].sort.reverse.each { |x| puts File.basename(x) }
     end
@@ -74,7 +74,7 @@ namespace :db do
 
     # Source: https://gist.github.com/mfilej/5943114
     desc "Fix 'database is being accessed by other users'"
-    task :terminate => :environment do
+    task terminate: :environment do
       ActiveRecord::Base.connection.execute <<-SQL
         SELECT
           pg_terminate_backend(pid)

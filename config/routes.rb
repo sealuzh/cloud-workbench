@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   # Exceptions
   %w( 404 422 500 ).each do |code|
-    match code, :to => 'errors#show', code: code, via: :all
+    match code, to: 'errors#show', code: code, via: :all
   end
 
   # Resources

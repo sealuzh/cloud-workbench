@@ -5,7 +5,7 @@ namespace :user do
   task :change, :password, :environment do |task, args|
     on primary(:app) do
       within current_path do
-        with :rails_env => fetch(:rails_env) do
+        with rails_env: fetch(:rails_env) do
           default_email = 'seal@uzh.ch' # TODO: Fix hardcoded value (MUST match with application.rb)
           # NOTE: Rails environment is not available here
           # default_email = Rails.application.config.default_email
@@ -20,7 +20,7 @@ namespace :user do
   def remote_rake(task)
     on primary(:app) do
       within current_path do
-        with :rails_env => fetch(:rails_env) do
+        with rails_env: fetch(:rails_env) do
           rake task
         end
       end
