@@ -125,7 +125,7 @@ feature 'Benchmark definition management' do
 
   feature 'Editing a metric definition' do
     given(:ratio_metric) { create(:ratio_metric_definition, unit: 'wrong unit') }
-    background { visit  edit_metric_definition_path(ratio_metric) }
+    background { visit edit_metric_definition_path(ratio_metric) }
 
     scenario 'Should change unit name' do
       fill_in 'Unit', with: 'MB/s'

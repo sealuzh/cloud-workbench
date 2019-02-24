@@ -10,7 +10,7 @@ namespace :deploy do
     end
     on roles(:app) do |role|
       run_locally do
-        execute"rsync -av ./public/assets/ #{role.user}@#{role.hostname}:#{release_path}/public/assets/;"
+        execute "rsync -av ./public/assets/ #{role.user}@#{role.hostname}:#{release_path}/public/assets/;"
       end
     end
     run_locally do
