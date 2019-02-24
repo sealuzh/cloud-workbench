@@ -3,7 +3,7 @@
 class BenchmarkDefinitionsController < ApplicationController
   include BenchmarkDefinitionsHelper
   before_action :set_benchmark_definition, only: [:show, :edit, :update, :destroy]
-  before_action :check_and_show_executions_integrity_warning , only: [:edit, :update]
+  before_action :check_and_show_executions_integrity_warning, only: [:edit, :update]
 
   def index
     @benchmark_definitions = BenchmarkDefinition.search(params[:search]).paginate(page: params[:page])
