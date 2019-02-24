@@ -82,7 +82,7 @@ class BenchmarkSchedule < ApplicationRecord
 
     def self.write_content_to_file(schedule, schedule_path)
       parent_dir = Pathname.new(schedule_path).parent
-      FileUtils::mkdir_p(parent_dir)
+      FileUtils.mkdir_p(parent_dir)
       File.open(schedule_path, 'w') do |f|
         f.write(schedule)
       end
