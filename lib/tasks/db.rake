@@ -59,7 +59,7 @@ namespace :db do
             puts 'Try a more specific pattern'
         end
         unless cmd.nil?
-          ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK']='1'
+          ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK'] = '1'
           Rake::Task['db:drop'].invoke
           Rake::Task['db:create'].invoke
           puts cmd

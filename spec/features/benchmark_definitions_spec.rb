@@ -73,7 +73,7 @@ feature 'Benchmark definition management' do
 
   feature 'Cloning a benchmark definition' do
     scenario 'Should create a clone of the same definition' do
-      benchmark =  create(:benchmark_definition)
+      benchmark = create(:benchmark_definition)
       metric = create(:ratio_metric_definition, benchmark_definition: benchmark)
       schedule = create(:benchmark_schedule, benchmark_definition: benchmark)
 
