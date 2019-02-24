@@ -57,6 +57,13 @@ FactoryBot.define do
     initialize_with { new(vagrantfile_path, log_dir) }
   end
 
+  factory :vagrant_runner do
+    vagrant_dir { "#{Rails.application.config.spec_files}/vagrant_driver/single_aws_instance" }
+
+    skip_create
+    initialize_with { new(vagrant_dir) }
+  end
+
   factory :metric_definition do
     association :benchmark_definition, factory: :benchmark_definition
     name { 'default metric' }
