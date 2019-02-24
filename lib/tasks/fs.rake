@@ -39,7 +39,7 @@ namespace :fs do
         else
           puts "No recognized dump file suffix: #{file}"
         end
-        else
+      else
         puts "Too many files match the pattern '#{args.pat}':"
         puts ' ' + files.join("\n ")
         puts 'Try a more specific pattern'

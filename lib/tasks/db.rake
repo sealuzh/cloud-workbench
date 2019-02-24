@@ -53,7 +53,7 @@ namespace :db do
           else
             cmd = "#{pw_env} pg_restore #{username_arg} #{host_arg} #{dbname_arg} --jobs=8 #{file}"
           end
-          else
+        else
           puts "Too many files match the pattern '#{args.pat}':"
           puts ' ' + files.join("\n ")
           puts 'Try a more specific pattern'
@@ -144,7 +144,7 @@ namespace :db do
         when 'p' then 'sql' # TODO: Fix import because pg_restore does NOT support SQL alike-> sudo -u postgres psql -U postgres -d cloud_workbench_production -f dump.sql
         when 't' then 'tar'
         when 'd' then 'dir'
-          else nil
+        else nil
         end
       end
 
@@ -154,7 +154,7 @@ namespace :db do
         when /\.sql$/  then 'p'
         when /\.dir$/  then 'd'
         when /\.tar$/  then 't'
-          else nil
+        else nil
         end
       end
 
