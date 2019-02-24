@@ -23,7 +23,6 @@ describe MetricDefinitionsController do
   end
 
   describe 'single observation creation' do
-
     describe 'automatic default metric generation' do
       let(:metric) { build(:nominal_metric_definition) }
       let(:value) { '1111' }
@@ -99,7 +98,6 @@ describe MetricDefinitionsController do
     let(:ratio_metric) { create(:ratio_metric_definition, benchmark_definition: benchmark) }
 
     describe 'of ratio scale metrics' do
-
       describe 'with small samples' do
         before do
           post_import(ratio_metric, vm, "#{Rails.application.config.spec_files}/metric_observations/results_small.csv")

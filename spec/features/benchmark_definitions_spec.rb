@@ -120,7 +120,6 @@ feature 'Benchmark definition management' do
         expect(page).to have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
       end
     end
-
   end
 
   feature 'Editing a metric definition' do

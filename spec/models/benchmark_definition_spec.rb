@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 describe BenchmarkDefinition do
-
   before do
     @benchmark_definition = create(:benchmark_definition)
   end

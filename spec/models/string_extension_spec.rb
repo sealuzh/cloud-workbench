@@ -3,9 +3,7 @@
 require 'spec_helper'
 
 describe 'String extension' do
-
   describe 'to_bool' do
-
     describe 'with true values' do
       true_values = %w(true True t 1)
       true_values.each do |true_value|

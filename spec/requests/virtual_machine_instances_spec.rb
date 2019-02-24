@@ -7,7 +7,6 @@ describe VirtualMachineInstancesController do
   let(:execution) { vm.benchmark_execution }
 
   describe 'complete benchmark' do
-
     context 'with success' do
       let(:success_message) { 'Benchmark completed message' }
 
@@ -67,7 +66,6 @@ describe VirtualMachineInstancesController do
   end
 
   describe 'complete postprocessing' do
-
     context 'with success' do
       let(:success_message) { 'Postprocessing completed message' }
       before do
