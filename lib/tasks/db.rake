@@ -138,7 +138,7 @@ namespace :db do
         con.close if con
       end
 
-      def suffix_for_format suffix
+      def suffix_for_format(suffix)
         case suffix
         when 'c' then 'dump'
         when 'p' then 'sql' # TODO: Fix import because pg_restore does NOT support SQL alike-> sudo -u postgres psql -U postgres -d cloud_workbench_production -f dump.sql
@@ -148,7 +148,7 @@ namespace :db do
         end
       end
 
-      def format_for_file file
+      def format_for_file(file)
         case file
         when /\.dump$/ then 'c'
         when /\.sql$/  then 'p'

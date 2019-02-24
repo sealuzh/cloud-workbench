@@ -16,7 +16,7 @@ Capybara.javascript_driver = :selenium # :poltergeist
 # when using `save_and_open_page`
 Capybara.asset_host = 'http://localhost:3000'
 
-def reload_page page
+def reload_page(page)
   page.evaluate_script('window.location.reload()')
 end
 
