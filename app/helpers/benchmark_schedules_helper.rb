@@ -18,7 +18,7 @@ module BenchmarkSchedulesHelper
   end
 
   # You may pass optional html parameters such as { class: 'pull-right', title: 'I'm a tooltip }
-  def benchmark_schedule_label(schedule, opts={})
+  def benchmark_schedule_label(schedule, opts = {})
     if schedule.active?
       schedule_label(schedule, 'success', opts)
     else

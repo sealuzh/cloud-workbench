@@ -183,7 +183,7 @@ namespace :db do
           "#{Rails.root}/db/backups"
         end
 
-        def db_config(rails_env=Rails.env)
+        def db_config(rails_env = Rails.env)
           Rails.application.config.database_configuration[rails_env]
         end
   end
