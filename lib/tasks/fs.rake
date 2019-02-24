@@ -73,7 +73,7 @@ namespace :fs do
       formatted_timestamp(time) + '_' + db_config['database'] + file_extension
     end
 
-      # See: db.rake
+    # See: db.rake
     def formatted_timestamp(time = Time.now)
       time.strftime('%Y-%m-%d-%H%M%S')
     end

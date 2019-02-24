@@ -90,7 +90,7 @@ namespace :db do
 
     private
 
-        # See: fs.rake
+      # See: fs.rake
       def formatted_timestamp(time = Time.now)
         time.strftime('%Y-%m-%d-%H%M%S')
       end
