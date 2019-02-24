@@ -92,7 +92,7 @@ set :tests, []
 # Live deploy via: "cap production deploy live=true"
 namespace :deploy do
   unless ENV['live'].to_s.empty?
-    set :live, ( ENV['live'].to_s == 'true' ? true : false )
+    set :live, (ENV['live'].to_s == 'true' ? true : false)
   end
   # Make sure we're deploying what we think we're deploying
   # before :deploy, 'deploy:check_revision'
