@@ -15,7 +15,7 @@ class MetricObservationsController < ApplicationController
     @metric_definition = MetricDefinition.find(params[:metric_definition_id])
     @execution = BenchmarkExecution.find(params[:benchmark_execution_id]) if params[:benchmark_execution_id].present?
     respond_to do |format|
-      format.html { @metric_observations = @metric_observations.paginate(page: params[:page], per_page: 30); render action: 'index'}
+      format.html { @metric_observations = @metric_observations.paginate(page: params[:page], per_page: 30); render action: 'index' }
       format.csv  { send_data MetricObservation.to_csv(@metric_observations) }
     end
   rescue => error

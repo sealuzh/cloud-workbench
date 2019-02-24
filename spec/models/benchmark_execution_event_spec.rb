@@ -12,7 +12,7 @@ describe 'Events of benchmark execution' do
   its(:active?) { should be_truthy }
   describe 'duration' do
     its(:duration) { should be > 0 }
-    specify { expect {execution.duration}.to increase_over_time }
+    specify { expect { execution.duration }.to increase_over_time }
   end
 
   context 'after started preparing,' do
@@ -23,7 +23,7 @@ describe 'Events of benchmark execution' do
       its(:benchmark_active?) { should be_falsey }
       describe 'benchmark duration' do
         its(:benchmark_duration) { should eq 0 }
-        specify { expect {execution.benchmark_duration}.to remain_over_time }
+        specify { expect { execution.benchmark_duration }.to remain_over_time }
       end
 
       context 'started running,' do
@@ -31,14 +31,14 @@ describe 'Events of benchmark execution' do
         its(:benchmark_active?) { should be_truthy }
         describe 'benchmark duration' do
           its(:benchmark_duration) { should be > 0 }
-          specify { expect {execution.benchmark_duration}.to increase_over_time }
+          specify { expect { execution.benchmark_duration }.to increase_over_time }
         end
 
         context 'finished running,' do
           before { create_event(:finished_running) }
           its(:benchmark_active?) { should be_falsey }
           describe 'benchmark duration' do
-            specify { expect {execution.benchmark_duration}.to remain_over_time }
+            specify { expect { execution.benchmark_duration }.to remain_over_time }
           end
 
           context 'started_postprocessing,' do
@@ -55,7 +55,7 @@ describe 'Events of benchmark execution' do
                   before { create_event(:finished_releasing_resources) }
                   its(:active?) { should be_falsey }
                   describe 'execution duration' do
-                    specify { expect {execution.duration}.to remain_over_time }
+                    specify { expect { execution.duration }.to remain_over_time }
                   end
                 end
               end

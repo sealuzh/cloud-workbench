@@ -13,6 +13,6 @@ RSpec::Matchers.define :contain_event do |expected|
 
   # Provide descriptive error message: [created, started_preparing]
   def event_names(events)
-    '[' + events.map { |event| event.name}.join(', ') + ']'
+    '[' + events.map { |event| event.name }.join(', ') + ']'
   end
 end

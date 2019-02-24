@@ -138,7 +138,7 @@ feature 'Benchmark definition management' do
 
   feature 'Starting a benchmark execution' do
     given(:benchmark_definition) { create(:benchmark_definition) }
-    given(:start_execution) { -> { click_button 'Start Execution'} }
+    given(:start_execution) { -> { click_button 'Start Execution' } }
     background { visit benchmark_definition_path(benchmark_definition) }
 
     scenario 'Should create a new benchmark execution' do
