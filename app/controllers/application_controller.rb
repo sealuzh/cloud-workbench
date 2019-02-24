@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
 
   def layout_by_resource
-    if devise_controller? and !user_signed_in?
+    if devise_controller? && !user_signed_in?
       'devise'
     else
       'application'
