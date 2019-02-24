@@ -26,7 +26,7 @@ class BenchmarkDefinition < ApplicationRecord
   end
 
   validates :running_timeout, presence: true,
-                              numericality: {only_integer: true, greater_than: 0}
+                              numericality: { only_integer: true, greater_than: 0 }
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
   # that do not support case-sensitive indices. This case should practically never occur is therefore not handled.
   MAX_NAME_LENGTH = 70
