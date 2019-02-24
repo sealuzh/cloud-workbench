@@ -126,3 +126,36 @@ make lint
     ```bash
     vagrant plugin install vagrant-cachier
     ```
+
+## Conventions
+
+### Commit Messages
+
+1. Capitalize the subject line (e.g., Fix ... instead of fix ...)
+2. Use imperative verbs in the subject line (e.g., Fix instead of Fixed)
+3. Use the body to motivate the change (i.e., what?, why?, how?) when appropriate. Example:
+
+    ```none
+    Fix HTTP status codes for errors
+
+    Problem: Errors (i.e., 404, 422, 500) returned 200 by mistake
+    Solution: Return the right error code by calling the right helper method
+    ```
+
+Common prefixes are: Fix, Add, Update, Remove, Improve
+
+### Branching Strategy
+
+This project uses short-lived features branches typically prefixed with:
+
+* `feature/` introducing new functionality
+* `fix/` fixing an issue
+* `support/` supporting changes related to documentation, deployment, or testing
+
+Feature branches are merged into master via Github pull request after a successful build.
+Minor changes (e.g., README updates) can be committed directly into master (Hint: `[skip-ci]` skips the CI build for minor commits).
+
+### Release / Deployment Strategy
+
+This project follows a [continous delivery](https://continuousdelivery.com/) deployment model and therefore does not use the notion of releases.
+Checkout the [cwb client library](https://github.com/sealuzh/cwb) for a publicly released [Ruby gem](https://rubygems.org/gems/cwb).
