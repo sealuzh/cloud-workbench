@@ -16,9 +16,9 @@ class VagrantRunner
     ssh_command(Rails.application.config.vm_start_postprocessing)
   end
 
-  def ssh_command(executable)
+  def ssh_command(executable, dir = Rails.application.config.vm_benchmark_dir)
     # NOTE: We cannot use && between cd and nohup because this doesn't work together with non-blocking commands
-    shell_cmd = "vagrant ssh -- \"cd '#{Rails.application.config.vm_benchmark_dir}';
+    shell_cmd = "vagrant ssh -- \"cd '#{dir}';
     nohup './#{executable}' >/dev/null 2>>'#{Rails.application.config.vm_error_log_file}' </dev/null &\""
     shell(shell_cmd, dir: @vagrant_dir)
   end
