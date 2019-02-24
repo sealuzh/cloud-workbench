@@ -31,7 +31,7 @@ namespace :db do
 
     desc 'Show the existing database backups'
     task :list => :environment do
-        puts "#{backup_dir}"
+      puts "#{backup_dir}"
         Dir["#{backup_dir}/*[#{suffixes.join('|')}]"].sort.reverse.each { |x| puts File.basename(x) }
     end
 
@@ -42,9 +42,9 @@ namespace :db do
         files = only_allowed_db_files(Dir.glob("#{backup_dir}/*#{args.pat}*"))
         case files.size
         when 0
-            puts "No backups found for the pattern '#{args.pat}'"
+          puts "No backups found for the pattern '#{args.pat}'"
         when 1
-            file = files.first
+          file = files.first
             fmt = format_for_file(file)
             if fmt.nil?
               puts "No recognized dump file suffix: #{file}"
@@ -54,7 +54,7 @@ namespace :db do
               cmd = "#{pw_env} pg_restore #{username_arg} #{host_arg} #{dbname_arg} --jobs=8 #{file}"
             end
           else
-            puts "Too many files match the pattern '#{args.pat}':"
+          puts "Too many files match the pattern '#{args.pat}':"
             puts ' ' + files.join("\n ")
             puts 'Try a more specific pattern'
         end
@@ -91,9 +91,9 @@ namespace :db do
     private
 
         # See: fs.rake
-        def formatted_timestamp(time = Time.now)
-          time.strftime('%Y-%m-%d-%H%M%S')
-        end
+      def formatted_timestamp(time = Time.now)
+        time.strftime('%Y-%m-%d-%H%M%S')
+      end
 
         def pw_env
           "PGPASSWORD=#{db_config['password']}"

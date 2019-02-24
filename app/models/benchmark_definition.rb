@@ -78,10 +78,10 @@ class BenchmarkDefinition < ApplicationRecord
       case clone.class.name
       when 'BenchmarkDefinition'
           # Avoid name collision if copying a benchmark multiple times
-          clone.name = "#{original.name} copy (#{SecureRandom.hex(1)})"
+        clone.name = "#{original.name} copy (#{SecureRandom.hex(1)})"
       when 'BenchmarkSchedule'
           # Disable schedule if active
-          clone.active = false if clone.present?
+        clone.active = false if clone.present?
       end
     end
     benchmark_definition.save!

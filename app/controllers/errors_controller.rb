@@ -12,7 +12,7 @@ class ErrorsController < ApplicationController
 
   protected
 
-  def status_code
-    params[:code] || :internal_server_error # 500
-  end
+    def status_code
+      params[:code] || :internal_server_error # 500
+    end
 end

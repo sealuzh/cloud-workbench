@@ -20,7 +20,7 @@ namespace :fs do
 
   desc 'Show the existing file system backups'
   task :list => :environment do
-      puts "#{backup_dir}"
+    puts "#{backup_dir}"
       Dir["#{backup_dir}/*#{file_extension}"].sort.reverse.each { |x| puts File.basename(x) }
   end
 
@@ -31,16 +31,16 @@ namespace :fs do
       files = only_allowed_fs_files(Dir.glob("#{backup_dir}/*#{args.pat}*"))
       case files.size
       when 0
-          puts "No backups found for the pattern '#{args.pat}'"
+        puts "No backups found for the pattern '#{args.pat}'"
       when 1
-          file = files.first
+        file = files.first
           if file.end_with?(file_extension)
             cmd = "tar xf #{file} -C #{File.dirname(storage_dir)}"
           else
             puts "No recognized dump file suffix: #{file}"
           end
         else
-          puts "Too many files match the pattern '#{args.pat}':"
+        puts "Too many files match the pattern '#{args.pat}':"
           puts ' ' + files.join("\n ")
           puts 'Try a more specific pattern'
       end
@@ -61,9 +61,9 @@ namespace :fs do
 
   private
 
-      def clean_storage_dir
-        FileUtils.rm_rf(Dir[storage_dir])
-      end
+    def clean_storage_dir
+      FileUtils.rm_rf(Dir[storage_dir])
+    end
 
       def storage_dir
         Rails.application.config.storage

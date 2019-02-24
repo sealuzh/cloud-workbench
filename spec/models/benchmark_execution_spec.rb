@@ -27,7 +27,7 @@ describe BenchmarkExecution do
   end
 
   describe 'successful prepare' do
-    let(:driver) { double('driver', up: true) }
+      let(:driver) { double('driver', up: true) }
     before do
       benchmark_execution.prepare_with(driver)
     end
@@ -49,7 +49,7 @@ describe BenchmarkExecution do
   end
 
   describe 'successful start running' do
-    let(:benchmark_runner) { double('benchmark runner', start_benchmark: true) }
+      let(:benchmark_runner) { double('benchmark runner', start_benchmark: true) }
     before do
       benchmark_execution.start_benchmark_with(benchmark_runner)
     end
@@ -68,7 +68,7 @@ describe BenchmarkExecution do
   end
 
   describe 'successful start postprocessing' do
-    let(:benchmark_runner) { double('benchmark runner', start_postprocessing: true) }
+      let(:benchmark_runner) { double('benchmark runner', start_postprocessing: true) }
     before do
       benchmark_execution.start_postprocessing_with(benchmark_runner)
     end

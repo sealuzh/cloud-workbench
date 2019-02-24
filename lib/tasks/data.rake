@@ -21,7 +21,7 @@ namespace :data do
 
   private
 
-      def backup_dir
-        "#{Rails.root}/db/backups"
-      end
+    def backup_dir
+      "#{Rails.root}/db/backups"
+    end
 end
