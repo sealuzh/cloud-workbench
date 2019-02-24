@@ -57,3 +57,7 @@ Step-by-step guidance is given [here](https://github.com/sealuzh/cwb-chef-repo)
 
 Automated as part of the [installation](https://github.com/sealuzh/cwb-chef-repo#installation)
  or [manually triggerable](https://github.com/sealuzh/cwb-chef-repo#deployment).
+
+## Development
+
+See [DEVELOPMENT.md](./DEVELOPMENT.md)
