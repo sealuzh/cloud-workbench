@@ -87,5 +87,4 @@ class BenchmarkSchedule < ApplicationRecord
         f.write(schedule)
       end
     end
-
 end
