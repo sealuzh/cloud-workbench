@@ -9,7 +9,7 @@ Cloud WorkBench (CWB) [![Build Status](https://travis-ci.org/sealuzh/cloud-workb
 * Install CWB: https://github.com/sealuzh/cwb-chef-repo
 * *cwb* Utility Cookbook *(Chef)*: https://supermarket.chef.io/cookbooks/cwb
 * *cwb* Client *(RubyGem)*: https://github.com/sealuzh/cwb
-    * [Cwb::Client Docs](http://www.rubydoc.info/gems/cwb/Cwb/Client)
+  * [Cwb::Client Docs](http://www.rubydoc.info/gems/cwb/Cwb/Client)
 
 ## Literature
 
@@ -51,7 +51,7 @@ Find more screenshots under [/docs/img](/docs/img)
 Most parts are automated and configurable via [Chef](https://www.chef.io/),
 some manual steps are required to setup credentials and Chef server configuration.
 
-Step-by-step guidance is given here: https://github.com/sealuzh/cwb-chef-repo
+Step-by-step guidance is given [here](https://github.com/sealuzh/cwb-chef-repo)
 
 ## Deployment
 
