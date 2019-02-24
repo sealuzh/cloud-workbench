@@ -38,7 +38,7 @@ module BenchmarkSchedulesHelper
     def schedule_label(schedule, type, opts)
       base_html_class = "label label-#{type}"
       html_class = opts[:class].present? ? "#{base_html_class} #{opts[:class]}" : base_html_class
-      args = opts.merge({ class: html_class })
+      args = opts.merge(class: html_class)
       link_to schedule.cron_expression, edit_benchmark_schedule_path(schedule), args
     end
 end

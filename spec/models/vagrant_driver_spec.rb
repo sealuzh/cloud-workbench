@@ -12,9 +12,9 @@ describe VagrantDriver do
     end
     it 'should detect a single aws vm' do
       expect(@vms.size).to eq(1)
-      expect(@vms[0]).to eq({ provider_name: vm.provider_name,
+      expect(@vms[0]).to eq( provider_name: vm.provider_name,
                               provider_instance_id: vm.provider_instance_id,
-                              role: vm.role })
+                              role: vm.role )
     end
   end
 
@@ -24,9 +24,9 @@ describe VagrantDriver do
     end
     it 'should detect a single aws vm' do
       expect(@vms.size).to eq(1)
-      expect(@vms[0]).to eq({ provider_name: vm.provider_name,
+      expect(@vms[0]).to eq( provider_name: vm.provider_name,
                               provider_instance_id: vm.provider_instance_id,
-                              role: vm.role })
+                              role: vm.role )
     end
   end
 end

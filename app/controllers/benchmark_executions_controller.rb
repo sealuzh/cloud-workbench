@@ -22,7 +22,7 @@ class BenchmarkExecutionsController < ApplicationController
   end
 
   def toggle_keep_alive
-    @benchmark_execution.update_attributes!({ keep_alive: params[:keep_alive].to_bool })
+    @benchmark_execution.update_attributes!(keep_alive: params[:keep_alive].to_bool)
     flash[:success] = "Successfully #{@benchmark_execution.keep_alive? ? 'enabled' : 'disabled'} the keep alive flag."
   rescue => e
     flash[:error] = "Could not set the keep alive flage to #{params[:keep_alive]}. #{e.message}"
