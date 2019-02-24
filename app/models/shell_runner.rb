@@ -9,7 +9,7 @@ module ShellRunner
   #   log: file path for logging stdout and stderr
   # @return [Boolean] `true` if successful (i.e,. exit 0), `false` otherwise
   def shell(cmd, opts)
-    full_cmd = ''
+    full_cmd = ''.dup
     full_cmd << "cd #{opts[:dir]} && " if opts[:dir]
     full_cmd << reset_env
     full_cmd << cmd
