@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module IconHelper
-
   def ion_icon(name, html_class = '')
     "<i class='ion ion-#{name} #{html_class}'></i>".html_safe
   end
