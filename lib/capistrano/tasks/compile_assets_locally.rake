@@ -1,7 +1,7 @@
 # Source: https://github.com/TalkingQuickly/capistrano-3-rails-template
 
 namespace :deploy do
-  desc "compiles assets locally then rsyncs"
+  desc 'compiles assets locally then rsyncs'
   task :compile_assets_locally do
     run_locally do
       execute "RAILS_ENV=#{fetch(:rails_env)} bundle exec rake assets:precompile"
@@ -12,7 +12,7 @@ namespace :deploy do
       end
     end
     run_locally do
-      execute "rm -rf ./public/assets"
+      execute 'rm -rf ./public/assets'
     end
   end
 end

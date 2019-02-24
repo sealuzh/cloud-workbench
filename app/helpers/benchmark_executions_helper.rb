@@ -48,11 +48,11 @@ module BenchmarkExecutionsHelper
   end
 
   def confirm_restart_benchmark_msg(execution)
-    { confirm: "This action will try to restart the benchmark again via SSH. It starts the start_runner script again." }
+    { confirm: 'This action will try to restart the benchmark again via SSH. It starts the start_runner script again.' }
   end
 
   def confirm_abort_execution_msg(execution)
-    { confirm: "This action will abort the execution by terminating all running virtual machine instances." }
+    { confirm: 'This action will abort the execution by terminating all running virtual machine instances.' }
   end
 
   def confirm_delete_execution_msg(execution)

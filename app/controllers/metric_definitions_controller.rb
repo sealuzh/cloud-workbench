@@ -50,7 +50,7 @@ class MetricDefinitionsController < ApplicationController
 
     def check_and_show_observations_integrity_warning
       if @metric_definition.has_any_observations?
-        flash.now[:info] = "You try to modify a metric definition that already has observed values."
+        flash.now[:info] = 'You try to modify a metric definition that already has observed values.'
       end
     end
 

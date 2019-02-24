@@ -73,7 +73,7 @@ class BenchmarkDefinitionsController < ApplicationController
 
     def check_and_show_executions_integrity_warning
       if @benchmark_definition.benchmark_executions.any?
-        flash.now[:info] = "You try to modify a benchmark that has already been executed."
+        flash.now[:info] = 'You try to modify a benchmark that has already been executed.'
       end
     end
 

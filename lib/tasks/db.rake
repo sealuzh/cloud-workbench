@@ -16,24 +16,24 @@ namespace :db do
     end
 
     # Backup and restore based on: https://gist.github.com/hopsoft/56ba6f55fe48ad7f8b90#gistcomment-1646663
-    desc "Dump the database to backups using the format: c (custom), p (sql), t (tar), d (directory)"
+    desc 'Dump the database to backups using the format: c (custom), p (sql), t (tar), d (directory)'
     task :dump, [:format] => :environment do |task, args|
       dump_fmt = args[:format] || 'c'      # or 'p', 't', 'd'
       dump_sfx = suffix_for_format dump_fmt
       ensure_exists(backup_dir)
-      file_name = formatted_timestamp + "_" + db_config['database'] + '.' + dump_sfx
+      file_name = formatted_timestamp + '_' + db_config['database'] + '.' + dump_sfx
       cmd = "#{pw_env} pg_dump #{username_arg} #{host_arg} #{dbname_arg} #{format_arg(dump_fmt)} --file=#{backup_dir}/#{file_name}"
       puts cmd
       system cmd
     end
 
-    desc "Show the existing database backups"
+    desc 'Show the existing database backups'
     task :list => :environment do
         puts "#{backup_dir}"
         Dir["#{backup_dir}/*[#{suffixes.join('|')}]"].sort.reverse.each { |x| puts File.basename(x) }
     end
 
-    desc "Restores the database from a backup using PATTERN"
+    desc 'Restores the database from a backup using PATTERN'
     task :restore, [:pat] => :environment do |task, args|
       if args.pat.present?
         cmd = nil
@@ -54,16 +54,16 @@ namespace :db do
           else
             puts "Too many files match the pattern '#{args.pat}':"
             puts ' ' + files.join("\n ")
-            puts "Try a more specific pattern"
+            puts 'Try a more specific pattern'
         end
         unless cmd.nil?
           ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK']='1'
-          Rake::Task["db:drop"].invoke
-          Rake::Task["db:create"].invoke
+          Rake::Task['db:drop'].invoke
+          Rake::Task['db:create'].invoke
           puts cmd
           system cmd
-          Rake::Task["db:migrate"].invoke
-          Rake::Task["user:create_default"].invoke
+          Rake::Task['db:migrate'].invoke
+          Rake::Task['user:create_default'].invoke
         end
       else
         puts 'Please pass a pattern to the task'
@@ -90,7 +90,7 @@ namespace :db do
 
         # See: fs.rake
         def formatted_timestamp(time = Time.now)
-          time.strftime("%Y-%m-%d-%H%M%S")
+          time.strftime('%Y-%m-%d-%H%M%S')
         end
 
         def pw_env

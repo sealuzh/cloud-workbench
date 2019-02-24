@@ -3,7 +3,7 @@
 namespace :deploy do
   desc "Runs test before deploying, can't deploy unless they pass"
   task :run_tests do
-    test_log = "log/capistrano.test.log"
+    test_log = 'log/capistrano.test.log'
     tests = fetch(:tests)
     tests.each do |test|
       puts "--> Running tests: '#{test}', please wait ..."
@@ -14,7 +14,7 @@ namespace :deploy do
       end
       puts "--> '#{test}' passed"
     end
-    puts "--> All tests passed"
+    puts '--> All tests passed'
     system "rm #{test_log}"
   end
 end

@@ -4,25 +4,25 @@ describe MetricDefinitionsController do
   let(:vm) { create(:virtual_machine_instance) }
   let(:benchmark) { vm.benchmark_execution.benchmark_definition }
 
-  describe "download metric observations as CSV" do
+  describe 'download metric observations as CSV' do
     let(:ordered_observation) { create(:ordered_metric_observation) }
 
     before do
       get metric_observations_path(params: { metric_definition_id: ordered_observation.metric_definition_id }, format: :csv)
     end
 
-    it "should return the status code 200 for ok" do
+    it 'should return the status code 200 for ok' do
       expect(response.status).to eq(200)
     end
 
-    it "should return a CSV file containing the metric observation" do
+    it 'should return a CSV file containing the metric observation' do
       expect(response.body).to eq(MetricObservation.to_csv([ordered_observation]))
     end
   end
 
-  describe "single observation creation" do
+  describe 'single observation creation' do
 
-    describe "automatic default metric generation" do
+    describe 'automatic default metric generation' do
       let(:metric) { build(:nominal_metric_definition) }
       let(:value) { '1111' }
 
@@ -30,20 +30,20 @@ describe MetricDefinitionsController do
         post_create(metric, vm, '11', value)
       end
 
-      it "should return the status code 201 for created" do
+      it 'should return the status code 201 for created' do
         expect(response.status).to eq(201) # created
       end
 
-      it "should create a new default metric (nominal scale)" do
+      it 'should create a new default metric (nominal scale)' do
         expect(MetricDefinition.find_by_name(metric.name)).not_to be_nil
       end
 
-      it "should create a new observation" do
+      it 'should create a new observation' do
         expect(NominalMetricObservation.find_by_value(value)).not_to be_nil
       end
     end
 
-    describe "of ratio scale metric" do
+    describe 'of ratio scale metric' do
       let(:ratio_metric) { create(:ratio_metric_definition, benchmark_definition: benchmark) }
       let(:time) { '500' }
       let(:value) { '1024' }
@@ -52,16 +52,16 @@ describe MetricDefinitionsController do
         post_create(ratio_metric, vm, time, value)
       end
 
-      it "should return the status code 201 for created" do
+      it 'should return the status code 201 for created' do
         expect(response.status).to eq(201) # created
       end
 
-      it "should create a new ratio metric observation" do
+      it 'should create a new ratio metric observation' do
         expect(OrderedMetricObservation.where(time: time, value: value).count).to eq 1
       end
     end
 
-    describe "of nominal scale metric" do
+    describe 'of nominal scale metric' do
       let(:nominal_metric) { create(:nominal_metric_definition, benchmark_definition: benchmark) }
       let(:time) { '0' }
       let(:value) { 'Xeon CPU x2' }
@@ -70,11 +70,11 @@ describe MetricDefinitionsController do
         post_create(nominal_metric, vm, time, value)
       end
 
-      it "should return the status code 201 for created" do
+      it 'should return the status code 201 for created' do
         expect(response.status).to eq(201) # created
       end
 
-      it "should create a new nominal metric observation with the correct values" do
+      it 'should create a new nominal metric observation with the correct values' do
         expect(NominalMetricObservation.where(time: time, value: value).count).to eq 1
       end
     end
@@ -93,21 +93,21 @@ describe MetricDefinitionsController do
     end
   end
 
-  describe "bulk import" do
+  describe 'bulk import' do
     let(:ratio_metric) { create(:ratio_metric_definition, benchmark_definition: benchmark) }
 
-    describe "of ratio scale metrics" do
+    describe 'of ratio scale metrics' do
 
-      describe "with small samples" do
+      describe 'with small samples' do
         before do
           post_import(ratio_metric, vm, "#{Rails.application.config.spec_files}/metric_observations/results_small.csv")
         end
 
-        it "should return the status code 201 for created" do
+        it 'should return the status code 201 for created' do
           expect(response.status).to eq(201) # created
         end
 
-        it "should create new ratio metric observations from the csv data" do
+        it 'should create new ratio metric observations from the csv data' do
           ratio_metric_observations = OrderedMetricObservation.where(metric_definition_id: ratio_metric.id)
           expect(ratio_metric_observations.count).to eq 20 # number of samples in csv
 
@@ -118,16 +118,16 @@ describe MetricDefinitionsController do
         end
       end
 
-      describe "with large samples", :slow do
+      describe 'with large samples', :slow do
         before do
           post_import(ratio_metric, vm, "#{Rails.application.config.spec_files}/metric_observations/results_big.csv")
         end
 
-        it "should return the status code 201 for created" do
+        it 'should return the status code 201 for created' do
           expect(response.status).to eq(201) # created
         end
 
-        it "should create new ratio metric observations from the csv data" do
+        it 'should create new ratio metric observations from the csv data' do
           ratio_metric_observations = OrderedMetricObservation.where(metric_definition_id: ratio_metric.id)
           expect(ratio_metric_observations.count).to eq 1978 # number of samples in csv
 

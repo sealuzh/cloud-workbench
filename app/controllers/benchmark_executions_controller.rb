@@ -30,19 +30,19 @@ class BenchmarkExecutionsController < ApplicationController
 
   def reprovision
     Delayed::Job.enqueue(ReprovisionBenchmarkExecutionJob.new(@benchmark_execution.id), PRIORITY_HIGH)
-    flash[:success] = "Successfully started a reprovisioning job asynchronously."
+    flash[:success] = 'Successfully started a reprovisioning job asynchronously.'
     redirect_to @benchmark_execution
   end
 
   def restart_benchmark
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(@benchmark_execution.id), PRIORITY_HIGH)
-    flash[:success] = "Successfully started a restart benchmark job asynchronously."
+    flash[:success] = 'Successfully started a restart benchmark job asynchronously.'
     redirect_to @benchmark_execution
   end
 
   def abort
     Delayed::Job.enqueue(ReleaseResourcesJob.new(@benchmark_execution.id), PRIORITY_HIGH)
-    flash[:success] = "Successfully started a release resources job asynchronously."
+    flash[:success] = 'Successfully started a release resources job asynchronously.'
     redirect_to @benchmark_execution
   end
 

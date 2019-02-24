@@ -1,7 +1,7 @@
 require 'rubygems'
 
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 # Support for deprecated `its` in RSpec 3 discussed in: https://gist.github.com/myronmarston/4503509
 require 'rspec/its'
@@ -19,8 +19,8 @@ def reload_page page
 end
 
 # Recursively require supporting files (e.g., custom matchers)
-Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
-Dir[Rails.root.join("spec/features/support/**/*.rb")].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/features/support/**/*.rb')].each { |f| require f }
 
 # Run pending migrations automatically if any
 ActiveRecord::Migration.maintain_test_schema!

@@ -16,7 +16,7 @@ namespace :fs do
     system cmd
   end
 
-  desc "Show the existing file system backups"
+  desc 'Show the existing file system backups'
   task :list => :environment do
       puts "#{backup_dir}"
       Dir["#{backup_dir}/*#{file_extension}"].sort.reverse.each { |x| puts File.basename(x) }
@@ -40,10 +40,10 @@ namespace :fs do
         else
           puts "Too many files match the pattern '#{args.pat}':"
           puts ' ' + files.join("\n ")
-          puts "Try a more specific pattern"
+          puts 'Try a more specific pattern'
       end
       unless cmd.nil?
-        Rake::Task["fs:clean"].invoke
+        Rake::Task['fs:clean'].invoke
         puts cmd
         system cmd
       end
@@ -73,7 +73,7 @@ namespace :fs do
 
       # See: db.rake
       def formatted_timestamp(time = Time.now)
-        time.strftime("%Y-%m-%d-%H%M%S")
+        time.strftime('%Y-%m-%d-%H%M%S')
       end
 
       def file_extension

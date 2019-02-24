@@ -1,8 +1,8 @@
 namespace :data do
   desc 'Backup database and file storage'
   task backup: :environment do
-    Rake::Task["db:dump"].invoke
-    Rake::Task["fs:dump"].invoke
+    Rake::Task['db:dump'].invoke
+    Rake::Task['fs:dump'].invoke
   end
 
   desc 'List database and file storage backups'
