@@ -68,7 +68,7 @@ bin/guard
 
 Automatically reloads a page on asset modification via the following browser plugin:
 
-## Setup Production Model Locally
+## Setup Production Environment Locally
 
 * Requirement: Setup local PostgreSQL
 
@@ -111,7 +111,7 @@ make lint
 * Tests can be [tagged](https://www.relishapp.com/rspec/rspec-core/v/3-4/docs/command-line/tag-option)
   (e.g., useful for [slow tests](http://engineering.sharethrough.com/blog/2013/08/10/greater-test-control-with-rspecs-tag-filters/))
 
-## Testing Environment
+## Local Integration Testing Environment
 
 * CWB can be locally installed into 2 [Virtualbox](https://www.virtualbox.org/wiki/Downloads) VMs.
   Follow the [Installation](https://github.com/sealuzh/cwb-chef-repo#installation) steps
@@ -122,6 +122,7 @@ make lint
 
 * The Vagrant plugin [vagrant-cachier](https://github.com/fgrehm/vagrant-cachier)
   can speed up development by serving as a cache for apt, gems, etc.
+
     ```bash
     vagrant plugin install vagrant-cachier
     ```
