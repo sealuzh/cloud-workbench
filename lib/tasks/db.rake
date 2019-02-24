@@ -41,9 +41,9 @@ namespace :db do
         cmd = nil
         files = only_allowed_db_files(Dir.glob("#{backup_dir}/*#{args.pat}*"))
         case files.size
-          when 0
+        when 0
             puts "No backups found for the pattern '#{args.pat}'"
-          when 1
+        when 1
             file = files.first
             fmt = format_for_file(file)
             if fmt.nil?
@@ -140,20 +140,20 @@ namespace :db do
 
         def suffix_for_format suffix
           case suffix
-            when 'c' then 'dump'
-            when 'p' then 'sql' # TODO: Fix import because pg_restore does NOT support SQL alike-> sudo -u postgres psql -U postgres -d cloud_workbench_production -f dump.sql
-            when 't' then 'tar'
-            when 'd' then 'dir'
+          when 'c' then 'dump'
+          when 'p' then 'sql' # TODO: Fix import because pg_restore does NOT support SQL alike-> sudo -u postgres psql -U postgres -d cloud_workbench_production -f dump.sql
+          when 't' then 'tar'
+          when 'd' then 'dir'
             else nil
           end
         end
 
         def format_for_file file
           case file
-            when /\.dump$/ then 'c'
-            when /\.sql$/  then 'p'
-            when /\.dir$/  then 'd'
-            when /\.tar$/  then 't'
+          when /\.dump$/ then 'c'
+          when /\.sql$/  then 'p'
+          when /\.dir$/  then 'd'
+          when /\.tar$/  then 't'
             else nil
           end
         end

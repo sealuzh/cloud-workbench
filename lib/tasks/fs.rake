@@ -30,9 +30,9 @@ namespace :fs do
       cmd = nil
       files = only_allowed_fs_files(Dir.glob("#{backup_dir}/*#{args.pat}*"))
       case files.size
-        when 0
+      when 0
           puts "No backups found for the pattern '#{args.pat}'"
-        when 1
+      when 1
           file = files.first
           if file.end_with?(file_extension)
             cmd = "tar xf #{file} -C #{File.dirname(storage_dir)}"
