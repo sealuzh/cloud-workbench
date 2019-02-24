@@ -17,9 +17,13 @@ class VagrantRunner
   end
 
   def ssh_command(executable, dir = Rails.application.config.vm_benchmark_dir, log = Rails.application.config.vm_error_log_file)
-    # NOTE: We cannot use && between cd and nohup because this doesn't work together with non-blocking commands
-    shell_cmd = "vagrant ssh -- \"cd '#{dir}';
-    nohup './#{executable}' >/dev/null 2>>'#{log}' </dev/null &\""
+    shell_cmd = ssh_shell_cmd(executable, dir, log)
     shell(shell_cmd, dir: @vagrant_dir)
+  end
+
+  def ssh_shell_cmd(executable, dir, log)
+    # NOTE: We cannot use && between cd and nohup because this doesn't work together with non-blocking commands
+    "vagrant ssh -- \"cd '#{dir}';
+    nohup './#{executable}' >/dev/null 2>>'#{log}' </dev/null &\""
   end
 end
