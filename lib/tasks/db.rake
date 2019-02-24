@@ -48,7 +48,7 @@ namespace :db do
           fmt = format_for_file(file)
           if fmt.nil?
             puts "No recognized dump file suffix: #{file}"
-          elsif (fmt == 'p')
+          elsif fmt == 'p'
             cmd = "#{pw_env} psql #{username_arg} #{host_arg} #{dbname_arg} --file=#{file}"
           else
             cmd = "#{pw_env} pg_restore #{username_arg} #{host_arg} #{dbname_arg} --jobs=8 #{file}"
@@ -118,7 +118,7 @@ namespace :db do
       def create_or_update_db_user(username, password)
         con = PG.connect(dbname: 'postgres')
         res = con.exec("SELECT usename FROM pg_catalog.pg_user WHERE pg_user.usename='#{username}';")
-        if (res.one?) # or res.num_tuples
+        if res.one? # or res.num_tuples
           con.exec("ALTER ROLE #{username} WITH CREATEDB PASSWORD '#{password}';")
         else
           con.exec("CREATE ROLE #{username} WITH CREATEDB PASSWORD '#{password}';")
