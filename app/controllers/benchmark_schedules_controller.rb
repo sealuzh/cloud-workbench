@@ -19,8 +19,8 @@ class BenchmarkSchedulesController < ApplicationController
   def create
     @benchmark_schedule = @benchmark_definition.build_benchmark_schedule(benchmark_schedule_params)
     @benchmark_schedule.save!
-      success_flash_for 'created'
-      redirect_to @benchmark_definition
+    success_flash_for 'created'
+    redirect_to @benchmark_definition
   rescue => error
     flash.now[:error] = error.message
     render action: 'new'

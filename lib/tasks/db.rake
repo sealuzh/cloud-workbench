@@ -32,7 +32,7 @@ namespace :db do
     desc 'Show the existing database backups'
     task list: :environment do
       puts "#{backup_dir}"
-        Dir["#{backup_dir}/*[#{suffixes.join('|')}]"].sort.reverse.each { |x| puts File.basename(x) }
+      Dir["#{backup_dir}/*[#{suffixes.join('|')}]"].sort.reverse.each { |x| puts File.basename(x) }
     end
 
     desc 'Restores the database from a backup using PATTERN'
@@ -45,18 +45,18 @@ namespace :db do
           puts "No backups found for the pattern '#{args.pat}'"
         when 1
           file = files.first
-            fmt = format_for_file(file)
-            if fmt.nil?
-              puts "No recognized dump file suffix: #{file}"
-            elsif (fmt == 'p')
-              cmd = "#{pw_env} psql #{username_arg} #{host_arg} #{dbname_arg} --file=#{file}"
-            else
-              cmd = "#{pw_env} pg_restore #{username_arg} #{host_arg} #{dbname_arg} --jobs=8 #{file}"
-            end
+          fmt = format_for_file(file)
+          if fmt.nil?
+            puts "No recognized dump file suffix: #{file}"
+          elsif (fmt == 'p')
+            cmd = "#{pw_env} psql #{username_arg} #{host_arg} #{dbname_arg} --file=#{file}"
+          else
+            cmd = "#{pw_env} pg_restore #{username_arg} #{host_arg} #{dbname_arg} --jobs=8 #{file}"
+          end
           else
           puts "Too many files match the pattern '#{args.pat}':"
-            puts ' ' + files.join("\n ")
-            puts 'Try a more specific pattern'
+          puts ' ' + files.join("\n ")
+          puts 'Try a more specific pattern'
         end
         unless cmd.nil?
           ENV['DISABLE_DATABASE_ENVIRONMENT_CHECK'] = '1'
@@ -95,95 +95,95 @@ namespace :db do
         time.strftime('%Y-%m-%d-%H%M%S')
       end
 
-        def pw_env
-          "PGPASSWORD=#{db_config['password']}"
-        end
+      def pw_env
+        "PGPASSWORD=#{db_config['password']}"
+      end
 
-        def username_arg
-          "--username=#{db_config['username']}"
-        end
+      def username_arg
+        "--username=#{db_config['username']}"
+      end
 
-        def dbname_arg
-          "--dbname=#{db_config['database']}"
-        end
+      def dbname_arg
+        "--dbname=#{db_config['database']}"
+      end
 
-        def host_arg
-          "--host=#{db_config['host']}"
-        end
+      def host_arg
+        "--host=#{db_config['host']}"
+      end
 
-        def format_arg(format)
-          "--format=#{format}"
-        end
+      def format_arg(format)
+        "--format=#{format}"
+      end
 
-        def create_or_update_db_user(username, password)
-          con = PG.connect(dbname: 'postgres')
-          res = con.exec("SELECT usename FROM pg_catalog.pg_user WHERE pg_user.usename='#{username}';")
-          if (res.one?) # or res.num_tuples
-            con.exec("ALTER ROLE #{username} WITH CREATEDB PASSWORD '#{password}';")
-          else
-            con.exec("CREATE ROLE #{username} WITH CREATEDB PASSWORD '#{password}';")
-          end
-        rescue => e
-          STDERR.puts e
-        ensure
-          con.close if con
+      def create_or_update_db_user(username, password)
+        con = PG.connect(dbname: 'postgres')
+        res = con.exec("SELECT usename FROM pg_catalog.pg_user WHERE pg_user.usename='#{username}';")
+        if (res.one?) # or res.num_tuples
+          con.exec("ALTER ROLE #{username} WITH CREATEDB PASSWORD '#{password}';")
+        else
+          con.exec("CREATE ROLE #{username} WITH CREATEDB PASSWORD '#{password}';")
         end
+      rescue => e
+        STDERR.puts e
+      ensure
+        con.close if con
+      end
 
-        def drop_db_user(username)
-          con = PG.connect(dbname: 'postgres')
-          con.exec("DROP ROLE #{username};")
-        rescue => e
-          STDERR.puts e
-        ensure
-          con.close if con
-        end
+      def drop_db_user(username)
+        con = PG.connect(dbname: 'postgres')
+        con.exec("DROP ROLE #{username};")
+      rescue => e
+        STDERR.puts e
+      ensure
+        con.close if con
+      end
 
-        def suffix_for_format suffix
-          case suffix
-          when 'c' then 'dump'
-          when 'p' then 'sql' # TODO: Fix import because pg_restore does NOT support SQL alike-> sudo -u postgres psql -U postgres -d cloud_workbench_production -f dump.sql
-          when 't' then 'tar'
-          when 'd' then 'dir'
-            else nil
-          end
+      def suffix_for_format suffix
+        case suffix
+        when 'c' then 'dump'
+        when 'p' then 'sql' # TODO: Fix import because pg_restore does NOT support SQL alike-> sudo -u postgres psql -U postgres -d cloud_workbench_production -f dump.sql
+        when 't' then 'tar'
+        when 'd' then 'dir'
+          else nil
         end
+      end
 
-        def format_for_file file
-          case file
-          when /\.dump$/ then 'c'
-          when /\.sql$/  then 'p'
-          when /\.dir$/  then 'd'
-          when /\.tar$/  then 't'
-            else nil
-          end
+      def format_for_file file
+        case file
+        when /\.dump$/ then 'c'
+        when /\.sql$/  then 'p'
+        when /\.dir$/  then 'd'
+        when /\.tar$/  then 't'
+          else nil
         end
+      end
 
-        def only_allowed_db_files(file_list)
-          file_list.select do |file|
-            end_with_any?(file, suffixes)
-          end
+      def only_allowed_db_files(file_list)
+        file_list.select do |file|
+          end_with_any?(file, suffixes)
         end
+      end
 
-        def end_with_any?(string, suffixes)
-          suffixes.map { |suffix| string.end_with?(suffix) }.include?(true)
-        end
+      def end_with_any?(string, suffixes)
+        suffixes.map { |suffix| string.end_with?(suffix) }.include?(true)
+      end
 
-        def suffixes
-          %w(.dump .sql .tar .dir)
-        end
+      def suffixes
+        %w(.dump .sql .tar .dir)
+      end
 
-        def ensure_exists(dir)
-          unless Dir.exist?(dir)
-            puts "Creating #{backup_dir} .."
-            Dir.mkdir(backup_dir)
-          end
+      def ensure_exists(dir)
+        unless Dir.exist?(dir)
+          puts "Creating #{backup_dir} .."
+          Dir.mkdir(backup_dir)
         end
+      end
 
-        def backup_dir
-          "#{Rails.root}/db/backups"
-        end
+      def backup_dir
+        "#{Rails.root}/db/backups"
+      end
 
-        def db_config(rails_env = Rails.env)
-          Rails.application.config.database_configuration[rails_env]
-        end
+      def db_config(rails_env = Rails.env)
+        Rails.application.config.database_configuration[rails_env]
+      end
   end

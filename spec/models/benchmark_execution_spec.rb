@@ -28,11 +28,11 @@ describe BenchmarkExecution do
 
   describe 'successful prepare' do
       let(:driver) { double('driver', up: true) }
-    before do
-      benchmark_execution.prepare_with(driver)
-    end
-    its(:events) { should contain_event :started_preparing }
-    its(:status) { should eq 'WAITING FOR START RUNNING' }
+      before do
+        benchmark_execution.prepare_with(driver)
+      end
+      its(:events) { should contain_event :started_preparing }
+      its(:status) { should eq 'WAITING FOR START RUNNING' }
     end
 
   describe 'failed prepare' do
@@ -50,12 +50,12 @@ describe BenchmarkExecution do
 
   describe 'successful start running' do
       let(:benchmark_runner) { double('benchmark runner', start_benchmark: true) }
-    before do
-      benchmark_execution.start_benchmark_with(benchmark_runner)
-    end
-    its(:events) { should contain_event :started_running }
-    its(:events) { should_not contain_event :finished_running }
-    its(:status) { should eq('RUNNING') }
+      before do
+        benchmark_execution.start_benchmark_with(benchmark_runner)
+      end
+      its(:events) { should contain_event :started_running }
+      its(:events) { should_not contain_event :finished_running }
+      its(:status) { should eq('RUNNING') }
     end
 
   describe 'failed start running' do
@@ -69,11 +69,11 @@ describe BenchmarkExecution do
 
   describe 'successful start postprocessing' do
       let(:benchmark_runner) { double('benchmark runner', start_postprocessing: true) }
-    before do
-      benchmark_execution.start_postprocessing_with(benchmark_runner)
-    end
-    its(:events) { should contain_event :started_postprocessing }
-    its(:status) { should eq('POSTPROCESSING') }
+      before do
+        benchmark_execution.start_postprocessing_with(benchmark_runner)
+      end
+      its(:events) { should contain_event :started_postprocessing }
+      its(:status) { should eq('POSTPROCESSING') }
     end
 
   describe 'failed start postprocessing' do
