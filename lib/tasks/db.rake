@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pg'
 namespace :db do
     # Fallbacks to Rails.env or production defaults if no arguments are provided

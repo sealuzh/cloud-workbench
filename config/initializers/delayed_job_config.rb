@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # config/initializers/delayed_job_config.rb
 # see https://github.com/collectiveidea/delayed_job
 Delayed::Worker.backend = :active_record

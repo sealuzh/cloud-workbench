@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BenchmarkExecutionsHelper
   def execution_status_label(execution)
     if execution.failed?

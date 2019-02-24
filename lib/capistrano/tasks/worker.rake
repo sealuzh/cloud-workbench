@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :worker do
   DEFAULT_WORKER_NUMBER = 1;
 

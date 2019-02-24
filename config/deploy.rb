@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Capistrano 3 announcements: http://capistranorb.com/2013/06/01/release-announcement.html
 # Capistrano 3 docs: https://github.com/capistrano/capistrano
 # For path helpers see: 'Capistrano::DSL::Paths' in capistrano/lib/capistrano/dsl/paths.rb

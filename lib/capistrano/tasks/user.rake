@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 namespace :user do
   desc "Change the password for the default user: 'cap production user:change[new_password]'"

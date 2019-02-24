@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Based on Heroku example: https://devcenter.heroku.com/articles/rails-unicorn
 worker_processes Integer(ENV['WEB_CONCURRENCY'] || 3)
 timeout 15

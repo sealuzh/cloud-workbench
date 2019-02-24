@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VirtualMachineInstancesController < ApplicationController
   API_METHODS = [:complete_benchmark, :complete_postprocessing]
   before_action :authenticate_user!, except: API_METHODS

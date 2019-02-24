@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'forwardable'
 class MetricObservation
   attr_accessor(:provider_name, :provider_instance_id)

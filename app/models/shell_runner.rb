@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ShellRunner
   # Runs a shell command. Sanitizes Rails-related environment variables.
   #

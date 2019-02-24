@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BenchmarkSchedulesController < ApplicationController
   before_action :set_benchmark_schedule, only: [:edit, :update, :activate, :deactivate]
   before_action :set_benchmark_definition, only: [:new, :create]

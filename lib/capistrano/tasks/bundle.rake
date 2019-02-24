@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Source: http://stackoverflow.com/a/22206605
 
 namespace :bundle do

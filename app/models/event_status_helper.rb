@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EventStatusHelper
   # Traceable (e.g. Execution)
   def active?

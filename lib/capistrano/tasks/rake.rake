@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 DEFAULT_COMMAND = 'about'
 desc "Invoke a rake command on the remote app server: 'cap production rake[about]'"
 task :rake, :command do |task, args|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Source: RailsCast by Ryan Bates; Episode 212 Refactoring & Dynamic Delegator
 # http://railscasts.com/episodes/212-refactoring-dynamic-delegator
 

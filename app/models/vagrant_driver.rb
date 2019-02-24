@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 # Vagrant commands can be further refactored into its own method and
 # generic access can be provided to commands ands its corresponding logs.

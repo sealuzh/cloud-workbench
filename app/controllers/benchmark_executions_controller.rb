@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BenchmarkExecutionsController < ApplicationController
   PRIORITY_HIGH = 1
   API_METHODS = [:prepare_log, :release_resources_log]

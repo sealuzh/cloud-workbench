@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StatusHelper
   LINE_BREAK_STRINGS = [
       'WAITING FOR',

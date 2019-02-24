@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 def ruby_version(file = '.ruby-version')
   # Ensure that symlinks are correctly handled

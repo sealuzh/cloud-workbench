@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MetricDefinitionsController < ApplicationController
   before_action :set_metric_definition, only: [:edit, :update, :destroy]
   before_action :set_benchmark_definition, only: [:new, :create]

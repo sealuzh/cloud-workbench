@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VagrantfileBinding
   attr_reader :execution
 

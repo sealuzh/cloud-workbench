@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BenchmarkDefinitionsController < ApplicationController
   include BenchmarkDefinitionsHelper
   before_action :set_benchmark_definition, only: [:show, :edit, :update, :destroy]

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Source: https://github.com/TalkingQuickly/capistrano-3-rails-template
 #
 # will first try and copy the file: config/deploy/#{full_app_name}/#{from}.erb

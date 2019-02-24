@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BenchmarkExecution < ApplicationRecord
   DEFAULT_PROVIDER = Rails.application.config.supported_providers.first
   PRIORITY_HIGH = 1

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TimeDiff
   module Matchers
     def remain_over_time

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VagrantConfigsController < ApplicationController
   before_action :set_vagrant_config, only: [:edit, :update]
 

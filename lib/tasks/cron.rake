@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # NOTE: Make sure that you run these tasks as the right user!
 namespace :cron do
   desc 'Clear the generated Cron benchmark schedules (user dependent!).'

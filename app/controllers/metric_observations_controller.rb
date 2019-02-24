@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Abstraction for different types of MetricObservations:
 # * The implementation detail which MetricObservation (e.g. nominal, ordered) should remain hidden for a client.
 # * The concrete implementation is chosen based on the metric_type from the associated MetricDefinition

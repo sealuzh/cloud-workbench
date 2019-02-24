@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VagrantRunner
   include ShellRunner
   attr_reader :vagrant_dir

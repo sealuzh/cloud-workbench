@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Event < ApplicationRecord
   default_scope { order(happened_at: :asc) }
   scope :happened_before, lambda { |time| where('happened_at < ?', time).reorder(happened_at: :desc) }

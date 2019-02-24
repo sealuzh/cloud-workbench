@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # DateTime format docs: http://apidock.com/ruby/DateTime/strftime
 
 # Example: 2014-06-29 11:35:41

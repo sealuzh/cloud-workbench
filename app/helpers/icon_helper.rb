@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module IconHelper
 
   def ion_icon(name, html_class = '')

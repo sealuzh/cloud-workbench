@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BenchmarkSchedulesHelper
   def toggle_benchmark_schedule_link(schedule)
     toggle_benchmark_schedule(schedule, activate_class: 'activate-color', deactivate_class: 'deactivate-color')

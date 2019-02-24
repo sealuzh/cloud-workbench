@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module FlashHelper
   # FLASH_LEVEL: [ CLASS_TYPE, ICON ]
   CLASS_TYPE = 0

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationHelper
   def content_header(title, subtitle = '')
     content_for :content_header do

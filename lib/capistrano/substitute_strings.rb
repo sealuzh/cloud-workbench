@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Source: https://github.com/TalkingQuickly/capistrano-3-rails-template
 #
 # we often want to refer to variables which
