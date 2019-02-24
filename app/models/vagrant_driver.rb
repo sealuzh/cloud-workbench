@@ -26,7 +26,7 @@ class VagrantDriver
     end
     virtual_machines
   end
-  
+
   # The meta directories "." and ".." shouln't be detected as roles
   def meta_directory?(role)
     role == CURRENT_DIR ||
