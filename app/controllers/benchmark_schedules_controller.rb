@@ -9,9 +9,9 @@ class BenchmarkSchedulesController < ApplicationController
   end
 
   def index
-    @benchmark_schedules = BenchmarkSchedule.scoped
-    @benchmark_schedules = BenchmarkSchedule.actives if params[:active].present?
-    @benchmark_schedules = BenchmarkSchedule.paginate(page: params[:page])
+    @benchmark_schedules = BenchmarkSchedule.unscoped
+    @benchmark_schedules = @benchmark_schedules.actives if params[:active].present?
+    @benchmark_schedules = @benchmark_schedules.paginate(page: params[:page])
   end
 
   def edit
