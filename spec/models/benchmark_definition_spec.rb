@@ -106,4 +106,15 @@ describe BenchmarkDefinition do
       end
     end
   end
+
+  describe 'searching' do
+    before do
+      @b1 = create(:benchmark_definition, name: 'my_first_benchmark1')
+      @b2 = create(:benchmark_definition, name: 'my_FIRST_benchmark2')
+    end
+
+    it 'should find case-insensitive substrings matching the benchmark name' do
+      expect(BenchmarkDefinition.search('first').size).to eq 2
+    end
+  end
 end
