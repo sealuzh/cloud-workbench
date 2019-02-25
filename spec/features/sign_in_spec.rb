@@ -19,9 +19,4 @@ feature 'Sign in' do
     find('button[type="submit"]').click
     expect(page).to have_content 'Invalid password.'
   end
-
-  scenario 'with an invalid authentication token' do
-    skip 'How to test this?'
-    # Maybe like this: https://stackoverflow.com/a/34007085/6875981
-  end
 end
