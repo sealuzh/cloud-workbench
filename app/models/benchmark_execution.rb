@@ -16,6 +16,10 @@ class BenchmarkExecution < ApplicationRecord
     select { |execution| execution.active? }
   end
 
+  after_initialize do |new_execution|
+    @file_system ||= VagrantFileSystem.new(new_execution.benchmark_definition, new_execution)
+  end
+
   # TODO: Consider using the following method signature:
   # + clearer dependencies
   # + testable
@@ -195,17 +199,11 @@ end
 
   private
 
-    def set_file_system
-      @file_system ||= VagrantFileSystem.new(self.benchmark_definition, self)
-    end
-
     def set_driver_and_fs
-      set_file_system
       @driver ||= VagrantDriver.new(@file_system.vagrantfile_path, @file_system.log_dir)
     end
 
     def set_benchmark_runner_and_fs
-      set_file_system
       @benchmark_runner ||= VagrantRunner.new(@file_system.vagrant_dir)
     end
 end
