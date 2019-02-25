@@ -22,11 +22,6 @@ class BenchmarkExecution < ApplicationRecord
     @benchmark_runner ||= VagrantRunner.new(@file_system.vagrant_dir)
   end
 
-  # TODO: Consider using the following method signature:
-  # + clearer dependencies
-  # + testable
-  # def prepare(file_system = default_file_system,
-  #     driver = default_driver)
   def prepare
     @file_system.prepare_vagrantfile_for_driver
     prepare_with(@driver)
@@ -37,7 +32,6 @@ class BenchmarkExecution < ApplicationRecord
     # Usually the start execution job can be executed immediately here!
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), priority: PRIORITY_HIGH)
   rescue => e
-    # TODO: Handle exception appropriately
     puts e.message
     shutdown_after_failure_timeout
     detect_and_create_vm_instances_with(@driver) rescue nil
