@@ -28,4 +28,16 @@ describe BenchmarkSchedule do
       end
     end
   end
+
+  describe 'filtering schedules' do
+    let(:active_schedule) { create(:benchmark_schedule, active: true) }
+    let(:inactive_schedule) { create(:benchmark_schedule, active: false) }
+    before do
+      active_schedule.save!
+      inactive_schedule.save!
+    end
+    it 'should show only active schedules' do
+      expect(BenchmarkSchedule.actives.size).to eq 1
+    end
+  end
 end
