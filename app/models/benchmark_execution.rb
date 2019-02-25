@@ -18,6 +18,7 @@ class BenchmarkExecution < ApplicationRecord
 
   after_initialize do |new_execution|
     @file_system ||= VagrantFileSystem.new(new_execution.benchmark_definition, new_execution)
+    @driver ||= VagrantDriver.new(@file_system.vagrantfile_path, @file_system.log_dir)
   end
 
   # TODO: Consider using the following method signature:
@@ -26,7 +27,6 @@ class BenchmarkExecution < ApplicationRecord
   # def prepare(file_system = default_file_system,
   #     driver = default_driver)
   def prepare
-    set_driver_and_fs
     @file_system.prepare_vagrantfile_for_driver
     prepare_with(@driver)
     detect_and_create_vm_instances_with(@driver)
@@ -83,12 +83,10 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def prepare_log
-    set_driver_and_fs
     @driver.up_log
   end
 
   def reprovision
-    set_driver_and_fs
     vagrantfile = @file_system.evaluate_vagrantfile
     @file_system.create_vagrantfile(vagrantfile)
     reprovision_with(@driver)
@@ -144,7 +142,6 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def release_resources
-    set_driver_and_fs
     check_and_log_running_timeout
     if active? && !keep_alive?
       release_resources_with(@driver)
@@ -181,7 +178,6 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def release_resources_log
-    set_driver_and_fs
     @driver.destroy_log
   end
 
@@ -198,10 +194,6 @@ class BenchmarkExecution < ApplicationRecord
 end
 
   private
-
-    def set_driver_and_fs
-      @driver ||= VagrantDriver.new(@file_system.vagrantfile_path, @file_system.log_dir)
-    end
 
     def set_benchmark_runner_and_fs
       @benchmark_runner ||= VagrantRunner.new(@file_system.vagrant_dir)
