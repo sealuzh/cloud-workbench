@@ -22,6 +22,9 @@ worker:
 foreman:
 	bin/foreman start
 
+console:
+	bin/rails console
+
 stop_spring:
 	bin/spring stop
 
