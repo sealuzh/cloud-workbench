@@ -119,6 +119,11 @@ feature 'Benchmark definition management' do
       scenario 'Name field should be readonly' do
         expect(page).to have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
       end
+
+      scenario 'Should show a flash after updating' do
+        click_button 'Update Benchmark'
+        expect(page).to have_content "Benchmark definition #{benchmark_definition.name} was successfully updated"
+      end
     end
   end
 
