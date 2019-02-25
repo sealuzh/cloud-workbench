@@ -63,11 +63,6 @@ class BenchmarkSchedule < ApplicationRecord
     %x(whenever --clear-crontab -f "#{schedule_path}")
   end
 
-  def self.filter(active_param)
-    active = active_param.to_bool rescue nil
-    active ? actives : all
-  end
-
   private
 
     def update_system_crontab_if_active
