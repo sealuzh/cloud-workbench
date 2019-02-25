@@ -24,7 +24,8 @@ FactoryBot.define do
   end
 
   factory :benchmark_execution do
-    association :benchmark_definition, factory: :benchmark_definition
+    # Due to BenchmarkExecution#after_initialize dependency requiring the definition to be present
+    initialize_with { new(benchmark_definition: build(:benchmark_definition)) }
   end
 
   # Currently not needed
