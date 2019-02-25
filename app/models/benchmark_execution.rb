@@ -19,6 +19,7 @@ class BenchmarkExecution < ApplicationRecord
   after_initialize do |new_execution|
     @file_system ||= VagrantFileSystem.new(new_execution.benchmark_definition, new_execution)
     @driver ||= VagrantDriver.new(@file_system.vagrantfile_path, @file_system.log_dir)
+    @benchmark_runner ||= VagrantRunner.new(@file_system.vagrant_dir)
   end
 
   # TODO: Consider using the following method signature:
@@ -106,7 +107,6 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def start_benchmark
-    set_benchmark_runner_and_fs
     start_benchmark_with(@benchmark_runner)
     timeout_hours = benchmark_definition.running_timeout || Rails.application.config.default_running_timeout
     shutdown_after(timeout_hours.hours)
@@ -125,7 +125,6 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def start_postprocessing
-    set_benchmark_runner_and_fs
     start_postprocessing_with(@benchmark_runner)
   rescue => e
     shutdown_after_failure_timeout
@@ -191,11 +190,5 @@ class BenchmarkExecution < ApplicationRecord
     times = Rails.application.config.execution_failed_threshold
     # Current execution is included as the counter is updated before
     schedule.consecutive_failure_count > times
-end
-
-  private
-
-    def set_benchmark_runner_and_fs
-      @benchmark_runner ||= VagrantRunner.new(@file_system.vagrant_dir)
-    end
+  end
 end
