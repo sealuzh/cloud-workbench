@@ -9,14 +9,14 @@ class VagrantRunner
   end
 
   def start_benchmark
-    ssh_command(Rails.application.config.vm_start_runner)
+    ssh_exec(Rails.application.config.vm_start_runner)
   end
 
   def start_postprocessing
-    ssh_command(Rails.application.config.vm_start_postprocessing)
+    ssh_exec(Rails.application.config.vm_start_postprocessing)
   end
 
-  def ssh_command(executable, dir = Rails.application.config.vm_benchmark_dir, log = Rails.application.config.vm_error_log_file)
+  def ssh_exec(executable, dir = Rails.application.config.vm_benchmark_dir, log = Rails.application.config.vm_error_log_file)
     shell_cmd = ssh_shell_cmd(executable, dir, log)
     shell(shell_cmd, dir: @vagrant_dir)
   end
