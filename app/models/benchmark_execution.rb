@@ -11,6 +11,14 @@ class BenchmarkExecution < ApplicationRecord
   end
   include EventStatusHelper
   default_scope { order('created_at DESC') }
+  scope :by_status, lambda { |status|
+     case status
+     when 'FAILED'
+       select { |e| e.failed? }
+     else
+       select { |e| e.status == status }
+     end
+   }
 
   def self.actives
     select { |execution| execution.active? }
