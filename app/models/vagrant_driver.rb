@@ -20,7 +20,7 @@ class VagrantDriver
   def detect_vm_instances
     virtual_machines = []
     Pathname(machines_dir).each_child do |machine|
-      if machine.directory? && !meta_directory?(role(machine))
+      if candiate_vms_role(machine)
         virtual_machines.concat(detect_vms_with_role(role(machine)))
       end
     end
@@ -85,6 +85,10 @@ class VagrantDriver
   end
 
   private
+
+    def candiate_vms_role(machine)
+      machine.directory? && !meta_directory?(role(machine))
+    end
 
     def machines_dir
       File.join(@vagrant_dir_path, '.vagrant', 'machines')
