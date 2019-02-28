@@ -37,6 +37,13 @@ class BenchmarkDefinition < ApplicationRecord
   # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
   validates :vagrantfile, presence: true
   before_save :ensure_name_integrity
+  scope :search, ->(query) do
+    if query.present?
+      where(['lower(name) LIKE ?', "%#{query.downcase}%"])
+    else
+      all
+    end
+  end
   default_scope { order('created_at DESC') }
 
   def virtual_machine_instances
@@ -86,14 +93,6 @@ class BenchmarkDefinition < ApplicationRecord
     end
     benchmark_definition.save!
     benchmark_definition
-  end
-
-  def self.search(query)
-    if query.present?
-      where(['lower(name) LIKE ?', "%#{query.downcase}%"])
-    else
-      all
-    end
   end
 
   private
