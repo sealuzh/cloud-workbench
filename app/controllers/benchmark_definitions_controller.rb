@@ -6,7 +6,9 @@ class BenchmarkDefinitionsController < ApplicationController
   before_action :check_and_show_executions_integrity_warning, only: [:edit, :update]
 
   def index
-    @benchmark_definitions = BenchmarkDefinition.search(params[:search]).paginate(page: params[:page])
+    @benchmark_definitions = BenchmarkDefinition
+    @benchmark_definitions = @benchmark_definitions.search(params[:search])
+    @benchmark_definitions = @benchmark_definitions.paginate(page: params[:page])
   end
 
   def show
