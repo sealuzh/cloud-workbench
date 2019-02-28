@@ -7,7 +7,7 @@ class BenchmarkDefinitionsController < ApplicationController
 
   def index
     @benchmark_definitions = BenchmarkDefinition
-    @benchmark_definitions = @benchmark_definitions.search(params[:search])
+    @benchmark_definitions = @benchmark_definitions.search(params[:search]) if params[:search].present?
     @benchmark_definitions = @benchmark_definitions.paginate(page: params[:page])
   end
 
