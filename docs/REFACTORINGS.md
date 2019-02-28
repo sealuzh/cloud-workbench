@@ -7,7 +7,8 @@ All refactoring commits are prefixed with `[refactor]` to identify them for the 
 Create refactor commit list: `git lg | ag '\[refactor\]'`
 
 ```none
-* 1dac26c (2019-02-28 18:01:10 +0100) - (HEAD -> support/wasp-sw) [refactor] Move statement to caller <Joel Scheuner>
+* 7b1e49a (2019-02-28 18:14:41 +0100) - (HEAD -> support/wasp-sw) [refactor] Decompose conditional <Joel Scheuner>
+* 1dac26c (2019-02-28 18:01:10 +0100) - [refactor] Move statement to caller <Joel Scheuner>
 * f88b96f (2019-02-28 17:54:56 +0100) - [refactor] Split method chain <Joel Scheuner>
 * b3c0f71 (2019-02-28 17:35:11 +0100) - [refactor] Replace static method with Rails scope <Joel Scheuner>
 * f8a91e6 (2019-02-28 17:31:04 +0100) - [refactor] Rename variable <Joel Scheuner>
