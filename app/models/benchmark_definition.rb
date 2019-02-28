@@ -88,9 +88,9 @@ class BenchmarkDefinition < ApplicationRecord
     benchmark_definition
   end
 
-  def self.search(search)
-    if search.present?
-      where(['lower(name) LIKE ?', "%#{search.downcase}%"])
+  def self.search(query)
+    if query.present?
+      where(['lower(name) LIKE ?', "%#{query.downcase}%"])
     else
       all
     end
