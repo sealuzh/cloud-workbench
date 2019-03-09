@@ -13,7 +13,7 @@ class BenchmarkExecutionsController < ApplicationController
       @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:page])
     else
       @benchmark_executions = BenchmarkExecution
-      @benchmark_executions = @benchmark_executions.by_status(status: params[:status]) if params[:status].present?
+      @benchmark_executions = @benchmark_executions.by_status(params[:status]) if params[:status].present?
       @benchmark_executions = @benchmark_executions.paginate(page: params[:page])
     end
   end
