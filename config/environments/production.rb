@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -52,7 +54,7 @@ Rails.application.configure do
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
   # Level: :debug, :info, :warn, :error, :fatal, :unknown for 0 to 5
-  config.log_level = (ENV["LOG_LEVEL"].present? ? ENV["LOG_LEVEL"] : :debug)
+  config.log_level = (ENV['LOG_LEVEL'].present? ? ENV['LOG_LEVEL'] : :debug)
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -91,7 +93,7 @@ Rails.application.configure do
                                    %r{/benchmark_executions/\d+/release_resources_log.txt},
                          ]
   # Proposed logging config from Rails 5
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
+  if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)

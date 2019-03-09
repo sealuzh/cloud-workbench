@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EventsAsTraceableExtension
   def create_with_name!(name, message = '')
     create!(name: name, happened_at: Time.current, message: message)

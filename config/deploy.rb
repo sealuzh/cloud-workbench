@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Capistrano 3 announcements: http://capistranorb.com/2013/06/01/release-announcement.html
 # Capistrano 3 docs: https://github.com/capistrano/capistrano
 # For path helpers see: 'Capistrano::DSL::Paths' in capistrano/lib/capistrano/dsl/paths.rb
@@ -25,11 +27,10 @@ set :branch, 'master'
 
 # SSH connection
 # --------------
-set :ssh_options, {
+set :ssh_options,
     keys: %w(~/.ssh/id_rsa),
     forward_agent: true,
     auth_methods: %w(publickey)
-}
 
 # Remote machine
 # --------------
@@ -90,7 +91,7 @@ set :tests, []
 # Live deploy via: "cap production deploy live=true"
 namespace :deploy do
   unless ENV['live'].to_s.empty?
-    set :live, ( ENV['live'].to_s == 'true' ? true : false )
+    set :live, (ENV['live'].to_s == 'true' ? true : false)
   end
   # Make sure we're deploying what we think we're deploying
   # before :deploy, 'deploy:check_revision'
@@ -152,7 +153,7 @@ end
 def remote_rake(task)
   on primary(:app) do
     within current_path do
-      with :rails_env => fetch(:rails_env) do
+      with rails_env: fetch(:rails_env) do
         rake task
       end
     end

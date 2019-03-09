@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveAttributesFromBenchmarkExecutions < ActiveRecord::Migration[5.0]
   def change
     remove_column :benchmark_executions, :status

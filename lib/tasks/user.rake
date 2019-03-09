@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :user do
   desc 'Create or update (if password has changed) the default user.'
   task create_default: :environment do

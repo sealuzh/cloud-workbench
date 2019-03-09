@@ -26,6 +26,14 @@
   <% all_executions_link = link_to pluralize(@benchmark_executions.count, 'Benchmark Execution'), benchmark_executions_path %>
   <% content_header("#{all_executions_link}") %>
 
+  Status filter:
+  <%= link_to 'ALL', benchmark_executions_path, class: 'label label-default' %>
+  <%= link_to 'FAILED', benchmark_executions_path(status: 'FAILED'), class: 'label label-danger' %>
+  <%= link_to 'FAILED ON RUNNING', benchmark_executions_path(status: 'FAILED ON RUNNING'), class: 'label label-danger' %>
+  <%= link_to 'FAILED ON RELEASING RESOURCES', benchmark_executions_path(status: 'FAILED ON RELEASING RESOURCES'), class: 'label label-danger' %>
+  <%= link_to 'PREPARING', benchmark_executions_path(status: 'PREPARING'), class: 'label label-info' %>
+  <%= link_to 'RUNNING', benchmark_executions_path(status: 'RUNNING'), class: 'label label-info' %>
+  <%= link_to 'FINISHED', benchmark_executions_path(status: 'FINISHED'), class: 'label label-success' %>
   <%= will_paginate @benchmark_executions %>
   <%= render 'shared/benchmark_executions', show_benchmark_definition: true %>
   <%= will_paginate @benchmark_executions %>

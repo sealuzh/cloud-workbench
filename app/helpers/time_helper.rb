@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TimeHelper
   # NOTE: Keep in mind that the db format does NOT reflect the time zone!
   def formatted_time(time, format = :db)

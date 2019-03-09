@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class MetricDefinitionsController < ApplicationController
   before_action :set_metric_definition, only: [:edit, :update, :destroy]
   before_action :set_benchmark_definition, only: [:new, :create]
-  before_action :check_and_show_observations_integrity_warning , only: [:edit, :update]
+  before_action :check_and_show_observations_integrity_warning, only: [:edit, :update]
 
   def new
     @metric_definition = @benchmark_definition.metric_definitions.build
@@ -50,7 +52,7 @@ class MetricDefinitionsController < ApplicationController
 
     def check_and_show_observations_integrity_warning
       if @metric_definition.has_any_observations?
-        flash.now[:info] = "You try to modify a metric definition that already has observed values."
+        flash.now[:info] = 'You try to modify a metric definition that already has observed values.'
       end
     end
 

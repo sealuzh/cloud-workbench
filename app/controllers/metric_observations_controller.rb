@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Abstraction for different types of MetricObservations:
 # * The implementation detail which MetricObservation (e.g. nominal, ordered) should remain hidden for a client.
 # * The concrete implementation is chosen based on the metric_type from the associated MetricDefinition
@@ -13,7 +15,7 @@ class MetricObservationsController < ApplicationController
     @metric_definition = MetricDefinition.find(params[:metric_definition_id])
     @execution = BenchmarkExecution.find(params[:benchmark_execution_id]) if params[:benchmark_execution_id].present?
     respond_to do |format|
-      format.html { @metric_observations = @metric_observations.paginate(page: params[:page], per_page: 30); render action: 'index'}
+      format.html { @metric_observations = @metric_observations.paginate(page: params[:page], per_page: 30); render action: 'index' }
       format.csv  { send_data MetricObservation.to_csv(@metric_observations) }
     end
   rescue => error

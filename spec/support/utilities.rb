@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :contain_event do |expected|
   match do |events|
     events.select { |event| event.name.to_s == expected.to_s }.any?
@@ -11,6 +13,6 @@ RSpec::Matchers.define :contain_event do |expected|
 
   # Provide descriptive error message: [created, started_preparing]
   def event_names(events)
-    '[' + events.map { |event| event.name}.join(', ') + ']'
+    '[' + events.map { |event| event.name }.join(', ') + ']'
   end
 end

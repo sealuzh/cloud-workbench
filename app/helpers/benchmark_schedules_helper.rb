@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BenchmarkSchedulesHelper
   def toggle_benchmark_schedule_link(schedule)
     toggle_benchmark_schedule(schedule, activate_class: 'activate-color', deactivate_class: 'deactivate-color')
@@ -16,7 +18,7 @@ module BenchmarkSchedulesHelper
   end
 
   # You may pass optional html parameters such as { class: 'pull-right', title: 'I'm a tooltip }
-  def benchmark_schedule_label(schedule, opts={})
+  def benchmark_schedule_label(schedule, opts = {})
     if schedule.active?
       schedule_label(schedule, 'success', opts)
     else
@@ -36,7 +38,7 @@ module BenchmarkSchedulesHelper
     def schedule_label(schedule, type, opts)
       base_html_class = "label label-#{type}"
       html_class = opts[:class].present? ? "#{base_html_class} #{opts[:class]}" : base_html_class
-      args = opts.merge({ class: html_class })
+      args = opts.merge(class: html_class)
       link_to schedule.cron_expression, edit_benchmark_schedule_path(schedule), args
     end
 end

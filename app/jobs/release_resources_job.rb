@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ReleaseResourcesJob < Struct.new(:benchmark_execution_id)
   def perform
     benchmark_execution = BenchmarkExecution.find(benchmark_execution_id)

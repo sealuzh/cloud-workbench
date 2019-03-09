@@ -11,6 +11,8 @@ AllCops:
     - '**/vendor/**/*'
     - 'actionpack/lib/action_dispatch/journey/parser.rb'
     - 'railties/test/fixtures/tmp/**/*'
+    - 'db/schema.rb'
+    - 'bin/**'
 
 Performance:
   Exclude:
@@ -151,7 +153,7 @@ Layout/SpaceInsideParens:
 # Check quotes usage according to lint rule below.
 Style/StringLiterals:
   Enabled: true
-  EnforcedStyle: double_quotes
+  EnforcedStyle: single_quotes
 
 # Detect hard tabs, no hard tabs.
 Layout/Tab:

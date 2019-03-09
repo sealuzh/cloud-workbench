@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BenchmarkExecutionsController < ApplicationController
   PRIORITY_HIGH = 1
   API_METHODS = [:prepare_log, :release_resources_log]
@@ -10,7 +12,9 @@ class BenchmarkExecutionsController < ApplicationController
       set_benchmark_definition
       @benchmark_executions = @benchmark_definition.benchmark_executions.paginate(page: params[:page])
     else
-      @benchmark_executions = BenchmarkExecution.paginate(page: params[:page])
+      @benchmark_executions = BenchmarkExecution
+      @benchmark_executions = @benchmark_executions.by_status(status: params[:status]) if params[:status].present?
+      @benchmark_executions = @benchmark_executions.paginate(page: params[:page])
     end
   end
 
@@ -20,7 +24,7 @@ class BenchmarkExecutionsController < ApplicationController
   end
 
   def toggle_keep_alive
-    @benchmark_execution.update_attributes!({keep_alive: params[:keep_alive].to_bool})
+    @benchmark_execution.update_attributes!(keep_alive: params[:keep_alive].to_bool)
     flash[:success] = "Successfully #{@benchmark_execution.keep_alive? ? 'enabled' : 'disabled'} the keep alive flag."
   rescue => e
     flash[:error] = "Could not set the keep alive flage to #{params[:keep_alive]}. #{e.message}"
@@ -30,19 +34,19 @@ class BenchmarkExecutionsController < ApplicationController
 
   def reprovision
     Delayed::Job.enqueue(ReprovisionBenchmarkExecutionJob.new(@benchmark_execution.id), PRIORITY_HIGH)
-    flash[:success] = "Successfully started a reprovisioning job asynchronously."
+    flash[:success] = 'Successfully started a reprovisioning job asynchronously.'
     redirect_to @benchmark_execution
   end
 
   def restart_benchmark
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(@benchmark_execution.id), PRIORITY_HIGH)
-    flash[:success] = "Successfully started a restart benchmark job asynchronously."
+    flash[:success] = 'Successfully started a restart benchmark job asynchronously.'
     redirect_to @benchmark_execution
   end
 
   def abort
     Delayed::Job.enqueue(ReleaseResourcesJob.new(@benchmark_execution.id), PRIORITY_HIGH)
-    flash[:success] = "Successfully started a release resources job asynchronously."
+    flash[:success] = 'Successfully started a release resources job asynchronously.'
     redirect_to @benchmark_execution
   end
 
@@ -76,7 +80,7 @@ class BenchmarkExecutionsController < ApplicationController
 
   def destroy
     @benchmark_execution.destroy
-      redirect_to benchmark_executions_path
+    redirect_to benchmark_executions_path
   end
 
   private

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 
 ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 # Support for deprecated `its` in RSpec 3 discussed in: https://gist.github.com/myronmarston/4503509
 require 'rspec/its'
@@ -14,13 +16,13 @@ Capybara.javascript_driver = :selenium # :poltergeist
 # when using `save_and_open_page`
 Capybara.asset_host = 'http://localhost:3000'
 
-def reload_page page
+def reload_page(page)
   page.evaluate_script('window.location.reload()')
 end
 
 # Recursively require supporting files (e.g., custom matchers)
-Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
-Dir[Rails.root.join("spec/features/support/**/*.rb")].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join('spec/features/support/**/*.rb')].each { |f| require f }
 
 # Run pending migrations automatically if any
 ActiveRecord::Migration.maintain_test_schema!

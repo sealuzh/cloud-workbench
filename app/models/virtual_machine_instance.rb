@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VirtualMachineInstance < ApplicationRecord
   belongs_to :benchmark_execution
   validates :benchmark_execution, presence: true

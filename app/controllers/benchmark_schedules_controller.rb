@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BenchmarkSchedulesController < ApplicationController
   before_action :set_benchmark_schedule, only: [:edit, :update, :activate, :deactivate]
   before_action :set_benchmark_definition, only: [:new, :create]
@@ -7,7 +9,9 @@ class BenchmarkSchedulesController < ApplicationController
   end
 
   def index
-    @benchmark_schedules = BenchmarkSchedule.filter(params[:active]).paginate(page: params[:page])
+    @benchmark_schedules = BenchmarkSchedule.unscoped
+    @benchmark_schedules = @benchmark_schedules.actives if params[:active].present?
+    @benchmark_schedules = @benchmark_schedules.paginate(page: params[:page])
   end
 
   def edit
@@ -17,8 +21,8 @@ class BenchmarkSchedulesController < ApplicationController
   def create
     @benchmark_schedule = @benchmark_definition.build_benchmark_schedule(benchmark_schedule_params)
     @benchmark_schedule.save!
-      success_flash_for 'created'
-      redirect_to @benchmark_definition
+    success_flash_for 'created'
+    redirect_to @benchmark_definition
   rescue => error
     flash.now[:error] = error.message
     render action: 'new'

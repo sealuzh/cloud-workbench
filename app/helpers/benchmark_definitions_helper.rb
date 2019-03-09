@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BenchmarkDefinitionsHelper
   def confirm_delete_benchmark_msg(benchmark_definition)
     { confirm: (render 'benchmark_definitions/confirm_delete', benchmark_definition: benchmark_definition) }

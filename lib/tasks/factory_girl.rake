@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Linting factories: https://github.com/thoughtbot/factory_bot/blob/master/GETTING_STARTED.md#linting-factories
 namespace :factory_bot do
   desc 'Verify that all FactoryBot factories are valid'

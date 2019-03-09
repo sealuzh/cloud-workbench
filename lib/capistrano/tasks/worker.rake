@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 namespace :worker do
-  DEFAULT_WORKER_NUMBER = 1;
+  DEFAULT_WORKER_NUMBER = 1
 
   # Example: restart all workers with 'worker:restart_all'
   RUNIT_COMMANDS.each do |command|

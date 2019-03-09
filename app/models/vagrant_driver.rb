@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 # Vagrant commands can be further refactored into its own method and
 # generic access can be provided to commands ands its corresponding logs.
@@ -18,13 +20,13 @@ class VagrantDriver
   def detect_vm_instances
     virtual_machines = []
     Pathname(machines_dir).each_child do |machine|
-      if machine.directory? && !meta_directory?(role(machine))
+      if candiate_vms_role(machine)
         virtual_machines.concat(detect_vms_with_role(role(machine)))
       end
     end
     virtual_machines
   end
-  
+
   # The meta directories "." and ".." shouln't be detected as roles
   def meta_directory?(role)
     role == CURRENT_DIR ||
@@ -83,6 +85,10 @@ class VagrantDriver
   end
 
   private
+
+    def candiate_vms_role(machine)
+      machine.directory? && !meta_directory?(role(machine))
+    end
 
     def machines_dir
       File.join(@vagrant_dir_path, '.vagrant', 'machines')

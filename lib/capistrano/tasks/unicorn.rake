@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :unicorn do
   # Example: 'cap production unicorn:status'
   RUNIT_COMMANDS.each do |task_name|

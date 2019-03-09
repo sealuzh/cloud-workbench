@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module EventHelper
   def has_log(event)
     event.started_preparing? || event.started_releasing_resources?

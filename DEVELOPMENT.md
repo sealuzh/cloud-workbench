@@ -68,7 +68,7 @@ bin/guard
 
 Automatically reloads a page on asset modification via the following browser plugin:
 
-## Setup Production Model Locally
+## Setup Production Environment Locally
 
 * Requirement: Setup local PostgreSQL
 
@@ -111,7 +111,7 @@ make lint
 * Tests can be [tagged](https://www.relishapp.com/rspec/rspec-core/v/3-4/docs/command-line/tag-option)
   (e.g., useful for [slow tests](http://engineering.sharethrough.com/blog/2013/08/10/greater-test-control-with-rspecs-tag-filters/))
 
-## Testing Environment
+## Local Integration Testing Environment
 
 * CWB can be locally installed into 2 [Virtualbox](https://www.virtualbox.org/wiki/Downloads) VMs.
   Follow the [Installation](https://github.com/sealuzh/cwb-chef-repo#installation) steps
@@ -122,6 +122,40 @@ make lint
 
 * The Vagrant plugin [vagrant-cachier](https://github.com/fgrehm/vagrant-cachier)
   can speed up development by serving as a cache for apt, gems, etc.
+
     ```bash
     vagrant plugin install vagrant-cachier
     ```
+
+## Conventions
+
+### Commit Messages
+
+1. Capitalize the subject line (e.g., Fix ... instead of fix ...)
+2. Use imperative verbs in the subject line (e.g., Fix instead of Fixed)
+3. Use the body to motivate the change (i.e., what?, why?, how?) when appropriate. Example:
+
+    ```none
+    Fix HTTP status codes for errors
+
+    Problem: Errors (i.e., 404, 422, 500) returned 200 by mistake
+    Solution: Return the right error code by calling the right helper method
+    ```
+
+Common prefixes are: Fix, Add, Update, Remove, Improve
+
+### Branching Strategy
+
+This project uses short-lived features branches typically prefixed with:
+
+* `feature/` introducing new functionality
+* `fix/` fixing an issue
+* `support/` supporting changes related to documentation, deployment, or testing
+
+Feature branches are merged into master via Github pull request after a successful build.
+Minor changes (e.g., README updates) can be committed directly into master (Hint: `[skip-ci]` skips the CI build for minor commits).
+
+### Release / Deployment Strategy
+
+This project follows a [continous delivery](https://continuousdelivery.com/) deployment model and therefore does not use the notion of releases.
+Checkout the [cwb client library](https://github.com/sealuzh/cwb) for a publicly released [Ruby gem](https://rubygems.org/gems/cwb).

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Source: http://stackoverflow.com/a/22206605
 
 namespace :bundle do
@@ -7,7 +9,7 @@ namespace :bundle do
     on roles(:app) do
       within release_path do
         with rails_env: fetch(:rails_env) do
-          execute :bundle, "list"
+          execute :bundle, 'list'
         end
       end
     end

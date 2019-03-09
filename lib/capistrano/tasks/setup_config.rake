@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Source: https://github.com/TalkingQuickly/capistrano-3-rails-template
 
 namespace :deploy do
@@ -23,7 +25,7 @@ namespace :deploy do
       # 1) Will be copied from "config/deploy/#{folder}/database.secret.yml.erb" to "#{shared}/config/database.yml"
       # 2) Will be copied from "config/deploy/#{folder}/userconfig.yml.erb" to "#{shared}/config/userconfig.yml"
       config_files = fetch(:config_files) || Array.new
-      config_files.each do |from, to=nil|
+      config_files.each do |from, to = nil|
         smart_template from, to
       end
 

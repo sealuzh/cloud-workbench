@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 feature 'Benchmark definition management' do
@@ -71,7 +73,7 @@ feature 'Benchmark definition management' do
 
   feature 'Cloning a benchmark definition' do
     scenario 'Should create a clone of the same definition' do
-      benchmark =  create(:benchmark_definition)
+      benchmark = create(:benchmark_definition)
       metric = create(:ratio_metric_definition, benchmark_definition: benchmark)
       schedule = create(:benchmark_schedule, benchmark_definition: benchmark)
 
@@ -117,13 +119,17 @@ feature 'Benchmark definition management' do
       scenario 'Name field should be readonly' do
         expect(page).to have_xpath("//input[@id='benchmark_definition_name' and @readonly='readonly']")
       end
-    end
 
+      scenario 'Should show a flash after updating' do
+        click_button 'Update Benchmark'
+        expect(page).to have_content "Benchmark definition #{benchmark_definition.name} was successfully updated"
+      end
+    end
   end
 
   feature 'Editing a metric definition' do
     given(:ratio_metric) { create(:ratio_metric_definition, unit: 'wrong unit') }
-    background { visit  edit_metric_definition_path(ratio_metric) }
+    background { visit edit_metric_definition_path(ratio_metric) }
 
     scenario 'Should change unit name' do
       fill_in 'Unit', with: 'MB/s'
@@ -136,7 +142,7 @@ feature 'Benchmark definition management' do
 
   feature 'Starting a benchmark execution' do
     given(:benchmark_definition) { create(:benchmark_definition) }
-    given(:start_execution) { -> { click_button 'Start Execution'} }
+    given(:start_execution) { -> { click_button 'Start Execution' } }
     background { visit benchmark_definition_path(benchmark_definition) }
 
     scenario 'Should create a new benchmark execution' do

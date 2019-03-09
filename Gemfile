@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 def ruby_version(file = '.ruby-version')
   # Ensure that symlinks are correctly handled
@@ -72,7 +74,7 @@ group :development do
   gem 'rubocop', require: false
 end
 
-DEPLOYMENT=false
+DEPLOYMENT = false
 if DEPLOYMENT
   # Deployment with Capistrano: http://capistranorb.com/
   group :deployment do
@@ -87,7 +89,7 @@ if DEPLOYMENT
   end
 end
 
-OPTIONAL=false
+OPTIONAL = false
 if OPTIONAL
   # Visualize dependency graph `bundle viz` (requires `graphviz`)
 

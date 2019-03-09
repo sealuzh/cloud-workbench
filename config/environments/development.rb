@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -64,7 +66,7 @@ Rails.application.configure do
 
   # Scaffoling
   config.generators do |g|
-    g.test_framework  :rspec, fixture: false
+    g.test_framework :rspec, fixture: false
     g.fixture_replacement :factory_bot, dir: 'spec/factories'
     g.assets false
     g.helper false

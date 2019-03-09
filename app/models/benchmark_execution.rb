@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BenchmarkExecution < ApplicationRecord
   DEFAULT_PROVIDER = Rails.application.config.supported_providers.first
   PRIORITY_HIGH = 1
@@ -9,18 +11,26 @@ class BenchmarkExecution < ApplicationRecord
   end
   include EventStatusHelper
   default_scope { order('created_at DESC') }
+  scope :by_status, lambda { |status|
+     case status
+     when 'FAILED'
+       select { |e| e.failed? }
+     else
+       select { |e| e.status == status }
+     end
+   }
 
   def self.actives
     select { |execution| execution.active? }
   end
 
-  # TODO: Consider using the following method signature:
-  # + clearer dependencies
-  # + testable
-  # def prepare(file_system = default_file_system,
-  #     driver = default_driver)
+  after_initialize do |new_execution|
+    @file_system ||= VagrantFileSystem.new(new_execution.benchmark_definition, new_execution)
+    @driver ||= VagrantDriver.new(@file_system.vagrantfile_path, @file_system.log_dir)
+    @benchmark_runner ||= VagrantRunner.new(@file_system.vagrant_dir)
+  end
+
   def prepare
-    set_driver_and_fs
     @file_system.prepare_vagrantfile_for_driver
     prepare_with(@driver)
     detect_and_create_vm_instances_with(@driver)
@@ -30,7 +40,6 @@ class BenchmarkExecution < ApplicationRecord
     # Usually the start execution job can be executed immediately here!
     Delayed::Job.enqueue(StartBenchmarkExecutionJob.new(id), priority: PRIORITY_HIGH)
   rescue => e
-    # TODO: Handle exception appropriately
     puts e.message
     shutdown_after_failure_timeout
     detect_and_create_vm_instances_with(@driver) rescue nil
@@ -77,12 +86,10 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def prepare_log
-    set_driver_and_fs
     @driver.up_log
   end
 
   def reprovision
-    set_driver_and_fs
     vagrantfile = @file_system.evaluate_vagrantfile
     @file_system.create_vagrantfile(vagrantfile)
     reprovision_with(@driver)
@@ -102,7 +109,6 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def start_benchmark
-    set_benchmark_runner_and_fs
     start_benchmark_with(@benchmark_runner)
     timeout_hours = benchmark_definition.running_timeout || Rails.application.config.default_running_timeout
     shutdown_after(timeout_hours.hours)
@@ -121,7 +127,6 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def start_postprocessing
-    set_benchmark_runner_and_fs
     start_postprocessing_with(@benchmark_runner)
   rescue => e
     shutdown_after_failure_timeout
@@ -138,7 +143,6 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def release_resources
-    set_driver_and_fs
     check_and_log_running_timeout
     if active? && !keep_alive?
       release_resources_with(@driver)
@@ -175,7 +179,6 @@ class BenchmarkExecution < ApplicationRecord
   end
 
   def release_resources_log
-    set_driver_and_fs
     @driver.destroy_log
   end
 
@@ -189,21 +192,5 @@ class BenchmarkExecution < ApplicationRecord
     times = Rails.application.config.execution_failed_threshold
     # Current execution is included as the counter is updated before
     schedule.consecutive_failure_count > times
-end
-
-  private
-
-    def set_file_system
-      @file_system ||= VagrantFileSystem.new(self.benchmark_definition, self)
-    end
-
-    def set_driver_and_fs
-      set_file_system
-      @driver ||= VagrantDriver.new(@file_system.vagrantfile_path, @file_system.log_dir)
-    end
-
-    def set_benchmark_runner_and_fs
-      set_file_system
-      @benchmark_runner ||= VagrantRunner.new(@file_system.vagrant_dir)
-    end
+  end
 end

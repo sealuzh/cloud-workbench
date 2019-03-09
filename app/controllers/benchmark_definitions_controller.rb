@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
 class BenchmarkDefinitionsController < ApplicationController
   include BenchmarkDefinitionsHelper
   before_action :set_benchmark_definition, only: [:show, :edit, :update, :destroy]
-  before_action :check_and_show_executions_integrity_warning , only: [:edit, :update]
+  before_action :check_and_show_executions_integrity_warning, only: [:edit, :update]
 
   def index
-    @benchmark_definitions = BenchmarkDefinition.search(params[:search]).paginate(page: params[:page])
+    @benchmark_definitions = BenchmarkDefinition
+    @benchmark_definitions = @benchmark_definitions.search(params[:search]) if params[:search].present?
+    @benchmark_definitions = @benchmark_definitions.paginate(page: params[:page])
   end
 
   def show
@@ -73,7 +77,7 @@ class BenchmarkDefinitionsController < ApplicationController
 
     def check_and_show_executions_integrity_warning
       if @benchmark_definition.benchmark_executions.any?
-        flash.now[:info] = "You try to modify a benchmark that has already been executed."
+        flash.now[:info] = 'You try to modify a benchmark that has already been executed.'
       end
     end
 

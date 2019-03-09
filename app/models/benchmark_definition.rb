@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'securerandom'
 class BenchmarkDefinition < ApplicationRecord
   extend Enumerize
@@ -24,7 +26,7 @@ class BenchmarkDefinition < ApplicationRecord
   end
 
   validates :running_timeout, presence: true,
-                              numericality: {only_integer: true, greater_than: 0}
+                              numericality: { only_integer: true, greater_than: 0 }
   # Notice: Uniqueness constraint may be violated by occurring race conditions with database adapters
   # that do not support case-sensitive indices. This case should practically never occur is therefore not handled.
   MAX_NAME_LENGTH = 70
@@ -35,6 +37,7 @@ class BenchmarkDefinition < ApplicationRecord
   # TODO: Add further validations and sanity checks for Vagrantfile after dry-up has been completed.
   validates :vagrantfile, presence: true
   before_save :ensure_name_integrity
+  scope :search, ->(query) { where(['lower(name) LIKE ?', "%#{query.downcase}%"]) }
   default_scope { order('created_at DESC') }
 
   def virtual_machine_instances
@@ -74,24 +77,16 @@ class BenchmarkDefinition < ApplicationRecord
     # The block will be called for original and each included association
     benchmark_definition = self.deep_clone include: [ :metric_definitions, :benchmark_schedule ] do |original, clone|
       case clone.class.name
-        when 'BenchmarkDefinition'
-          # Avoid name collision if copying a benchmark multiple times
-          clone.name = "#{original.name} copy (#{SecureRandom.hex(1)})"
-        when 'BenchmarkSchedule'
-          # Disable schedule if active
-          clone.active = false if clone.present?
+      when 'BenchmarkDefinition'
+        # Avoid name collision if copying a benchmark multiple times
+        clone.name = "#{original.name} copy (#{SecureRandom.hex(1)})"
+      when 'BenchmarkSchedule'
+        # Disable schedule if active
+        clone.active = false if clone.present?
       end
     end
     benchmark_definition.save!
     benchmark_definition
-  end
-
-  def self.search(search)
-    if search
-      where(['lower(name) LIKE ?', "%#{search.downcase}%"])
-    else
-      all
-    end
   end
 
   private

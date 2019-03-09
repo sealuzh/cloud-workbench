@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NominalMetricObservationsController < ApplicationController
   before_action :set_metric_observation, only: [:destroy]
 

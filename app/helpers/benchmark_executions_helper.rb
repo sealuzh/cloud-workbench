@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module BenchmarkExecutionsHelper
   def execution_status_label(execution)
     if execution.failed?
@@ -48,11 +50,11 @@ module BenchmarkExecutionsHelper
   end
 
   def confirm_restart_benchmark_msg(execution)
-    { confirm: "This action will try to restart the benchmark again via SSH. It starts the start_runner script again." }
+    { confirm: 'This action will try to restart the benchmark again via SSH. It starts the start_runner script again.' }
   end
 
   def confirm_abort_execution_msg(execution)
-    { confirm: "This action will abort the execution by terminating all running virtual machine instances." }
+    { confirm: 'This action will abort the execution by terminating all running virtual machine instances.' }
   end
 
   def confirm_delete_execution_msg(execution)
@@ -80,11 +82,7 @@ module BenchmarkExecutionsHelper
       duration = execution.benchmark_duration
       duration == 0 ? '' : distance_of_time_in_words(duration).humanize
     else
-      if execution.failed?
-        'Not started'
-      else
-        'Not started yet'
-      end
+      execution.failed? ? 'Not started' : 'Not started yet'
     end
   end
 
@@ -93,11 +91,7 @@ module BenchmarkExecutionsHelper
       duration = execution.duration
       duration == 0 ? '' : distance_of_time_in_words(duration).humanize
     else
-      if execution.failed?
-        'Not started'
-      else
-        'Not started yet'
-      end
+      execution.failed? ? 'Not started' : 'Not started yet'
     end
   end
 

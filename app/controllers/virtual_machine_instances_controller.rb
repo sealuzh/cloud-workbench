@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VirtualMachineInstancesController < ApplicationController
   API_METHODS = [:complete_benchmark, :complete_postprocessing]
   before_action :authenticate_user!, except: API_METHODS
@@ -12,7 +14,7 @@ class VirtualMachineInstancesController < ApplicationController
   def complete_benchmark
     if @virtual_machine_instance.present?
       cont = boolean_value(:continue, false)
-      success  = boolean_value(:success, true)
+      success = boolean_value(:success, true)
       message = (params[:message] rescue '')
       @virtual_machine_instance.complete_benchmark(cont, success, message)
       head 200 # ok

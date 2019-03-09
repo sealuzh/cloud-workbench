@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 require 'fileutils'
 require 'erb'
@@ -61,11 +63,6 @@ class BenchmarkSchedule < ApplicationRecord
     %x(whenever --clear-crontab -f "#{schedule_path}")
   end
 
-  def self.filter(active_param)
-    active = active_param.to_bool rescue nil
-    active ? actives : all
-  end
-
   private
 
     def update_system_crontab_if_active
@@ -80,10 +77,9 @@ class BenchmarkSchedule < ApplicationRecord
 
     def self.write_content_to_file(schedule, schedule_path)
       parent_dir = Pathname.new(schedule_path).parent
-      FileUtils::mkdir_p(parent_dir)
+      FileUtils.mkdir_p(parent_dir)
       File.open(schedule_path, 'w') do |f|
         f.write(schedule)
       end
     end
-
 end

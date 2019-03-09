@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIndexOnNameToMetricDefinitions < ActiveRecord::Migration[5.0]
   def change
     # Ensure scoped uniqueness constraint of metrics_definitions:

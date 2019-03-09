@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VagrantConfigsController < ApplicationController
   before_action :set_vagrant_config, only: [:edit, :update]
 
@@ -15,7 +17,7 @@ class VagrantConfigsController < ApplicationController
 
   def reset_defaults
     VagrantConfig.reset_defaults!
-    flash[:success] = "The Vagrant configuration was successfully reset to its defaults."
+    flash[:success] = 'The Vagrant configuration was successfully reset to its defaults.'
     redirect_to edit_vagrant_config_path
   rescue => e
     flash[:error] = e.message

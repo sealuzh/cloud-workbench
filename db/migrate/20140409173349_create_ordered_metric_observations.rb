@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateOrderedMetricObservations < ActiveRecord::Migration[5.0]
   def change
     create_table :ordered_metric_observations do |t|

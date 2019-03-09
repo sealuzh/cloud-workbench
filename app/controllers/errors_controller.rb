@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ErrorsController < ApplicationController
   skip_before_action :authenticate_user!, raise: false
   skip_before_action :verify_authenticity_token
@@ -10,7 +12,7 @@ class ErrorsController < ApplicationController
 
   protected
 
-  def status_code
-    params[:code] || :internal_server_error # 500
-  end
+    def status_code
+      params[:code] || :internal_server_error # 500
+    end
 end

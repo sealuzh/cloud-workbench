@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrderedMetricObservationsController < ApplicationController
   before_action :set_ordered_metric_observation, only: [:destroy]
 

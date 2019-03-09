@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StatusHelper
   LINE_BREAK_STRINGS = [
       'WAITING FOR',
@@ -43,7 +45,7 @@ module StatusHelper
 
   private
 
-  def second_part(status, line_break_string)
-    status.split(line_break_string)[1]
-  end
+    def second_part(status, line_break_string)
+      status.split(line_break_string)[1]
+    end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class VagrantConfig < ActiveRecord::Base
   # Single implementation based on: https://stackoverflow.com/a/12463209/6875981
   # The "singleton_guard" column is a unique column which must always be set to '0'

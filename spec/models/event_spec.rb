@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe Event do
@@ -9,5 +11,4 @@ describe Event do
   it { is_expected.to be_valid }
   its(:failed?) { should be_falsey }
   its(:status) { should eq('WAITING FOR START PREPARING') }
-
 end

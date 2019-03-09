@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TimeDiff
   module Matchers
     def remain_over_time
@@ -24,7 +26,7 @@ module TimeDiff
       end
 
       def description
-        "check whether the result of two consecutive calls remains the same over time"
+        'check whether the result of two consecutive calls remains the same over time'
       end
 
       def supports_block_expectations?
@@ -48,7 +50,7 @@ module TimeDiff
       end
 
       def description
-        "check whether the result of two consecutive calls increases over time"
+        'check whether the result of two consecutive calls increases over time'
       end
 
       def supports_block_expectations?
