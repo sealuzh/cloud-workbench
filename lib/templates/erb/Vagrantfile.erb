@@ -76,11 +76,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.user_data = "#cloud-config\nssh_authorized_keys:\n  - " + pub_key
 
     # Instance defaults
-    # Official Caninical Ubuntu image: 18.04 LTS hvm:ebs-ssd amd64 eu-central-1
-    #  https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = 'ami-080d06f90eb293a27'
-    aws.region = 'eu-central-1' # Europe/Frankfurt as default configuration
-    aws.instance_type = 't2.micro'
+    # Official Ubuntu from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
+    # 18.04 LTS hvm:ebs-ssd amd64 ap-south-1
+    aws.ami = 'ami-0a63d6cdb8b90bdae'
+    aws.region = 'ap-south-1'
+    aws.instance_type = 't3.nano'
     aws.security_groups = ['cwb-web']
     aws.instance_ready_timeout = instance_ready_timeout # default 120s
     aws.tags = {
