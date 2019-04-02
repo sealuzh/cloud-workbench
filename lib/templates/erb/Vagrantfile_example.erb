@@ -6,59 +6,32 @@
 # chef_node_name: The default node name used for Chef client provisioning
 # tag_name: The default tag name set as aws name tag
 
-SSH_USERNAME = 'ubuntu'
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.ssh.username = SSH_USERNAME
-
   config.vm.provider :aws do |aws, override|
-    aws.region = 'eu-central-1'
+    aws.region = 'ap-south-1'
     # Official Ubuntu from Canonical: https://cloud-images.ubuntu.com/locator/ec2/
-    # 18.04 LTS hvm:ebs-ssd amd64 eu-central-1
-    aws.ami = 'ami-080d06f90eb293a27'
+    # 18.04 LTS hvm:ebs-ssd amd64 ap-south-1
+    aws.ami = 'ami-0a63d6cdb8b90bdae'
     # https://www.ec2instances.info/
-    aws.instance_type = 't2.micro'
-    aws.security_groups = ['cwb-web']
+    # Options: t3.nano, t2.nano, t3.micro, t2.micro, t3.small, t2.small
+    aws.instance_type = 't3.nano'
   end
 
   config.vm.provision 'cwb', type: 'chef_client' do |chef|
-    chef.add_recipe 'cli-benchmark' # @1.1.1 version is optional
+    chef.add_recipe 'cli-benchmark'
     chef.json =
     {
-      'benchmark' =>  {
-          'ssh_username' => SSH_USERNAME,
-      },
       'cli-benchmark' => {
-          'packages' => %w(sysbench),
-          # 'install' => 'cd /usr/local && echo "This runs during installation." >> install.txt',
+          'packages' => ['sysbench'],
           # 'pre_run' => 'echo "This runs immediately before execution" >> log.txt',
-          'run' => 'sysbench --test=cpu --cpu-max-prime=4000 run',
+          'run' => 'sysbench --time=10 --cpu-max-prime=25000 cpu run',
           'repetitions' => 3,
           'metrics' => {
             # [name of the metric] => [regex to extract result from stdout],
             'execution_time' => 'total time:\s*(\d+\.\d+)s',
+            'events_per_second' => 'events per second:\s*(\d+\.?\d*)'
           },
       },
     }
   end
 end
-
-  # config.vm.provider :google do |google, override|
-  #   # https://cloud.google.com/compute/docs/images
-  #   google.image = 'ubuntu-1604-xenial-v20181204'
-  #   # https://cloud.google.com/compute/docs/machine-types
-  #   google.machine_type = 'f1-micro' # Default: 'n1-standard-1'
-  #   # https://cloud.google.com/compute/docs/regions-zones/
-  #   google.zone = 'europe-west3-b'
-  # end
-
-  # config.vm.provider :azure do |azure, override|
-  #   # az vm image list --output table
-  #   # az vm image list --output table --publisher Canonical --all
-  #   azure.vm_image_urn = 'Canonical:UbuntuServer:16.04-LTS:latest'
-  #   # az account list-locations
-  #   # Other locations require setting `cwb.azure_id = get_azure_id(execution_id, new_location)`
-  #   azure.location = 'westeurope'
-  #   # az vm list-sizes --location westeurope
-  #   # https://azureprice.net/?region=westeurope
-  #   azure.vm_size = 'Standard_B1s'
-  # end
