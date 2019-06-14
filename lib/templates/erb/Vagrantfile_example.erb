@@ -13,7 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # 18.04 LTS hvm:ebs-ssd amd64 eu-north-1
     aws.ami = 'ami-780a8206'
     # https://www.ec2instances.info/
-    # Options: t3.nano, t2.nano, t3.micro, t2.micro, t3.small, t2.small
+    # Options: t3.nano, t3.micro, t3.small
     aws.instance_type = 't3.nano'
   end
 
