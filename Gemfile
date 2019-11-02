@@ -39,7 +39,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'font-awesome-rails', '~> 4.7', '>= 4.7.0.4'
 gem 'will_paginate', '~> 3.1', '>= 3.1.6'
 gem 'bootstrap-will_paginate', '~> 1.0'
-gem 'simple_form', '~> 4.0', '>= 4.0.1'
+gem 'simple_form', '~> 5.0'
 gem 'data-confirm-modal', '~> 1.6', '>= 1.6.2'
 
 # Admin
