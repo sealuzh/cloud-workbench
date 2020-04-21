@@ -78,7 +78,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Instance defaults
     # Official Caninical Ubuntu image: 18.04 LTS hvm:ebs-ssd amd64 eu-central-1
     #  https://cloud-images.ubuntu.com/locator/ec2/
-    aws.ami = 'ami-080d06f90eb293a27'
+    aws.ami = 'ami-0e342d72b12109f91'
     aws.region = 'eu-central-1' # Europe/Frankfurt as default configuration
     aws.instance_type = 't2.micro'
     aws.security_groups = ['cwb-web']
@@ -139,10 +139,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     azure.location = location
     # az vm image list --output table
     # az vm image list --output table --publisher Canonical --all
-    azure.vm_image_urn = 'Canonical:UbuntuServer:16.04.0-LTS:16.04.201611150'
+    azure.vm_image_urn = 'Canonical:UbuntuServer:18.04-LTS:18.04.202004080'
     # az vm list-sizes --location westeurope
     # https://azureprice.net/?region=westeurope
-    azure.vm_size = 'Standard_DS1'
+    azure.vm_size = 'Standard_A0'
     azure.instance_ready_timeout = instance_ready_timeout # default 120s
   end
   <% elsif provider_name == 'softlayer' %>
