@@ -19,7 +19,7 @@ gem 'enumerize', '~> 2.2', '>= 2.2.2'
 gem 'deep_cloneable', '~> 2.3', '>= 2.3.2'
 
 # Authentication
-gem 'devise', '~> 4.6', '>= 4.6.2'
+gem 'devise', '~> 4.7'
 
 # Assets
 # Required by `less-rails` for Bootstrap assets:
