@@ -43,6 +43,8 @@ Cloud WorkBench (CWB) [![Build Status](https://travis-ci.org/sealuzh/cloud-workb
 
 * Joel Scheuner, Philipp Leitner, Jürgen Cito, and Harald Gall (2014), [**Cloud WorkBench – Infrastructure-as-Code Based Cloud Benchmarking,**](https://joelscheuner.com/publication/scheuner-14-cloudcom/) in Proceedings of the 6th IEEE International Conference on Cloud Computing Technology and Science (CloudCom’14), 2014. DOI: [10.1109/CloudCom.2014.98](https://doi.org/10.1109/CloudCom.2014.98)
 
+Find a detailed list of benchmarks used by each study [here](https://github.com/sealuzh/cwb-benchmarks/blob/master/docs/PAPERS.md).
+
 ## Screenshots
 
 ![Benchmark Definition](/docs/img/cwb-edit-benchmark.png?raw=true "Edit Benchmark Definition")
